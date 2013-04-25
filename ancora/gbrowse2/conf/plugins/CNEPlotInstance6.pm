@@ -3,7 +3,7 @@ use strict;
 use vars '@ISA';
 #use lib '/home/engstrom/DEVEL/CNE/lib';
 use Bio::Graphics::Browser::Plugin::CNEPlot;
-@ISA = qw(Bio::Graphics::Browser::Plugin::CNEPlot);
+@ISA = qw(Bio::Graphics::Browser2::Plugin::CNEPlot);
 
 
 sub static_plugin_setting {
