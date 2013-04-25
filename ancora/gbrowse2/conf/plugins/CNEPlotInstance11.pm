@@ -1,0 +1,1 @@
+/opt/www/ancora/conf/gbrowse.conf/plugins/CNEPlotInstance11.pm
