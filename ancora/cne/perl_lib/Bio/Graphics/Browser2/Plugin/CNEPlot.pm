@@ -1,4 +1,4 @@
-package Bio::Graphics::Browser::Plugin::CNEPlot;
+package Bio::Graphics::Browser2::Plugin::CNEPlot;
 use strict;
 use Bio::Graphics::Browser2::Plugin;
 use Bio::Graphics::Feature;
