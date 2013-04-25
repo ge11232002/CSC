@@ -1,4 +1,4 @@
-package Bio::Graphics::Browser::Plugin::CNEPlotInstance3;
+package Bio::Graphics::Browser2::Plugin::CNEPlotInstance3;
 use strict;
 use vars '@ISA';
 #use lib '/home/engstrom/DEVEL/CNE/lib';
