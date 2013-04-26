@@ -19,8 +19,8 @@ $VERSION = '0.1'; # This supposed to be the version number for the library, I th
 my $MY_VERSION = 0.91;
 
 my $ABS_SCORE = 0;
-my $DB_NAME = "cne2";
-my $DB_HOST = "mysql-cbu.bccs.uib.no";
+my $DB_NAME = "cne";
+my $DB_HOST = "localhost";
 my $DB_USER = "nobody";
 my $METHODS_URL = "/methods.html";
 
