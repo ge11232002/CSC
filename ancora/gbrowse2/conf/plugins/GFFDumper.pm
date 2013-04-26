@@ -1,15 +1,15 @@
-package Bio::Graphics::Browser::Plugin::GFFDumper;
+package Bio::Graphics::Browser2::Plugin::GFFDumper;
 # $Id: GFFDumper.pm,v 1.23.4.1.2.1.2.1 2008/04/17 01:09:57 sheldon_mckay Exp $
 # test plugin
 use strict;
-use Bio::Graphics::Browser::Plugin;
-use Bio::Graphics::Browser::GFFhelper;
+use Bio::Graphics::Browser2::Plugin;
+use Bio::Graphics::Browser2::GFFhelper;
 use CGI qw(:standard *sup);
 
 use vars '$VERSION','@ISA';
 $VERSION = '0.80';
 
-@ISA = qw/ Bio::Graphics::Browser::Plugin /;
+@ISA = qw/ Bio::Graphics::Browser2::Plugin /;
 
 sub name { "GFF File" }
 sub description {

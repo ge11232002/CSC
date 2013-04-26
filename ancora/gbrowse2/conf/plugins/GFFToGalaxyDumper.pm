@@ -1,16 +1,16 @@
-package Bio::Graphics::Browser::Plugin::GFFToGalaxyDumper;
+package Bio::Graphics::Browser2::Plugin::GFFToGalaxyDumper;
 # $Id: GFFToGalaxyDumper.pm,v 1.1.2.1 2008/05/12 14:06:53 lstein Exp $
 # test plugin
 use strict;
-use Bio::Graphics::Browser::Plugin;
-use Bio::Graphics::Browser::GFFhelper;
+use Bio::Graphics::Browser2::Plugin;
+use Bio::Graphics::Browser2::GFFhelper;
 #use CGI qw(:standard *sup);
 use CGI qw(:standard *sup escape);
 
 use vars '$VERSION','@ISA';
 $VERSION = '0.80';
 
-@ISA = qw/ Bio::Graphics::Browser::Plugin /;
+@ISA = qw/ Bio::Graphics::Browser2::Plugin /;
 
 sub name { "GFF to Galaxy" }
 
