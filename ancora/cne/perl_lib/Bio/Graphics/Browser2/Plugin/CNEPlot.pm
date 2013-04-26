@@ -36,19 +36,21 @@ my $DEFAULT_MAX_INTENSITY = 140;
 my %DEFAULT_COLORS = ( 3 => [[200,200,0], [220,130,0], [255,0,0]],
 		       4 => [[200,200,0], [200,150,0], [220,100,0], [255,0,0]]);
 
-
+# called by gbrowse to return name of plugin for popup menu
 sub name { 
     shift->asm2_name . " HCNEs";
 }
-
+# called by gbrowse to return description of plugin
 sub verb { 'Configure' }
 
+# called by gbrowse to return description of plugin
 sub description {
     my $self = shift;
     p("This track shows ".$self->name().
       ". To configure this track, select it from the Reports & Analysis menu or click on its density plot.");
 }
 
+# called by gbrowse to return type of plugin
 sub type { 'annotator' }
 
 sub init {
@@ -59,7 +61,7 @@ sub init {
     $self->{_asm2_name} = $self->static_plugin_setting('asm_name') || $self->{_asm2};
 }
 
-
+# called by gbrowse to configure default settings for plugin
 sub config_defaults {
   my $self = shift;
 
