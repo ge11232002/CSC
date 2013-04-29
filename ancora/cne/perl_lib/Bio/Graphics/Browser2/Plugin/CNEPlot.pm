@@ -56,7 +56,6 @@ sub type { 'annotator' }
 sub init {
     my $self = shift;
     $self->{_nr_cne_sets} = $self->static_plugin_setting('nr_cne_sets') || $DEFAULT_NR_CNE_SETS;
-    #warn "so far the self is  $self->get_source_from_cgi...";
     #$self->{_asm1} = $self->browser_config->source();
     $self->{_asm1} =  $self->browser_config->name();
     #warn "so far $self->{_asm1}...";
