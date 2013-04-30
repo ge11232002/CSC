@@ -9,6 +9,8 @@ use vars '$VERSION','@ISA';
 use CNE::DB;
 use AT::GFX::SeqColorIndex;
 use AT::Tools::RangeHandler;
+use Data::Dumper;
+
 $VERSION = '0.1'; # This supposed to be the version number for the library, I think...
 
 @ISA = qw(Bio::Graphics::Browser2::Plugin);
@@ -58,7 +60,6 @@ sub init {
     $self->{_nr_cne_sets} = $self->static_plugin_setting('nr_cne_sets') || $DEFAULT_NR_CNE_SETS;
     #$self->{_asm1} = $self->browser_config->source();
     $self->{_asm1} =  $self->browser_config->name();
-    #warn "so far $self->{_asm1}...";
     $self->{_asm2} = $self->static_plugin_setting('asm_id') || die "No second assembly configured for plugin";
     $self->{_asm2_name} = $self->static_plugin_setting('asm_name') || $self->{_asm2};
 }
@@ -215,6 +216,14 @@ sub configure_form {
 			      dbname => $DB_NAME,
 			      dbuser => $DB_USER)
 	or die "could not connect to db $DB_NAME @ $DB_HOST";
+    ## debug
+    warn "I am in the CNE plugin:configure_form now!!!";
+    $Data::Dumper::Indent = 1;
+    $Data::Dumper::Sortkeys = 1;
+    open (FH, '>/mnt/biggley/home/gtan/debug/debug_configure_form.txt');
+    print FH Dumper($db);
+    close FH;
+
 
     my $nr_cne_sets = $self->nr_cne_sets();
     my $asm1 = $self->asm1();
