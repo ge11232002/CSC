@@ -57,6 +57,7 @@ sub type { 'annotator' }
 
 sub init {
     my $self = shift;
+    #warn "I am in the init() CNE plogin now!!!";
     $self->{_nr_cne_sets} = $self->static_plugin_setting('nr_cne_sets') || $DEFAULT_NR_CNE_SETS;
     #$self->{_asm1} = $self->browser_config->source();
     $self->{_asm1} =  $self->browser_config->name();
@@ -162,7 +163,7 @@ sub _parse_decimal_input
     return $n;
 } 
 
-
+# called by gbrowse to reconfigure plugin settings based on CGI parameters
 sub reconfigure {
     my $self = shift;
     my $config = $self->configuration;
@@ -204,7 +205,7 @@ sub reconfigure {
     $config->{version} = $defaults->{version};
 }
 
-
+# called by gbrowse to create a <form> fragment for changing settings
 sub configure_form {
     my $self = shift;
 
@@ -217,7 +218,7 @@ sub configure_form {
 			      dbuser => $DB_USER)
 	or die "could not connect to db $DB_NAME @ $DB_HOST";
     ## debug
-    warn "I am in the CNE plugin:configure_form now!!!";
+    #warn "I am in the CNE plugin:configure_form now!!!";
     $Data::Dumper::Indent = 1;
     $Data::Dumper::Sortkeys = 1;
     open (FH, '>/mnt/biggley/home/gtan/debug/debug_configure_form.txt');
@@ -351,12 +352,12 @@ sub configure_form {
   return $form;
 }
 
-
+# called by gbrowse to annotate the DNA, returning features
 sub annotate {
     my ($self, $segment) = @_;
 
     $self->_set_config_to_default() unless(($self->configuration->{version} || 0) eq $MY_VERSION);
-
+    #warn "I am in the annotate CNE now";
     # Create a FeatureFile object to store the result in
     my $out_feature_list = Bio::Graphics::FeatureFile->new;
     $out_feature_list->mtime(time()); # To prevent gbrowse_img from retrieving a cached image
