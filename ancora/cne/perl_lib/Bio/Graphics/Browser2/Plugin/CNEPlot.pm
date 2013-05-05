@@ -57,7 +57,7 @@ sub type { 'annotator' }
 
 sub init {
     my $self = shift;
-    #warn "I am in the init() CNE plogin now!!!";
+    warn "I am in the init() CNE plogin now!!!";
     $self->{_nr_cne_sets} = $self->static_plugin_setting('nr_cne_sets') || $DEFAULT_NR_CNE_SETS;
     #$self->{_asm1} = $self->browser_config->source();
     $self->{_asm1} =  $self->browser_config->name();
@@ -218,7 +218,7 @@ sub configure_form {
 			      dbuser => $DB_USER)
 	or die "could not connect to db $DB_NAME @ $DB_HOST";
     ## debug
-    #warn "I am in the CNE plugin:configure_form now!!!";
+    warn "I am in the CNE plugin:configure_form now!!!";
     $Data::Dumper::Indent = 1;
     $Data::Dumper::Sortkeys = 1;
     open (FH, '>/mnt/biggley/home/gtan/debug/debug_configure_form.txt');
@@ -357,28 +357,43 @@ sub annotate {
     my ($self, $segment) = @_;
 
     $self->_set_config_to_default() unless(($self->configuration->{version} || 0) eq $MY_VERSION);
-    #warn "I am in the annotate CNE now";
+    warn "I am in the annotate CNE now";
+    $Data::Dumper::Indent = 1;
+    $Data::Dumper::Sortkeys = 1;
+    open (FH, '>/mnt/biggley/home/gtan/debug/debug_CNE_annotate_self.txt');
+    print FH Dumper($self);
+    close FH;
+    open (FH, '>/mnt/biggley/home/gtan/debug/debug_CNE_annotate_segment.txt');
+    print FH Dumper($segment);
+    close FH;
+
     # Create a FeatureFile object to store the result in
     my $out_feature_list = Bio::Graphics::FeatureFile->new;
     $out_feature_list->mtime(time()); # To prevent gbrowse_img from retrieving a cached image
-
-    return $out_feature_list unless($segment);
     
+    return $out_feature_list unless($segment);
+    warn "In annotate, still running";
     # Connect to DB
     my $db = CNE::DB->connect(dbhost => $DB_HOST,
 			      dbname => $DB_NAME,
 			      dbuser => $DB_USER)
 	or die "could not connect to db $DB_NAME @ $DB_HOST";
 
-
+    warn "In annotate,  the db is   ", Dumper($db);
+    warn "In annotate, the out_feature_list is   ", Dumper($out_feature_list);
     my ($chr, $start, $end) = $self->_get_display_bounds($segment);
-    
+    warn "In annotate, the chr, start, end  ", $chr, " ", $start, "  ", $end;
     # Make the density features
     $self->_make_density_features($out_feature_list, $db, $chr, $start, $end);
-    
+    warn "In annotate, Am I running??";
+    open (FH, '>/mnt/biggley/home/gtan/debug/debug_CNE_annotate_self_after_density_features.txt');
+    print FH Dumper($self);
+    close FH;
     # Make the CNE features
     $self->_make_cne_features($out_feature_list, $db, $chr, $start, $end);
-        
+    open (FH, '>/mnt/biggley/home/gtan/debug/debug_CNE_annotate_self_after_CNE_features.txt');
+    print FH Dumper($self);
+    close FH;
     # For debug use
     my $msg_string = "";
     # For debug usage
@@ -459,6 +474,7 @@ sub _get_min_lengths
 
 sub _make_density_features
 {
+    warn "I am in _make_density_features now!!!";
     my ($self, $out_feature_list, $db, $chr, $start, $end) = @_;
     
     # For benchmarking
@@ -469,20 +485,33 @@ sub _make_density_features
 
     # Get parameters for this plugin
     my $sets_to_show = $self->_get_sets_to_show('show_graph');
+    warn "In _make_density_features, sets_to_show is ", @$sets_to_show;
     my $tables = $self->_get_table_names($db, $sets_to_show);
     my $min_lengths = $self->_get_min_lengths($sets_to_show);
     my $window_size = $self->configuration->{window_size}*1000;  # convert window size value from kb to bp
     my $max_score = $self->configuration->{max_score};
     my $nr_graphs = $self->configuration->{nr_graphs};
+    warn "In _make_density_features, nr_graphs is ", $nr_graphs;
     my $rank_un_low = $self->configuration->{rank_un_low};
+    warn "In _make_density_features, am I running? The rank_un_low ", $rank_un_low;
+
     my $label = $self->asm2_name . " HCNE density";
-    my $pixel_width = $self->browser_config->width;
-    my $assembly = $self->browser_config->source;
+    warn "In _make_density_features, am I running? The label ", $label;
+    warn "In _make_density_features, check the browse_config";
+    open (FH, '>/mnt/biggley/home/gtan/debug/debug_CNE_annotate_self_browser_config.txt');
+    print FH Dumper($self->browser_config);
+    close FH;
+    #my $pixel_width = $self->browser_config->width;
+    my $pixel_width = 800;
+    warn "In _make_density_features, am I running? The pixel_width  ", $pixel_width;
+    my $assembly = $self->browser_config->name;
+    warn "In _make_density_features, am I running? The assembly ", $assembly;
+    #my $assembly = $self->browser_config->source;
     my ($my_last_name) = ref($self) =~ /(\w+)$/;
 
     # Return if no nothing to do
     return if($nr_graphs == 0 or @$sets_to_show == 0);
-    
+    warn "In _make_density_features, am I running?";
     # Compute the step size
     $t0 = Benchmark->new;
     my $step_size;
@@ -500,6 +529,7 @@ sub _make_density_features
 	    $step_size--;
 	}
     }
+    warn "In _make_density_features, am I running? the step_size  ", $step_size;
     my $win_nr_steps = $window_size / $step_size;
 #    print STDERR "Calculated step size ".timediff_str($t0,Benchmark->new)."\n";
 
