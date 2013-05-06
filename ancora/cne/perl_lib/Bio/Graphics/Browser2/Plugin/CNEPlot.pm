@@ -654,7 +654,6 @@ sub _make_cne_features
     my $bump_cnes = $self->configuration->{bump_cnes};
 #    my $assembly = $self->browser_config->source;
     my $assembly = $self->browser_config->name;
-    warn "In _make_cne_features, am I alive?";
     # Prepare to color CNEs
     my ($color_sub, $seq_color_index);
     if($color_cnes) {
