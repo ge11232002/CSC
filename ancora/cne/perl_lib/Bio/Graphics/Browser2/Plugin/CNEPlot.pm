@@ -69,6 +69,7 @@ sub init {
 sub config_defaults {
   my $self = shift;
 
+  warn "I am in CNE config_defaults now!!!";
   my $color_cnes = $self->static_plugin_setting('color_cnes');
   $color_cnes = 'dark' unless defined $color_cnes;
 
@@ -389,10 +390,16 @@ sub annotate {
     open (FH, '>/mnt/biggley/home/gtan/debug/debug_CNE_annotate_self_after_density_features.txt');
     print FH Dumper($self);
     close FH;
+    open (FH, '>/mnt/biggley/home/gtan/debug/debug_CNE_annotate_out_feature_list_after_density_features.txt');
+    print FH Dumper($out_feature_list);
+    close FH;
     # Make the CNE features
     $self->_make_cne_features($out_feature_list, $db, $chr, $start, $end);
     open (FH, '>/mnt/biggley/home/gtan/debug/debug_CNE_annotate_self_after_CNE_features.txt');
     print FH Dumper($self);
+    close FH;
+    open (FH, '>/mnt/biggley/home/gtan/debug/debug_CNE_annotate_out_feature_list_after_CNE_features.txt');
+    print FH Dumper($out_feature_list);
     close FH;
     # For debug use
     my $msg_string = "";
@@ -432,6 +439,8 @@ sub _get_display_bounds
 
 sub _get_sets_to_show
 {
+    warn "I am in _get_sets_to_show now!!!";
+
     my ($self, $prefix) = @_;
     my @set_nrs;
     for my $i (1..$self->nr_cne_sets()) {
@@ -443,18 +452,26 @@ sub _get_sets_to_show
 
 sub _get_table_names
 {
+    warn "I am in _get_table_names now!!!";
     my ($self, $db, $set_nrs) = @_;
     my $asm1 = $self->asm1();
     my $asm2 = $self->asm2();
     my @tables;
+    warn "In _get_table_names, the asm1 is  ", $asm1;
+    warn "In _get_table_names, the asm2 is  ", $asm2;
     foreach my $i (@$set_nrs) {
+        warn "In _get_table_names, doing ", $i;
+        warn "The min_cne_id is", $self->configuration->{"min_cne_id$i"};
 	my $id_cutoff_code = $self->configuration->{"min_cne_id$i"} or next;
 	my ($min_id, $min_len) = split '/', $id_cutoff_code;
+    warn "The min_id is ", $min_id;
+    warn "The min_len is ", $min_len;
 	my $table = $db->get_cne_table_name(assembly1 => $asm1, 
 					    assembly2 => $asm2,
 					    min_identity => $min_id,
 					    min_length => $min_len,
 	                                    version => 1);
+    warn "In _get_table_names, check the table", Dumper($table);
 	push @tables, $table if($table and $db->cne_table_exists($table));
     }
     return \@tables;
@@ -487,6 +504,7 @@ sub _make_density_features
     my $sets_to_show = $self->_get_sets_to_show('show_graph');
     warn "In _make_density_features, sets_to_show is ", @$sets_to_show;
     my $tables = $self->_get_table_names($db, $sets_to_show);
+    warn "In _make_density_features, see tables is", Dumper($tables);
     my $min_lengths = $self->_get_min_lengths($sets_to_show);
     my $window_size = $self->configuration->{window_size}*1000;  # convert window size value from kb to bp
     my $max_score = $self->configuration->{max_score};
@@ -511,7 +529,6 @@ sub _make_density_features
 
     # Return if no nothing to do
     return if($nr_graphs == 0 or @$sets_to_show == 0);
-    warn "In _make_density_features, am I running?";
     # Compute the step size
     $t0 = Benchmark->new;
     my $step_size;
@@ -537,8 +554,9 @@ sub _make_density_features
     # Compute how large region we need to look at around the displayed region
     my $context_start = $start - int((($win_nr_steps-1)*$step_size)/2+0.5);
     $context_start  = 1 if($context_start < 1);
+    warn "In _make_density_features, the context_start is ", $context_start;
     my $context_end = $end + int((($win_nr_steps-1)*$step_size)/2+$step_size+0.5);
-
+    warn "In _make_density_features, the context_end is ", $context_end;
    
     # Define a feature type with drawing parameters for the curve
     $out_feature_list->add_type('density_curve' => {glyph => 'fast_xyplot',
@@ -615,6 +633,7 @@ sub _make_density_features
 
 sub _make_cne_features
 {
+    warn "I am in _make_cne_features now!!!";
     my ($self, $out_feature_list, $db, $chr, $start, $end) = @_;
     
     # For benchmarking
@@ -633,8 +652,9 @@ sub _make_cne_features
     my @labels = $labels_string ? split /\s+/, $labels_string : ();
     my $color_cnes = $self->configuration->{color_cnes};
     my $bump_cnes = $self->configuration->{bump_cnes};
-    my $assembly = $self->browser_config->source;
-
+#    my $assembly = $self->browser_config->source;
+    my $assembly = $self->browser_config->name;
+    warn "In _make_cne_features, am I alive?";
     # Prepare to color CNEs
     my ($color_sub, $seq_color_index);
     if($color_cnes) {
