@@ -8,6 +8,7 @@ This document describes the implementation the Ancora web resource. For a genera
 *    [Installation](#installation)
 	*	[Software dependencies](#dependencies)
 	*	[GBrowse2](#GBrowse2)
+	*	[Gbrowse2 Advanced Installation](#GBrowse2Ad)
 	*	[UCSC Genome Browser source and utilities](#UCSC)
 	*	[ProServer DAS server](#DAS)
 	
@@ -15,7 +16,7 @@ This document describes the implementation the Ancora web resource. For a genera
  This documentation focuses on the Ancora installation on Olifant at csc. Olifant is running the CentOS release 5.8 (Final). However, ancora is supposed to run on other Linux/Unix distribution without too much difficulty.
 
 <h3 id="dependencies">Software dependecies</h3>
-The following softwares are essential for the whole implementation.
+ The following softwares are essential for the whole implementation.
  
  *	A httpd server (Currently [Apache](http://httpd.apache.org/docs/2.2/ "Apache") 2.2.3 is used on olifant)
  *	[MySQL](http://dev.mysql.com/downloads/mysql/5.0.html "MySQL") client if you have a dedicated MySQL server. if not, MySQL server is alse required. (MySQL 5.0.95 is used on olifant)
@@ -67,15 +68,62 @@ perl Build.PL
 sudo ./Build install --uninst 1
 ```
 The "--uninst 1" will make sure that the files for the
-newer (2.33) version are removed in case they are installed in another
-directory.
+newer (2.33) version are removed in case they are installed in another directory.
 
 **Note**: For some unknown reasons, the tracks are not displayed on Mac OS 10.8.3 with Firefox 20.0, Safari 6.0.4 and Opera 12.15. However, Chrome 26.0.1410.65 works fine. So far, it works on Windows 7 with all major browsers.
 
+<h3 id="GBrowse2Ad">GBrowse2 Advanced Installation</h3>
+This section is optional and incomplete. The advance installation should cover the topics such as *FastCGI*, *User Account Database*, *Displaying Next Generation Sequencing Data*, *Configuring the Uploaded Track Database*.
+
+<h4 id="FastCGI">Running GBrowse under FastCGI</h4>
+The idea of FastCGI is to make the script as a long-running process at the first time of the script is requested. By eliminating the startup time for later use of script, the responsiveness of a FastCGI is significantly improved.
+
+To use this facility, you will need a version of Apache equipped with FastCGI support, the module [mod_fcgid](http://httpd.apache.org/mod_fcgid/). For a Debian (DEB) based system,
+
+```
+sudo apt-get install libapache2-mod-fastcgi libfcgi-perl
+```
+or for Cent OS,
+
+```
+cd /etc/yum.repos.d/
+wget http://centos.karan.org/kbsingh-CentOS-Extras.repo
+sudo vim /etc/yum.repos.d/kbsingh-CentOS-Extras.repo 
+# set gpgcheck to 0 and enabled to 1 in the [kbs-CentOS-Testing] section.
+yum install mod_fcgid
+# Down the latest atomic-release rpm from http://www6.atomicorp.com/channels/atomic/centos/5/x86_64/RPMS/
+# Install atomic-release rpm:
+rpm -Uvh atomic-release*rpm
+yum install fcgi-perl
+```
+
+The configuration of GBrowse2's FastCGI for Ancora will be addressed later.
+
+**Note**: Because the olifant has a old version of *Apache* and *mod_fcgid*. You may need to adapt the GBrowse2 conf file for Apache (Fon instance, /etc/httpd/conf.d/gbrowse2.conf on olifant) to the older version of *mod_fcgid* with the names mapping descripted on [page](http://httpd.apache.org/mod_fcgid/mod/mod_fcgid.html).
+
+<h4 id="">User Account Database</h4>
+<h4 id="">Displaying Next Generation Sequencing Data</h4>
+<h4 id="">Configuring the Uploaded Track Database</h4>
+
+<h3 id="UCSC">UCSC Genome Browser source and utilities</h3>
+The UCSC Genome Browser source code is needed to compile the C program for detecting CNEs, which makes use of several library functions from the UCSC source. The UCSC Genome Browser source also contains a collection of useful utilities, some of which are needed at steps below. It is recommended to compile all the UCSC utilities by following the instructions in the README file in the UCSC source package. Short story on olifant,
+
+```
+export MACHTYPE=x86_64
+export MYSQLINC=/usr/include/mysql
+export MYSQLLIBS="/usr/lib64/mysql/libmysqlclient.a -lz"
+export PATH=$HOME/bin/$MACHTYPE:$PATH
+mkdir -p $HOME/bin/$MACHTYPE.
+wegt http://hgdownload.cse.ucsc.edu/admin/jksrc.zip
+unzip jksrc.zip
+cd kent/src
+make libs
+cd utils/
+make
+```
 
 
-
-
+<h3 id="DAS">ProServer DAS server</h3>
 
 
 
