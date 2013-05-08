@@ -6,7 +6,7 @@ This document describes the implementation the Ancora web resource. For a genera
 **Table of contents**
 
 *    [Installation](#installation)
- * [Software dependencies](#dependencies)
+	* [Software dependencies](#dependencies)
 	* [GBrowse2](#GBrowse2)
 	* [Gbrowse2 Advanced Installation](#GBrowse2Ad)
 	* [UCSC Genome Browser source and utilities](#UCSC)
@@ -112,7 +112,11 @@ yum install fcgi-perl
 
 The configuration of GBrowse2's FastCGI for Ancora will be addressed later.
 
-**Note**: Because the olifant has a old version of *Apache* and *mod_fcgid*. You may need to adapt the GBrowse2 conf file for Apache (Fon instance, /etc/httpd/conf.d/gbrowse2.conf on olifant) to the older version of *mod_fcgid* with the names mapping descripted on [page](http://httpd.apache.org/mod_fcgid/mod/mod_fcgid.html).
+**Note**: Because the olifant has a old version of *Apache* and *mod_fcgid*. 
+You may need to adapt the GBrowse2 conf file for Apache 
+(/etc/httpd/conf.d/gbrowse2.conf on olifant) 
+to the older version of *mod_fcgid* with the names mapping 
+described on the [page](http://httpd.apache.org/mod_fcgid/mod/mod_fcgid.html).
 
 <h4 id="User">User Account Database</h4>
 To be implemented
@@ -189,5 +193,7 @@ Instructions for how to compile the C programs are in cne/tools/README.txt.
 This section will describe all the necessary configurations step by step
 for setting up the Ancora web resource.
 <h3 id="ancoraweb">Ancora Web Resource</h3>
+The cne/ancora directory in the cne package contains files 
+related to the Ancora web resource. 
 
 
