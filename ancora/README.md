@@ -11,6 +11,7 @@ This document describes the implementation the Ancora web resource. For a genera
   * [Gbrowse2 Advanced Installation](#GBrowse2Ad)
   * [UCSC Genome Browser source and utilities](#UCSC)
   * [ProServer DAS server](#DAS)
+  * [Software components](#SoftwareComponents)
   
 <h2 id="installation">Installation</h2>
  This documentation focuses on the Ancora installation on Olifant at csc. Olifant is running the CentOS release 5.8 (Final). However, ancora is supposed to run on other Linux/Unix distribution without too much difficulty.
@@ -35,7 +36,9 @@ After installing the prerequisites, run this command in terminal
 sudo perl -MCPAN -e 'install Bio::Graphics::Browser2'
 ```
 If not all the necessary prerequisites are installed, it will be notified during the test step. 
-During the installation, there are some prompted configuration questions. On olifant, we configrued as follows:
+During the installation, there are some prompted configuration questions about the location of files.
+In principle, the default paths are fine and you can customize it to fit your needs.
+On olifant, we configrued as follows:
 
 * Directory for GBrowse's config and support files? [/etc/gbrowse2] /opt/www/gbrowse2/conf
 * Directory for GBrowse's static images & HTML files? [/var/www/html/gbrowse2] /opt/www/gbrowse2/html
@@ -141,6 +144,35 @@ make
 <h3 id="DAS">ProServer DAS server</h3>
 To be implemented
 
+<h3 id="SoftwareComponents">Software components</h3>
+Ancora requires two software packages developed in Boris Lenhard’s group: 
+cne and AT. The cne package contains Perl libraries, 
+C source code and Perl and bash scripts for detecting and 
+working with CNEs, as well as Perl libraries and CGI scripts 
+directly underlying the Ancora web resource. 
+The AT package is a collection of Perl modules related to genome 
+and transcriptome sequence analysis. 
+They were largely implemented by Pär Engström during his PhD studies 
+but also include contributions from several other past 
+and present members of the Lenhard group. 
+Ancora only uses a few well-tested modules from the AT package, 
+which also includes many modules in early stages of development.
 
+The cne and AT packages are maintained in the CSC repository. 
+To retrieve the most recent versions, do:
 
+```sh
+git clone git@github.com:ge11232002/CSC.git
+```
+One copy of the packages should be placed under /opt/www/cne and /opt/www/AT, respectively, 
+where the Ancora genome browser will access them from.
+This could be done by creating soft links for the *cne* and *AT* under */opt/www/*.
+To run scripts that use the modules, 
+you will have to add the installation paths to your PERL5LIB environment variable. 
+If you use bash as your shell, 
+you can do this by adding the following line to the file ~/.bash_profile:
+```sh
+export PERL5LIB=/opt/www/AT/lib:/opt/www/cne/perl_lib:$PERL5LIB
+```
+(If you want scripts to use a working copy of the modules in a different location, modify the above line accordingly.)
 
