@@ -193,7 +193,41 @@ Instructions for how to compile the C programs are in cne/tools/README.txt.
 This section will describe all the necessary configurations step by step
 for setting up the Ancora web resource.
 <h3 id="ancoraweb">Ancora Web Resource</h3>
-The cne/ancora directory in the cne package contains files 
-related to the Ancora web resource. 
+Under the repository, there are two other folders *ancora* and *gbrowse2*,
+besides the *cne* and *AT* packages.
+The *ancora* directory contains html and cgi files 
+related to the Ancora web resource,
+while the *gbrowse2* directory contains the *conf* files for GBrowse2.
+If you are setting up the Ancora web resource, 
+you will need to copy some files to the ancora and gbrowse2 directory on your server. 
+On olifant, they are ```/opt/www/ancora``` and ```/opt/www/gbrowse2``` 
+(As we installed GBrowse2 to this directory).
+The following commands create the links there:
+```sh
+cd ancora
+## the html files
+ln -s html /opt/www/ancora/
+## the cgi files
+ln -s cgi-bin /opt/www/ancora/
+## the das server settings
+ln -s Bio-Das-ProServer /opt/www/ancora/
+## put the gbrowse cgi files to ancora cgi-bin folder
+ln -s /opt/www/gbrowse2/cgi-bin/* /opt/www/ancora/cgi-bin
+## put the gbrowse conf files to the GBrowse's conf folder 
+cd gbrowse2/conf
+ln -s *.conf /opt/www/gbrowse2/conf
+## put the gbrowse plugins to the GBrowse's plugins folder
+ln -s plugins/* /opt/www/gbrowse2/conf/plugins/
+```
+
+<h3 id="apache">Apache Configuration</h3>
+The Apache httpd server is configured to look for html files under
+```/var/www/html``` and CGI scripts in ``` /var/www/cgi-bin```.
+However, if we use the technique called "VirtualHost",
+the html files can be left under ```/opt/www/ancora```.
+The mapping of the domain http://ancora.olifant.cscdom.csc.mrc.ac.uk/ 
+to this directory is configured in Apache configuration file
+```/etc/httpd/conf```.
+
 
 
