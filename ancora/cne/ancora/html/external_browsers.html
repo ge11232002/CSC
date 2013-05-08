@@ -1,0 +1,63 @@
+<!DOCTYPE HTML PUBLIC "-//IETF//DTD HTML//EN">
+<html><head>
+<link rel="stylesheet" type="text/css" href="main.css" />
+<title>Ancora - External Browsers</title>
+</head>
+
+<body>
+<p align="center"><a href="/" align="center"><img src="/logo.png" border=0 alt="Ancora"></a></p>
+
+<h3>Browse HCNEs in external genome browsers</h3>
+
+<table class="main">
+<tr>
+<td class="textbox">
+  
+<p>
+The <a href="/cgi-bin/gbrowse/">Ancora genome browser</a> provides the most
+flexible way to explore the Ancora data.
+However, it is also useful to view the data in other browsers where it can be compared
+to annotations not present on this site.
+  
+<p><a href="http://genome.ucsc.edu/" class="plain"><b>UCSC Genome Browser</b></a>
+<p>
+<!-- One advantage of viewing HCNEs in the UCSC Genome Browser is the possibility to compare
+them to chained alignments between genomes. These alignments are often a good indication of
+conserved synteny blocks.-->
+All files in our downloads section can be uploaded as custom tracks to the UCSC Genome Browser.
+Please visit the <a href="downloads/">downloads section</a> for more details.
+</p>
+
+<p><a href="http://www.ensembl.org/" class="plain"><b>Ensembl</b></a></p>
+<p>Much of the Ancora data is accessible through the
+<a href="http://www.biodas.org">DAS protocol</a> for exchanging sequence annotations. 
+Ensembl can display sequence annotations provided in this way. Enabling Ancora data in Ensembl is easy:
+<ol>
+<li>Go to the <a href="http://www.ensembl.org/">Ensembl web site</a> and bring up a genome browser for human, mouse, zebrafish or fruitfly. For example: click &quot;Human&quot; on Ensembl&rsquo;s start page, and then click &quot;Location&quot; in the menu to the left.</li>
+<li>Click &quot;Add cutom data to page&quot; in the menu to the left.</li>
+<li>Click &quot;Attach DAS&quot;. Enter http://ancora.genereg.net/das in the field labeled &quot;other DAS server&quot; and click &quot;Next&quot;.</li>
+<li>Select the tracks you wish to add. Note that the list only shows tracks that are valid for the genome that you are currently looking at in Ensembl. Click &quot;Next&quot;.</li>
+<li>Click &quot;Close&quot; in the upper right corner. The Ancora tracks that you have selected should now be visible in the lower panel (the one that shows a detailed view of the selected region). If you do not see the Ancora tracks, the reason may be that there are no HCNEs in the region that you are looking at. In that case, navigate to a different region (for example, that of your favourite developmental regulator).</li>
+</ol>
+
+<p>To remove any tracks that you have added, click &quot;Add custom data to page&quot; again and select &quot;Manage data&quot;.</p>
+
+<p>Note that the Ancora data can be viewed on both the &quot;Region in detail&quot; and the &quot;Region overview&quot; view in Ensembl. The latter is particularly useful for inspecting HCNE density distributions over large genomic regions.</p>
+
+<p>Some users may recall that we used to have a direct link here to a form for adding data to ContigView in Ensembl.
+We have disabled this form as it made use of a feature that is not yet supported by Ensembl's new web interface.</p> 
+  
+<!--
+<p><b>Other genome browsers</b></p>
+<p>Ancora data can also be viewed in other genome browsers that support the DAS protocol.
+The <a href="http://www.affymetrix.com/support/developer/tools/download_igb.affx">Integrated Genome Browser</a>
+from Affymetrix is one such browser.
+You will have to provide the browser with the URL for our DAS server, which is
+<a href="http://ancora.genereg.net/das">http://ancora.genereg.net/das</a>.
+-->
+  
+</td>
+  
+</table>
+
+</body> </html>

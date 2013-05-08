@@ -1,0 +1,29 @@
+body { background-color: #e0e0e0 }
+
+/* Heading styles */
+h3 { font-family: Verdana, Arial, Helvetica, sans-serif; text-align:center }
+
+/* Paragraph styles */
+p { font-family: Verdana, Arial, Helvetica, sans-serif; font-size: 12px }
+ul { font-family: Verdana, Arial, Helvetica, sans-serif; font-size: 12px }
+p.center { text-align:center }
+
+/* Table styles */
+td { font-family: Verdana, Arial, Helvetica, sans-serif; font-size: 12px }
+th { font-family: Verdana, Arial, Helvetica, sans-serif; font-size: 14px; text-align:left }
+
+/* Tables for page layout */
+table.main {border-style:none; border-spacing:5; width: 100%}
+table.maincenter {border-style:none; border-spacing:5; width:auto; margin-left:auto; margin-right:auto}
+td.textbox {border: solid; padding: 10px; vertical-align:top; background-color:#e0e8f0}
+
+/* Link styles */
+a:link {text-decoration: none; color: #0000ff}
+a:visited {text-decoration: none; color: #0000ff}
+a:hover {color: #ff0000}
+a.plain:link {text-decoration: none; color: #000000 }
+a.plain:visited {text-decoration: none; color: #000000 }
+a.plain:hover {color: #ff0000}
+
+/* Variable styles */
+var { color: #004000 }

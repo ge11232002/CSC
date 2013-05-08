@@ -1,0 +1,44 @@
+hg18	4
+hg19    4 
+mm8	4
+mm9	4
+monDom4	4
+monDom5 4
+ornAna1	4
+galGal3	4
+xenTro2	4
+anoCar1 4
+petMar1 4
+ 
+danRer4	8
+danRer5	8
+danRer6 8
+tetNig1	8
+tetNig2 8
+fr2	8
+gasAcu1	8
+oryLat1	8
+oryLat2 8
+GmG10	8
+GmG09   8
+
+dm3	4
+droAna3	4
+dp4	4
+droVir3	4
+droMoj3	4
+
+ce4	4
+cb3	4
+caePb1	4
+caeRem2	4
+priPac1	4
+
+MetagenomeScaffold	4
+Arcobacter	4
+Campylobacter	4
+S_autotrophica	4
+S_denitrificans	4
+Sulfurospirillum	4
+Sulfurovum	4
+

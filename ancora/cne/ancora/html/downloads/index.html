@@ -1,0 +1,67 @@
+<!DOCTYPE HTML PUBLIC "-//IETF//DTD HTML//EN">
+<html><head>
+<link rel="stylesheet" type="text/css" href="/main.css" />
+<title>Ancora - Downloads</title>
+</head>
+
+<body>
+<p align="center"><a href="/" align="center"><img src="/logo.png" border=0 alt="Ancora"></a></p>
+
+<h3>Download data</h3>
+
+<table class="main">
+<tr>
+<td class="textbox">
+  
+<p>
+Data files are available for HCNE locations and HCNE density curves.
+The files are in
+<a href="http://genome.ucsc.edu/FAQ/FAQformat#format1">BED</a> and
+<a href="http://genome.ucsc.edu/goldenPath/help/wiggle.html">WIG</a> format, respectively.
+All files are compressed with the gzip program.
+</p>
+  
+<p>HCNE location files are named</p>
+<p style="margin-left:20px; font-family:monospace">
+  HCNE_<var>asm1</var>_<var>asm2</var>_<var>X</var>pc_<var>Y</var>col.bed.gz</p>
+<p>where <var>asm1</var> and <var>asm2</var> are identifiers for the compared genome assemblies,
+  <var>X</var> is the percent identity threshold used for HCNE detection and
+  <var>Y</var> is the number of alignment columns (window size) over which percent identity is computed (see <a href="/methods.html">Methods</a> for details).
+</p>
+
+<p>HCNE density files are similarly named</p>
+<p style="margin-left:20px; font-family:monospace">HCNE_density_<var>asm1</var>_<var>asm2</var>_<var>X</var>pc_<var>Y</var>col.wig.gz</p>
+
+<p>The coordinates in the files refer to assembly <var>asm1</var>.</p>
+  
+<p>All files can be used as custom tracks in the
+<a href="http://genome.ucsc.edu/">UCSC Genome Browser</a>.
+It is not neccessary to download the files in order to use them as custom tracks.
+Simply paste the URL for the file of interest into the "add custom tracks"
+form on the UCSC Genome Browser web site.
+To copy the URL for a file, right-click on the filename with and select "Copy Shortcut"
+or "Copy Link Location".
+If you are using a Mac with a single mouse button, hold down Ctrl while clicking on the filename.
+Make sure you add tracks to the correct genome assembly; its identifier should match <var>asm1</var>.
+  
+<p>Please select the genome assembly that you wish to download data for:</p>
+<ul>
+<li><a href="hg18/">Human March 2006 assembly (NCBI 36 / hg18)</a>
+<li><a href="mm9/">Mouse July 2007 assembly (NCBI 37 / mm9)</a>
+<li><a href="mm8/">Mouse February 2006 assembly (NCBI 36 / mm8)</a>
+<li><a href="danRer5/">Zebrafish July 2007 assembly (Zv7 / danRer5)</a>
+<li><a href="danRer4/">Zebrafish March 2006 assembly (Zv6 / danRer4)</a>
+<li><a href="tetNig1/"><i>Tetraodon</i> February 2004 assembly (V7 / tetNig1)</a>
+<li><a href="dm3/"><i>D. melanogaster</i> April 2006 assembly (BDGP 5 / dm3)</a>
+<li><a href="ce4/"><i>C. elegans</i> January 2007 assembly (WS170 / ce4)</a>
+  </p>  
+</ul>
+  
+<p>Before using this data in a large-scale analysis, please note that <a href="http://genome.ucsc.edu/goldenPath/credits.html">usage restrictions</a> may apply to the underlying genome sequences.</p>
+  
+</td>
+  
+</table>
+
+
+</body> </html>

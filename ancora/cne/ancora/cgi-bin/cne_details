@@ -1,0 +1,513 @@
+#!/usr/bin/perl 
+use strict;
+use warnings;
+use CGI qw/:standard/;
+use DBI;
+use lib '/opt/www/cne/perl_lib';
+use lib '/opt/www/AT/lib';
+use CNE::DB;
+use AT::DB::GenomeAssemblyTwoBit;
+use AT::DB::ChainedAlignment;
+use AT::Tools::SeqHandler;
+
+$ENV{PATH} = '/usr/local/bin:'.$ENV{PATH};  # This is where the UCSC binaries are. We need them for twoBit IO.
+my $STYLESHEET = "/gbrowse/gbrowse-cne.css";
+my $ASSEMBLY_DIR = "/export/data/goldenpath";
+my $GBROWSE_CONF_DIR = "/opt/www/ancora/conf/gbrowse.conf/";
+my $GBROWSE_URL = "gbrowse";
+my $METHODS_URL = "/methods.html";
+my $CNE_DB_NAME = "cne";  # We hardcode the DB name to avoid malicious users from trying to access arbitrary databases
+my $DB_HOST = "localhost";
+my $DB_USER = "nobody";
+
+my $CGI = CGI->new;
+
+# Connect to CNE DB
+my $db = CNE::DB->connect(dbhost => $DB_HOST,
+			  dbname => $CNE_DB_NAME,
+			  dbuser => $DB_USER)
+  or fail("could not connect to db $CNE_DB_NAME @ $DB_HOST");
+
+# Print details for specified type
+my $type = $CGI->param('type') or fail("Missing parameter: type");
+if($type eq 'cne') {
+    cne_details($db);
+}
+elsif($type eq 'synteny') {
+    synteny_details($db);
+}
+else {
+    fail("Unknown type $type.");
+}
+
+# Print HTML footer
+print_footer();
+
+
+##
+## Subroutines
+##
+
+
+sub synteny_details
+{
+    my ($db) = @_;
+    
+    # Print HTML header
+    print_header(-title => "Synteny block details");
+
+    # Get parameters
+    my $asm1 = $CGI->param('asm1') or fail("Missing parameter: asm1");
+    my $asm2 = $CGI->param('asm2') or fail("Missing parameter: asm2");
+    my $loc1 = $CGI->param('loc1') or fail("Missing parameter: loc1");
+    my $loc2 = $CGI->param('loc2') or fail("Missing parameter: loc2");
+    my $ori = $CGI->param('ori'); fail("Missing parameter: ori") unless(defined $ori);
+
+    # Get info about assemblies
+    my $asm1_info = $db->get_assembly_info($asm1) or fail("Missing assembly info for $asm1");
+    my $asm2_info = $db->get_assembly_info($asm2) or fail("Missing assembly info for $asm1");
+
+    # Print header
+    print $CGI->h1("Synteny block")."\n";
+
+    # Parse location args
+    my ($chr1, $start1, $end1) = split '\:|\.\.', $loc1;
+    my @loc2_list;
+    foreach my $loc2_str (split ',', $loc2) {
+	my ($chr2, $start2, $end2) = split '\:|\.\.', $loc2_str;
+	push @loc2_list, [$chr2, $start2, $end2];
+    }
+    if($ori == 1) {
+	$ori = 'forward';
+    }
+    elsif($ori == -1) {
+	$ori = 'reverse';
+    }
+    else {
+	$ori = $asm1 =~ /^dm/ ? 'mixed' : 'mixed, synteny block contains inversions';
+    }
+
+
+    # Print synteny block location
+    print
+	$CGI->p(
+	    $CGI->start_table({-cellspacing => 5, -style=>"width: auto"}). "\n".
+	    $CGI->Tr([$CGI->th({-align => 'left'}, ['Organism','Genome assembly','Location','Size']),
+		      $CGI->td([get_location_fields($asm1_info, $chr1, $start1, $end1)]),
+		      map( { $CGI->td([get_location_fields($asm2_info, @$_)]) } @loc2_list),
+		      $CGI->td(""),
+		      $CGI->td({-colspan => 4}, $CGI->b("Alignment orientation: ").$ori)
+		     ]),
+	    $CGI->end_table()."\n"
+	), "\n";
+
+    print $CGI->hr();
+
+    if($asm1 =~ /^dm/) {
+	print $CGI->p("Synteny blocks were generated from chained alignments from the ".
+		      $CGI->a({-href=>"http://genome.ucsc.edu/"}, "UCSC Genome Browser Database").
+		      " as will be described in a coming publication (Engstr&ouml;m et al., <i>in press</i>). See ".
+		      $CGI->a({-href=>$METHODS_URL}, "Methods")." for more information.");
+    }
+    else {
+	print $CGI->p("Synteny blocks were generated from net alignments from the ".
+		      $CGI->a({-href=>"http://genome.ucsc.edu/"}, "UCSC Genome Browser Database").
+		      " as described by ".
+		      $CGI->a({-href=>"http://www.genome.org/cgi/content/abstract/17/5/545"}, "Kikuta et al. 2007").
+		      ". Blocks with less than 2 kb aligned sequence are not shown. See ".
+		      $CGI->a({-href=>$METHODS_URL}, "Methods")." for more information.");
+    }
+    print $CGI->hr();
+}
+
+
+sub cne_details
+{
+    my ($db) = @_;
+
+    # Print HTML header
+    print_header(-title => "HCNE details");
+    
+    # Get parameters
+    my $db_table = $CGI->param('table') or fail("Missing parameter: table");
+    my $asm_id = $CGI->param('asm') or fail("Missing parameter: asm");
+    my $cne_id = $CGI->param('id') or fail("Missing parameter: id");
+
+    # Get CNE object
+    my $cne = $db->get_cne_by_id(table_name => $db_table,
+				 assembly => $asm_id,
+				 id => $cne_id);
+    fail("No CNE with id $cne_id in database $CNE_DB_NAME, table $db_table") unless($cne);
+    
+    # Get info about assemblies
+    my $asm1_info = $db->get_assembly_info($cne->assembly1) or fail("Missing assembly info for ".$cne->assembly1);
+    my $asm2_info = $db->get_assembly_info($cne->assembly2) or fail("Missing assembly info for ".$cne->assembly2);
+
+    # Print header
+    print $CGI->h1("Highly conserved noncoding element")."\n";
+
+    # Print CNE location
+    print
+	$CGI->p(
+	    $CGI->start_table({-cellspacing => 5, -style=>"width: auto"}). "\n".
+	    $CGI->Tr([$CGI->th({-align => 'left'}, ['Organism','Genome assembly','Location','Size']),
+		      $CGI->td([get_location_fields($asm1_info, $cne->chr1, $cne->start1, $cne->end1)]),
+		      $CGI->td([get_location_fields($asm2_info, $cne->chr2, $cne->start2, $cne->end2)])
+		     ]),
+	    $CGI->end_table()."\n"
+	), "\n";
+    
+    # Print alignment
+    my $id_frac = print_alignment($asm1_info, $asm2_info, $cne);
+
+    # Print note if similarity if below threshold
+    my $table_info = $db->get_cne_table_info($db_table);
+    if($id_frac < $table_info->{min_identity}) {
+	print p("Note: the similarity of this alignment is below the search threshold of ".
+		$table_info->{min_identity}*100.
+		."% identity because HCNEs were obtained by merging overlapping ".$table_info->{min_length}.
+		"-column alignment windows that satisfy the search threshold. See ".
+		a({-href=>$METHODS_URL},"Methods")." for a detailed description of our HCNE detection procedure.");
+    }
+
+    print $CGI->hr();
+    
+}
+
+
+sub print_alignment
+{
+    my ($asm1_info, $asm2_info, $cne) = @_;
+
+    # Get handles to assembly files
+    my $asm1_fn = "$ASSEMBLY_DIR/$asm1_info->{assembly_id}/assembly.2bit";
+    my $asm2_fn = "$ASSEMBLY_DIR/$asm2_info->{assembly_id}/assembly.2bit";
+    my $asm1 = AT::DB::GenomeAssemblyTwoBit->new(file => $asm1_fn, id => $asm1_info->{assembly_id});	
+    my $asm2 = AT::DB::GenomeAssemblyTwoBit->new(file => $asm2_fn, id => $asm2_info->{assembly_id});	
+
+    # Get alignment
+    my $aln = $cne->get_alignment($asm1, $asm2);
+    fail("Error: could not get alignment") unless($aln);
+    my $seq1 = $aln->get_seq_by_pos(1) or fail("Error: failed to get seq 1 from alignment");
+    my $seq2 = $aln->get_seq_by_pos(2) or fail("Error: failed to get seq 2 from alignment");
+
+    # Compute % identity
+    my $match_line = $aln->match_line;
+    my $matches;
+    my $n_cols = length($match_line);
+    foreach my $c (split //, $match_line) {
+	$matches++ if($c eq '*');
+    }
+
+    # Print the alignment
+    my $top = $seq1->seq;
+    my $bottom = $seq2->seq;
+    my $name1 = make_organism_string($asm1_info);
+    my $name2 = make_organism_string($asm2_info);
+    print "<p>", $CGI->start_table({-style=>"width: auto"}), "\n";
+    print $CGI->Tr($CGI->th({-align => 'left'}, "Alignment")), "\n";
+    while($top ne '') {
+	print $CGI->Tr($CGI->td([$name1, $CGI->tt(substr($top, 0, 60, ''))])), "\n";
+	print $CGI->Tr($CGI->td([$name2, $CGI->tt(substr($bottom, 0, 60, ''))])), "\n";
+	my $ml = substr($match_line, 0, 60, ''); $ml =~ s/ /&nbsp;/g;
+	print $CGI->Tr($CGI->td(['', $CGI->tt($ml)])), "\n";
+	print $CGI->Tr($CGI->td(' '));
+    } 
+    print $CGI->end_table, "</p>\n";
+
+    if($seq1->strand == -1) {
+	my $name1_lc = $asm1_info->{organism_common} || $CGI->i($asm1_info->{organism_latin});
+	print $CGI->p("Note: the $name1_lc sequence is reverse complemented in the alignment.");
+    }
+
+    if($seq2->strand == -1) {
+	my $name2_lc = $asm2_info->{organism_common} || $CGI->i($asm2_info->{organism_latin});
+	print $CGI->p("Note: the $name2_lc sequence is reverse complemented in the alignment.");
+    }
+
+    # Print identity
+    my $id_frac = $matches / $n_cols;
+    my $id = sprintf("%.2f", 100 * $id_frac);
+    print $CGI->p($CGI->b("Similarity:")." $matches / $n_cols identical columns = $id%");
+
+    return $id_frac;
+}
+
+
+sub old_print_alignment
+{
+    my ($asm1_info, $asm2_info, $cne) = @_;
+
+    # Get handles to assembly files
+    my $asm1_fn = "$ASSEMBLY_DIR/$asm1_info->{assembly_id}/assembly.2bit";
+    my $asm2_fn = "$ASSEMBLY_DIR/$asm2_info->{assembly_id}/assembly.2bit";
+    my $asm1 = AT::DB::GenomeAssemblyTwoBit->new(file => $asm1_fn, id => $asm1_info->{assembly_id});	
+    my $asm2 = AT::DB::GenomeAssemblyTwoBit->new(file => $asm2_fn, id => $asm2_info->{assembly_id});	
+
+    # Get alignment
+    my ($seq1, $seq2);
+    my $aln = get_alignment($asm1_info, $asm2_info, $asm1, $asm2, $cne);
+    if($aln) {
+	$seq1 = $aln->get_seq_by_pos(1);
+	$seq2 = $aln->get_seq_by_pos(2);
+    }
+    else {
+	$aln = get_alignment($asm2_info, $asm1_info, $asm2, $asm1, $cne->clone->swap_locations);
+	fail("Error: could not get alignment") unless($aln);
+	$seq1 = $aln->get_seq_by_pos(2);
+	$seq2 = $aln->get_seq_by_pos(1);
+    }
+
+    # Compute % identity
+    my $match_line = $aln->match_line;
+    my $matches;
+    my $n_cols = length($match_line);
+    foreach my $c (split //, $match_line) {
+	$matches++ if($c eq '*');
+    }
+
+    # Print the alignment
+    my $top = $seq1->seq;
+    my $bottom = $seq2->seq;
+    my $name1 = make_organism_string($asm1_info);
+    my $name2 = make_organism_string($asm2_info);
+    print "<p>", $CGI->start_table({-style=>"width: auto"}), "\n";
+    print $CGI->Tr($CGI->th({-align => 'left'}, "Alignment")), "\n";
+    while($top ne '') {
+	print $CGI->Tr($CGI->td([$name1, $CGI->tt(substr($top, 0, 60, ''))])), "\n";
+	print $CGI->Tr($CGI->td([$name2, $CGI->tt(substr($bottom, 0, 60, ''))])), "\n";
+	my $ml = substr($match_line, 0, 60, ''); $ml =~ s/ /&nbsp;/g;
+	print $CGI->Tr($CGI->td(['', $CGI->tt($ml)])), "\n";
+	print $CGI->Tr($CGI->td(' '));
+    } 
+    print $CGI->end_table, "</p>\n";
+
+    if($seq1->strand == -1) {
+	my $name1_lc = $asm1_info->{organism_common} || $CGI->i($asm1_info->{organism_latin});
+	print $CGI->p("Note: the $name1_lc sequence is reverse complemented in the alignment.");
+    }
+
+    if($seq2->strand == -1) {
+	my $name2_lc = $asm2_info->{organism_common} || $CGI->i($asm2_info->{organism_latin});
+	print $CGI->p("Note: the $name2_lc sequence is reverse complemented in the alignment.");
+    }
+
+    # Print identity
+    my $id_frac = $matches / $n_cols;
+    my $id = sprintf("%.2f", 100 * $id_frac);
+    print $CGI->p($CGI->b("Similarity:")." $matches / $n_cols identical columns = $id%");
+
+    return $id_frac;
+}
+
+
+sub get_alignment
+{
+    my ($asm1_info, $asm2_info, $asm1, $asm2, $cne) = @_;
+
+    # Get ids for assemblies
+    my $asm1_id = $asm1_info->{assembly_id};
+    my $asm2_id = $asm2_info->{assembly_id};
+
+    # Connect to alignment db
+    my $aln_db_name = $asm1_info->{ucsc_db} or return;
+    my $aln_db = AT::DB::ChainedAlignment->connect(dbname => $aln_db_name,
+						   dbhost => $DB_HOST,
+						   dbuser => $DB_USER)
+	or fail("Error: failed to connect to db $aln_db_name");
+    $aln_db->target_assembly($asm1_id, $asm1);
+    $aln_db->query_assembly($asm2_id, $asm2);
+
+    # Return unless alignment exists
+    #print "<p>looking for alignment to $asm2_id in $aln_db_name</p>\n";
+    $aln_db->alignment_exists($asm2_id) or return;
+
+    # Get the alignment
+    my $aln = $aln_db->get_alignments_for_regions(target_chr => $cne->chr1,
+						  target_start => $cne->start1,
+						  target_end => $cne->end1,
+						  query_id => $asm2_id,
+						  query_chr => $cne->chr2,
+						  query_start => $cne->start2,
+						  query_end => $cne->end2);
+
+    fail("Error: no alignment for CNE in database $aln_db_name") if(@$aln == 0);
+    fail("Error: multiple alignments for CNE in database $aln_db_name") if(@$aln > 1);
+
+    # Return the alignment
+    return $aln->[0];
+}
+
+
+sub get_seq_str
+{
+    my ($asm_id, $chr, $start, $end) = @_;
+    my $asm_fn = "$ASSEMBLY_DIR/$asm_id/assembly.2bit";
+    my $asm = AT::DB::GenomeAssemblyTwoBit->new(file => $asm_fn, id => $asm_id);	
+    my $seq_str = $asm->get_genome_seq_str(chr => $chr, start => $start, end => $end);
+    return $seq_str;
+}
+
+
+sub get_location_fields
+{
+    my ($asm_info, $chr, $start, $end) = @_;
+
+    my $organism = make_organism_string($asm_info);
+
+    my $asm_id = $asm_info->{assembly_id};
+    my $assembly = ' '.$asm_info->{assembly_name}.' ('.$asm_id.') ';
+
+    my $loc = $chr.':'.make_position_string($start).'..'.make_position_string($end);
+    if(gbrowse_conf_file_exists($asm_id)) {
+	my $url = "$GBROWSE_URL/$asm_id?ref=$chr&start=$start&end=$end";
+	$loc = $CGI->a({-href => $url},$loc);
+    }
+    my $length = make_position_string($end - $start + 1).' bp';
+
+    return ($organism, $assembly, $loc, $length);
+}
+
+
+sub make_organism_string
+{
+    my $asm_info = shift;
+    my $organism;
+    if($asm_info->{organism_common}) {
+	$organism = ucfirst($asm_info->{organism_common});
+    }
+    else {
+	$organism = $CGI->i($asm_info->{organism_latin});
+    }
+    return $organism;
+}
+
+
+sub make_cne_location_string
+{
+    my ($asm_info, $chr, $start, $end) = @_;
+
+    my $asm_id = $asm_info->{assembly_id};
+
+    my $string;
+    if($asm_info->{organism_common}) {
+	$string = ucfirst($asm_info->{organism_common});
+    }
+    else {
+	$string = $CGI->i($asm_info->{organism_latin});
+    }
+    $string .= ' '.$asm_info->{assembly_name}.' ('.$asm_id.') ';
+
+    my $loc = $chr.':'.make_position_string($start).'..'.make_position_string($end);
+    my $loc_len = $end - $start + 1;
+    if(gbrowse_conf_file_exists($asm_id)) {
+	my $url = "$GBROWSE_URL/$asm_id?ref=$chr&start=$start&end=$end";
+	$string .= $CGI->a({-href => $url},$loc);
+    }
+    else {
+	$string .= $loc;
+    }
+    $string .= " ($loc_len bp)";
+
+    return $string;
+}
+
+
+sub make_position_string
+{
+    my ($pos) = @_;
+    my @triplets;
+    while(length($pos)) {
+	unshift @triplets, substr($pos, -3, 3, '');
+    }
+    return join(',',@triplets);
+}
+
+sub gbrowse_conf_file_exists
+{
+    my $asm_id = shift;
+    return -e "$GBROWSE_CONF_DIR/$asm_id.conf" ? 1 : 0;
+}
+
+
+
+# Print HTML header
+{
+    my $_printedHeader = 0;
+    sub print_header
+    {
+	return if($_printedHeader);
+	$_printedHeader = 1;
+	my %args = @_;
+	print $CGI->header();
+	$args{-title} = "Details" unless($args{-title});
+	$args{-style}{-src} = $STYLESHEET unless($args{-style}{-src});
+	print $CGI->start_html(%args), "\n\n";
+	#print_navigation_bar();
+	print "\n";
+    }
+}
+
+# Print HTML footer
+sub print_footer
+{
+    print $CGI->end_html;
+}
+
+
+sub fail 
+{
+    print_header();
+    print(@_);
+    print_footer();
+    exit;
+}
+
+
+sub __old_print_alignment
+{
+    my ($asm1_info, $asm2_info, $cne) = @_;
+
+    # Get sequences to align
+    my $seq1 = get_seq_str($cne->assembly1, $cne->chr1, $cne->start1, $cne->end1);
+    my $seq2 = get_seq_str($cne->assembly2, $cne->chr2, $cne->start2, $cne->end2);
+
+    # Make alignment in both orientations and choose the best
+    my %scores = (match => 1, mismatch => -0.5, gap => -4, gap_extend => -0.2); 
+    my $aln_fwd = Bio::Graphics::Browser::Realign->new($seq1, $seq2, \%scores);
+    my $aln_rev = Bio::Graphics::Browser::Realign->new($seq1, AT::Tools::SeqHandler->revcom($seq2), \%scores);
+    my ($aln, $strand) = $aln_fwd->score > $aln_rev->score ? ($aln_fwd, 1) : ($aln_rev, -1);
+
+    # Compute % identity
+    my ($top, $middle, $bottom) = $aln->pads;
+    my $matches;
+    my $n_cols = length($middle);
+    foreach my $c (split //, $middle) {
+	$matches++ if($c eq '|');
+    }
+
+    # Print the alignment
+    my $name1 = make_organism_string($asm1_info);
+    my $name2 = make_organism_string($asm2_info);
+    print "<p>", $CGI->start_table({-style=>"width: auto"}), "\n";
+    print $CGI->Tr($CGI->th({-align => 'left'}, "Alignment")), "\n";
+    while($top ne '') {
+	print $CGI->Tr($CGI->td([$name1, $CGI->tt(substr($top, 0, 60, ''))])), "\n";
+	my $mid = substr($middle, 0, 60, ''); $mid =~ s/ /&nbsp;/g;
+	print $CGI->Tr($CGI->td(['', $CGI->tt($mid)])), "\n";
+	print $CGI->Tr($CGI->td([$name2, $CGI->tt(substr($bottom, 0, 60, ''))])), "\n";
+	print $CGI->Tr($CGI->td(' '));
+    } 
+    print $CGI->end_table, "</p>\n";
+    if($strand == -1) {
+	my $name2_lc = $asm2_info->{organism_common} || $CGI->i($asm2_info->{organism_latin});
+	print $CGI->p("Note: the $name2_lc sequence is reverse complemented in the alignment.");
+    }
+
+    # Print identity
+    my $id = sprintf("%.2f", 100 * $matches / $n_cols);
+    print $CGI->p($CGI->b("Similarity:")." $matches / $n_cols identical columns = $id%");
+}
+
+
+

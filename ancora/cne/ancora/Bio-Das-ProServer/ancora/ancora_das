@@ -1,0 +1,115 @@
+#!/bin/bash
+#
+#	/etc/rc.d/init.d/ancora_das
+#
+# ancora_das    This shell script takes care of starting and stopping
+#               the DAS server (proserver) for Ancora.
+#    		The DAS server runs on http://ancora.genereg.net/das,
+# 		which maps to localhost:9000 through a httpd reverse proxy.
+# 
+# chkconfig: 2345 85 15
+# description: Proserver DAS server for Ancora data
+# processname: proserver
+# config: /opt/www/ancora/Bio-Das-ProServer/eg/proserver.ini
+# pidfile: /opt/www/ancora/Bio-Das-ProServer/eg/proserver.pid
+
+# Source function library.
+. /etc/init.d/functions
+
+PROSERVER_DIR=/opt/www/ancora/Bio-Das-ProServer
+ANCORA_DIR=$PROSERVER_DIR/ancora
+LOG_DIR=$PROSERVER_DIR/ancora/log
+START_SCRIPT=$ANCORA_DIR/start_proserver
+LOG_FILE=$LOG_DIR/proserver.log
+ERR_FILE=$LOG_DIR/proserver.err
+PID_FILE=$LOG_DIR/proserver.pid
+
+start() {
+	echo -n "Starting Proserver for Ancora: "
+   	if [ -f $PID_FILE ]; then
+		PID=`cat $PID_FILE`
+		echo "Proserver for Ancora already running: $PID"
+                exit 2;
+	fi
+	touch $LOG_FILE $ERR_FILE
+	chown nobody:nobody $LOG_DIR $LOG_FILE $ERR_FILE $START_SCRIPT
+	chmod a+rx $ANCORA_DIR
+	chmod u+rwx $LOG_DIR
+	chmod u+rw $LOG_FILE $ERR_FILE
+	daemon --user nobody $START_SCRIPT
+	RETVAL=$?
+	echo
+	[ $RETVAL -eq 0 ] && touch /var/lock/subsys/ancora_das
+	return $RETVAL
+}	
+
+stop() {
+    echo -n "Shutting down Proserver for Ancora: "
+    if [ -f $PID_FILE ]; then
+	pid=`cat $PID_FILE`
+	if checkpid $pid 2>&1; then
+	    #TERM first, then KILL if not dead
+	    kill -TERM $pid >/dev/null 2>&1
+	    usleep 100000
+	    if checkpid $pid && sleep 1 &&
+		checkpid $pid && sleep 3 &&
+		checkpid $pid ; then
+		kill -KILL $pid >/dev/null 2>&1
+		usleep 100000
+	    fi
+	fi
+	checkpid $pid
+	RC=$?
+	[ "$RC" -eq 0 ] && failure $"Ancora Proserver shutdown" || success $"Ancora Proserver shutdown"
+	RC=$((! $RC))
+    else
+	failure $"Ancora Proserver shutdown"
+	RC=1
+    fi
+    if [ "$RC" -eq 0 ]; then
+	rm -f $PID_FILE
+	rm -f /var/lock/subsys/ancora_das
+    fi
+    echo
+    return $RC
+}
+
+# experimental
+#reload() {
+#	echo -n "Asking Ancora Proserver to restart: "
+#	PID=`pidofproc ancora_das`
+#	kill -USR1 $PID
+#	RETVAL=$?
+#	echo 
+#	return $?
+#}
+
+case "$1" in
+    start)
+	start
+	;;
+    stop)
+	stop
+	;;
+    status)
+	echo Not implemented
+	#status ancora_das
+	;;
+    restart)
+    	stop
+	start
+	;;
+    reload)
+	stop
+	start
+	;;
+    condrestart)
+	[ -f /var/lock/subsys/<service> ] && restart || :
+	;;
+    *)
+	echo "Usage: ancora_das {start|stop|status|reload|restart}"
+	exit 1
+	;;
+esac
+exit $?
+
