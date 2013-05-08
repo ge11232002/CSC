@@ -1,0 +1,26 @@
+Readme file for script cgb.pl
+Par Engstrom 2006-07-11
+
+The cgb.pl script is a Perl/CGI implementation of a comparative genome browser.
+
+Requirements
+------------
+- AT library
+- UCSC annotation databases (in MySQL) for one or more genomes. The entire databases are not needed, just the tracks you want to display.
+- Genome sequence databases for the genomes you want to browse. These databases can 2bit files (preferred), nib files or GenomeAssembly MySQL databases.
+- GenomeAlignment databases for the genomes you want to compare. GenomeAlignment databases are built from axtNet files with the script axt2sql.pl supplied with AT.
+
+To set it up
+------------
+- Copy cgb.pl and its configuration file draw_loci.conf (found in AT/SCRIPTS/draw_loci) to your cgi-bin directory.
+- Modify the paths and database references in the the script and config file to in accordance with your system configuration.
+
+Track configuration
+-------------------
+Genomes and tracks are specified in the configuration file. The script can read track data from MySQL databases and bed files. Since bed files are not indexed, and not assumed to be sorted, tracks that are to be used a lot are preferably put in a MySQL database. The bed file option, however, is good for temporary tracks as long as the files are not too large.
+
+Further reading
+---------------
+For more details, see the readme file for draw_loci.pl (AT/SCRIPTS/draw_loci/draw_loci.README.txt). 
+
+//

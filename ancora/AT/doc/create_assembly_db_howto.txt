@@ -1,0 +1,16 @@
+This document describes how to create an AT-type genome assembly database.
+
+1. Find the fasta files for the genome assembly. The files should be
+on mordor, under /data/goldenpath/GS_MMMYY/fasta. In this naming
+scheme, G=genus, S=species, M=month, Y=year. There should be one
+file for each chromosomes. If these files have not been downloaded,
+ask Bent to do it.
+
+2. Use the mysql client to create a database named according to the
+format GS_MMMYY.  E.g: create database HS_MAY03;
+
+3. Run the script AT/SCRIPTS/genome2sql.pl to populate the database.
+E.g.: perl genome2sql.pl -u engstrom -d HS_MAY03 -h nautilus /net/mordor/data/goldenpath/HS_MAY03/fasta/*.fa
+
+Done!
+
