@@ -1,4 +1,4 @@
-body { background-color: #e0e0e0 }
+body { background-color: #CCFFCC }
 
 /* Heading styles */
 h3 { font-family: Verdana, Arial, Helvetica, sans-serif; text-align:center }
@@ -15,7 +15,7 @@ th { font-family: Verdana, Arial, Helvetica, sans-serif; font-size: 14px; text-a
 /* Tables for page layout */
 table.main {border-style:none; border-spacing:5; width: 100%}
 table.maincenter {border-style:none; border-spacing:5; width:auto; margin-left:auto; margin-right:auto}
-td.textbox {border: solid; padding: 10px; vertical-align:top; background-color:#e0e8f0}
+td.textbox {border: solid; padding: 10px; vertical-align:top; background-color:#FFFFFF}
 
 /* Link styles */
 a:link {text-decoration: none; color: #0000ff}

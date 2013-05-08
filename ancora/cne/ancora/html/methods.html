@@ -163,9 +163,10 @@ downloaded from the <a href="http://hgdownload.cse.ucsc.edu/downloads.html">UCSC
 for regions with at least <i>I</i> identities over <i>C</i> alignment columns.
 We use two different window sizes (<i>C</i>=30 and <i>C</i>=50) for each pair of genomes.
 We use identity thresholds (<i>I</i>/<i>C</i>) in the range 70-100% depending on evolutionary distance.
-Regions annotated as <a href="filters.html">exons</a> or <a href="filters.html">repeats</a> are not scanned. For each pairwise comparison, we scan two sets of nets (one from the perspective of each genome)
+For each pairwise comparison, we scan two sets of nets (one from the perspective of each genome)
 in order not to miss elements duplicated in either lineage. We merge highly conserved elements that overlap
-on both genomes. We then <a href="http://www.genome.org/cgi/content/full/12/4/656">BLAT</a> all remaining elements against the two respective genomes, counting all mapping positions with a sequence identity of at least 90%. We discard any element with more than four mapping locations in a mammalian or invertebrate genome or eight mapping locations in a teleost genome and consider remaining elements HCNEs.
+on both genomes. We discard elements whose genome coordinates overlap by one or more bp with
+<a href="filters.html">annoted exons</a> and <a href="filters.html">known repeats</a>. We then <a href="http://www.genome.org/cgi/content/full/12/4/656">BLAT</a> all remaining elements against the two respective genomes, counting all mapping positions with a sequence identity equal or higher to the identity threshold used in the cross-species alignment scan. We discard any element with more than four mapping locations in a mammalian genome or eight mapping locations in a teleost genome and consider remaining elements HCNEs.
   
 </p>
   
