@@ -211,13 +211,13 @@ ln -s html /opt/www/ancora/
 ln -s cgi-bin /opt/www/ancora/
 ## the das server settings
 ln -s Bio-Das-ProServer /opt/www/ancora/
-## put the gbrowse cgi files to ancora cgi-bin folder
-ln -s /opt/www/gbrowse2/cgi-bin/* /opt/www/ancora/cgi-bin
+## put the cgi files to GBrowse cgi-bin folder
+cd gbrowse2
+ln -s cgi-bin/* /opt/www/gbrowse2/cgi-bin/
 ## put the gbrowse conf files to the GBrowse's conf folder 
-cd gbrowse2/conf
-ln -s *.conf /opt/www/gbrowse2/conf
+ln -s conf/*.conf /opt/www/gbrowse2/conf/
 ## put the gbrowse plugins to the GBrowse's plugins folder
-ln -s plugins/* /opt/www/gbrowse2/conf/plugins/
+ln -s conf/plugins/* /opt/www/gbrowse2/conf/plugins/
 ```
 
 <h3 id="apache">Apache Configuration</h3>
@@ -226,8 +226,12 @@ The Apache httpd server is configured to look for html files under
 However, if we use the technique called "VirtualHost",
 the html files can be left under ```/opt/www/ancora```.
 The mapping of the domain http://ancora.olifant.cscdom.csc.mrc.ac.uk/ 
-to this directory is configured in Apache configuration file
-```/etc/httpd/conf```.
-
-
+to this directory is configured in Apache configuration file ```/etc/httpd/conf```.
+```
+<VirtualHost *:80>
+	ServerName ancora.olifant.cscdom.csc.mrc.ac.uk
+	ScriptAlias /cgi-bin /opt/www/gbrowse2/cgi-bin
+	DocumentRoot /opt/www/ancora/html
+</VirtualHost>
+```
 
