@@ -82,17 +82,19 @@ sudo ./Build install --uninst 1
 The "--uninst 1" will make sure that the files for the
 newer (2.33) version are removed in case they are installed 
 in another directory.
-
 **Note**: For some unknown reasons, the tracks are not displayed on Mac OS 10.8.3 with Firefox 20.0, Safari 6.0.4 and Opera 12.15. However, Chrome 26.0.1410.65 works fine. So far, it works on Windows 7 with all major browsers.
 
 <h3 id="GBrowse2Ad">GBrowse2 Advanced Installation</h3>
 This section is optional and incomplete. The advance installation should cover the topics such as *FastCGI*, *User Account Database*, *Displaying Next Generation Sequencing Data*, *Configuring the Uploaded Track Database*.
 
 <h4 id="FastCGI">Running GBrowse under FastCGI</h4>
-The idea of FastCGI is to make the script as a long-running process at the first time of the script is requested. By eliminating the startup time for later use of script, the responsiveness of a FastCGI is significantly improved.
+The idea of FastCGI is to make the script as a long-running process at the first time of the script is requested. 
+By eliminating the startup time for later use of script, 
+the responsiveness of a FastCGI is significantly improved.
 
-To use this facility, you will need a version of Apache equipped with FastCGI support, the module [mod_fcgid](http://httpd.apache.org/mod_fcgid/). For a Debian (DEB) based system,
-
+To use this facility, you will need a version of Apache equipped with FastCGI support, 
+the module [mod_fcgid](http://httpd.apache.org/mod_fcgid/). 
+For a Debian (DEB) based system,
 ```sh
 sudo apt-get install libapache2-mod-fastcgi libfcgi-perl
 ```
@@ -109,9 +111,6 @@ yum install mod_fcgid
 rpm -Uvh atomic-release*rpm
 yum install fcgi-perl
 ```
-
-The configuration of GBrowse2's FastCGI for Ancora will be addressed later.
-
 **Note**: Because the olifant has a old version of *Apache* and *mod_fcgid*. 
 You may need to adapt the GBrowse2 conf file for Apache 
 (/etc/httpd/conf.d/gbrowse2.conf on olifant) 
@@ -135,7 +134,6 @@ The UCSC Genome Browser source also contains a collection of useful utilities,
 some of which are needed at steps below. 
 It is recommended to compile all the UCSC utilities by following the instructions in the README file in the UCSC source package. 
 Short story on olifant,
-
 ```sh
 export MACHTYPE=x86_64
 export MYSQLINC=/usr/include/mysql
@@ -169,7 +167,6 @@ which also includes many modules in early stages of development.
 
 The cne and AT packages are maintained in the CSC repository. 
 To retrieve the most recent versions, do:
-
 ```sh
 git clone git@github.com:ge11232002/CSC.git
 ```
@@ -234,4 +231,70 @@ to this directory is configured in Apache configuration file ```/etc/httpd/conf`
 	DocumentRoot /opt/www/ancora/html
 </VirtualHost>
 ```
+**Note**: When the CGI script is called by ```/cgi-bin/gbrowse```,
+the CGI will run in the traditional mode.
+If you want to take the advantage of FastCGI, 
+the CGI will be executed in ```/fgb2/gbrowse```.
+The settings of FastCGI for GBrowse2 is in ```/etc/httpd/conf.d/gbrowse2.conf```.
+By default, Ancora will call the CGI in FastCGI mode.
+
+<h3 id="data">Data Files</h3>
+Ancora expects genome assembly sequences in binary 2bit format to be present under 
+/export/data/goldenpath. 
+There should be one subdirectory for each assembly, 
+named using a UCSC assembly identifier (e.g. hg18, mm9) 
+or some other suitable identifier for assemblies not served by UCSC. 
+Each such subdirectory should contain a file named assembly.2bit 
+containing the soft-masked assembly sequence. 
+Two-bit files can be made by downloading the assembly 
+in soft-masked fasta format from http://genome.ucsc.edu/ 
+and converting it to 2bit format using the program faToTwoBit, 
+which is part of the UCSC utilities. E.g. 
+for the latest human assembly:
+```sh
+cd /export/data/goldenpath
+mkdir hg18
+cd hg18
+wget http://hgdownload.cse.ucsc.edu/goldenPath/hg18/bigZips/chromFa.zip
+unip chromFa.zip
+faToTwoBit *.fa assembly.2bit
+rm *.fa chromFa.zip
+```
+We use additional files (annotation and aligment files) from UCSC 
+in the CNE detection pipeline and 
+in constructing the other annotation tracks shown in the genome browser. 
+How to retrieve these files is described in the corresponding sections below.
+
+<h3 id="cnedb">The CNE database</h3>
+Ancora reads information about genome assemblies and CNEs 
+from a database called cne served by the MySQL server on the same host. 
+Programmatic access to this database is provided 
+by the Perl module CNE::DB in the cne package.
+
+If this database does not exist, create it:
+```sh
+mysql -u username -p -e 'create database cne'
+mysql -u username -p -e 'grant select on cne.* to nobody@localhost'
+```
+(Replacing username with your MySQL username, or root if necessary.) 
+The second command gives user nobody read access to the database. 
+This is necessary because Ancora accesses the database as user nobody.
+
+Presently there is only one table that must exist in the database. 
+This table is called assembly and holds information 
+about the genome assemblies for which comparisons are available in Ancora. 
+The cne package contains a file with SQL commands 
+that create the table and fills it with sample data:
+```sh
+mysql -u username -p cne < cne/scripts/cne_pipeline/create_assembly_table.sql
+```
+
+If the assembly you are setting up a browser for is not already present in this table, 
+you need to execute an SQL INSERT statement (see the MySQL manual) 
+to add a row describing the assembly. 
+Most of the fields in the table are self-explanatory. 
+The following may not be:
+*	ensembl_ver – Currently only used by the DAS service. Specifies which Ensembl version that DAS tracks should be added to. Leave blank for the most recent Ensembl release, or add a version in the form of an archive name (e.g. “apr2007”) for an older release.
+*	default_ensembl_loc – Currently only used by the DAS service. Specifies which location the user should be taken to in Ensembl when tracks are added. Specify as an Ensembl location string (e.g. “7:8541098-8656549”).
+*	ucsc_db – Deprecated, so can be left blank. Earlier releases of Ancora required an UCSC annotation database to be present for some assemblies.
 
