@@ -18,6 +18,12 @@ This document describes the implementation the Ancora web resource. For a genera
 	* [Data Files](#data)
 	* [The CNE database](#cnedb)
     * [MySQL account for Perl scripts](#mysql)
+*	[Generating CNEs](#CNEs)
+	*	[Obtaining alignment files](#alignment)
+    *	[Creating filter files](#filter)
+    *	[Scanning for CNEs](#scan)
+    *	[Removing unannotated repeats with BLAT](#BLAT)
+    *	[Loading CNEs into the cne database](#loadCNEs)
 
 <h2 id="installation">Installation</h2>
  This documentation focuses on the Ancora installation on Olifant at csc. Olifant is running the CentOS release 5.8 (Final). However, ancora is supposed to run on other Linux/Unix distribution without too much difficulty.
@@ -290,11 +296,56 @@ mysql -u username -p cne < cne/scripts/cne_pipeline/create_assembly_table.sql
 ```
 
 If the assembly you are setting up a browser for is not already present in this table, 
-you need to execute an SQL INSERT statement (see the MySQL manual) 
+you need to execute an SQL INSERT statement
 to add a row describing the assembly. 
 Most of the fields in the table are self-explanatory. 
 The following may not be:
 *	ensembl_ver – Currently only used by the DAS service. Specifies which Ensembl version that DAS tracks should be added to. Leave blank for the most recent Ensembl release, or add a version in the form of an archive name (e.g. “apr2007”) for an older release.
 *	default_ensembl_loc – Currently only used by the DAS service. Specifies which location the user should be taken to in Ensembl when tracks are added. Specify as an Ensembl location string (e.g. “7:8541098-8656549”).
 *	ucsc_db – Deprecated, so can be left blank. Earlier releases of Ancora required an UCSC annotation database to be present for some assemblies.
+
+To add one new row into the table or update one row,
+```sql
+INSERT INTO assembly 
+(assembly_id, assembly_name, organism_common, organism_latin, ensembl_ver, default_ensembl_loc) 
+VALUES 
+("hg19", "NCBI Build 37", "human", "Homo sapiens", "feb2009", "11:31766034-31797085");
+UPDATE assembly
+SET ensembl_ver="nov2009", default_ensembl_loc="GL172646.1:2369612-2552500"
+WHERE assembly_id="xenTro3";
+```
+
+<h3 id="mysql">MySQL account for Perl scripts</h3>
+Generating CNEs and setting up the annotation database for Ancora 
+involves running several Perl scripts that need to access local MySQL databases. 
+Some of these scripts require that a MySQL username and password 
+are specified in a file called MyPerlVars.pm 
+located in a directory mentioned in your PERL5LIB environment variable. 
+I have such a file in a directory called .perl under my home directory, 
+and have added the following line to my .bashrc to 
+make Perl look for libraries in this directory:
+```sh
+export PERL5LIB=~/.perl:$PERL5LIB
+```
+The file MyPerlVars.pm should contain the following lines:
+```perl
+package MyPerlVars;
+use warnings;
+use strict;
+
+use Exporter;
+
+our @ISA = qw(Exporter);
+our @EXPORT_OK = qw($sqlUser $sqlPass);
+
+our $sqlUser = "username"; # replace username with your username
+our $sqlPass = "password"; # replace password with your password
+
+1;
+```
+
+<h2 id="CNEs">Generating CNEs</h2>
+
+
+
 
