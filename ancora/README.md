@@ -18,6 +18,12 @@ This document describes the implementation the Ancora web resource. For a genera
 	* [Data Files](#data)
 	* [The CNE database](#cnedb)
     * [MySQL account for Perl scripts](#mysql)
+*	[Generating CNEs](#CNEs)
+	*	[Obtaining alignment files](#alignment)
+    *	[Creating filter files](#filter)
+    *	[Scanning for CNEs](#scan)
+    *	[Removing unannotated repeats with BLAT](#BLAT)
+    *	[Loading CNEs into the cne database](#loadCNEs)
 
 <h2 id="installation">Installation</h2>
  This documentation focuses on the Ancora installation on Olifant at csc. Olifant is running the CentOS release 5.8 (Final). However, ancora is supposed to run on other Linux/Unix distribution without too much difficulty.
@@ -308,4 +314,38 @@ UPDATE assembly
 SET ensembl_ver="nov2009", default_ensembl_loc="GL172646.1:2369612-2552500"
 WHERE assembly_id="xenTro3";
 ```
+
+<h3 id="mysql">MySQL account for Perl scripts</h3>
+Generating CNEs and setting up the annotation database for Ancora 
+involves running several Perl scripts that need to access local MySQL databases. 
+Some of these scripts require that a MySQL username and password 
+are specified in a file called MyPerlVars.pm 
+located in a directory mentioned in your PERL5LIB environment variable. 
+I have such a file in a directory called .perl under my home directory, 
+and have added the following line to my .bashrc to 
+make Perl look for libraries in this directory:
+```sh
+export PERL5LIB=~/.perl:$PERL5LIB
+```
+The file MyPerlVars.pm should contain the following lines:
+```perl
+package MyPerlVars;
+use warnings;
+use strict;
+
+use Exporter;
+
+our @ISA = qw(Exporter);
+our @EXPORT_OK = qw($sqlUser $sqlPass);
+
+our $sqlUser = "username"; # replace username with your username
+our $sqlPass = "password"; # replace password with your password
+
+1;
+```
+
+<h2 id="CNEs">Generating CNEs</h2>
+
+
+
 
