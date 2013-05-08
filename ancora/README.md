@@ -290,11 +290,22 @@ mysql -u username -p cne < cne/scripts/cne_pipeline/create_assembly_table.sql
 ```
 
 If the assembly you are setting up a browser for is not already present in this table, 
-you need to execute an SQL INSERT statement (see the MySQL manual) 
+you need to execute an SQL INSERT statement
 to add a row describing the assembly. 
 Most of the fields in the table are self-explanatory. 
 The following may not be:
 *	ensembl_ver – Currently only used by the DAS service. Specifies which Ensembl version that DAS tracks should be added to. Leave blank for the most recent Ensembl release, or add a version in the form of an archive name (e.g. “apr2007”) for an older release.
 *	default_ensembl_loc – Currently only used by the DAS service. Specifies which location the user should be taken to in Ensembl when tracks are added. Specify as an Ensembl location string (e.g. “7:8541098-8656549”).
 *	ucsc_db – Deprecated, so can be left blank. Earlier releases of Ancora required an UCSC annotation database to be present for some assemblies.
+
+To add one new row into the table or update one row,
+```sql
+INSERT INTO assembly 
+(assembly_id, assembly_name, organism_common, organism_latin, ensembl_ver, default_ensembl_loc) 
+VALUES 
+("hg19", "NCBI Build 37", "human", "Homo sapiens", "feb2009", "11:31766034-31797085");
+UPDATE assembly
+SET ensembl_ver="nov2009", default_ensembl_loc="GL172646.1:2369612-2552500"
+WHERE assembly_id="xenTro3";
+```
 
