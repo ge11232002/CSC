@@ -6,16 +6,21 @@ This document describes the implementation the Ancora web resource. For a genera
 **Table of contents**
 
 *    [Installation](#installation)
-  * [Software dependencies](#dependencies)
-  * [GBrowse2](#GBrowse2)
-  * [Gbrowse2 Advanced Installation](#GBrowse2Ad)
-  * [UCSC Genome Browser source and utilities](#UCSC)
-  * [ProServer DAS server](#DAS)
-  * [Software components](#SoftwareComponents)
-  
+ * [Software dependencies](#dependencies)
+	* [GBrowse2](#GBrowse2)
+	* [Gbrowse2 Advanced Installation](#GBrowse2Ad)
+	* [UCSC Genome Browser source and utilities](#UCSC)
+	* [ProServer DAS server](#DAS)
+	* [Software components](#SoftwareComponents)
+*    [Configuration](#configuration)
+	* [Ancora Web Resource](#ancoraweb)
+	* [Apache Configuration](#apache)
+	* [Data Files](#data)
+	* [The CNE database](#cnedb)
+    * [MySQL account for Perl scripts](#mysql)
+
 <h2 id="installation">Installation</h2>
  This documentation focuses on the Ancora installation on Olifant at csc. Olifant is running the CentOS release 5.8 (Final). However, ancora is supposed to run on other Linux/Unix distribution without too much difficulty.
-
 <h3 id="dependencies">Software dependecies</h3>
  The following softwares are essential for the whole implementation.
  
@@ -170,9 +175,19 @@ This could be done by creating soft links for the *cne* and *AT* under */opt/www
 To run scripts that use the modules, 
 you will have to add the installation paths to your PERL5LIB environment variable. 
 If you use bash as your shell, 
-you can do this by adding the following line to the file ~/.bash_profile:
+you can do this by adding the following line to the file ~/.bashrc:
 ```sh
 export PERL5LIB=/opt/www/AT/lib:/opt/www/cne/perl_lib:$PERL5LIB
 ```
 (If you want scripts to use a working copy of the modules in a different location, modify the above line accordingly.)
+The cne/tools directory in the cne package contains source code for several C programs. 
+Ancora currently only needs one of these programs: ceScan, 
+the program we use to detect CNE. 
+Instructions for how to compile the C programs are in cne/tools/README.txt.
+
+<h2 id="configuration">Configuration</h2>
+This section will describe all the necessary configurations step by step
+for setting up the Ancora web resource.
+<h3 id="ancoraweb">Ancora Web Resource</h3>
+
 
