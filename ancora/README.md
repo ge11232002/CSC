@@ -352,6 +352,8 @@ VALUES
 UPDATE assembly
 SET ensembl_ver="nov2009", default_ensembl_loc="GL172646.1:2369612-2552500"
 WHERE assembly_id="xenTro3";
+/* Finally output the table for backup*/
+mysqldump -u username -p cne assembly > create_assembly_table.sql 
 ```
 
 <h3 id="mysql">MySQL account for Perl scripts</h3>
@@ -465,6 +467,47 @@ Begin by creating a local database to hold UCSC annotations for the assembly,
 if one does not already exist. 
 We have named these databases UCSC_id, 
 replacing id with the UCSC assembly id, e.g. UCSC_hg18, UCSC_mm9.
+
+The annotations available for download from UCSC can be browsed 
+at http://hgdownload.cse.ucsc.edu/downloads.html. 
+Annotations files can be downloaded in batch with rsync.
+
+**Gaps and RepeatMasker**
+```sh
+## old storage format
+rsync -avzP \
+  rsync://hgdownload.cse.ucsc.edu/goldenPath/hg18/database/*_gap.* \
+  rsync://hgdownload.cse.ucsc.edu/goldenPath/hg18/database/*_rmsk.* \
+  /export/data/CNEs/hg18/annotation/
+## new storage format
+rsync -avzp \
+  rsync://hgdownload.cse.ucsc.edu/goldenPath/hg19/database/gap.* \
+  rsync://hgdownload.cse.ucsc.edu/goldenPath/hg19/database/rmsk.* \
+  /export/data/CNEs/hg19/annotation/
+```
+**RefSeq genes**
+```sh
+rsync -avzp \
+  rsync://hgdownload.cse.ucsc.edu/goldenPath/hg19/database/refGene.* \
+  rsync://hgdownload.cse.ucsc.edu/goldenPath/hg19/database/refLink.* \
+  /export/data/CNEs/hg19/annotation/
+```
+**UCSC Known Genes**
+```sh
+rsync -avzp \
+  rsync://hgdownload.cse.ucsc.edu/goldenPath/hg19/database/knownGene.* \
+  rsync://hgdownload.cse.ucsc.edu/goldenPath/hg19/database/knownIsoforms.* \
+  rsync://hgdownload.cse.ucsc.edu/goldenPath/hg19/database/kgXref.* \
+  /export/data/CNEs/hg19/annotation/
+```
+**Aligned UCSC Known Gene peptides from other species**
+```sh
+rsync -avzp \
+  rsync://hgdownload.cse.ucsc.edu/goldenPath/hg19/database/knownGene.* \
+  rsync://hgdownload.cse.ucsc.edu/goldenPath/hg19/database/knownIsoforms.* \
+  rsync://hgdownload.cse.ucsc.edu/goldenPath/hg19/database/kgXref.* \
+  /export/data/CNEs/hg19/annotation/
+```
 
 
 
