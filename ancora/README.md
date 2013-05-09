@@ -1,7 +1,12 @@
 #Ancora technical documentation
-First version by Pär Engström, April 2008. This version by Ge Tan, May 2013. This document was produced by the [GitHub Flavored Markdown](https://help.github.com/articles/github-flavored-markdown "Markdown").
+First version by Pär Engström, April 2008. 
+This version by Ge Tan, May 2013. 
+This document was produced by the 
+[GitHub Flavored Markdown](https://help.github.com/articles/github-flavored-markdown "Markdown").
 
-This document describes the implementation the Ancora web resource. For a general description of Ancora and its user interface, see the [Ancora publication](http://genomebiology.com/2008/9/2/R34 "Ancora publication").
+This document describes the implementation the Ancora web resource. 
+For a general description of Ancora and its user interface, 
+see the [Ancora publication](http://genomebiology.com/2008/9/2/R34 "Ancora publication").
 
 **Table of contents**
 
@@ -24,9 +29,15 @@ This document describes the implementation the Ancora web resource. For a genera
     *	[Scanning for CNEs](#scan)
     *	[Removing unannotated repeats with BLAT](#BLAT)
     *	[Loading CNEs into the cne database](#loadCNEs)
+*	[Setting up a genome browser](#genomebrowser)
+	*	[Creating an annotation database for GBrowse](#annotationdb)
+    *	[Obtaining genome annotations](#genomeAnnotation)
 
 <h2 id="installation">Installation</h2>
- This documentation focuses on the Ancora installation on Olifant at csc. Olifant is running the CentOS release 5.8 (Final). However, ancora is supposed to run on other Linux/Unix distribution without too much difficulty.
+ This documentation focuses on the Ancora installation on Olifant at MRC CSC. 
+ Olifant is running the CentOS release 5.8 (Final). 
+ However, ancora is supposed to run on other Linux/Unix distribution without too much difficulty.
+
 <h3 id="dependencies">Software dependecies</h3>
  The following softwares are essential for the whole implementation.
  
@@ -35,17 +46,28 @@ This document describes the implementation the Ancora web resource. For a genera
  *  [BioPerl](http://www.bioperl.org/wiki/Installing_BioPerl_on_Unix "BioPerl"). Installation is quite straightforward following the instructions. (BioPerl 1.6.1 is used on olifant.)
 
 <h3 id="GBrowse2">GBrowse2</h3>
-This implementation of Ancora utilizes the latest version of GBrowse 2.54. GBrowse 2.X is a complete rewrite of GBrowse 1.X version. There are several advantages compared to the GBrowse 1.X. See the [details](http://gmod.org/wiki/GBrowse_2.0_HOWTO#Installation_from_Source_Code "GBrowse").
+This implementation of Ancora utilizes the latest version of GBrowse 2.54. 
+GBrowse 2.X is a complete rewrite of GBrowse 1.X version. 
+There are several advantages compared to the GBrowse 1.X. 
+See the [details](http://gmod.org/wiki/GBrowse_2.0_HOWTO#Installation_from_Source_Code "GBrowse").
 
-Since the GBrowse 2.X is perl-based and all the modules are hosted on [CPAN](http://search.cpan.org/~lds/GBrowse-2.54/), the easiest way to install GBrowse 2 is using the standard Perl module building procedure.
+Since the GBrowse 2.X is perl-based and 
+all the modules are hosted on [CPAN](http://search.cpan.org/~lds/GBrowse-2.54/), 
+the easiest way to install GBrowse 2 is using the standard Perl module 
+building procedure.
 
-For a smooth installation, please install some prerequisites before launching the GBrowse2 installation. Details are mentioned on the [page](http://gmod.org/wiki/GBrowse_2.0_Prerequisites). It is highly recommened to use the common package managers, Debian(DEB) or RedHat Package Manager(RPM).
+For a smooth installation, 
+please install some prerequisites before launching the GBrowse2 installation. 
+Details are mentioned on the [page](http://gmod.org/wiki/GBrowse_2.0_Prerequisites). 
+It is highly recommened to use the common package managers, Debian(DEB) 
+or RedHat Package Manager(RPM).
 
 After installing the prerequisites, run this command in terminal
 
 ```sh
 sudo perl -MCPAN -e 'install Bio::Graphics::Browser2'
 ```
+
 If not all the necessary prerequisites are installed, it will be notified during the test step. 
 During the installation, there are some prompted configuration questions about the location of files.
 In principle, the default paths are fine and you can customize it to fit your needs.
@@ -75,6 +97,7 @@ Can't locate object method "height" via package "gdTinyFont"
 (perhaps you forgot to load "gdTinyFont"?) at /usr/local/share/perl/5.8.8/Bio/Graphics/Panel.pm line 641. at
 /usr/local/lib/perl/5.8.8/Bio/Graphics/Browser2/Render.pm line 3678.
 ```
+
 As long as Lincoln D. Stein does not fix the bug, just downgrade to the ```Bio::Graphics 2.32```. Here is the trick how to do it.
 
 ```sh
@@ -85,6 +108,7 @@ perl Build.PL
 ./Build test
 sudo ./Build install --uninst 1
 ```
+
 The "--uninst 1" will make sure that the files for the
 newer (2.33) version are removed in case they are installed 
 in another directory.
@@ -101,9 +125,11 @@ the responsiveness of a FastCGI is significantly improved.
 To use this facility, you will need a version of Apache equipped with FastCGI support, 
 the module [mod_fcgid](http://httpd.apache.org/mod_fcgid/). 
 For a Debian (DEB) based system,
+
 ```sh
 sudo apt-get install libapache2-mod-fastcgi libfcgi-perl
 ```
+
 or for Cent OS,
 
 ```sh
@@ -117,6 +143,7 @@ yum install mod_fcgid
 rpm -Uvh atomic-release*rpm
 yum install fcgi-perl
 ```
+
 **Note**: Because the olifant has a old version of *Apache* and *mod_fcgid*. 
 You may need to adapt the GBrowse2 conf file for Apache 
 (/etc/httpd/conf.d/gbrowse2.conf on olifant) 
@@ -140,6 +167,7 @@ The UCSC Genome Browser source also contains a collection of useful utilities,
 some of which are needed at steps below. 
 It is recommended to compile all the UCSC utilities by following the instructions in the README file in the UCSC source package. 
 Short story on olifant,
+
 ```sh
 export MACHTYPE=x86_64
 export MYSQLINC=/usr/include/mysql
@@ -173,9 +201,11 @@ which also includes many modules in early stages of development.
 
 The cne and AT packages are maintained in the CSC repository. 
 To retrieve the most recent versions, do:
+
 ```sh
 git clone git@github.com:ge11232002/CSC.git
 ```
+
 One copy of the packages should be placed under /opt/www/cne and /opt/www/AT, respectively, 
 where the Ancora genome browser will access them from.
 This could be done by creating soft links for the *cne* and *AT* under */opt/www/*.
@@ -183,9 +213,11 @@ To run scripts that use the modules,
 you will have to add the installation paths to your PERL5LIB environment variable. 
 If you use bash as your shell, 
 you can do this by adding the following line to the file ~/.bashrc:
+
 ```sh
 export PERL5LIB=/opt/www/AT/lib:/opt/www/cne/perl_lib:$PERL5LIB
 ```
+
 (If you want scripts to use a working copy of the modules in a different location, modify the above line accordingly.)
 The cne/tools directory in the cne package contains source code for several C programs. 
 Ancora currently only needs one of these programs: ceScan, 
@@ -195,6 +227,7 @@ Instructions for how to compile the C programs are in cne/tools/README.txt.
 <h2 id="configuration">Configuration</h2>
 This section will describe all the necessary configurations step by step
 for setting up the Ancora web resource.
+
 <h3 id="ancoraweb">Ancora Web Resource</h3>
 Under the repository, there are two other folders *ancora* and *gbrowse2*,
 besides the *cne* and *AT* packages.
@@ -206,6 +239,7 @@ you will need to copy some files to the ancora and gbrowse2 directory on your se
 On olifant, they are ```/opt/www/ancora``` and ```/opt/www/gbrowse2``` 
 (As we installed GBrowse2 to this directory).
 The following commands create the links there:
+
 ```sh
 cd ancora
 ## the html files
@@ -225,11 +259,12 @@ ln -s conf/plugins/* /opt/www/gbrowse2/conf/plugins/
 
 <h3 id="apache">Apache Configuration</h3>
 The Apache httpd server is configured to look for html files under
-```/var/www/html``` and CGI scripts in ``` /var/www/cgi-bin```.
+*/var/www/html* and CGI scripts in */var/www/cgi-bin*.
 However, if we use the technique called "VirtualHost",
 the html files can be left under ```/opt/www/ancora```.
 The mapping of the domain http://ancora.olifant.cscdom.csc.mrc.ac.uk/ 
 to this directory is configured in Apache configuration file ```/etc/httpd/conf```.
+
 ```
 <VirtualHost *:80>
 	ServerName ancora.olifant.cscdom.csc.mrc.ac.uk
@@ -257,6 +292,7 @@ in soft-masked fasta format from http://genome.ucsc.edu/
 and converting it to 2bit format using the program faToTwoBit, 
 which is part of the UCSC utilities. E.g. 
 for the latest human assembly:
+
 ```sh
 cd /export/data/goldenpath
 mkdir hg18
@@ -278,6 +314,7 @@ Programmatic access to this database is provided
 by the Perl module CNE::DB in the cne package.
 
 If this database does not exist, create it:
+
 ```sh
 mysql -u username -p -e 'create database cne'
 mysql -u username -p -e 'grant select on cne.* to nobody@localhost'
@@ -291,6 +328,7 @@ This table is called assembly and holds information
 about the genome assemblies for which comparisons are available in Ancora. 
 The cne package contains a file with SQL commands 
 that create the table and fills it with sample data:
+
 ```sh
 mysql -u username -p cne < cne/scripts/cne_pipeline/create_assembly_table.sql
 ```
@@ -305,6 +343,7 @@ The following may not be:
 *	ucsc_db – Deprecated, so can be left blank. Earlier releases of Ancora required an UCSC annotation database to be present for some assemblies.
 
 To add one new row into the table or update one row,
+
 ```sql
 INSERT INTO assembly 
 (assembly_id, assembly_name, organism_common, organism_latin, ensembl_ver, default_ensembl_loc) 
@@ -324,10 +363,13 @@ located in a directory mentioned in your PERL5LIB environment variable.
 I have such a file in a directory called .perl under my home directory, 
 and have added the following line to my .bashrc to 
 make Perl look for libraries in this directory:
+
 ```sh
 export PERL5LIB=~/.perl:$PERL5LIB
 ```
+
 The file MyPerlVars.pm should contain the following lines:
+
 ```perl
 package MyPerlVars;
 use warnings;
@@ -343,6 +385,7 @@ our $sqlPass = "password"; # replace password with your password
 
 1;
 ```
+
 For security reasons, 
 it is a good idea to change the permissions of MyPerlVars.pm file 
 so that nobody but you can read it.
@@ -358,10 +401,71 @@ that are to be ignored in the scanning.
 The alignment and filter files are not required to run the web resource, 
 so they can be removed after CNE generation.
 
-2.1. Obtaining alignment files
+<h3 id="alignment">Obtaining alignment files</h3>
 The program that scans for CNEs (ceScan) takes alignments in axt format as input. 
 We typically obtain alignment files in axt format from UCSC and 
 keep them under ```/export/downloads/ucsc/axtNet```.
+This directory contains one subdirectory for each genome assembly. 
+The directories are named using UCSC assembly identifiers, 
+as for the genome assembly directories (see above). 
+Each directory contains axt files for pairwise net alignments 
+with the corresponding assembly as the reference; 
+e.g. directory ```/export/downloads/ucsc/axtNet/hg18``` 
+only contains net alignments where hg18 is reference. 
+To detect CNEs between two genomes, 
+you need two sets of net alignments - 
+one where each genome is the reference 
+(see the [Ancora](http://genomebiology.com/2008/9/2/R34) 
+paper for an explanation of the rationale behind this).
+The files we download from UCSC are typically compressed with gzip. 
+There is no need to decompress them, 
+because ceScan can read gzip-compressed files.
+
+As an example, to detect CNEs between the current human and mouse genome assemblies, 
+the required alignment files can be obtained as follows:
+```sh
+rsync -avzP \
+  rsync://hgdownload.cse.ucsc.edu/goldenPath/hg19/vsMm10/axtNet/* \
+  /export/downloads/ucsc/axtNet/hg19
+rsync -avzP \
+  rsync://hgdownload.cse.ucsc.edu/goldenPath/mm10/vsHg19/axtNet/* \
+  /export/downloads/ucsc/axtNet/mm10
+```
+I prepared a script ```cne/scripts/cne_pipeline/downloadAlignments.r``` 
+to download the pairwise alignments.
+
+<h3 id="filter">Creating filter files</h3>
+Filer files list regions to be ignored in the scan. 
+One filter file should be created for each assembly.
+
+
+<h2 id="genomebrowser">Setting up a genome browser</h2>
+Setting up a genome browser for a new assembly involves 
+creating and loading CNEs for the assembly, 
+as described in the previous section, 
+as well as a number of additional steps detailed in this section.
+
+<h3 id="annotationdb">Creating an annotation database for GBrowse</h3>
+Create a MySQL database to store the annotation (genes etc) 
+that is to be shown alongside the CNEs. 
+For the main Ancora installation on olifant, 
+we name these databases gbrowse_gff_assembly_id, 
+e.g. gbrowse_gff_hg19 for the latest human assembly. 
+Make sure the user nobody@localhost has SELECT permission on the database
+as described above. 
+
+<h3 id="genomeAnnotation">Obtaining genome annotations</h3>
+This step usually involves more manual work than the other steps, 
+because annotations are available in diverse databases and 
+in different and changing formats. 
+To keep things simple, 
+we have tried to retrieve as much annotation as possible 
+from the UCSC Genome Browser database.
+Begin by creating a local database to hold UCSC annotations for the assembly, 
+if one does not already exist. 
+We have named these databases UCSC_id, 
+replacing id with the UCSC assembly id, e.g. UCSC_hg18, UCSC_mm9.
+
 
 
 
