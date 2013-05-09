@@ -343,8 +343,25 @@ our $sqlPass = "password"; # replace password with your password
 
 1;
 ```
+For security reasons, 
+it is a good idea to change the permissions of MyPerlVars.pm file 
+so that nobody but you can read it.
 
 <h2 id="CNEs">Generating CNEs</h2>
+To scan for CNEs, 
+you need to have the cne package, the AT package and 
+genome assembly sequences installed as outlined above. 
+In addition, you need to obtain alignment files for the genomes 
+that are to be compared, and create filter files that specify 
+which regions (typically exons and repeats) 
+that are to be ignored in the scanning. 
+The alignment and filter files are not required to run the web resource, 
+so they can be removed after CNE generation.
+
+2.1. Obtaining alignment files
+The program that scans for CNEs (ceScan) takes alignments in axt format as input. 
+We typically obtain alignment files in axt format from UCSC and 
+keep them under ```/export/downloads/ucsc/axtNet```.
 
 
 
