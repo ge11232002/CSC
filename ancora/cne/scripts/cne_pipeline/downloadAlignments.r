@@ -69,5 +69,6 @@ for(build1 in names(builds)){
   }
 }
 
+######## download the repeats from UCSC######################
 
 
