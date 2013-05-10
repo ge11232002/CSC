@@ -7,10 +7,12 @@ use Getopt::Std;
 
 my $SOURCE = "Ensembl";
 my @FIELD_NAMES = (
-    'Ensembl Gene ID', 'Chromosome', 'Ensembl Transcript ID',
+    'Ensembl Gene ID', 'Chromosome Name', 'Ensembl Transcript ID',
     'Gene Start (bp)', 'Gene End (bp)', 'Transcript Start (bp)', 'Transcript End (bp)',
-    'Strand', 'External Gene ID',
-    'Exon Start (bp)', 'Exon End (bp)', 'Coding Start (bp)', 'Coding End (bp)');
+    'Strand', #'External Gene ID',
+    'Associated Gene Name',
+    #'Exon Start (bp)', 'Exon End (bp)', 'Coding Start (bp)', 'Coding End (bp)');
+    'Exon Chr Start (bp)', 'Exon Chr End (bp)', 'CDS Start', 'CDS End');
 
 my %args;
 getopts('h',\%args);
