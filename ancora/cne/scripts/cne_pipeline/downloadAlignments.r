@@ -70,5 +70,12 @@ for(build1 in names(builds)){
 }
 
 ######## download the repeats from UCSC######################
+builds = list("old"=c("hg18", "mm9", "equCab2", "tetNig1", "dm3", "ce4"),
+              "new"=c("hg19", "mm10", "canFam3", "galGal4", "danRer7", "danRer6", "danRer5", "tetNig2"))
+
+
+
+
+
 
 
