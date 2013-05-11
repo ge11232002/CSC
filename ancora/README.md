@@ -472,43 +472,55 @@ The annotations available for download from UCSC can be browsed
 at http://hgdownload.cse.ucsc.edu/downloads.html. 
 Annotations files can be downloaded in batch with rsync.
 
-**Gaps and RepeatMasker**
 ```sh
-## old storage format
 rsync -avzP \
-  rsync://hgdownload.cse.ucsc.edu/goldenPath/hg18/database/*_gap.* \
-  rsync://hgdownload.cse.ucsc.edu/goldenPath/hg18/database/*_rmsk.* \
-  /export/data/CNEs/hg18/annotation/
-## new storage format
-rsync -avzp \
-  rsync://hgdownload.cse.ucsc.edu/goldenPath/hg19/database/gap.* \
-  rsync://hgdownload.cse.ucsc.edu/goldenPath/hg19/database/rmsk.* \
-  /export/data/CNEs/hg19/annotation/
-```
-**RefSeq genes**
-```sh
-rsync -avzp \
-  rsync://hgdownload.cse.ucsc.edu/goldenPath/hg19/database/refGene.* \
-  rsync://hgdownload.cse.ucsc.edu/goldenPath/hg19/database/refLink.* \
-  /export/data/CNEs/hg19/annotation/
-```
-**UCSC Known Genes**
-```sh
-rsync -avzp \
-  rsync://hgdownload.cse.ucsc.edu/goldenPath/hg19/database/knownGene.* \
-  rsync://hgdownload.cse.ucsc.edu/goldenPath/hg19/database/knownIsoforms.* \
-  rsync://hgdownload.cse.ucsc.edu/goldenPath/hg19/database/kgXref.* \
-  /export/data/CNEs/hg19/annotation/
-```
-**Aligned UCSC Known Gene peptides from other species**
-```sh
-rsync -avzp \
-  rsync://hgdownload.cse.ucsc.edu/goldenPath/hg19/database/knownGene.* \
-  rsync://hgdownload.cse.ucsc.edu/goldenPath/hg19/database/knownIsoforms.* \
-  rsync://hgdownload.cse.ucsc.edu/goldenPath/hg19/database/kgXref.* \
+  rsync://hgdownload.cse.ucsc.edu/goldenPath/hg19/database/*_gap.* \
+  rsync://hgdownload.cse.ucsc.edu/goldenPath/hg19/database/*_rmsk.* \
   /export/data/CNEs/hg19/annotation/
 ```
 
+The UCSC annotations come as MySQL table dumps, 
+with one table definition file (ending in .sql) 
+and one data file (ending in .txt.gz) for each table. 
+The following series of commands can be used to 
+load a set of downloaded files into a local MySQL database 
+(named UCSC_hg19 in this example).
+
+```sh
+## first create the database and grant the select to nobody
+mysql -u root -p -e 'create database UCSC_hg19' 
+mysql -u root -p -e 'grant select on UCSC_hg19.* to nobody@localhost' 
+## unzip and load the dump
+gunzip *.txt.gz
+cat *.sql | mysql -u root -p UCSC_hg19
+mysqlimport -u root -Lp UCSC_hg19 *.txt
+```
+
+**Annotation from UCSC used in Ancora browsers**
+
+| Annotation type |old UCSC tables | new UCSC table |
+| --------------- |--------------- | -------------- |
+| Gaps            | \*_gap.\*      | gap.\*         |
+| RepeatMasker    | \*_rmsk.\*     | rmsk.\*        |
+| RefSeq genes    | refGene.\*, refLink.\* | refGene.\*, refLink.\*|
+| UCSC Known Genes| knownGene.\*, knownIsoforms.\*, kgXref.\* | knownGene.\*, knownIsoforms.\*, kgXref.\* |
+| Aligned UCSC Known Gene peptides from other species |  blastKG\*, kgXref.\* | kgXref.\*|
+| ZFIN Genes      | vegaGene.\* | vegaGene.\* | 
+| CpG islands     | cpgIslandExt.\*| cpgIslandExt.\*|
+| ORegAnno Regulatory Elements | oreganno.\*, oregannoAttr.\*|  oreganno.\*, oregannoAttr.\*  |
+
+The Ancora browsers also use annotation from sources other than UCSC. 
+For each of these sources, 
+we download flat files as detailed below.
+
+**Non-UCSC annotation used in Ancora browsers**
+This is incomplete.
+
+| Annotation type | Flat files     | Parsing script |
+| --------------- |--------------- | -------------- |
+| Ensembl genes   | Tab-separated text file obtained using BioMart. See usage message for ens2gff.pl for details. | perl ens2gff.pl assembly.2bit ensembl_genes.txt > ensembl_genes.gff|
+|miRBase microRNAs|GFF3 file obtained from http://microrna.sanger.ac.uk/sequences/ftp.shtml | perl mirbase2gff.pl assembly.2bit hsa.gff3 > miRBase.gff3 |
+|MGI genes        | Tab-delimited MGI coordinate file (currently named MGI_Gene_Model_Coord.rpt) obtained from ftp://ftp.informatics.jax.org/pub/reports/index.html |
 
 
 
