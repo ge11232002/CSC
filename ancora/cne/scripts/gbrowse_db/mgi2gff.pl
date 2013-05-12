@@ -26,10 +26,11 @@ $cmd [options] <2bit file> <MGI file>
 Required arguments:
 
 <2bit file>  Name of .2bit file for assembly
-<MGI file>   Name of coordinate file from MGI (usually MGI_Coordinate.rpt)
+<MGI file>   Name of coordinate file from MGI (usually MGI_Gene_Model_Coord.rpt)
 
 The MGI file can be retreived from ftp://ftp.informatics.jax.org/pub/reports/index.html.
 Make sure the coordinates in the file refer to the correct genome assembly.
+This is only for mouse.
 
 Options:
 
@@ -53,9 +54,15 @@ my %genes;
 
 # Check that the header is as expected
 my $expected_header = join("\t",
-    'MGI accession id', 'marker type', 'marker symbol', 'marker name', 'representative genome id', 
-    'representative genome chromosome', 'representative genome start', 'representative genome end',
-    'representative genome strand');
+    #'MGI accession id', 'marker type', 'marker symbol', 'marker name', 'representative genome id', 
+    '1. MGI accession id', '2. marker type', '3. marker symbol', '4. marker name', '5. genome build',
+    #'representative genome chromosome', 'representative genome start', 'representative genome end',
+    '6. Entrez gene id', '7. NCBI gene chromosome', '8. NCBI gene start', '9. NCBI gene end',
+    '10. NCBI gene strand', '11. Ensembl gene id', '12. Ensembl gene chromosome', 
+    '13. Ensembl gene start', '14. Ensembl gene end', '15. Ensembl gene strand', 
+    '16. VEGA gene id', '17. VEGA gene chromosome', '18. VEGA gene start', 
+    '19. VEGA gene end', '20. VEGA gene strand');
+#'representative genome strand');
 open IN, $MGI_FN or die "could not open $MGI_FN";
 my $header = <IN>;
 chomp $header;
@@ -65,6 +72,8 @@ if(substr($header,0,length($expected_header)) ne $expected_header) {
     print STDERR "Got: $header\n";
     exit unless($ALLOW_HEADER_MISMATCH);
 }
+#print "I am here\n";
+
 
 # Get list of valid chromsomes from 2bit file
 my $asm = AT::DB::GenomeAssemblyTwoBit->new(file => $TWOBIT_FN)
@@ -76,11 +85,12 @@ my %skipped_chr;
 print STDERR "Reading input file...\n";
 my $nr_genes  = 0;  # just to have something to say at the end
 my %total_gene_counts; # count nr of genes for each gene id
+
 while(my $line  = <IN>) {
 
     # Parse line
     chomp $line;
-    my ($gene_id, $type, $symbol, undef, undef, $chr, $gene_start, $gene_end, $strand) = split /\t/, $line;
+    my ($gene_id, $type, $symbol, undef, undef, undef, $chr, $gene_start, $gene_end, $strand, undef, undef, undef, undef, undef, undef, undef, undef, undef, undef) = split /\t/, $line;
 
     # Check that we have all fields we need
     next if($type ne 'Gene' or $symbol eq 'null' or $chr eq 'null' or
