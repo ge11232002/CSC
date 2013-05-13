@@ -32,6 +32,7 @@ see the [Ancora publication](http://genomebiology.com/2008/9/2/R34 "Ancora publi
 *	[Setting up a genome browser](#genomebrowser)
 	*	[Creating an annotation database for GBrowse](#annotationdb)
     *	[Obtaining genome annotations](#genomeAnnotation)
+    *	[Creating and loading GFF files](#loadGFF)
 
 <h2 id="installation">Installation</h2>
  This documentation focuses on the Ancora installation on Olifant at MRC CSC. 
@@ -439,7 +440,26 @@ to download the pairwise alignments.
 <h3 id="filter">Creating filter files</h3>
 Filer files list regions to be ignored in the scan. 
 One filter file should be created for each assembly.
+The current file for human assembly hg19 is 
+/export/data/CNEs/hg19/filters/filter_regions.hg19.bed, 
+and files for other assemblies are in corresponding locations. 
+Filter files should adhere to the three-column bed format. 
+The filter files do not have to be sorted or non-redundant 
+(i.e. they may contain overlapping features).
 
+We produce filter files from exon and repeat annotation downloaded 
+from UCSC. Please refer to the section “Obtaining genome annotations” 
+below for information about how to download exon and repeat annotation 
+from UCSC and load it into a local MySQL database. 
+Once the data is in a local database, 
+the script cne/scripts/cne_pipeline/create_filter.pl in the cne package 
+can be used to create a filter file from it. 
+Run the script without arguments for usage information. 
+The username and password that the script should use to connect to the database must be declared in MyPerlVars.pm (see above).
+
+```sh
+perl /opt/www/cne/scripts/cne_pipeline/create_filter.pl -b hg19 -r -a /export/data/goldenpath/hg19/assembly.2bit > /export/data/CNEs/hg19/filters/repeat_regions.hg19.bed
+```
 
 <h2 id="genomebrowser">Setting up a genome browser</h2>
 Setting up a genome browser for a new assembly involves 
@@ -520,8 +540,9 @@ This is incomplete.
 | --------------- |--------------- | -------------- |
 | Ensembl genes   | Tab-separated text file obtained using BioMart. See usage message for ens2gff.pl for details. | perl ens2gff.pl assembly.2bit ensembl_genes.txt > ensembl_genes.gff|
 |miRBase microRNAs|GFF3 file obtained from http://microrna.sanger.ac.uk/sequences/ftp.shtml | perl mirbase2gff.pl assembly.2bit hsa.gff3 > miRBase.gff3 |
-|MGI genes        | Tab-delimited MGI coordinate file (currently named MGI_Gene_Model_Coord.rpt) obtained from ftp://ftp.informatics.jax.org/pub/reports/index.html |
+|MGI genes        | Tab-delimited MGI coordinate file (currently named MGI_Gene_Model_Coord.rpt) obtained from ftp://ftp.informatics.jax.org/pub/reports/index.html |perl mgi2gff.pl assembly.2bit MGI_Gene_Model_Coord.rpt > MGI_Gene_Model_Coord.gff|
 
+<h3 id="loadGFF">Creating and loading GFF files</h3>
 
 
 
