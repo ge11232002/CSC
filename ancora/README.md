@@ -458,8 +458,66 @@ Run the script without arguments for usage information.
 The username and password that the script should use to connect to the database must be declared in MyPerlVars.pm (see above).
 
 ```sh
-perl /opt/www/cne/scripts/cne_pipeline/create_filter.pl -b hg19 -r -a /export/data/goldenpath/hg19/assembly.2bit > /export/data/CNEs/hg19/filters/repeat_regions.hg19.bed
+perl /opt/www/cne/scripts/cne_pipeline/create_filter.pl \
+-g refGene,knownGene -b hg19 -r -a /export/data/goldenpath/hg19/assembly.2bit \
+> /export/data/CNEs/hg19/filters/filter_regions.hg19.bed
 ```
+
+<h3 id="scan">Scanning for CNEs</h3>
+The cne package contains a Perl script cne/scripts/cne_pipeline/detect_cnes.pl 
+that we run to detect CNEs. 
+The simplest way to run the script is as follows:
+
+```sh
+perl /opt/www/cne/scripts/cne_pipeline/detect_cnes.pl all
+```
+
+If executed in this way, 
+the script will scan for CNEs for all pairwise comparisons and thresholds 
+listed in the configuration file comparisons.txt 
+located in the same directory as the script itself. 
+Running the script with a pair of assembly ids as arguments 
+causes it to detect CNEs only for that particular pairwise comparison 
+(which must be listed in the configuration file):
+
+```sh
+perl /opt/www/cne/scripts/cne_pipeline/detect_cnes.pl hg18 mm9
+```
+
+If thresholds are also specified on the command line, 
+the script will not attempt to read a configuration file, 
+but simply generate CNEs for the indicated comparison and thresholds:
+
+```sh
+perl /opt/www/cne/scripts/cne_pipeline/detect_cnes.pl hg18 mm9 45,50 48,50 49,50
+```
+
+Each threshold is specified as two values separated by a comma: 
+identities,columns - e.g. 45,50 for 45 (95%) 
+identities over 50 alignment columns. 
+Any number of thresholds can be given. 
+The configuration file is formatted in the same manner; 
+see the default file comparisons.txt for an example. 
+Some additional usage information can be obtained 
+by running the script without any arguments.
+
+Briefly, the script does the following:
+For each pair of genome assemblies a and b that are to be compared,
+* Run ceScan to detect CNEs based on net alignments with a as reference.
+* Run ceScan to detect CNEs based on net alignments with b as reference.
+* Run the script merge_twoway_cne_sets.pl to combine the output 
+	from the two ceScan runs. 
+    In this process, any CNEs that overlap on both genomes are merged.
+
+Output files are placed in the current working directory. 
+The files are named according the parameters of the comparison. 
+For example, a search for CNEs between assemblies hg19 and mm10 
+at a threshold of 49 identities over 50 columns generates a file 
+named cne2w_hg19_mm10_49_50. 
+Assembly ids are ordered alphanumerically in the filenames. 
+We currently keep these files under /export/data/CNEs/pre-blatFilter/.
+
+
 
 <h2 id="genomebrowser">Setting up a genome browser</h2>
 Setting up a genome browser for a new assembly involves 
