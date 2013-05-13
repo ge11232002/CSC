@@ -162,11 +162,11 @@ sub get_gene_features
     my $sth = $dbh->prepare($query) || die "Could not prepare $query\n";
     $sth->execute($chr) || die "Could not execute $query\n";
     while(my ($exonStart_str,$exonEnd_str) = $sth->fetchrow_array) {
-	my @exonStarts = map { $_ + 1 } split /,/, $exonStart_str;
-	my @exonEnds = split /,/, $exonEnd_str;
-	while(@exonStarts) {
-	    push @$list, [shift @exonStarts, shift @exonEnds];
-	}
+	    my @exonStarts = map { $_ + 1 } split /,/, $exonStart_str;
+	    my @exonEnds = split /,/, $exonEnd_str;
+	    while(@exonStarts) {
+	      push @$list, [shift @exonStarts, shift @exonEnds];
+	    }
     }
 }
 
