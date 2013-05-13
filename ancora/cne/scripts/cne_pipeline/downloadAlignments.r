@@ -22,7 +22,7 @@ downloadUCSCPA = function(build1, build2, outputDir=NULL){
   }
 }
 
-builds = list("hg19"=c("mm10", "xenTro3", "tetNig2", "canFam3", "galGal4", "danRer7", "fr3", "danRer6", "equCab2", "danRer5"),
+builds = list("hg19"=c("mm10", "xenTro3", "tetNig2", "canFam3", "galGal4", "danRer7", "fr3", "danRer6", "equCab2", "danRer5", "anoCar2"),
               "hg18"=c("mm9", "ornAna1", "danRer5", "canFam2", "galGal3", "tetNig1", "monDom4", "xenTro2"),
               "mm10"=c("hg19", "galGal4", "danRer7", "fr3", "danRer6"),
               "mm9"=c("hg18", "canFam3", "equCab2", "danRer7", "danRer6", "danRer5", "tetNig2"),
@@ -54,10 +54,11 @@ builds = list("hg19"=c("mm10", "xenTro3", "tetNig2", "canFam3", "galGal4", "danR
               #"cb4"=c("ce10"),
               "cb3"=c("ce4"),
               "caeRem2"=c("ce4"),
-              "caePb1"=c("ce4")
+              "caePb1"=c("ce4"),
+              "anoCar2"=c("hg19"),
               #"caeRem4"=c("ce10"),
-              #"caePb3"=c("ce10")
-              )
+              #"caePb3"=c("ce10"),
+              NULL)
 ######## download the pairwise alignment from UCSC############
 outputDir = "/export/downloads/ucsc/axtNet"
 report = c()
