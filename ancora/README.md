@@ -447,11 +447,22 @@ Filter files should adhere to the three-column bed format.
 The filter files do not have to be sorted or non-redundant 
 (i.e. they may contain overlapping features).
 
-We produce filter files from exon and repeat annotation downloaded 
-from UCSC. Please refer to the section “Obtaining genome annotations” 
+We produce filter files from exon and repeat annotation.
+Please refer to the section “Obtaining genome annotations” 
 below for information about how to download exon and repeat annotation 
-from UCSC and load it into a local MySQL database. 
-Once the data is in a local database, 
+from UCSC and load it into a local MySQL database or from other sources.
+We maintain a text file ```cne/scripts/cne_pipeline/filter_features.txt``` 
+to record the genes and repeats information we used.
+
+To prepare the exon file from ensembl gff, run the following command:
+
+```sh
+cut -f5,10,11 ../annotation/ensembl_genes.txt | \
+awk '{ printf "chr"; print }' | tail -n +2 | \
+sed 's/chrMT/chrM/g' > ensembleExons.txt
+```
+
+Once the data is in a local database and other exons files are ready,
 the script ```cne/scripts/cne_pipeline/create_filter.pl``` in the cne package 
 can be used to create a filter file from it. 
 Run the script without arguments for usage information. 
@@ -539,7 +550,7 @@ not annotated as such in the RepeatMasker track from UCSC.
 The strategy is simple: use blat to align all CNEs back to 
 the genome and remove those having more than N hits 
 with percent identity of at least *I*. 
-Based on some testing by David Fredman we use *I* = 90% for all genomes. 
+Based on some testing by David Fredman we use I = 90% for all genomes. 
 We use N = 4 for all genomes except the fish genomes, 
 for which we use N = 8. 
 The largest family of duplicated CNEs we have found is 
@@ -571,7 +582,7 @@ but with the prefix cne2wBf instead of cne2w.
 The format is also the same, 
 except that four columns with diagnostic information are added at the end (see the script for details). 
 Future versions of the script might not output these extra columns. 
-We currently keep the output files under /export/data/CNEs/blatFiltered.
+We currently keep the output files under ```/export/data/CNEs/blatFiltered```.
 
 The script reads the N-values for different assemblies 
 from a configuration file. 
