@@ -208,13 +208,13 @@ To retrieve the most recent versions, do:
 git clone git@github.com:ge11232002/CSC.git
 ```
 
-One copy of the packages should be placed under /opt/www/cne and /opt/www/AT, respectively, 
+One copy of the packages should be placed under ```/opt/www/cne``` and ```/opt/www/AT```, respectively, 
 where the Ancora genome browser will access them from.
-This could be done by creating soft links for the *cne* and *AT* under */opt/www/*.
+This could be done by creating soft links for the ```cne``` and ```AT``` under ```/opt/www/```.
 To run scripts that use the modules, 
 you will have to add the installation paths to your PERL5LIB environment variable. 
 If you use bash as your shell, 
-you can do this by adding the following line to the file ~/.bashrc:
+you can do this by adding the following line to the file ```~/.bashrc```:
 
 ```sh
 export PERL5LIB=/opt/www/AT/lib:/opt/www/cne/perl_lib:$PERL5LIB
@@ -260,8 +260,8 @@ ln -s conf/plugins/* /opt/www/gbrowse2/conf/plugins/
 ```
 
 <h3 id="apache">Apache Configuration</h3>
-The Apache httpd server is configured to look for html files under
-*/var/www/html* and CGI scripts in */var/www/cgi-bin*.
+The Apache httpd server is configured to look for html files 
+under ```/var/www/html``` and CGI scripts in ```/var/www/cgi-bin```.
 However, if we use the technique called "VirtualHost",
 the html files can be left under ```/opt/www/ancora```.
 The mapping of the domain http://ancora.olifant.cscdom.csc.mrc.ac.uk/ 
@@ -282,8 +282,8 @@ The settings of FastCGI for GBrowse2 is in ```/etc/httpd/conf.d/gbrowse2.conf```
 By default, Ancora will call the CGI in FastCGI mode.
 
 <h3 id="data">Data Files</h3>
-Ancora expects genome assembly sequences in binary 2bit format to be present under 
-/export/data/goldenpath. 
+Ancora expects genome assembly sequences in binary 2bit format to 
+be present under ```/export/data/goldenpath```. 
 There should be one subdirectory for each assembly, 
 named using a UCSC assembly identifier (e.g. hg18, mm9) 
 or some other suitable identifier for assemblies not served by UCSC. 
@@ -441,8 +441,7 @@ to download the pairwise alignments.
 <h3 id="filter">Creating filter files</h3>
 Filer files list regions to be ignored in the scan. 
 One filter file should be created for each assembly.
-The current file for human assembly hg19 is 
-/export/data/CNEs/hg19/filters/filter_regions.hg19.bed, 
+The current file for human assembly hg19 is ```/export/data/CNEs/hg19/filters/filter_regions.hg19.bed```. 
 and files for other assemblies are in corresponding locations. 
 Filter files should adhere to the three-column bed format. 
 The filter files do not have to be sorted or non-redundant 
@@ -453,7 +452,7 @@ from UCSC. Please refer to the section “Obtaining genome annotations”
 below for information about how to download exon and repeat annotation 
 from UCSC and load it into a local MySQL database. 
 Once the data is in a local database, 
-the script cne/scripts/cne_pipeline/create_filter.pl in the cne package 
+the script ```cne/scripts/cne_pipeline/create_filter.pl``` in the cne package 
 can be used to create a filter file from it. 
 Run the script without arguments for usage information. 
 The username and password that the script should use to connect to the database must be declared in MyPerlVars.pm (see above).
