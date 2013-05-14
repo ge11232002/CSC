@@ -557,8 +557,7 @@ that may contain artificially duplicated sequence from the IRX clusters,
 e.g. an IRX cluster contig not assigned to a chromosome; 
 we have not explored this further).
 
-The blat filter is implemented in the script 
-```cne/scripts/cne_pipeline/blat_filter.pl```. 
+The blat filter is implemented in the script ```cne/scripts/cne_pipeline/blat_filter.pl```.
 It can simply be run with the cne files as arguments, e.g.:
 
 ```sh
