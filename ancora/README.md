@@ -33,6 +33,7 @@ see the [Ancora publication](http://genomebiology.com/2008/9/2/R34 "Ancora publi
 	*	[Creating an annotation database for GBrowse](#annotationdb)
     *	[Obtaining genome annotations](#genomeAnnotation)
     *	[Creating and loading GFF files](#loadGFF)
+    *	[Creating a configuration file for GBrowse](#gbrowseConfig)
 
 <h2 id="installation">Installation</h2>
  This documentation focuses on the Ancora installation on Olifant at MRC CSC. 
@@ -664,6 +665,43 @@ This is incomplete.
 |MGI genes        | Tab-delimited MGI coordinate file (currently named MGI_Gene_Model_Coord.rpt) obtained from ftp://ftp.informatics.jax.org/pub/reports/index.html |perl mgi2gff.pl assembly.2bit MGI_Gene_Model_Coord.rpt > MGI_Gene_Model_Coord.gff|
 
 <h3 id="loadGFF">Creating and loading GFF files</h3>
+The annotations in the UCSC MySQL tables and 
+the flat files must be converted to a GFF format suitable for 
+import into the GBrowse annotation database. 
+A number of scripts that carry out those conversions are available 
+in the directory ```cne/scripts/gbrowse_db``` in the cne package. 
+The script ```ucsc2gff.pl``` extracts data 
+from UCSC annotation tables stored in a MySQL database and 
+outputs GFF format suitable for import into the GBrowse database. 
+The scripts that process flat files to generate GBrowse GFF files are listed in Table above.
 
+The script ```ucsc2gff.pl``` can also read genome assembly information from 2bit files 
+and output a GFF feature for each sequence in the assembly 
+(the chromosomes, or supercontigs if the genome is not assembled into chromosomes). 
+These GFF lines are also needed by GBrowse.
+
+In the same directory as the Perl conversion scripts, 
+there is a bash script ```make_gff.sh``` that runs the conversion scripts 
+to generate GFF files for all assemblies currently in Ancora. 
+The script creates GFF files named by assembly id 
+(e.g. hg19.gff, mm10.gff). 
+It is recommended carry out the conversions by running this bash script 
+instead of running the Perl scripts directly, 
+as it also provides a record of which annotation is being used for each assembly. 
+The bash script does not require any arguments, 
+but it expects the UCSC databases with relevant annotation tables to be available on the local host, 
+as well as relevant flat files to be present in the correct subdirectories. 
+Please see the script for where to place the flat files so that it can find them.
+
+When GFF files have been created 
+they can be loaded into GBrowse annotation databases 
+using the script ```load_gff.sh```. 
+The script does not take any arguments, 
+but prompts for a MySQL username and password. 
+NOTE: use this script with caution as 
+it erases all data stored in the GBrowse annotation databases 
+before it loads the GFF files.
+
+<h3 id="gbrowseConfig">Creating a configuration file for GBrowse</h3>
 
 
