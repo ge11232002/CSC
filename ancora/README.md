@@ -33,6 +33,7 @@ see the [Ancora publication](http://genomebiology.com/2008/9/2/R34 "Ancora publi
 	*	[Creating an annotation database for GBrowse](#annotationdb)
     *	[Obtaining genome annotations](#genomeAnnotation)
     *	[Creating and loading GFF files](#loadGFF)
+    *	[Creating a configuration file for GBrowse](#gbrowseConfig)
 
 <h2 id="installation">Installation</h2>
  This documentation focuses on the Ancora installation on Olifant at MRC CSC. 
@@ -207,13 +208,13 @@ To retrieve the most recent versions, do:
 git clone git@github.com:ge11232002/CSC.git
 ```
 
-One copy of the packages should be placed under /opt/www/cne and /opt/www/AT, respectively, 
+One copy of the packages should be placed under ```/opt/www/cne``` and ```/opt/www/AT```, respectively, 
 where the Ancora genome browser will access them from.
-This could be done by creating soft links for the *cne* and *AT* under */opt/www/*.
+This could be done by creating soft links for the ```cne``` and ```AT``` under ```/opt/www/```.
 To run scripts that use the modules, 
 you will have to add the installation paths to your PERL5LIB environment variable. 
 If you use bash as your shell, 
-you can do this by adding the following line to the file ~/.bashrc:
+you can do this by adding the following line to the file ```~/.bashrc```:
 
 ```sh
 export PERL5LIB=/opt/www/AT/lib:/opt/www/cne/perl_lib:$PERL5LIB
@@ -259,8 +260,8 @@ ln -s conf/plugins/* /opt/www/gbrowse2/conf/plugins/
 ```
 
 <h3 id="apache">Apache Configuration</h3>
-The Apache httpd server is configured to look for html files under
-*/var/www/html* and CGI scripts in */var/www/cgi-bin*.
+The Apache httpd server is configured to look for html files 
+under ```/var/www/html``` and CGI scripts in ```/var/www/cgi-bin```.
 However, if we use the technique called "VirtualHost",
 the html files can be left under ```/opt/www/ancora```.
 The mapping of the domain http://ancora.olifant.cscdom.csc.mrc.ac.uk/ 
@@ -281,8 +282,8 @@ The settings of FastCGI for GBrowse2 is in ```/etc/httpd/conf.d/gbrowse2.conf```
 By default, Ancora will call the CGI in FastCGI mode.
 
 <h3 id="data">Data Files</h3>
-Ancora expects genome assembly sequences in binary 2bit format to be present under 
-/export/data/goldenpath. 
+Ancora expects genome assembly sequences in binary 2bit format to 
+be present under ```/export/data/goldenpath```. 
 There should be one subdirectory for each assembly, 
 named using a UCSC assembly identifier (e.g. hg18, mm9) 
 or some other suitable identifier for assemblies not served by UCSC. 
@@ -429,10 +430,10 @@ the required alignment files can be obtained as follows:
 ```sh
 rsync -avzP \
   rsync://hgdownload.cse.ucsc.edu/goldenPath/hg19/vsMm10/axtNet/* \
-  /export/downloads/ucsc/axtNet/hg19
+  /export/downloads/ucsc/axtNet/hg19/
 rsync -avzP \
   rsync://hgdownload.cse.ucsc.edu/goldenPath/mm10/vsHg19/axtNet/* \
-  /export/downloads/ucsc/axtNet/mm10
+  /export/downloads/ucsc/axtNet/mm10/
 ```
 I prepared a script ```cne/scripts/cne_pipeline/downloadAlignments.r``` 
 to download the pairwise alignments.
@@ -440,8 +441,7 @@ to download the pairwise alignments.
 <h3 id="filter">Creating filter files</h3>
 Filer files list regions to be ignored in the scan. 
 One filter file should be created for each assembly.
-The current file for human assembly hg19 is 
-/export/data/CNEs/hg19/filters/filter_regions.hg19.bed, 
+The current file for human assembly hg19 is ```/export/data/CNEs/hg19/filters/filter_regions.hg19.bed```. 
 and files for other assemblies are in corresponding locations. 
 Filter files should adhere to the three-column bed format. 
 The filter files do not have to be sorted or non-redundant 
@@ -452,7 +452,7 @@ from UCSC. Please refer to the section “Obtaining genome annotations”
 below for information about how to download exon and repeat annotation 
 from UCSC and load it into a local MySQL database. 
 Once the data is in a local database, 
-the script cne/scripts/cne_pipeline/create_filter.pl in the cne package 
+the script ```cne/scripts/cne_pipeline/create_filter.pl``` in the cne package 
 can be used to create a filter file from it. 
 Run the script without arguments for usage information. 
 The username and password that the script should use to connect to the database must be declared in MyPerlVars.pm (see above).
@@ -474,7 +474,7 @@ perl /opt/www/cne/scripts/cne_pipeline/detect_cnes.pl all
 
 If executed in this way, 
 the script will scan for CNEs for all pairwise comparisons and thresholds 
-listed in the configuration file comparisons.txt 
+listed in the configuration file ```comparisons.txt``` 
 located in the same directory as the script itself. 
 Running the script with a pair of assembly ids as arguments 
 causes it to detect CNEs only for that particular pairwise comparison 
@@ -516,6 +516,69 @@ at a threshold of 49 identities over 50 columns generates a file
 named cne2w_hg19_mm10_49_50. 
 Assembly ids are ordered alphanumerically in the filenames. 
 We currently keep these files under /export/data/CNEs/pre-blatFilter/.
+
+The output files contain one line for each CNE. 
+There are nine columns:
+*	Sequence name in first assembly
+*	Start coordinate in first assembly
+*	End coordinate in first assembly
+*	Sequence name in second assembly
+*	Start coordinate in second assembly
+*	End coordinate in second assembly
+*	Alignment orientation (+ or -)
+*	Percent identity (percentage of alignment columns with identities)
+*	CIGAR string, according to the DAS specification for alignments (see http://www.dasregistry.org/extension_alignment.jsp).
+
+The coordinate ranges are half-open, zero-based as in the bed format, 
+so that three-column bed files can be generated by cutting out columns 1-3 or 4-6.
+
+<h3 id="BLAT">Removing unannotated repeats with BLAT</h3>
+This step has been implemented as a separate script because it takes long to run. 
+The goal of this step is to remove CNEs that correspond to repeated sequence 
+not annotated as such in the RepeatMasker track from UCSC. 
+The strategy is simple: use blat to align all CNEs back to 
+the genome and remove those having more than N hits 
+with percent identity of at least *I*. 
+Based on some testing by David Fredman we use *I* = 90% for all genomes. 
+We use N = 4 for all genomes except the fish genomes, 
+for which we use N = 8. 
+The largest family of duplicated CNEs we have found is 
+linked to the IRX genes and comprises 4 homologous CNEs 
+in the human genome, 
+motivating the chosen values of N for land vertebrates. 
+The two-fold higher value for fish is motivated 
+by the extra gene duplication that occurred in the teleost lineage. 
+We are currently using N = 4 for nematodes and flies as well, 
+although we have not explored CNE duplication in those genomes. 
+Note that N should not be set to anything lower than 2 
+because many assemblies contain some artificially duplicated sequence 
+(this means that N=4 may in fact be too strict for assemblies 
+that may contain artificially duplicated sequence from the IRX clusters, 
+e.g. an IRX cluster contig not assigned to a chromosome; 
+we have not explored this further).
+
+The blat filter is implemented in the script ```cne/scripts/cne_pipeline/blat_filter.pl```.
+It can simply be run with the cne files as arguments, e.g.:
+
+```sh
+perl /opt/www/cne/scripts/cne_pipeline/blat_filter.pl cne2w_hg18_mm9_45_50 cne2w_hg18_mm9_48_50 cne2w_hg18_mm9_49_50
+```
+
+Any number of CNE files can be given as arguments. 
+For each input file, a corresponding file with filtered CNEs will be created in the working directory. 
+This file will have the same name, 
+but with the prefix cne2wBf instead of cne2w. 
+The format is also the same, 
+except that four columns with diagnostic information are added at the end (see the script for details). 
+Future versions of the script might not output these extra columns. 
+We currently keep the output files under /export/data/CNEs/blatFiltered.
+
+The script reads the N-values for different assemblies 
+from a configuration file. 
+By default, the script looks for a file named ```blat_hit_cutoffs.txt``` 
+located in the same directory as the script itself. 
+Run the script without any arguments for more information 
+about how it can be configured.
 
 
 
@@ -601,6 +664,43 @@ This is incomplete.
 |MGI genes        | Tab-delimited MGI coordinate file (currently named MGI_Gene_Model_Coord.rpt) obtained from ftp://ftp.informatics.jax.org/pub/reports/index.html |perl mgi2gff.pl assembly.2bit MGI_Gene_Model_Coord.rpt > MGI_Gene_Model_Coord.gff|
 
 <h3 id="loadGFF">Creating and loading GFF files</h3>
+The annotations in the UCSC MySQL tables and 
+the flat files must be converted to a GFF format suitable for 
+import into the GBrowse annotation database. 
+A number of scripts that carry out those conversions are available 
+in the directory ```cne/scripts/gbrowse_db``` in the cne package. 
+The script ```ucsc2gff.pl``` extracts data 
+from UCSC annotation tables stored in a MySQL database and 
+outputs GFF format suitable for import into the GBrowse database. 
+The scripts that process flat files to generate GBrowse GFF files are listed in Table above.
 
+The script ```ucsc2gff.pl``` can also read genome assembly information from 2bit files 
+and output a GFF feature for each sequence in the assembly 
+(the chromosomes, or supercontigs if the genome is not assembled into chromosomes). 
+These GFF lines are also needed by GBrowse.
+
+In the same directory as the Perl conversion scripts, 
+there is a bash script ```make_gff.sh``` that runs the conversion scripts 
+to generate GFF files for all assemblies currently in Ancora. 
+The script creates GFF files named by assembly id 
+(e.g. hg19.gff, mm10.gff). 
+It is recommended carry out the conversions by running this bash script 
+instead of running the Perl scripts directly, 
+as it also provides a record of which annotation is being used for each assembly. 
+The bash script does not require any arguments, 
+but it expects the UCSC databases with relevant annotation tables to be available on the local host, 
+as well as relevant flat files to be present in the correct subdirectories. 
+Please see the script for where to place the flat files so that it can find them.
+
+When GFF files have been created 
+they can be loaded into GBrowse annotation databases 
+using the script ```load_gff.sh```. 
+The script does not take any arguments, 
+but prompts for a MySQL username and password. 
+NOTE: use this script with caution as 
+it erases all data stored in the GBrowse annotation databases 
+before it loads the GFF files.
+
+<h3 id="gbrowseConfig">Creating a configuration file for GBrowse</h3>
 
 
