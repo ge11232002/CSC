@@ -1,5 +1,33 @@
-hg18	Human	RefSeq Genes, Ensembl Genes, Genscan Genes, UCSC Known Genes, RepeatMasker
-mm9	Mouse	RefSeq Genes, Ensembl Genes, Genscan Genes, UCSC Known Genes, RepeatMasker
+hg19	Human	      RefSeq Genes, Ensembl Genes, UCSC Known Genes, RepeatMasker
+mm10	Mouse	      RefSeq Genes, Ensembl Genes, UCSC Known Genes, RepeatMasker
+mm9	Mouse	        RefSeq Genes, Ensembl Genes, UCSC Known Genes, RepeatMasker
+xenTro3	Frog	    RefSeq Genes, Ensembl Genes,                   RepeatMasker
+tetNig2	Tetraodon	              Ensembl Genes,                   
+canFam3	Dog	      RefSeq Genes, Ensembl Genes,                   RepeatMasker
+galGal3	Chicken	  RefSeq Genes, Ensembl Genes,                   RepeatMasker
+danRer7	Zebrafish	RefSeq Genes, Ensembl Genes,                   RepeatMasker
+fr2	Fugu	                      Ensembl Genes,                   RepeatMasker
+anoCar2	Lizard	                Ensembl Genes,                   RepeatMasker
+equCab2	Horse	    RefSeq Genes, Ensembl Genes,                   RepeatMasker
+oryLat2	Medaka	  RefSeq Genes, Ensembl Genes,                   RepeatMasker
+rn4	Rat	          RefSeq Genes, Ensembl Genes,                   RepeatMasker
+monDom5	Opossum	  RefSeq Genes, Ensembl Genes,                   RepeatMasker
+gasAcu1	Stickleback	RefSeq Genes, Ensembl Genes,                 RepeatMasker
+galGal4	Chicken	  RefSeq Genes, Ensembl Genes,                   RepeatMasker
+rn5	Rat	          RefSeq Genes, Ensembl Genes,                   RepeatMasker
+canFam2	Dog	      RefSeq Genes, Ensembl Genes,                   RepeatMasker
+fr3	Fugu	        RefSeq Genes,                                  RepeatMasker
+dm3	              RefSeq Genes, Ensembl Genes,                   RepeatMasker
+droAna2	                                                         RepeatMasker 
+dp3	                                                             RepeatMasker
+ce4	              RefSeq Genes,                                  RepeatMasker
+cb3	                                                             RepeatMasker
+caeRem2	                                                         RepeatMasker
+caePb1	                                                         RepeatMasker
+
+
+
+#hg18	Human	RefSeq Genes, Ensembl Genes, Genscan Genes, UCSC Known Genes, RepeatMasker
 galGal3	Chicken	RefSeq Genes, Ensembl Genes, Genscan Genes, RepeatMasker
 xenTro2	Frog	RefSeq Genes, Ensembl Genes, Genscan Genes, RepeatMasker
 danRer4	Zebrafish (Zv6)	Ensembl Genes, Genscan Genes, Zebrafish mRNAs, Human UCSC Known Genes (peptides), RepeatMasker
