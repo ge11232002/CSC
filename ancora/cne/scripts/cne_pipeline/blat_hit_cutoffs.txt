@@ -33,7 +33,9 @@ GmG09   8
 
 dm3     4
 droAna3 4
+droAna2 4
 dp4     4
+dp3     4
 droVir3 4
 droMoj3 4
 
