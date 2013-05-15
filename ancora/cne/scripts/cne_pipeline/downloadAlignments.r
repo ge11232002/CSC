@@ -19,7 +19,7 @@ downloadUCSCPA = function(build1, build2, outputDir=NULL){
   cmd = paste("rsync -avzP", build1URL2, outputDirBuild1)
   message(cmd)
   res2 = try(system(cmd))
-  if(class(res) == "try-error" | class(res2) == "try-error"){
+  if(res != 0 && res2 != 0){
     return(paste(build1, build2))
   }else{
     return("Success")
