@@ -454,13 +454,7 @@ from UCSC and load it into a local MySQL database or from other sources.
 We maintain a text file ```cne/scripts/cne_pipeline/filter_features.txt``` 
 to record the genes and repeats information we used.
 
-To prepare the exon file from ensembl gff, run the following command:
-
-```sh
-cut -f5,10,11 ../annotation/ensembl_genes.txt | \
-awk '{ printf "chr"; print }' | tail -n +2 | \
-sed 's/chrMT/chrM/g' > ensembleExons.txt
-```
+To prepare the exon file from ensembl gff, use the script ```cne/scripts/cne_pipeline/ens4filters.r```.
 
 Once the data is in a local database and other exons files are ready,
 the script ```cne/scripts/cne_pipeline/create_filter.pl``` in the cne package 
@@ -471,7 +465,8 @@ The username and password that the script should use to connect to the database 
 ```sh
 perl /opt/www/cne/scripts/cne_pipeline/create_filter.pl \
 -g refGene,knownGene -b hg19 -r -a /export/data/goldenpath/hg19/assembly.2bit \
-> /export/data/CNEs/hg19/filters/filter_regions.hg19.bed
+-f ensembleExons.txt \
+> /export/data/CNEs/hg19/filters/filter_regions.hg19.bed &
 ```
 
 <h3 id="scan">Scanning for CNEs</h3>
@@ -673,6 +668,10 @@ This is incomplete.
 | Ensembl genes   | Tab-separated text file obtained using BioMart. See usage message for ens2gff.pl for details. | perl ens2gff.pl assembly.2bit ensembl_genes.txt > ensembl_genes.gff|
 |miRBase microRNAs|GFF3 file obtained from http://microrna.sanger.ac.uk/sequences/ftp.shtml | perl mirbase2gff.pl assembly.2bit hsa.gff3 > miRBase.gff3 |
 |MGI genes        | Tab-delimited MGI coordinate file (currently named MGI_Gene_Model_Coord.rpt) obtained from ftp://ftp.informatics.jax.org/pub/reports/index.html |perl mgi2gff.pl assembly.2bit MGI_Gene_Model_Coord.rpt > MGI_Gene_Model_Coord.gff|
+| FlyBase genes   | GFF file from ftp://ftp.flybase.net/. Currently used file is named dmel-all-r5.51.gff.gz| extract_genes_from_gff3.pl|
+|WormBase genes   | GFF file from ftp://ftp.wormbase.org/pub/wormbase/species/c_elegans/gff/.  | not done |
+| RedFly CRMs     | GFF file from http://redfly.ccr.buffalo.edu/ (obtained by clicking “Search”, then “Download all CRM”) | redfly2gff.pl|
+|RedFly TFBSs     | GFF file from http://redfly.ccr.buffalo.edu/ (obtained by clicking “Search”, then “Download all TFBS”) | redfly2gff.pl|
 
 <h3 id="loadGFF">Creating and loading GFF files</h3>
 The annotations in the UCSC MySQL tables and 
