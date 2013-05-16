@@ -11,3 +11,15 @@ hg19()
 
 }
 
+
+#danRer7
+danRer7()
+{
+  cd /export/data/CNEs/danRer7/annotation/
+  gunzip *.txt.gz
+  # The net file
+  cat netHg19.sql | mysql -u root -pgenome UCSC_danRer7
+  mysqlimport -u root -Lpgenome UCSC_danRer7 netHg19.txt
+
+}
+
