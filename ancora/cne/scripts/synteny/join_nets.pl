@@ -30,8 +30,11 @@ struct MyNetCluster => [start1 => '$',
 struct vertex => [ id => '$', visited => '$', edges => '%' ];
 struct edge => [ labels => '%', weight => '$', visited => '$' ];
 
-my $DB_HOST = (hostname() =~ /^angband\./) ? 'localhost' : 'asp';
-my $DB_PORT = (hostname() =~ /^angband\./) ? 3306 : 3307;
+#my $DB_HOST = (hostname() =~ /^olifant\./) ? 'localhost' : 'localhost';
+my $DB_HOST = "localhost";
+#my $DB_PORT = (hostname() =~ /^olifant\./) ? 3306 : 3307;
+my $DB_PORT = 3306;
+my $DB_USER = "nobody";
 my $EXCLUDE_RANDOM = 1;
 my $FILTER = 1;
 
@@ -50,7 +53,7 @@ my $max_gap1_str = int($MAX_GAP1/1000)."k";
 my $max_gap2_str = int($MAX_GAP2/1000)."k";
 $BASE_FN = "joinedNets_${ASM1}_${ASM2}_gap${max_gap1_str}${max_gap2_str}" unless($BASE_FN);
 
-my $dbh = DBI->connect("dbi:mysql:host=$DB_HOST;database=$UCSC_DB_NAME;port=$DB_PORT","at_read","tittut")
+my $dbh = DBI->connect("dbi:mysql:host=$DB_HOST;database=$UCSC_DB_NAME;port=$DB_PORT",$DB_USER)
     or die "could not connect to db $UCSC_DB_NAME @ $DB_HOST:$DB_PORT";
 my @chr_list1 = @{$dbh->selectcol_arrayref("select distinct tName from $NET_TABLE")};
 my @chr_list2 = @{$dbh->selectcol_arrayref("select distinct qName from $NET_TABLE")};
