@@ -723,21 +723,33 @@ Tab-delimited MGI coordinate file
 (currently named MGI_Gene_Model_Coord.rpt) 
 obtained from ftp://ftp.informatics.jax.org/pub/reports/index.html 
 ```sh
-perl mgi2gff.pl assembly.2bit MGI_Gene_Model_Coord.rpt > MGI_Gene_Model_Coord.gff|
+  perl /opt/www/cne/scripts/gbrowse_db/mgi2gff.pl \
+    /export/data/goldenpath/mm10/assembly.2bit \
+    /export/data/CNEs/mm10/annotation/MGI_Gene_Model_Coord.rpt \
+    >>/export/data/CNEs/gff/mm10.gff
 ```
 
+**FlyBase genes**
 
-**Non-UCSC annotation used in Ancora browsers**
-This is incomplete.
+This is just for fruitfly.
+GFF file from ftp://ftp.flybase.net/. 
+Currently used file is named ```dmel-all-r5.51.gff.gz```.
 
-| Annotation type | Flat files     | Parsing script |
-| --------------- |--------------- | -------------- |
-|MGI genes        | Tab-delimited MGI coordinate file (currently named MGI_Gene_Model_Coord.rpt) obtained from ftp://ftp.informatics.jax.org/pub/reports/index.html |perl mgi2gff.pl assembly.2bit MGI_Gene_Model_Coord.rpt > MGI_Gene_Model_Coord.gff|
-| FlyBase genes   | GFF file from ftp://ftp.flybase.net/. Currently used file is named dmel-all-r5.51.gff.gz| extract_genes_from_gff3.pl|
-|WormBase genes   | GFF file from ftp://ftp.wormbase.org/pub/wormbase/species/c_elegans/gff/.  | not done |
-| RedFly CRMs     | GFF file from http://redfly.ccr.buffalo.edu/ (obtained by clicking “Search”, then “Download all CRM”) | redfly2gff.pl|
-|RedFly TFBSs     | GFF file from http://redfly.ccr.buffalo.edu/ (obtained by clicking “Search”, then “Download all TFBS”) | redfly2gff.pl|
+```sh
+perl 
+```
 
+**RedFly**
+
+This is just for fruitfly.
+
+RedFly CRMs: GFF file from http://redfly.ccr.buffalo.edu/ (obtained by clicking “Search”, then “Download all CRM”) 
+
+RedFly TFBSs: GFF file from http://redfly.ccr.buffalo.edu/ (obtained by clicking “Search”, then “Download all TFBS”)
+
+**WormBase genes**
+
+GFF file from ftp://ftp.wormbase.org/pub/wormbase/species/c_elegans/gff/. not done
 
 
 <h3 id="loadGFF">Creating and loading GFF files</h3>
