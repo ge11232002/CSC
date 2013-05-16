@@ -1,5 +1,25 @@
 #!/bin/bash
 
+#hg19
+hg19()
+{
+  perl /opt/www/cne/scripts/gbrowse_db/ucsc2gff.pl \
+    -a /export/data/goldenpath/hg19/assembly.2bit \
+    -d UCSC_hg19 \
+    assembly refGene knownGene oreganno cpgIslandExt rmsk gap \
+    >/export/data/CNEs/hg19/gff/hg19.gff
+  perl /opt/www/cne/scripts/gbrowse_db/ens2gff.pl \
+    /export/data/goldenpath/hg19/assembly.2bit \
+    /export/data/CNEs/hg19/annotation/ensembl_genes.txt \
+    >>/export/data/CNEs/hg19/gff/hg19.gff
+  perl /opt/www/cne/scripts/gbrowse_db/mirbase2gff.pl \
+    /export/data/goldenpath/hg19/assembly.2bit \
+    /export/data/CNEs/hg19/annotation/hsa.gff3 \
+    >>/export/data/CNEs/hg19/gff/hg19.gff
+
+}
+
+
 # hg18
 hg18()
 {
