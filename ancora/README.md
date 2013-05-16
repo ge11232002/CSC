@@ -8,34 +8,37 @@ This document describes the implementation the Ancora web resource.
 For a general description of Ancora and its user interface, 
 see the [Ancora publication](http://genomebiology.com/2008/9/2/R34 "Ancora publication").
 
+**Table of Contents**  *generated with [DocToc](http://doctoc.herokuapp.com/)*
 
-**Table of contents**
+- [Ancora technical documentation](#ancora-technical-documentation)
+	- [Installation](#installation)
+		- [Software dependecies](#software-dependecies)
+		- [GBrowse2](#gbrowse2)
+		- [GBrowse2 Advanced Installation](#gbrowse2-advanced-installation)
+			- [Running GBrowse under FastCGI](#running-gbrowse-under-fastcgi)
+			- [User Account Database](#user-account-database)
+			- [Displaying Next Generation Sequencing Data](#displaying-next-generation-sequencing-data)
+			- [Configuring the Uploaded Track Database](#configuring-the-uploaded-track-database)
+		- [UCSC Genome Browser source and utilities](#ucsc-genome-browser-source-and-utilities)
+		- [ProServer DAS server](#proserver-das-server)
+		- [Software components](#software-components)
+	- [Configuration](#configuration)
+		- [Ancora Web Resource](#ancora-web-resource)
+		- [Apache Configuration](#apache-configuration)
+		- [Data Files](#data-files)
+		- [The CNE database](#the-cne-database)
+		- [MySQL account for Perl scripts](#mysql-account-for-perl-scripts)
+	- [Generating CNEs](#generating-cnes)
+		- [Obtaining alignment files](#obtaining-alignment-files)
+		- [Creating filter files](#creating-filter-files)
+		- [Scanning for CNEs](#scanning-for-cnes)
+		- [Removing unannotated repeats with BLAT](#removing-unannotated-repeats-with-blat)
+	- [Setting up a genome browser](#setting-up-a-genome-browser)
+		- [Creating an annotation database for GBrowse](#creating-an-annotation-database-for-gbrowse)
+		- [Obtaining genome annotations](#obtaining-genome-annotations)
+		- [Creating and loading GFF files](#creating-and-loading-gff-files)
+		- [Creating a configuration file for GBrowse](#creating-a-configuration-file-for-gbrowse)    
 
-*    [Installation](#installation)
-	* [Software dependencies](#dependencies)
-	* [GBrowse2](#GBrowse2)
-	* [Gbrowse2 Advanced Installation](#GBrowse2Ad)
-	* [UCSC Genome Browser source and utilities](#UCSC)
-	* [ProServer DAS server](#DAS)
-	* [Software components](#SoftwareComponents)
-*    [Configuration](#configuration)
-	* [Ancora Web Resource](#ancoraweb)
-	* [Apache Configuration](#apache)
-	* [Data Files](#data)
-	* [The CNE database](#cnedb)
-    * [MySQL account for Perl scripts](#mysql)
-*	[Generating CNEs](#CNEs)
-	*	[Obtaining alignment files](#alignment)
-    *	[Creating filter files](#filter)
-    *	[Scanning for CNEs](#scan)
-    *	[Removing unannotated repeats with BLAT](#BLAT)
-    *	[Loading CNEs into the cne database](#loadCNEs)
-*	[Setting up a genome browser](#genomebrowser)
-	*	[Creating an annotation database for GBrowse](#annotationdb)
-    *	[Obtaining genome annotations](#genomeAnnotation)
-    *	[Creating and loading GFF files](#loadGFF)
-    *	[Creating a configuration file for GBrowse](#gbrowseConfig)
-    
 ## Installation
  This documentation focuses on the Ancora installation on Olifant at MRC CSC. 
  Olifant is running the CentOS release 5.8 (Final). 
