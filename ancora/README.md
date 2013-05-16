@@ -655,23 +655,90 @@ mysqlimport -u root -Lp UCSC_hg19 *.txt
 | ZFIN Genes      | vegaGene.\* | vegaGene.\* | 
 | CpG islands     | cpgIslandExt.\*| cpgIslandExt.\*|
 | ORegAnno Regulatory Elements | oreganno.\*, oregannoAttr.\*|  oreganno.\*, oregannoAttr.\*  |
+| Synteny blocks  | netDanRer7.\*  | netDanRer7.\* |
 
 The Ancora browsers also use annotation from sources other than UCSC. 
 For each of these sources, 
 we download flat files as detailed below.
+
+**Synteny blocks**
+
+Download the net files (For example, netDanRer7.sql and netDanRer7.txt.gz)
+from UCSC annotation database and load them into mySQL UCSC database (UCSC_hg19).
+
+```sh
+## for hg19 with danRer7
+cd /export/data/CNEs/synteny
+perl /opt/www/cne/scripts/synteny/join_nets.pl danRer7 hg19 UCSC_danRer7 100000 300000
+```
+
+Please adapt the database username , password, host and port in ```join_nets.pl``` for your environment.
+
+**Ensembl genes**
+
+Tab-separated text file obtained using BioMart. 
+Choose the most recent Ensembl version for your assembly of interest.
+Under Dataset, choose genes for the organism of interest (e.g. "Homo sapiens genes").
+Do not apply any filters. 
+Choose to get the following attributes (categorized under "Structures"):
+* Ensembl Gene ID
+* Chromosome Name
+* Ensembl Transcript ID
+* Gene Start (bp)
+* Gene End (bp)
+* Transcript Start (bp)
+* Transcript End (bp)
+* Strand
+* Associated Gene Name
+* Exon Chr Start (bp)
+* Exon Chr End (bp)
+* CDS Start
+* CDS End
+
+To convert the downloaded file into gff, 
+
+```sh
+perl /opt/www/cne/scripts/gbrowse_db/ens2gff.pl \
+    /export/data/goldenpath/hg19/assembly.2bit \
+    /export/data/CNEs/hg19/annotation/ensembl_genes.txt \
+    >>/export/data/CNEs/hg19/gff/hg19.gff
+```
+
+**miRBase microRNAs**
+
+GFF3 file obtained from http://microrna.sanger.ac.uk/sequences/ftp.shtml.
+To convert the downloaded gff3 to gff,
+
+```sh
+  perl /opt/www/cne/scripts/gbrowse_db/mirbase2gff.pl \
+    /export/data/goldenpath/hg19/assembly.2bit \
+    /export/data/CNEs/hg19/annotation/hsa.gff3 \
+    >>/export/data/CNEs/hg19/gff/hg19.gff
+```
+
+**MGI genes**
+
+This is just for Mouse.
+Tab-delimited MGI coordinate file 
+(currently named MGI_Gene_Model_Coord.rpt) 
+obtained from ftp://ftp.informatics.jax.org/pub/reports/index.html 
+```sh
+perl mgi2gff.pl assembly.2bit MGI_Gene_Model_Coord.rpt > MGI_Gene_Model_Coord.gff|
+```
+
 
 **Non-UCSC annotation used in Ancora browsers**
 This is incomplete.
 
 | Annotation type | Flat files     | Parsing script |
 | --------------- |--------------- | -------------- |
-| Ensembl genes   | Tab-separated text file obtained using BioMart. See usage message for ens2gff.pl for details. | perl ens2gff.pl assembly.2bit ensembl_genes.txt > ensembl_genes.gff|
-|miRBase microRNAs|GFF3 file obtained from http://microrna.sanger.ac.uk/sequences/ftp.shtml | perl mirbase2gff.pl assembly.2bit hsa.gff3 > miRBase.gff3 |
 |MGI genes        | Tab-delimited MGI coordinate file (currently named MGI_Gene_Model_Coord.rpt) obtained from ftp://ftp.informatics.jax.org/pub/reports/index.html |perl mgi2gff.pl assembly.2bit MGI_Gene_Model_Coord.rpt > MGI_Gene_Model_Coord.gff|
 | FlyBase genes   | GFF file from ftp://ftp.flybase.net/. Currently used file is named dmel-all-r5.51.gff.gz| extract_genes_from_gff3.pl|
 |WormBase genes   | GFF file from ftp://ftp.wormbase.org/pub/wormbase/species/c_elegans/gff/.  | not done |
 | RedFly CRMs     | GFF file from http://redfly.ccr.buffalo.edu/ (obtained by clicking “Search”, then “Download all CRM”) | redfly2gff.pl|
 |RedFly TFBSs     | GFF file from http://redfly.ccr.buffalo.edu/ (obtained by clicking “Search”, then “Download all TFBS”) | redfly2gff.pl|
+
+
 
 <h3 id="loadGFF">Creating and loading GFF files</h3>
 The annotations in the UCSC MySQL tables and 
@@ -683,6 +750,10 @@ The script ```ucsc2gff.pl``` extracts data
 from UCSC annotation tables stored in a MySQL database and 
 outputs GFF format suitable for import into the GBrowse database. 
 The scripts that process flat files to generate GBrowse GFF files are listed in Table above.
+
+```sh
+perl /opt/www/cne/ancora/gbrowse_db/ucsc2gff.pl -a /export/data/goldenpath/hg18/assembly.2bit -d UCSC_hg18   assembly rmsk gap refGene >hg18.gff
+```
 
 The script ```ucsc2gff.pl``` can also read genome assembly information from 2bit files 
 and output a GFF feature for each sequence in the assembly 
