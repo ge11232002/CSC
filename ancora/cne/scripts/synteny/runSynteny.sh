@@ -9,6 +9,15 @@ hg19()
 
 }
 
+#mm10
+mm10()
+{
+  cd /export/data/CNEs/synteny
+  perl /opt/www/cne/scripts/synteny/join_nets.pl \
+    hg19 mm10 UCSC_hg19 300000 300000
+
+}
+
 
 #danRer7
 danRer7()

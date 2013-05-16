@@ -8,7 +8,7 @@ Ensembl genes(ensembl_genes.txt), miRBase microRNAs(mmu.gff3), MGI genes(MGI_Gen
 
 canFam3
 Gaps, RepeatMasker, RefSeq genes, CpG islands
-Ensembl genes(ensembl_genes.txt)
+Ensembl genes(ensembl_genes.txt), miRBase microRNAs(cfa.gff3, lifted from canFam2)
 
 equCab2
 Gaps, RepeatMasker, RefSeq genes

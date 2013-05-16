@@ -8,6 +8,8 @@ hg19()
   # The net file
   cat netDanRer7.sql | mysql -u root -pgenome UCSC_hg19
   mysqlimport -u root -Lpgenome UCSC_hg19 netDanRer7.txt
+  cat netMm10.sql    | mysql -u root -pgenome UCSC_hg19
+  mysqlimport -u root -Lpgenome UCSC_hg19 netMm10.txt
 
 }
 
