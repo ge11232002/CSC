@@ -802,3 +802,9 @@ before it loads the GFF files.
 <h3 id="gbrowseConfig">Creating a configuration file for GBrowse</h3>
 
 
+
+**TO DO**
+switch to gff3!!!!!
+
+
+
