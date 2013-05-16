@@ -603,6 +603,11 @@ e.g. gbrowse_gff_hg19 for the latest human assembly.
 Make sure the user nobody@localhost has SELECT permission on the database
 as described above. 
 
+```sh
+mysql -u root -p -e 'create database gbrowse_gff_hg19'
+mysql -u root -p -e 'grant select on gbrowse_gff_hg19.* to nobody@localhost'
+```
+
 <h3 id="genomeAnnotation">Obtaining genome annotations</h3>
 This step usually involves more manual work than the other steps, 
 because annotations are available in diverse databases and 
