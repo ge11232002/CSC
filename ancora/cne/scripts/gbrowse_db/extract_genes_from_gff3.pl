@@ -134,39 +134,39 @@ sub read_flybase_gff {
     open IN, $gff_fn or die "could not open $gff_fn";
 
     while(my $line = <IN>) {
-	next if($line =~ /^\#/);
-	chomp $line;
-	my ($chr, $source, $type, $start, $end, undef, $strand, undef, $extras) = 
+	    next if($line =~ /^\#/);
+	    chomp $line;
+	    my ($chr, $source, $type, $start, $end, undef, $strand, undef, $extras) = 
 	    split /\t/, $line;
-	next unless(defined($source) and $source eq 'FlyBase');
-	if($type eq 'gene') {
-	    # Handle gene feature
-	    my ($gene_id) = $extras =~ /ID=(\w+);/;
-	    my ($gene_symbol) = $extras =~ /Name=([^;]+);/;
-	    add_gene($genes, $gene_id, $gene_symbol, $chr, $start, $end, $strand);
-	}
-	elsif($type eq 'CDS') {
-	    # Handle CDS feature
-	    my $parents = get_parents($extras);
-	    add_cds($transcripts, $parents, $start, $end);
-	}
-	elsif($type eq 'exon') {
-	    # Handle exon feature
-	    my $parents = get_parents($extras);
-	    add_exon($transcripts, $parents, $start, $end);
-	}
-	elsif($type =~ /RNA$/ or $type eq 'pseudogene') {
-	    # Handle transcript / pseudogene feature (coding or noncoding)
-	    # The regex is supposed to capture: mRNA, tRNA, ncRNA, rRNA, miRNA, snoRNA, scRNA, snoRNA, snRNA
-	    my ($transcript_id) = $extras =~ /ID=(\w+);/;
-	    my ($transcript_symbol) = $extras =~ /Name=([^;]+);/;
-	    my $parents = get_parents($extras);
-	    die "no gene for transcript $transcript_id" if(@$parents == 0);
-	    die "multiple genes for transcript $transcript_id" if(@$parents > 1);
-	    add_transcript($transcripts, $transcript_symbols, $transcript_id, $transcript_symbol,
+	    next unless(defined($source) and $source eq 'FlyBase');
+	    if($type eq 'gene') {
+	      # Handle gene feature
+	      my ($gene_id) = $extras =~ /ID=(\w+);/;
+	      my ($gene_symbol) = $extras =~ /Name=([^;]+);/;
+	      add_gene($genes, $gene_id, $gene_symbol, $chr, $start, $end, $strand);
+	    }
+  	  elsif($type eq 'CDS') {
+	      # Handle CDS feature
+	      my $parents = get_parents($extras);
+	      add_cds($transcripts, $parents, $start, $end);
+	    }
+	    elsif($type eq 'exon') {
+	      # Handle exon feature
+	      my $parents = get_parents($extras);
+	      add_exon($transcripts, $parents, $start, $end);
+	    }
+	    elsif($type =~ /RNA$/ or $type eq 'pseudogene') {
+	      # Handle transcript / pseudogene feature (coding or noncoding)
+	      # The regex is supposed to capture: mRNA, tRNA, ncRNA, rRNA, miRNA, snoRNA, scRNA, snoRNA, snRNA
+	      my ($transcript_id) = $extras =~ /ID=(\w+);/;
+	      my ($transcript_symbol) = $extras =~ /Name=([^;]+);/;
+	      my $parents = get_parents($extras);
+	      die "no gene for transcript $transcript_id" if(@$parents == 0);
+	      die "multiple genes for transcript $transcript_id" if(@$parents > 1);
+	      add_transcript($transcripts, $transcript_symbols, $transcript_id, $transcript_symbol,
 			   $type, $chr, $start, $end, $strand, $extras, $parents->[0]);
-	}
-	# we could also look for: nc_primary_transcript, which is used in the wormbase gff3 files
+	    }
+	    # we could also look for: nc_primary_transcript, which is used in the wormbase gff3 files
     }
 
     close IN;
@@ -195,7 +195,7 @@ sub read_wormbase_gff {
     close IN;
 
     open IN, $gff_fn or die "could not open $gff_fn";
-
+    
     while(my $line = <IN>) {
 	next if($line =~ /^\#/);
 	chomp $line;
