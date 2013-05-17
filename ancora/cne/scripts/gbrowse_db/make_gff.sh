@@ -188,11 +188,6 @@
     assembly refGene rmsk gap \
     >/export/data/CNEs/gff/ce4.gff
   wc -l /export/data/CNEs/gff/ce4.gff
-  perl /opt/www/cne/scripts/gbrowse_db/ens2gff.pl \
-    /export/data/goldenpath/ce4/assembly.2bit \
-    /export/data/CNEs/ce4/annotation/ensembl_genes.txt \
-    >>/export/data/CNEs/gff/ce4.gff
-  wc -l /export/data/CNEs/gff/ce4.gff
   perl /opt/www/cne/scripts/gbrowse_db/mirbase2gff.pl \
     /export/data/goldenpath/ce4/assembly.2bit \
     /export/data/CNEs/ce4/annotation/cel.gff \
