@@ -670,6 +670,8 @@ The Ancora browsers also use annotation from sources other than UCSC.
 For each of these sources, 
 we download flat files as detailed below.
 
+NOTE: Synteny blocks are not included currently. Not sure the settings of parameters.
+
 **Synteny blocks**
 
 Download the net files (For example, netDanRer7.sql and netDanRer7.txt.gz)
@@ -745,8 +747,11 @@ GFF file from ftp://ftp.flybase.net/.
 Currently used file is named ```dmel-all-r5.51.gff.gz```.
 
 ```sh
-perl 
+perl extract_genes_from_gff3.pl
 ```
+
+Note: ```extract_genes_from_gff3.pl``` needs to be fixed. Currently not working.
+
 
 **RedFly**
 
@@ -754,11 +759,18 @@ This is just for fruitfly.
 
 RedFly CRMs: GFF file from http://redfly.ccr.buffalo.edu/ (obtained by clicking “Search”, then “Download all CRM”) 
 
+```sh
+perl redfly2gff.pl /export/data/goldenpath/dm3/assembly.2bit /export/data/CNEs/dm3/annotation/redfly_CRM.gff CRM >>dm3.gff
+```
+
+Note: This script also needs to be fixed to the new format.
+
 RedFly TFBSs: GFF file from http://redfly.ccr.buffalo.edu/ (obtained by clicking “Search”, then “Download all TFBS”)
 
 **WormBase genes**
 
 GFF file from ftp://ftp.wormbase.org/pub/wormbase/species/c_elegans/gff/. not done
+This script is also broken. Needs to be fixed for gff2 to gbrowse gff.
 
 
 ### Creating and loading GFF files
