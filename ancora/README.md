@@ -8,46 +8,50 @@ This document describes the implementation the Ancora web resource.
 For a general description of Ancora and its user interface, 
 see the [Ancora publication](http://genomebiology.com/2008/9/2/R34 "Ancora publication").
 
-**Table of contents**
+**Table of Contents**  *generated with [DocToc](http://doctoc.herokuapp.com/)*
 
-*    [Installation](#installation)
-	* [Software dependencies](#dependencies)
-	* [GBrowse2](#GBrowse2)
-	* [Gbrowse2 Advanced Installation](#GBrowse2Ad)
-	* [UCSC Genome Browser source and utilities](#UCSC)
-	* [ProServer DAS server](#DAS)
-	* [Software components](#SoftwareComponents)
-*    [Configuration](#configuration)
-	* [Ancora Web Resource](#ancoraweb)
-	* [Apache Configuration](#apache)
-	* [Data Files](#data)
-	* [The CNE database](#cnedb)
-    * [MySQL account for Perl scripts](#mysql)
-*	[Generating CNEs](#CNEs)
-	*	[Obtaining alignment files](#alignment)
-    *	[Creating filter files](#filter)
-    *	[Scanning for CNEs](#scan)
-    *	[Removing unannotated repeats with BLAT](#BLAT)
-    *	[Loading CNEs into the cne database](#loadCNEs)
-*	[Setting up a genome browser](#genomebrowser)
-	*	[Creating an annotation database for GBrowse](#annotationdb)
-    *	[Obtaining genome annotations](#genomeAnnotation)
-    *	[Creating and loading GFF files](#loadGFF)
-    *	[Creating a configuration file for GBrowse](#gbrowseConfig)
+- [Ancora technical documentation](#ancora-technical-documentation)
+	- [Installation](#installation)
+		- [Software dependecies](#software-dependecies)
+		- [GBrowse2](#gbrowse2)
+		- [GBrowse2 Advanced Installation](#gbrowse2-advanced-installation)
+			- [Running GBrowse under FastCGI](#running-gbrowse-under-fastcgi)
+			- [User Account Database](#user-account-database)
+			- [Displaying Next Generation Sequencing Data](#displaying-next-generation-sequencing-data)
+			- [Configuring the Uploaded Track Database](#configuring-the-uploaded-track-database)
+		- [UCSC Genome Browser source and utilities](#ucsc-genome-browser-source-and-utilities)
+		- [ProServer DAS server](#proserver-das-server)
+		- [Software components](#software-components)
+	- [Configuration](#configuration)
+		- [Ancora Web Resource](#ancora-web-resource)
+		- [Apache Configuration](#apache-configuration)
+		- [Data Files](#data-files)
+		- [The CNE database](#the-cne-database)
+		- [MySQL account for Perl scripts](#mysql-account-for-perl-scripts)
+	- [Generating CNEs](#generating-cnes)
+		- [Obtaining alignment files](#obtaining-alignment-files)
+		- [Creating filter files](#creating-filter-files)
+		- [Scanning for CNEs](#scanning-for-cnes)
+		- [Removing unannotated repeats with BLAT](#removing-unannotated-repeats-with-blat)
+	- [Setting up a genome browser](#setting-up-a-genome-browser)
+		- [Creating an annotation database for GBrowse](#creating-an-annotation-database-for-gbrowse)
+		- [Obtaining genome annotations](#obtaining-genome-annotations)
+		- [Creating and loading GFF files](#creating-and-loading-gff-files)
+		- [Creating a configuration file for GBrowse](#creating-a-configuration-file-for-gbrowse)    
 
-<h2 id="installation">Installation</h2>
+## Installation
  This documentation focuses on the Ancora installation on Olifant at MRC CSC. 
  Olifant is running the CentOS release 5.8 (Final). 
  However, ancora is supposed to run on other Linux/Unix distribution without too much difficulty.
 
-<h3 id="dependencies">Software dependecies</h3>
+### Software dependecies
  The following softwares are essential for the whole implementation.
  
  *  A httpd server (Currently [Apache](http://httpd.apache.org/docs/2.2/ "Apache") 2.2.3 is used on olifant)
  *  [MySQL](http://dev.mysql.com/downloads/mysql/5.0.html "MySQL") client if you have a dedicated MySQL server. if not, MySQL server is alse required. (MySQL 5.0.95 is used on olifant)
  *  [BioPerl](http://www.bioperl.org/wiki/Installing_BioPerl_on_Unix "BioPerl"). Installation is quite straightforward following the instructions. (BioPerl 1.6.1 is used on olifant.)
 
-<h3 id="GBrowse2">GBrowse2</h3>
+### GBrowse2
 This implementation of Ancora utilizes the latest version of GBrowse 2.54. 
 GBrowse 2.X is a complete rewrite of GBrowse 1.X version. 
 There are several advantages compared to the GBrowse 1.X. 
@@ -116,10 +120,10 @@ newer (2.33) version are removed in case they are installed
 in another directory.
 **Note**: For some unknown reasons, the tracks are not displayed on Mac OS 10.8.3 with Firefox 20.0, Safari 6.0.4 and Opera 12.15. However, Chrome 26.0.1410.65 works fine. So far, it works on Windows 7 with all major browsers.
 
-<h3 id="GBrowse2Ad">GBrowse2 Advanced Installation</h3>
+### GBrowse2 Advanced Installation
 This section is optional and incomplete. The advance installation should cover the topics such as *FastCGI*, *User Account Database*, *Displaying Next Generation Sequencing Data*, *Configuring the Uploaded Track Database*.
 
-<h4 id="FastCGI">Running GBrowse under FastCGI</h4>
+#### Running GBrowse under FastCGI
 The idea of FastCGI is to make the script as a long-running process at the first time of the script is requested. 
 By eliminating the startup time for later use of script, 
 the responsiveness of a FastCGI is significantly improved.
@@ -152,16 +156,16 @@ You may need to adapt the GBrowse2 conf file for Apache
 to the older version of *mod_fcgid* with the names mapping 
 described on the [page](http://httpd.apache.org/mod_fcgid/mod/mod_fcgid.html).
 
-<h4 id="User">User Account Database</h4>
+#### User Account Database
 To be implemented
 
-<h4 id="">Displaying Next Generation Sequencing Data</h4>
+#### Displaying Next Generation Sequencing Data
 To be implemented
 
-<h4 id="">Configuring the Uploaded Track Database</h4>
+#### Configuring the Uploaded Track Database
 To be implemented
 
-<h3 id="UCSC">UCSC Genome Browser source and utilities</h3>
+### UCSC Genome Browser source and utilities
 The UCSC Genome Browser source code is needed to compile the C program 
 for detecting CNEs, which makes use of several library functions 
 from the UCSC source. 
@@ -184,10 +188,10 @@ cd utils/
 make
 ```
 
-<h3 id="DAS">ProServer DAS server</h3>
+### ProServer DAS server
 To be implemented
 
-<h3 id="SoftwareComponents">Software components</h3>
+### Software components
 Ancora requires two software packages developed in Boris Lenhard’s group: 
 cne and AT. The cne package contains Perl libraries, 
 C source code and Perl and bash scripts for detecting and 
@@ -226,11 +230,11 @@ Ancora currently only needs one of these programs: ceScan,
 the program we use to detect CNE. 
 Instructions for how to compile the C programs are in cne/tools/README.txt.
 
-<h2 id="configuration">Configuration</h2>
+## Configuration
 This section will describe all the necessary configurations step by step
 for setting up the Ancora web resource.
 
-<h3 id="ancoraweb">Ancora Web Resource</h3>
+### Ancora Web Resource
 Under the repository, there are two other folders *ancora* and *gbrowse2*,
 besides the *cne* and *AT* packages.
 The *ancora* directory contains html and cgi files 
@@ -259,7 +263,7 @@ ln -s conf/*.conf /opt/www/gbrowse2/conf/
 ln -s conf/plugins/* /opt/www/gbrowse2/conf/plugins/
 ```
 
-<h3 id="apache">Apache Configuration</h3>
+### Apache Configuration
 The Apache httpd server is configured to look for html files 
 under ```/var/www/html``` and CGI scripts in ```/var/www/cgi-bin```.
 However, if we use the technique called "VirtualHost",
@@ -281,7 +285,7 @@ the CGI will be executed in ```/fgb2/gbrowse```.
 The settings of FastCGI for GBrowse2 is in ```/etc/httpd/conf.d/gbrowse2.conf```.
 By default, Ancora will call the CGI in FastCGI mode.
 
-<h3 id="data">Data Files</h3>
+### Data Files
 Ancora expects genome assembly sequences in binary 2bit format to 
 be present under ```/export/data/goldenpath```. 
 There should be one subdirectory for each assembly, 
@@ -309,7 +313,7 @@ in the CNE detection pipeline and
 in constructing the other annotation tracks shown in the genome browser. 
 How to retrieve these files is described in the corresponding sections below.
 
-<h3 id="cnedb">The CNE database</h3>
+### The CNE database
 Ancora reads information about genome assemblies and CNEs 
 from a database called cne served by the MySQL server on the same host. 
 Programmatic access to this database is provided 
@@ -358,7 +362,7 @@ WHERE assembly_id="xenTro3";
 mysqldump -u username -p cne assembly > create_assembly_table.sql 
 ```
 
-<h3 id="mysql">MySQL account for Perl scripts</h3>
+### MySQL account for Perl scripts
 Generating CNEs and setting up the annotation database for Ancora 
 involves running several Perl scripts that need to access local MySQL databases. 
 Some of these scripts require that a MySQL username and password 
@@ -394,7 +398,7 @@ For security reasons,
 it is a good idea to change the permissions of MyPerlVars.pm file 
 so that nobody but you can read it.
 
-<h2 id="CNEs">Generating CNEs</h2>
+## Generating CNEs
 To scan for CNEs, 
 you need to have the cne package, the AT package and 
 genome assembly sequences installed as outlined above. 
@@ -405,7 +409,7 @@ that are to be ignored in the scanning.
 The alignment and filter files are not required to run the web resource, 
 so they can be removed after CNE generation.
 
-<h3 id="alignment">Obtaining alignment files</h3>
+### Obtaining alignment files
 The program that scans for CNEs (ceScan) takes alignments in axt format as input. 
 We typically obtain alignment files in axt format from UCSC and 
 keep them under ```/export/downloads/ucsc/axtNet```.
@@ -438,7 +442,7 @@ rsync -avzP \
 I prepared a script ```cne/scripts/cne_pipeline/downloadAlignments.r``` 
 to download the pairwise alignments.
 
-<h3 id="filter">Creating filter files</h3>
+### Creating filter files
 Filer files list regions to be ignored in the scan. 
 One filter file should be created for each assembly.
 The current file for human assembly hg19 is ```/export/data/CNEs/hg19/filters/filter_regions.hg19.bed```. 
@@ -469,7 +473,7 @@ perl /opt/www/cne/scripts/cne_pipeline/create_filter.pl \
 > /export/data/CNEs/hg19/filters/filter_regions.hg19.bed &
 ```
 
-<h3 id="scan">Scanning for CNEs</h3>
+### Scanning for CNEs
 The cne package contains a Perl script cne/scripts/cne_pipeline/detect_cnes.pl 
 that we run to detect CNEs. 
 The simplest way to run the script is as follows:
@@ -538,7 +542,7 @@ There are nine columns:
 The coordinate ranges are half-open, zero-based as in the bed format, 
 so that three-column bed files can be generated by cutting out columns 1-3 or 4-6.
 
-<h3 id="BLAT">Removing unannotated repeats with BLAT</h3>
+### Removing unannotated repeats with BLAT
 This step has been implemented as a separate script because it takes long to run. 
 The goal of this step is to remove CNEs that correspond to repeated sequence 
 not annotated as such in the RepeatMasker track from UCSC. 
@@ -588,13 +592,13 @@ about how it can be configured.
 
 
 
-<h2 id="genomebrowser">Setting up a genome browser</h2>
+## Setting up a genome browser
 Setting up a genome browser for a new assembly involves 
 creating and loading CNEs for the assembly, 
 as described in the previous section, 
 as well as a number of additional steps detailed in this section.
 
-<h3 id="annotationdb">Creating an annotation database for GBrowse</h3>
+### Creating an annotation database for GBrowse
 Create a MySQL database to store the annotation (genes etc) 
 that is to be shown alongside the CNEs. 
 For the main Ancora installation on olifant, 
@@ -603,7 +607,12 @@ e.g. gbrowse_gff_hg19 for the latest human assembly.
 Make sure the user nobody@localhost has SELECT permission on the database
 as described above. 
 
-<h3 id="genomeAnnotation">Obtaining genome annotations</h3>
+```sh
+mysql -u root -p -e 'create database gbrowse_gff_hg19'
+mysql -u root -p -e 'grant select on gbrowse_gff_hg19.* to nobody@localhost'
+```
+
+### Obtaining genome annotations
 This step usually involves more manual work than the other steps, 
 because annotations are available in diverse databases and 
 in different and changing formats. 
@@ -752,7 +761,7 @@ RedFly TFBSs: GFF file from http://redfly.ccr.buffalo.edu/ (obtained by clicking
 GFF file from ftp://ftp.wormbase.org/pub/wormbase/species/c_elegans/gff/. not done
 
 
-<h3 id="loadGFF">Creating and loading GFF files</h3>
+### Creating and loading GFF files
 The annotations in the UCSC MySQL tables and 
 the flat files must be converted to a GFF format suitable for 
 import into the GBrowse annotation database. 
@@ -794,6 +803,12 @@ NOTE: use this script with caution as
 it erases all data stored in the GBrowse annotation databases 
 before it loads the GFF files.
 
-<h3 id="gbrowseConfig">Creating a configuration file for GBrowse</h3>
+### Creating a configuration file for GBrowse
+
+
+
+**TO DO**
+switch to gff3!!!!!
+
 
 
