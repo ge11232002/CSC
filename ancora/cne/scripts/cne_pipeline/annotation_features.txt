@@ -4,7 +4,7 @@ Ensembl genes(ensembl_genes.txt), miRBase microRNAs(hsa.gff3)
 
 mm10
 Gaps, RepeatMasker, RefSeq genes, UCSC Known Genes, CpG islands
-Ensembl genes(ensembl_genes.txt), miRBase microRNAs(mmu.gff3), MGI genes(MGI_Gene_Model_Coord.rpt) 
+Ensembl genes(ensembl_genes.txt), miRBase microRNAs(mmu.gff3), MGI genes(MGI_Gene_Model_Coord.rpt)
 
 canFam3
 Gaps, RepeatMasker, RefSeq genes, CpG islands
@@ -32,6 +32,6 @@ Ensembl genes(ensembl_genes.txt), miRBase microRNAs(dme.gff3), flybase(dmel-all-
 
 ce4
 Gaps, RepeatMasker, RefSeq genes,
-miRBase microRNAs(cel.gff)
+miRBase microRNAs(cel.gff), worm base(c_elegans.WS170.annotations.gff2.gz, geneIDs.WS170.gz)
 
 

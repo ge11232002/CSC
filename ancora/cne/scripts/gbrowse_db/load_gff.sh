@@ -15,6 +15,8 @@ bp_bulk_load_gff.pl -u $USER -p $PASS -c -d gbrowse_gff_hg19 --maxfeature 100000
 #mm10
 bp_bulk_load_gff.pl -u $USER -p $PASS -c -d gbrowse_gff_mm10 --maxfeature 1000000000 /export/data/CNEs/gff/mm10.gff
 
+
+
 # hg18
 #bp_bulk_load_gff.pl -u $USER -p $PASS -c -d gbrowse_gff_hg18 --maxfeature 1000000000 hg18.gff
 #

@@ -57,7 +57,9 @@ while(my $line = <IN>) {
     $fields[0] = $chr;
     # Parse group field
     my $group = $fields[8];
+    ## for cel.gff
     #my ($id) = $group =~ /; ID="([^"]+)"/;
+    ## for the other
     my ($id) = $group =~ /Name=(.+)/;
     $id =~ s/;.+//;
     die "could not parse group field: $group" unless($id);

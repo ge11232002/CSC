@@ -46,7 +46,7 @@ danRer7()
 {
   cd /export/data/CNEs/danRer7/annotation/
   # The net file
-  rsync -avzP rsync://hgdownload.cse.ucsc.edu/goldenPath/danRer7/database/netHg19.* .
+  rsync -avzP rsync://hgdownload.cse.ucsc.edu/goldenPath/danRer7/database/net* .
 
 
 }

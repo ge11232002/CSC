@@ -1,8 +1,6 @@
 #!/bin/bash
 
 #hg19
-hg19()
-{
   perl /opt/www/cne/scripts/gbrowse_db/ucsc2gff.pl \
     -a /export/data/goldenpath/hg19/assembly.2bit \
     -d UCSC_hg19 \
@@ -19,16 +17,14 @@ hg19()
     /export/data/CNEs/hg19/annotation/hsa.gff3 \
     >>/export/data/CNEs/gff/hg19.gff
   wc -l /export/data/CNEs/gff/hg19.gff
-  perl /opt/www/cne/scripts/gbrowse_db/synteny2gff.pl jn danRer7 \
-    /export/data/CNEs/synteny/joinedNets_danRer7_hg19_gap100k300k.txt \
-    /export/data/CNEs/synteny/joinedNets_danRer7_hg19_gap100k300k.hg19_detail.bed \
-    >>/export/data/CNEs/gff/hg19.gff
-  wc -l /export/data/CNEs/gff/hg19.gff
-}
+  #perl /opt/www/cne/scripts/gbrowse_db/synteny2gff.pl jn danRer7 \
+  #  /export/data/CNEs/synteny/joinedNets_danRer7_hg19_gap100k300k.txt \
+  #  /export/data/CNEs/synteny/joinedNets_danRer7_hg19_gap100k300k.hg19_detail.bed \
+   # >>/export/data/CNEs/gff/hg19.gff
+  #wc -l /export/data/CNEs/gff/hg19.gff
+
 
 #mm10
-mm10()
-{
   perl /opt/www/cne/scripts/gbrowse_db/ucsc2gff.pl \
     -a /export/data/goldenpath/mm10/assembly.2bit \
     -d UCSC_mm10 \
@@ -50,16 +46,13 @@ mm10()
     /export/data/CNEs/mm10/annotation/MGI_Gene_Model_Coord.rpt \
     >>/export/data/CNEs/gff/mm10.gff
   wc -l /export/data/CNEs/gff/mm10.gff
-  perl /opt/www/cne/scripts/gbrowse_db/synteny2gff.pl jn hg19 \
-    /export/data/CNEs/synteny/joinedNets_hg19_mm10_gap300k300k.txt \
-    /export/data/CNEs/synteny/joinedNets_hg19_mm10_gap300k300k.mm10_detail.bed \
-    >>/export/data/CNEs/gff/mm10.gff
-  wc -l /export/data/CNEs/gff/mm10.gff
-}
+  #perl /opt/www/cne/scripts/gbrowse_db/synteny2gff.pl jn hg19 \
+  #  /export/data/CNEs/synteny/joinedNets_hg19_mm10_gap300k300k.txt \
+  #  /export/data/CNEs/synteny/joinedNets_hg19_mm10_gap300k300k.mm10_detail.bed \
+  #  >>/export/data/CNEs/gff/mm10.gff
+  #wc -l /export/data/CNEs/gff/mm10.gff
 
 #canFam3
-canFam3()
-{
   perl /opt/www/cne/scripts/gbrowse_db/ucsc2gff.pl \
     -a /export/data/goldenpath/canFam3/assembly.2bit \
     -d UCSC_canFam3 \
@@ -70,8 +63,142 @@ canFam3()
     /export/data/goldenpath/canFam3/assembly.2bit \
     /export/data/CNEs/canFam3/annotation/ensembl_genes.txt \
     >>/export/data/CNEs/gff/canFam3.gff
+  wc -l /export/data/CNEs/gff/canFam3.gff
+  perl /opt/www/cne/scripts/gbrowse_db/mirbase2gff.pl \
+    /export/data/goldenpath/canFam3/assembly.2bit \
+    /export/data/CNEs/canFam3/annotation/cfa.gff3 \
+    >>/export/data/CNEs/gff/canFam3.gff
+  wc -l /export/data/CNEs/gff/canFam3.gff
+  #perl /opt/www/cne/scripts/gbrowse_db/synteny2gff.pl jn hg19 \
+  #  /export/data/CNEs/synteny/joinedNets_hg19_canFam3_gap300k300k.txt \
+  #  /export/data/CNEs/synteny/joinedNets_hg19_canFam3_gap300k300k.canFam3_detail.bed \
+  #  >>/export/data/CNEs/gff/canFam3.gff
+  #wc -l /export/data/CNEs/gff/canFam3.gff
 
-}
+#equCab2
+  perl /opt/www/cne/scripts/gbrowse_db/ucsc2gff.pl \
+    -a /export/data/goldenpath/equCab2/assembly.2bit \
+    -d UCSC_equCab2 \
+    assembly refGene rmsk gap \
+    >/export/data/CNEs/gff/equCab2.gff
+  wc -l /export/data/CNEs/gff/equCab2.gff
+  perl /opt/www/cne/scripts/gbrowse_db/ens2gff.pl \
+    /export/data/goldenpath/equCab2/assembly.2bit \
+    /export/data/CNEs/equCab2/annotation/ensembl_genes.txt \
+    >>/export/data/CNEs/gff/equCab2.gff
+  wc -l /export/data/CNEs/gff/equCab2.gff
+  perl /opt/www/cne/scripts/gbrowse_db/mirbase2gff.pl \
+    /export/data/goldenpath/equCab2/assembly.2bit \
+    /export/data/CNEs/equCab2/annotation/eca.gff3 \
+    >>/export/data/CNEs/gff/equCab2.gff
+  wc -l /export/data/CNEs/gff/equCab2.gff
+  #perl /opt/www/cne/scripts/gbrowse_db/synteny2gff.pl jn hg19 \
+  #  /export/data/CNEs/synteny/joinedNets_hg19_equCab2_gap300k300k.txt \
+  #  /export/data/CNEs/synteny/joinedNets_hg19_equCab2_gap300k300k.equCab2_detail.bed \
+  #  >>/export/data/CNEs/gff/equCab2.gff
+  #wc -l /export/data/CNEs/gff/equCab2.gff
+
+#galGal4
+  perl /opt/www/cne/scripts/gbrowse_db/ucsc2gff.pl \
+    -a /export/data/goldenpath/galGal4/assembly.2bit \
+    -d UCSC_galGal4 \
+    assembly refGene cpgIsland rmsk gap \
+    >/export/data/CNEs/gff/galGal4.gff
+  wc -l /export/data/CNEs/gff/galGal4.gff
+  perl /opt/www/cne/scripts/gbrowse_db/ens2gff.pl \
+    /export/data/goldenpath/galGal4/assembly.2bit \
+    /export/data/CNEs/galGal4/annotation/ensembl_genes.txt \
+    >>/export/data/CNEs/gff/galGal4.gff
+  wc -l /export/data/CNEs/gff/galGal4.gff
+  perl /opt/www/cne/scripts/gbrowse_db/mirbase2gff.pl \
+    /export/data/goldenpath/galGal4/assembly.2bit \
+    /export/data/CNEs/galGal4/annotation/gga.gff3 \
+    >>/export/data/CNEs/gff/galGal4.gff
+  wc -l /export/data/CNEs/gff/galGal4.gff
+
+#danRer7
+  perl /opt/www/cne/scripts/gbrowse_db/ucsc2gff.pl \
+    -a /export/data/goldenpath/danRer7/assembly.2bit \
+    -d UCSC_danRer7 \
+    assembly refGene cpgIsland rmsk gap \
+    >/export/data/CNEs/gff/danRer7.gff
+  wc -l /export/data/CNEs/gff/danRer7.gff
+  perl /opt/www/cne/scripts/gbrowse_db/ens2gff.pl \
+    /export/data/goldenpath/danRer7/assembly.2bit \
+    /export/data/CNEs/danRer7/annotation/ensembl_genes.txt \
+    >>/export/data/CNEs/gff/danRer7.gff
+  wc -l /export/data/CNEs/gff/danRer7.gff
+  perl /opt/www/cne/scripts/gbrowse_db/mirbase2gff.pl \
+    /export/data/goldenpath/danRer7/assembly.2bit \
+    /export/data/CNEs/danRer7/annotation/dre.gff3 \
+    >>/export/data/CNEs/gff/danRer7.gff
+  wc -l /export/data/CNEs/gff/danRer7.gff
+  #perl /opt/www/cne/scripts/gbrowse_db/synteny2gff.pl jn hg19 \
+  #  /export/data/CNEs/synteny/joinedNets_hg19_danRer7_gap300k100k.txt \
+  #  /export/data/CNEs/synteny/joinedNets_hg19_danRer7_gap300k100k.danRer7_detail.bed \
+  #  >>/export/data/CNEs/gff/danRer7.gff
+  #wc -l /export/data/CNEs/gff/danRer7.gff
+
+
+#tetNig2
+  perl /opt/www/cne/scripts/gbrowse_db/ucsc2gff.pl \
+    -a /export/data/goldenpath/tetNig2/assembly.2bit \
+    -d UCSC_tetNig2 \
+    assembly cpgIsland gap \
+    >/export/data/CNEs/gff/tetNig2.gff
+  wc -l /export/data/CNEs/gff/tetNig2.gff
+  perl /opt/www/cne/scripts/gbrowse_db/ens2gff.pl \
+    /export/data/goldenpath/tetNig2/assembly.2bit \
+    /export/data/CNEs/tetNig2/annotation/ensembl_genes.txt \
+    >>/export/data/CNEs/gff/tetNig2.gff
+  wc -l /export/data/CNEs/gff/tetNig2.gff
+  perl /opt/www/cne/scripts/gbrowse_db/mirbase2gff.pl \
+    /export/data/goldenpath/tetNig2/assembly.2bit \
+    /export/data/CNEs/tetNig2/annotation/tni.gff3 \
+    >>/export/data/CNEs/gff/tetNig2.gff
+  wc -l /export/data/CNEs/gff/tetNig2.gff
+
+#dm3
+  perl /opt/www/cne/scripts/gbrowse_db/ucsc2gff.pl \
+    -a /export/data/goldenpath/dm3/assembly.2bit \
+    -d UCSC_dm3 \
+    assembly refGene rmsk gap \
+    >/export/data/CNEs/gff/dm3.gff
+  wc -l /export/data/CNEs/gff/dm3.gff
+  perl /opt/www/cne/scripts/gbrowse_db/ens2gff.pl \
+    /export/data/goldenpath/dm3/assembly.2bit \
+    /export/data/CNEs/dm3/annotation/ensembl_genes.txt \
+    >>/export/data/CNEs/gff/dm3.gff
+  wc -l /export/data/CNEs/gff/dm3.gff
+  perl /opt/www/cne/scripts/gbrowse_db/mirbase2gff.pl \
+    /export/data/goldenpath/dm3/assembly.2bit \
+    /export/data/CNEs/dm3/annotation/dme.gff3 \
+    >>/export/data/CNEs/gff/dm3.gff
+  wc -l /export/data/CNEs/gff/dm3.gff
+  #perl /opt/www/cne/scripts/gbrowse_db/extract_genes_from_gff3.pl \
+  #  flybase \
+  #  /export/data/CNEs/dm3/annotation/dmel-all-r5.51.gff \
+  #  >>/export/data/CNEs/gff/dm3.gff
+  #perl 
+
+#ce4
+  perl /opt/www/cne/scripts/gbrowse_db/ucsc2gff.pl \
+    -a /export/data/goldenpath/ce4/assembly.2bit \
+    -d UCSC_ce4 \
+    assembly refGene rmsk gap \
+    >/export/data/CNEs/gff/ce4.gff
+  wc -l /export/data/CNEs/gff/ce4.gff
+  perl /opt/www/cne/scripts/gbrowse_db/ens2gff.pl \
+    /export/data/goldenpath/ce4/assembly.2bit \
+    /export/data/CNEs/ce4/annotation/ensembl_genes.txt \
+    >>/export/data/CNEs/gff/ce4.gff
+  wc -l /export/data/CNEs/gff/ce4.gff
+  perl /opt/www/cne/scripts/gbrowse_db/mirbase2gff.pl \
+    /export/data/goldenpath/ce4/assembly.2bit \
+    /export/data/CNEs/ce4/annotation/cel.gff \
+    >>/export/data/CNEs/gff/ce4.gff
+  wc -l /export/data/CNEs/gff/ce4.gff
+
 
 
 
