@@ -1,7 +1,7 @@
 preBlatFilter = "/export/data/CNEs/pre-blatFilter"
 blatFilter = "/export/data/CNEs/blatFiltered"
 
-nr_cores = 8
+nr_cores = 10
 
 
 files = list.files(preBlatFilter, pattern="^cne2w_.*", full.names=TRUE)
