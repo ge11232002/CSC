@@ -6,6 +6,11 @@ use Class::Struct;
 use AT::DB::Binner;
 use AT::Tools::RangeHandler;
 
+use Data::Dumper;
+
+$Data::Dumper::Indent = 1;
+$Data::Dumper::Sortkeys = 1;
+
 struct(transcript => [gene_id => '$',
 		      type => '$',
 		      transcript_symbol => '$',
@@ -153,6 +158,9 @@ sub read_flybase_gff {
 	    elsif($type eq 'exon') {
 	      # Handle exon feature
 	      my $parents = get_parents($extras);
+        #print STDERR "parents ", Dumper($parents), "\n";
+        #print STDERR "start ", $start, "\n";
+        #print STDERR "end   ", $end, "\n";
 	      add_exon($transcripts, $parents, $start, $end);
 	    }
 	    elsif($type =~ /RNA$/ or $type eq 'pseudogene') {
@@ -170,6 +178,10 @@ sub read_flybase_gff {
     }
 
     close IN;
+    open (FH, '>/mnt/biggley/home/gtan/Downloads/transcripts.debug');
+    print FH Dumper($transcripts);
+    close FH;
+
 
     return ($transcripts, $genes);
 }
@@ -268,7 +280,10 @@ sub add_exon
     my ($transcripts, $transcript_ids, $start, $end) = @_;
     foreach my $transcript_id (@$transcript_ids) {
 	my $transcript = get_transcript($transcripts, $transcript_id);
+  #print STDERR "I am in add_exon, ", $start, "  ", $end, "\n";
+  #print STDERR "The transcripts exons ", Dumper($transcript->exons), "\n";
 	push @{$transcript->exons}, [$start, $end];
+  #print STDERR "The transcripts exons later ", Dumper($transcript->exons), "\n";
     }
 }
 
@@ -482,7 +497,8 @@ sub write_gbrowse_gff
 sub get_parents
 {
     my ($entire_str, $type) = @_;
-    my ($parent_str) = $entire_str =~ /Parent=([^;]+)/;
+    my ($parent_str) = $entire_str =~ /[Parent|Derives_from]=([^;]+)/;
+    #print STDERR "The parent str ", $parent_str, "\n";
     my @parents = split ',', $parent_str;
     if($type) {
 	@parents = grep { ($_ =~ s/^$type://) ? $_ : '' } @parents;

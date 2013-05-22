@@ -8,6 +8,10 @@ gff_fn = "/export/data/CNEs/dm3/annotation/dmel-all-r5.51.gff"
 
 ## Implementation
 
-foo = read_flybase_gff("debug.gff")
-foo = read_flybase_gff_whole(gff_fn)
+# FlyBase
+gff = read_flybase_gff(gff_fn)
+gff$transcripts = validate_transcripts(gff$transcripts)
+write_gbrowse_gff(gff$genes, gff$transcripts, source="FlyBase", output="flybase.gff")
+
+
 
