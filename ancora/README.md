@@ -745,27 +745,19 @@ obtained from ftp://ftp.informatics.jax.org/pub/reports/index.html
 This is just for fruitfly.
 GFF file from ftp://ftp.flybase.net/. 
 Currently used file is named ```dmel-all-r5.51.gff.gz```.
-
-```sh
-perl extract_genes_from_gff3.pl
-```
-
-Note: ```extract_genes_from_gff3.pl``` needs to be fixed. Currently not working.
-
+The conversion can be done by the script ```cne/scripts/gbrowse_db/extract_flybase_genes.r```.
 
 **RedFly**
 
 This is just for fruitfly.
 
 RedFly CRMs: GFF file from http://redfly.ccr.buffalo.edu/ (obtained by clicking “Search”, then “Download all CRM”) 
+RedFly TFBSs: GFF file from http://redfly.ccr.buffalo.edu/ (obtained by clicking “Search”, then “Download all TFBS”)
 
 ```sh
-perl redfly2gff.pl /export/data/goldenpath/dm3/assembly.2bit /export/data/CNEs/dm3/annotation/redfly_CRM.gff CRM >>dm3.gff
+perl /opt/www/cne/scripts/gbrowse_db/redfly2gff.pl /export/data/goldenpath/dm3/assembly.2bit /export/data/CNEs/dm3/annotation/redfly_CRM.gff CRM >>/export/data/CNEs/gff/dm3.gff
+perl /opt/www/cne/scripts/gbrowse_db/redfly2gff.pl /export/data/goldenpath/dm3/assembly.2bit /export/data/CNEs/dm3/annotation/redfly_TFBS.gff TFBS >>/export/data/CNEs/gff/dm3.gff
 ```
-
-Note: This script also needs to be fixed to the new format.
-
-RedFly TFBSs: GFF file from http://redfly.ccr.buffalo.edu/ (obtained by clicking “Search”, then “Download all TFBS”)
 
 **WormBase genes**
 
