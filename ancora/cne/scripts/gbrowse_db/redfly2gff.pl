@@ -61,7 +61,10 @@ while(my $line = <IN>) {
     # Parse group field
     my $group = $fields[8];
     my ($id) = $group =~ /ID="([^"]+)"/;
-    my ($redfly_internal_id) = $group =~ /"REDfly:([\d+]+)[",]/;
+    print STDERR "The id is ", $id, "\n";
+    #my ($redfly_internal_id) = $group =~ /"REDfly=([\d+]+)[",]/;
+    my ($redfly_internal_id) = $group =~ /REDfly="([^"]+)"/;
+    print STDERR "The internal id is ", $redfly_internal_id, "\n";
     die "could not parse group field: $group" unless($id and $redfly_internal_id);
 
     push @{$features_by_id{$id}}, [$redfly_internal_id, @fields];
