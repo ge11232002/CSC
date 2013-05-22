@@ -175,11 +175,16 @@
     /export/data/CNEs/dm3/annotation/dme.gff3 \
     >>/export/data/CNEs/gff/dm3.gff
   wc -l /export/data/CNEs/gff/dm3.gff
-  #perl /opt/www/cne/scripts/gbrowse_db/extract_genes_from_gff3.pl \
-  #  flybase \
-  #  /export/data/CNEs/dm3/annotation/dmel-all-r5.51.gff \
-  #  >>/export/data/CNEs/gff/dm3.gff
-  #perl 
+  cat /export/data/CNEs/dm3/annotation/flybase.gff \
+    >>/export/data/CNEs/gff/dm3.gff
+  perl /opt/www/cne/scripts/gbrowse_db/redfly2gff.pl \
+    /export/data/goldenpath/dm3/assembly.2bit \
+    /export/data/CNEs/dm3/annotation/redfly_CRM.gff CRM \
+    >>/export/data/CNEs/gff/dm3.gff
+  perl /opt/www/cne/scripts/gbrowse_db/redfly2gff.pl \
+    /export/data/goldenpath/dm3/assembly.2bit \
+    /export/data/CNEs/dm3/annotation/redfly_TFBS.gff TFBS \
+    >>/export/data/CNEs/gff/dm3.gff
 
 #ce4
   perl /opt/www/cne/scripts/gbrowse_db/ucsc2gff.pl \

@@ -12,7 +12,7 @@ my @FIELD_NAMES = (
     'Strand', #'External Gene ID',
     'Associated Gene Name',
     #'Exon Start (bp)', 'Exon End (bp)', 'Coding Start (bp)', 'Coding End (bp)');
-    'Exon Chr Start (bp)', 'Exon Chr End (bp)', 'CDS Start', 'CDS End');
+    'Exon Chr Start (bp)', 'Exon Chr End (bp)', 'Genomic coding start', 'Genomic coding end');
 
 my %args;
 getopts('h',\%args);
