@@ -703,8 +703,8 @@ Choose to get the following attributes (categorized under "Structures"):
 * Associated Gene Name
 * Exon Chr Start (bp)
 * Exon Chr End (bp)
-* CDS Start
-* CDS End
+* Genomic coding start
+* Genomic coding end
 
 To convert the downloaded file into gff, 
 
@@ -755,8 +755,14 @@ RedFly CRMs: GFF file from http://redfly.ccr.buffalo.edu/ (obtained by clicking 
 RedFly TFBSs: GFF file from http://redfly.ccr.buffalo.edu/ (obtained by clicking “Search”, then “Download all TFBS”)
 
 ```sh
-perl /opt/www/cne/scripts/gbrowse_db/redfly2gff.pl /export/data/goldenpath/dm3/assembly.2bit /export/data/CNEs/dm3/annotation/redfly_CRM.gff CRM >>/export/data/CNEs/gff/dm3.gff
-perl /opt/www/cne/scripts/gbrowse_db/redfly2gff.pl /export/data/goldenpath/dm3/assembly.2bit /export/data/CNEs/dm3/annotation/redfly_TFBS.gff TFBS >>/export/data/CNEs/gff/dm3.gff
+perl /opt/www/cne/scripts/gbrowse_db/redfly2gff.pl \
+	/export/data/goldenpath/dm3/assembly.2bit \
+    /export/data/CNEs/dm3/annotation/redfly_CRM.gff CRM \
+    >>/export/data/CNEs/gff/dm3.gff
+perl /opt/www/cne/scripts/gbrowse_db/redfly2gff.pl \
+	/export/data/goldenpath/dm3/assembly.2bit \
+    /export/data/CNEs/dm3/annotation/redfly_TFBS.gff TFBS \
+    >>/export/data/CNEs/gff/dm3.gff
 ```
 
 **WormBase genes**
