@@ -276,8 +276,16 @@ to this directory is configured in Apache configuration file ```/etc/httpd/conf`
 	ServerName ancora.olifant.cscdom.csc.mrc.ac.uk
 	ScriptAlias /cgi-bin /opt/www/gbrowse2/cgi-bin
 	DocumentRoot /opt/www/ancora/html
+    <Directory /opt/www/gbrowse2/cgi-bin>
+    	Options FollowSymLinks Indexes Includes ExecCGI
+    	AllowOverride Indexes
+    </Directory>
 </VirtualHost>
 ```
+
+The last three lines is for the usage of symlinks of CGIs. 
+By default, apache does not allow running the symlinks in the cgi-bin folder.
+
 **Note**: When the CGI script is called by ```/cgi-bin/gbrowse```,
 the CGI will run in the traditional mode.
 If you want to take the advantage of FastCGI, 
