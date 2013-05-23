@@ -36,6 +36,15 @@ bp_bulk_load_gff.pl -u $USER -p $PASS -c -d gbrowse_gff_canFam3 --maxfeature 100
 #ce4
 #bp_bulk_load_gff.pl -u $USER -p $PASS -c -d gbrowse_gff_ce4 --maxfeature 1000000000 /export/data/CNEs/gff/ce4.gff
 
+
+
+
+
+
+
+
+
+
 # hg18
 #bp_bulk_load_gff.pl -u $USER -p $PASS -c -d gbrowse_gff_hg18 --maxfeature 1000000000 hg18.gff
 #
