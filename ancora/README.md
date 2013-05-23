@@ -590,7 +590,15 @@ located in the same directory as the script itself.
 Run the script without any arguments for more information 
 about how it can be configured.
 
+### Loading CNEs into the cne database
+The script ```cne/scripts/cne_pipeline/load_cnes.pl``` loads CNEs into a MySQL database. 
+For example, the following command loads two files 
+with hg19-mm10 CNEs into the database cne:
 
+```sh
+perl /opt/www/cne/scripts/cne_pipeline/load_cnes.pl \
+	-d cne -r cne2wBf_hg19_mm10_29_30 cne2wBf_hg19_mm10_30_30
+```
 
 ## Setting up a genome browser
 Setting up a genome browser for a new assembly involves 
@@ -726,6 +734,10 @@ To convert the downloaded gff3 to gff,
     /export/data/CNEs/hg19/annotation/hsa.gff3 \
     >>/export/data/CNEs/hg19/gff/hg19.gff
 ```
+Note: Because of the old gff version of c. elegans 4 (WS170),
+the line 61 should be uncommented and line 63 should be commented 
+in ```mirbase2gff.pl```.
+This is not good. Should be fixed later.
 
 **MGI genes**
 
