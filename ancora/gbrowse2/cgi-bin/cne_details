@@ -13,7 +13,7 @@ use AT::Tools::SeqHandler;
 $ENV{PATH} = '/usr/local/bin:'.$ENV{PATH};  # This is where the UCSC binaries are. We need them for twoBit IO.
 my $STYLESHEET = "/gbrowse/gbrowse-cne.css";
 my $ASSEMBLY_DIR = "/export/data/goldenpath";
-my $GBROWSE_CONF_DIR = "/opt/www/ancora/conf/gbrowse.conf/";
+my $GBROWSE_CONF_DIR = "/opt/www/gbrowse2/conf/";
 my $GBROWSE_URL = "gbrowse";
 my $METHODS_URL = "/methods.html";
 my $CNE_DB_NAME = "cne";  # We hardcode the DB name to avoid malicious users from trying to access arbitrary databases
