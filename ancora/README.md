@@ -33,11 +33,12 @@ see the [Ancora publication](http://genomebiology.com/2008/9/2/R34 "Ancora publi
 		- [Creating filter files](#creating-filter-files)
 		- [Scanning for CNEs](#scanning-for-cnes)
 		- [Removing unannotated repeats with BLAT](#removing-unannotated-repeats-with-blat)
+		- [Loading CNEs into the cne database](#loading-cnes-into-the-cne-database)
 	- [Setting up a genome browser](#setting-up-a-genome-browser)
 		- [Creating an annotation database for GBrowse](#creating-an-annotation-database-for-gbrowse)
 		- [Obtaining genome annotations](#obtaining-genome-annotations)
 		- [Creating and loading GFF files](#creating-and-loading-gff-files)
-		- [Creating a configuration file for GBrowse](#creating-a-configuration-file-for-gbrowse)    
+		- [Creating a configuration file for GBrowse](#creating-a-configuration-file-for-gbrowse)
 
 ## Installation
  This documentation focuses on the Ancora installation on Olifant at MRC CSC. 
