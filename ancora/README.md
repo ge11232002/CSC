@@ -33,11 +33,12 @@ see the [Ancora publication](http://genomebiology.com/2008/9/2/R34 "Ancora publi
 		- [Creating filter files](#creating-filter-files)
 		- [Scanning for CNEs](#scanning-for-cnes)
 		- [Removing unannotated repeats with BLAT](#removing-unannotated-repeats-with-blat)
+		- [Loading CNEs into the cne database](#loading-cnes-into-the-cne-database)
 	- [Setting up a genome browser](#setting-up-a-genome-browser)
 		- [Creating an annotation database for GBrowse](#creating-an-annotation-database-for-gbrowse)
 		- [Obtaining genome annotations](#obtaining-genome-annotations)
 		- [Creating and loading GFF files](#creating-and-loading-gff-files)
-		- [Creating a configuration file for GBrowse](#creating-a-configuration-file-for-gbrowse)    
+		- [Creating a configuration file for GBrowse](#creating-a-configuration-file-for-gbrowse)
 
 ## Installation
  This documentation focuses on the Ancora installation on Olifant at MRC CSC. 
@@ -276,8 +277,16 @@ to this directory is configured in Apache configuration file ```/etc/httpd/conf`
 	ServerName ancora.olifant.cscdom.csc.mrc.ac.uk
 	ScriptAlias /cgi-bin /opt/www/gbrowse2/cgi-bin
 	DocumentRoot /opt/www/ancora/html
+    <Directory /opt/www/gbrowse2/cgi-bin>
+    	Options FollowSymLinks Indexes Includes ExecCGI
+    	AllowOverride Indexes
+    </Directory>
 </VirtualHost>
 ```
+
+The last three lines is for the usage of symlinks of CGIs. 
+By default, apache does not allow running the symlinks in the cgi-bin folder.
+
 **Note**: When the CGI script is called by ```/cgi-bin/gbrowse```,
 the CGI will run in the traditional mode.
 If you want to take the advantage of FastCGI, 
