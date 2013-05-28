@@ -48,5 +48,13 @@ danRer7()
   # The net file
   rsync -avzP rsync://hgdownload.cse.ucsc.edu/goldenPath/danRer7/database/net* .
 
-
 }
+
+
+
+##ce10
+cd /export/data/CNEs/ce10/annotation/
+# The rmsk
+rsync -avzP rsync://hgdownload.cse.ucsc.edu/goldenPath/ce10/database/rmsk.* .
+
+
