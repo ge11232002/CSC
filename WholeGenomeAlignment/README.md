@@ -51,7 +51,10 @@ The distance can be "near", "medium" and "far".
 It will determine the parameters used in later stages.
 Then follow all the functions in the script ```genomePairwiseAlignment.r```.
 
-
+## Pipeline details
+To reduce the number of chromosome comparison pairs 
+and since we are interested in ordinary chromosomes (e.g. chr\*),
+the chromosomes names contain the "_" symbol are skipped.
 
 
 
