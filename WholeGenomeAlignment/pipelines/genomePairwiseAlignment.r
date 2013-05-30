@@ -4,16 +4,18 @@ for(rs in selfScripts){message(rs);source(rs)}
 
 
 ## first set the two genomes are near, medium or far.
-distance = "near"
-assemblyTarget= "/home/gt09/work/assembly/ce10/ce10.2bit"
-assemblyQuery = "/home/gt09/work/assembly/cb3/cb3.2bit"
+distance = "far"
+assemblyTarget= "/home/gt09/work/assembly/hg19/hg19.2bit"
+assemblyQuery = "/home/gt09/work/assembly/fr3/fr3.2bit"
 
 ### step 1: Alignments with lastz 
 # This step might be slow. run in parallel.
 library(BatchJobs)
 library(rtracklayer)
-validchrsTarget = grep("_", seqnames(seqinfo(TwoBitFile(assemblyTarget))), invert=TRUE, value=TRUE)
-validchrsQuery = grep("_", seqnames(seqinfo(TwoBitFile(assemblyQuery))), invert=TRUE, value=TRUE)
+validchrsTarget = grep("chr", seqnames(seqinfo(TwoBitFile(assemblyTarget))), value=TRUE)
+validchrsTarget = grep("_", validchrsTarget, invert=TRUE, value=TRUE)
+validchrsQuery = grep("chr", seqnames(seqinfo(TwoBitFile(assemblyQuery))), value=TRUE)
+validchrsQuery = grep("_", validchrsQuery, invert=TRUE, value=TRUE)
 reg = makeRegistry(id="lastz", seed=123, file.dir=file.path(getwd(), "lastz_batchjobs"), work.dir=getwd(), skip=FALSE)
 batchExpandGrid(reg, function(chrsTarget, chrsQuery, assemblyTarget, assemblyQuery, distance, format){
                 selfDir = "~/Repos/genomics"
