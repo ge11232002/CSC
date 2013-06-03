@@ -18,5 +18,18 @@ setClass(Class="axt",
                    )
          )
 
+showGenomicRanges = function(x, margin="",
+                             with.classinfo=FALSE, print.seqlengths=FALSE){
+  lx <- length(x)
+  nc <- ncol(mcols(x))
+  cat(class(x), " with ", lx, " ", ifelse(lx == 1L, "alignment", "alignments"),
+      ":\n", sep="")
 
+}
+
+setMethod("show", "axt",
+          function(object)
+            showAxt(object, margin="  ",
+                              with.classinfo=TRUE, print.seqlengths=TRUE)
+)
 
