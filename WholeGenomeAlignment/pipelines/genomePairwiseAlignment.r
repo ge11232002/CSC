@@ -42,5 +42,5 @@ monitorBatchJobs(reg)
 lavs = reduceResultsVector(reg, fun=function(job, res) res)
 stopifnot(length(lavs) == showStatus(reg)[1,"started"])
 
-axtNetWholePipeline(lavs, assemblyTarget, assemblyQuery, distance)
+axtNetWholePipeline(lavs, assemblyTarget, assemblyQuery, distance, removeFiles=TRUE)
 
