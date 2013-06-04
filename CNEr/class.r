@@ -40,6 +40,69 @@ setMethod("length", "axt", function(x) length(targetNames(x)))
 setMethod("names", "axt", function(x) names(targetRanges(x)))
 
 ### - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+### Constructor.
+###
+axt = function(targetNames=Rle(), targetRanges=IRanges(),
+               targetSeqs=DNAStringSet(),
+               queryNames=Rle(), queryRanges=IRanges(),
+               querySeqs=DNAStringSet(),
+               strand=Rle("*", length(seqnames)), 
+               score=Rle()){
+  if(!is(targetNames, "Rle"))
+    targetNames = Rle(targetNames)
+  if(!is.factor(runValue(targetNames)))
+    runValue(targetNames) = factor(runValue(targetNames))
+  if(!is(queryNames, "Rle"))
+    queryNames = Rle(queryNames)
+  if(!is.factor(runValue(queryNames)))
+    runValue(queryNames) = factor(runValue(queryNames))
+  if(class(targetRanges) != "IRanges")
+    targetRanges = as(targetRanges, "IRanges")
+  if(class(queryRanges) != "IRanges")
+    queryRanges = as(queryRanges, "IRanges")
+  if(class(targetSeqs) != "DNAStringSet")
+    targetSeqs = DNAStringSet(targetSeqs)
+  if(class(querySeqs) != "DNAStringSet")
+    querySeqs = DNAStringSet(querySeqs)
+  if(!is(strand, "Rle"))
+    strand = Rle(strand)
+  if(!is.factor(runValue(strand)) || !identical(levels(runValue(strand)), levels(strand())))
+    runValue(strand) = strand(runValue(strand))
+  if(IRanges:::anyMissing(runValue(strand))){
+    warning("missing values in strand converted to \"*\"")
+    runValue(strand)[is.na(runValue(strand))] = "*"
+  }
+  if(!is(score, "Rle"))
+    score = Rle(score)
+  lx = max(length(targetNames), length(queryNames), 
+            length(targetRanges), length(queryRanges),
+            length(targetSeqs), length(querySeqs),
+            length(strand), length(score))
+  if(lx > 1){
+    if(length(targetNames) == 1)
+      targetNames = rep(targetNames, lx)
+    if(length(queryNames) == 1)
+      queryNames = rep(queryNames, lx)
+    if(length(targetRanges) == 1)
+      targetRanges = rep(targetRanges, lx)
+    if(length(queryRanges) == 1)
+      queryRanges = rep(queryRanges, lx)
+    if(length(targetSeqs) == 1)
+      targetSeqs = rep(targetSeqs, lx)
+    if(length(querySeqs) == 1)
+      querySeqs = rep(querySeqs, lx)
+    if(length(strand) == 1)
+      strand = rep(strand, lx)
+    if(length(score) == 1)
+      score = rep(score, lx)
+  }
+  new("axt", targetNames=targetNames, targetRanges=targetRanges, 
+      targetSeqs=targetSeqs,
+      queryNames=queryNames, queryRanges=queryRanges,
+      querySeqs=querySeqs, strand=strand, score=score)
+}
+
+### - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 ### Updating and cloning.
 ###
 ### An object is either 'update'd in place (usually with a replacement
