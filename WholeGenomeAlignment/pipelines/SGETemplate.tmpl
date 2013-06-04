@@ -12,7 +12,7 @@
 # use environment variables
 #$ -V
 # use correct queue
-#$ -q all.q
+#$ -q all.q@"(beta|delta|epsilon|gamma|iota|zeta)"
 
 # we merge R output with stdout from SGE, which gets then logged via -o option
 /home/gt09/bin/R CMD BATCH --no-save --no-restore "<%= rscript %>" /dev/stdout
