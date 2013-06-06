@@ -2,7 +2,7 @@
 
 readAxt = function(axtFile){
   axtContent = readLines(axtFile)
-  axtContent = axtContent[grep("^#", axtContent, invert=TRUE, fixed=TRUE)]
+  axtContent = axtContent[grep("^#", axtContent, invert=TRUE)]
   axtContent = axtContent[axtContent != ""]
   axtContent = split(axtContent, c("header", "target", "query"))
   header = strsplit(axtContent$header, split=" ", fixed=TRUE)
@@ -15,11 +15,25 @@ readAxt = function(axtFile){
               strand=Rle(sapply(header, "[",8)),
               score=Rle(as.integer(sapply(header, "[",9)))
               )
+  myAxt2 = axt2(targetRanges=GRanges(seqnames=Rle(sapply(header, "[",2)),
+                                     ranges=IRanges(start=as.integer(sapply(header, "[",3)), end=as.integer(sapply(header, "[",4)), names=sapply(header, "[",1)),
+                                     strand=Rle("+")),
+                targetSeqs=DNAStringSet(axtContent$target),
+                queryRanges=GRanges(seqnames=Rle(sapply(header, "[",5)),
+                                    ranges=IRanges(start=as.integer(sapply(header, "[",6)), end=as.integer(sapply(header, "[",7)), names=sapply(header, "[",1)),
+                                    strand=Rle(sapply(header, "[",8))),
+                querySeqs=DNAStringSet(axtContent$query),
+                score=as.integer(sapply(header, "[",9))
+                )
   rm(axtContent)
   rm(header)
   gc()
   return(myAxt)
 }
 
-
+# bedFile = "/export/data/CNEs/danRer7/filters/filter_regions.danRer7.bed"
+readBed = function(bedFile){
+  require(rtracklayer)
+  bed = import(bedFile, asRangedData = FALSE)
+}
 

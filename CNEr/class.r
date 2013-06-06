@@ -18,7 +18,6 @@ setClass(Class="axt",
                    )
          )
 
-
 ### - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 ### Slot getters and setters.
 ###
@@ -102,6 +101,10 @@ axt = function(targetNames=Rle(), targetRanges=IRanges(),
       querySeqs=querySeqs, strand=strand, score=score)
 }
 
+axt2 = function(target=GRanges(), query=GRanges(), score=integer()){
+  new("axt2", target=target, query=query, score=score)
+}
+
 ### - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 ### Updating and cloning.
 ###
@@ -120,7 +123,6 @@ setMethod("update", "axt",  # not exported
 )
 
 setGeneric("clone", function(x, ...) standardGeneric("clone"))  # not exported
-
 setMethod("clone", "ANY",  # not exported
     function(x, ...)
     {
@@ -161,6 +163,19 @@ setMethod("[", "axt",
     }
 )
 
+setMethod("[", "axt2",
+          function(x, i, ..., drop){
+            if(length(list(...)) > 0L)
+              stop("invalid subsetting")
+            if(missing(i))
+              return(x)
+            i = IRanges:::normalizeSingleBracketSubscript(i, x)
+            ans_target = target(x)[i]
+            ans_query = query(x)[i]
+            ans_score = score(x)[i]
+            clone(x, target=ans_target, query=ans_query, score=ans_score)
+          }
+          )
 ### - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 ### "show" method.
 ###
