@@ -2,12 +2,7 @@
 
 #include "R.h"
 #include "axt.h"
-#include "common.h"
-#include "linefile.h"
-#include "obscure.h"
-#include "options.h"
-#include "hash.h"
-
+#include  <ctype.h>  //for the tolower()
 /********************************************
  *  *** DATA STRUCTURES AND GLOBAL VARIABLES ***
  *   ********************************************/
@@ -60,29 +55,34 @@ struct slThreshold
 /*****************
  *** FUNCTIONS ***
  *****************/
-
-struct hash *loadIntHash(char *fileName)
-/* Read in a file full of name/number lines into a hash keyed
- * by name with number values. Adapted from axtToMaf.c. */
+void setBpScores(bpScores_t ss)
+/* Set scoring matrix to 1 for matches and 0 for mismatches and gaps. */
 {
-  struct lineFile *lf = lineFileOpen(fileName, TRUE);
-  char *row[2];
-  struct hash *hash = newHash(0);
+  unsigned int i, j;
+  int a, A;
+  char validChars[] = "ACGT";
 
-  while (lineFileRow(lf, row)) {
-    int num = lineFileNeedNum(lf, row, 1);
-    hashAddInt(hash, row[0], num);
+  // printf("%d\n", (int) sizeof(bpScores_t));
+
+  for (i = 0; i < NR_CHARS; ++i)
+    for (j = 0; j < NR_CHARS; ++j)
+      ss[i][j] = 0;
+  for (i = 0; i < sizeof(validChars)-1; ++i) {
+    A = validChars[i];
+    a = tolower(A);
+    ss[A][A] = ss[a][A] = ss[A][a] = ss[a][a] = 1;
   }
-
-  lineFileClose(&lf);
-  return hash;
 }
 
 
-void ceScan(int *a){
+void ceScan(int *a, char **tFilterFile, char **qFilterFile, char **qSizeFile, int *winSize, int *minScore){
   int i = 0;
+  struct slThreshold *trList = NULL, *tr;
+  setBpScores(bpScores);
   for(i; i<*a;i++)
   {
+    Rprintf("%d\n", bpScores['A']['A']);
+    Rprintf("%s\n", *tFilterFile);
     Rprintf("Hello world!\n");
   }
 }

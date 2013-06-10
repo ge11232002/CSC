@@ -31,9 +31,14 @@ readAxt = function(axtFile){
   return(myAxt)
 }
 
-# bedFile = "/export/data/CNEs/danRer7/filters/filter_regions.danRer7.bed"
+# tFilterFile = "/export/data/CNEs/danRer7/filters/filter_regions.danRer7.bed"
+# qFilterFile = "/export/data/CNEs/hg19/filters/filter_regions.hg19.bed"
+# tFilter = readBed(tFilterFile)
+# qFilter = readBed(qFilterFile)
 readBed = function(bedFile){
   require(rtracklayer)
   bed = import(bedFile, asRangedData = FALSE)
+  strand(bed) = "+"
+  bed = reduce(bed)
 }
 
