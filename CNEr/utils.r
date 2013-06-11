@@ -17,3 +17,9 @@ makeReversedFilter = function(qFilter, chromSizes){
   return(revFilterBed)
 }
 
+seqToAlignment = function(DNAStringSet){
+  foo = strsplit(as.character(DNAStringSet), "")
+  foo = lapply(foo, function(x){grep("-", x, invert=TRUE)})
+  return(foo)
+}
+

@@ -36,9 +36,12 @@ readAxt = function(axtFile){
 # tFilter = readBed(tFilterFile)
 # qFilter = readBed(qFilterFile)
 readBed = function(bedFile){
+## This GRanges is in 1-based.
   require(rtracklayer)
   bed = import(bedFile, asRangedData = FALSE)
   strand(bed) = "+"
   bed = reduce(bed)
 }
+
+
 
