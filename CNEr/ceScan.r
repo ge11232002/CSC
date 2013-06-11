@@ -52,8 +52,7 @@ if(length(qFilterNow) == 0){
 dyn.load("ceScan.so")
 .C("ceScan", 
       as.character(targetSeqs[i]), 
-      as.character(querySeqs[i]))
-#, 
+      as.character(querySeqs[i]),
       targetStart=targetStarts[i],
       targetEnd=targetEnds[i],
       queryStart=queryStarts[i],
