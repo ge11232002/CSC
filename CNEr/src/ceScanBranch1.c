@@ -346,7 +346,131 @@ void printElement(struct slThreshold *tr, struct axt *axt, struct hash *qSizes, 
   fputs("\n", tr->outFile);
 }
 
+void scanAxt(struct axt *axt, struct hash *qSizes, struct hash *tFilterAll, struct hash *qFilterAll, struct slThreshold *thresholds)
+/* Scan one axt alignment and print conserved elements found to stdout.
+ * THIS IS THE CORE FUNCTION OF THIS PROGRAM.
+ * Arguments:
+ * axt - alignment
+ * qSizes - query assembly chromosome sizes
+ * tFilterAll, qFilterAll - index of regions to exclude from scan
+ * winSize - size of sliding window
+ * thresholds - linked list of thresholds to call CEs at, and corresponding output filehandles
+ */
+{
+  /* Variables to keep track of things as we loop through the alignment */
+  int i = 0; /* column in alignment */
+  int tPos = axt->tStart; /* position in target sequence */
+  int qPos = axt->qStart; /* position in query sequence */
+  int nrColumns;  /* counter for nr of columns seen after mask */
+  int score;    /* sliding window score */
+  struct slThreshold *tr;
 
+  /* Three arrays where each element corresponds to a column in the alignment. */
+  int *profile = needLargeMem(axt->symCount * sizeof(int)); /* cumulative conservation profile */
+  int *tPosList = needLargeMem(axt->symCount * sizeof(int)); /* target seq position */
+  int *qPosList = needLargeMem(axt->symCount * sizeof(int)); /* query seq position */
+  /* E.g. at alignment column 5, target position tPosList[4] is aligned with query position qPosList[4],
+   *      and alignment columns 1-5 contain a total of profile[4] matches.
+   * Note:
+   *  - in these 3 arrays, elements that that correspond to masked regions are not set
+   *  - profile[] begins from zero again after each mask
+   *  - target and query positions are set to -1 at gaps. */
+
+  /* tFilter and qFilter are pointers to sorted arrays of coordinate ranges that should not be scanned.
+   * The calls to searchFilter find the first filter overlapping or following the alignment */
+  struct range *tFilter = tFilterAll ? searchFilter(tFilterAll, axt->tName, axt->tStart+1) : NULL;
+  struct range *qFilter = qFilterAll ? searchFilter(qFilterAll, axt->qName, axt->qStart+1) : NULL;
+  /* Initialize CE bounds for each threshold */
+  for(tr = thresholds; tr != NULL; tr = tr->next) {
+    tr->ceStart = -1; /* set to -1 = no CE found */
+  }
+
+  /* Main loop: go through alignment */
+  while(i < axt->symCount) { /* loop until we have looked at entire alignment */
+
+    /* if inside a mask, fast forward past it */
+    do {
+      if(tFilter) {
+  while(tFilter->end <= tPos) tFilter++;
+  if(tFilter->start <= tPos) {
+    if(tFilter->end >= axt->tEnd) goto endScan; /* using goto to break out of nested loop */
+    while(tFilter->end > tPos) {
+      if(axt->tSym[i] != '-') tPos++;
+      if(axt->qSym[i] != '-') qPos++;
+      i++;
+    }
+    tFilter++;
+  }
+      }
+      if(qFilter) {
+  while(qFilter->end <= qPos) qFilter++;
+  if(qFilter->start <= qPos) {
+    if(qFilter->end >= axt->qEnd) goto endScan; /* using goto to break out of nested loop */
+    while(qFilter->end > qPos) {
+      if(axt->tSym[i] != '-') tPos++;
+      if(axt->qSym[i] != '-') qPos++;
+      i++;
+    }
+    qFilter++;
+  }
+      }
+    } while(tFilter && tFilter->start <= tPos);
+
+    /* handle first position after mask */
+    profile[i] = bpScores[ (int) axt->qSym[i] ][ (int) axt->tSym[i] ];
+    tPosList[i] = axt->tSym[i] == '-' ? -1 : ++tPos;
+    qPosList[i] = axt->qSym[i] == '-' ? -1 : ++qPos;
+    nrColumns = 1;
+
+    /* handle remaining positions */
+    for(i++; i < axt->symCount; i++) {
+      /* break out of loop if we have come to a mask */
+      if((tFilter && tFilter->start <= tPos) || (qFilter && qFilter->start <= qPos)) break;
+      /* set positions */
+      tPosList[i] = axt->tSym[i] == '-' ? -1 : ++tPos;
+      qPosList[i] = axt->qSym[i] == '-' ? -1 : ++qPos;
+      /* set profile */
+      profile[i] = profile[i-1] + bpScores[ (int) axt->qSym[i]][ (int) axt->tSym[i] ];
+      /* increment nr of columns seen after mask */
+      nrColumns++;
+      /* loop over user-defined thresholds */
+      for(tr = thresholds; tr != NULL; tr = tr->next) {
+  /* if have have seen enough columns to cover a window, evaluate that window */
+  if(nrColumns >= tr->winSize) {
+    /* compute and check window score */
+    score = nrColumns > tr->winSize ? profile[i] - profile[i - tr->winSize] : profile[i];
+    if(score >= tr->minScore) {
+      /* score is above threshold: begin or extend conserved element */
+      if(tr->ceStart == -1) tr->ceStart = i - tr->winSize + 1;
+      tr->ceEnd = i;
+    }
+    else {
+      /* score is below threshold: close and print any open conserved elements that are more than a window away */
+      if(tr->ceStart != -1 && tr->ceEnd < i - tr->winSize + 1) {
+        printElement(tr, axt, qSizes, profile, tPosList, qPosList);
+        tr->ceStart = -1;
+      }
+    }
+  }
+      }
+    }
+
+    /* close and print any open conserved elements */
+    for(tr = thresholds; tr != NULL; tr = tr->next) {
+      if(tr->ceStart != -1) {
+  printElement(tr, axt, qSizes, profile, tPosList, qPosList);
+  tr->ceStart = -1;
+      }
+    }
+  }
+
+ endScan:
+
+  /* free memory */
+  freez(&profile);
+  freez(&tPosList);
+  freez(&qPosList);
+}
 
 void ceScan1(char *tFilterFile, char *qFilterFile, char *qSizeFile, struct slThreshold *thresholds, int nrAxtFiles, char *axtFiles[])
 /* ceScan - Find conserved elements. */
@@ -358,15 +482,24 @@ void ceScan1(char *tFilterFile, char *qFilterFile, char *qSizeFile, struct slThr
   
   setBpScores(bpScores);
   qSizes = loadIntHash(qSizeFile);
-  Rprintf("Hello world!\n");
   tFilter = tFilterFile ? readFilter(tFilterFile) : NULL;
   qFilter = qFilterFile ? readFilter(qFilterFile) : NULL;
   qFilterRev = qFilter ? makeReversedFilter(qFilter, qSizes) : NULL;
 
-  i = 0;
-  lf = lineFileOpen(axtFiles[i], TRUE);
-  axt = axtRead(lf);
-  lineFileClose(&lf);
+  //i = 0;
+  //Rprintf("Hello world!%s\n", axtFiles[i]);
+  for(i = 0; i < nrAxtFiles; i++) {
+    lf = lineFileOpen(axtFiles[i], TRUE);
+    while ((axt = axtRead(lf)) != NULL) {
+      scanAxt(axt,
+        qSizes,
+        tFilter,
+        axt->qStrand == '+' ? qFilter : qFilterRev,
+        thresholds);
+      axtFree(&axt);
+    }
+    lineFileClose(&lf);
+  }
 }
 
 void ceScan(char **tFilterFile, char **qFilterFile, char **qSizeFile, int *winSize, int *minScore, int *nThresholds, char **axtFiles, int *nrAxtFiles, char **outFilePrefix){
@@ -378,19 +511,19 @@ void ceScan(char **tFilterFile, char **qFilterFile, char **qSizeFile, int *winSi
     tr = needMem(sizeof(*tr));
     tr->minScore = *minScore++;
     tr->winSize = *winSize++;
-    safef(path, sizeof(path), "%s_%d_%d", outFilePrefix, minScore, winSize);
+    safef(path, sizeof(path), "%s_%d_%d", *outFilePrefix, tr->minScore, tr->winSize);
     tr->outFile = mustOpen(path, "w");
     slAddHead(&trList, tr);
-    Rprintf("The winsiez %d\n", tr->winSize);
+    //Rprintf("The winsiez %d\n", tr->winSize);
+    //Rprintf("The path is %s\n", path);
   }
   //Rprintf("The filter1 is %s\n", *tFilterFile++);
   //Rprintf("The filter1 is %s\n", *tFilterFile);
   /* Call function ceScan with the arguments */
   ceScan1(*tFilterFile, *qFilterFile, *qSizeFile, trList, *nrAxtFiles, axtFiles);
   /* Close all output files */
-  //for(tr = trList; tr != NULL; tr = tr->next)
-  //  fclose(tr->outFile);
-
+  for(tr = trList; tr != NULL; tr = tr->next)
+    fclose(tr->outFile);
 }
 
 
