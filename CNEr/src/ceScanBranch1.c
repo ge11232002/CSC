@@ -185,18 +185,212 @@ void convertRangeListToArray(struct hashEl *hel)
   arrayEl->end = 1e9+1;
 }
 
+void printRangeArray(struct hashEl *hel)
+/* Print a range array. For debugging purposes only. */
+{
+  struct rangeArray *arrayInfo = hel->val;
+  struct range *ranges = arrayInfo->ranges;
+  int i;
+  printf("%s n=%d\n", hel->name, arrayInfo->n);
+  for(i = 0; i < arrayInfo->n; i++) {
+    printf("%02d: %d - %d\n", i, ranges[i].start, ranges[i].end);
+  }
+}
 
-void ceScan(int *a, char **tFilterFile, char **qFilterFile, char **qSizeFile, int *winSize, int *minScore){
-  int i = 0, n, minScore, winSize;
+struct range *searchRangeArray(struct rangeArray *arrayInfo, int key)
+/* Binary search range array. */
+{
+  struct range *array = arrayInfo->ranges;
+  int low = 0;
+  int high = arrayInfo->n - 1;
+  int mid;
+
+  while(low <= high) {
+    mid = (low+high)/2;
+    if(key <= array[mid].start) high = mid - 1;
+    else if(key > array[mid].end) low = mid + 1;
+    else return array+mid; /* return pointer to range that contains key */
+  }
+
+  /* key not found: return pointer to nearest higher range or abort if there is no higher range
+   * (there should be one because we have added a dummy range with very high values) */
+  if(low >= arrayInfo->n) errAbort("searchRangeArray: key %d out of bounds\n", key);
+  return array+low;
+}
+
+struct hash *readFilter(char *fileName)
+/* Load a filter file. */
+{
+  struct hash *hash = readBed(fileName);
+  hashTraverseEls(hash, collapseRangeList);
+  hashTraverseEls(hash, convertRangeListToArray);
+  /* hashTraverseEls(hash, printRangeArray); */
+  return hash;
+}
+
+struct hash *makeReversedFilter(struct hash *f1, struct hash *chrSizes)
+/* Given a filter, create a reversed filter where coordinates increase in the opposite direction.
+ * We use this for filtering alignments that have qStrand == '-'. */
+{
+  struct hash *f2 = newHash(0);
+  struct hashCookie cookie = hashFirst(f1);
+  struct hashEl *hel;
+  struct rangeArray *fwd, *rev;
+  struct range *arrayEl;
+  int i, j, n, chrSize;
+
+  /* Iterate over all sequences (chromosomes) in filter */
+  while((hel = hashNext(&cookie))) {
+
+    /* get sequence size */
+    chrSize = hashIntVal(chrSizes, hel->name);
+
+    /* get forward range array */
+    fwd = hel->val;
+
+    /* allocate memory for reversed range array */
+    AllocVar(rev);
+    n = rev->n = fwd->n; /* set nr of elements in range */
+    rev->ranges = arrayEl = needMem(n * sizeof(struct range));
+
+    /* copy dummy range */
+    rev->ranges[n-1] = fwd->ranges[n-1];
+
+    /* reverse other ranges */
+    for(i = 0, j = n-2; j >= 0; i++, j--) {
+      rev->ranges[i].start = chrSize - fwd->ranges[j].end;
+      rev->ranges[i].end = chrSize - fwd->ranges[j].start;
+    }
+
+    /* add range array to hash keyed by sequence name */
+    hashAdd(f2, hel->name, rev);
+  }
+
+  /* return reverse filter */
+  return f2;
+}
+
+struct range *searchFilter(struct hash *filter, char *chrom, int pos)
+/* Find the first filter at or following a given position */
+{
+  struct hashEl *hel;
+
+  hel = hashLookup(filter, chrom);   /* find range array for sequence (chromosome) */
+  if(hel) return searchRangeArray(hel->val, pos); /* search range array by position */
+  else return NULL;
+}
+
+void printCigarString(FILE *fh, struct axt *axt, int i, int j)
+/* Print CIGAR string that summarizes alignment */
+{
+  char type = 'M'; /* in our case first column is always match */
+  char newType;
+  int count = 0;
+
+  for(; i <= j; i++) {
+    /* Determine column type */
+    if(axt->tSym[i] == '-') newType = 'D';
+    else if(axt->qSym[i] == '-') newType = 'I';
+    else newType = 'M';
+    /* If same type as previous, just increase count, otherwise output previous */
+    if(type == newType) count++;
+    else {
+      fprintf(fh, "%d%c", count, type);
+      type = newType;
+      count = 1;
+    }
+  }
+
+  if(count) fprintf(fh, "%d%c", count, type);
+}
+
+void printElement(struct slThreshold *tr, struct axt *axt, struct hash *qSizes, int *profile, int *tPosList, int *qPosList)
+/* Print one conserved element on stdout.
+ * Arguments:
+ * tr - contains threshold-specific information:
+ *      parameters used to find CE, CE location in alignment, and filehandle to print to
+ * axt - alignment
+ * qSizes - query assembly chromosome sizes
+ * profile - cumulative conservation profile for alignment
+ * tPosList, qPosList - target and query position arrays for alignment
+ */
+{
+  int score, qStart, qEnd, qSize;
+  int i = tr->ceStart; /* start column of conserved element in alignment */
+  int j = tr->ceEnd; /* end column of conserved element in alignment */
+
+  /* truncate edges (mismatches and gaps) */
+  while(bpScores[ (int) axt->qSym[i] ][ (int) axt->tSym[i] ] <= 0) i++;
+  while(bpScores[ (int) axt->qSym[j] ][ (int) axt->tSym[j] ] <= 0) j--;
+
+  /* compute score */
+  score = profile[j] - profile[i] + bpScores[ (int) axt->qSym[i] ][ (int) axt->tSym[i] ];
+
+  /* recompute query positions if query strand is - */
+  if(axt->qStrand == '+') {
+    qStart = qPosList[i];
+    qEnd = qPosList[j];
+  }
+  else {
+    qSize = hashIntVal(qSizes, axt->qName);
+    qStart = qSize - qPosList[j] + 1;
+    qEnd = qSize - qPosList[i] + 1;
+  }
+
+  /* output */
+  fprintf(tr->outFile, "%s\t%d\t%d\t%s\t%d\t%d\t%c\t%.2f\t",
+    axt->tName, tPosList[i]-1, tPosList[j],
+    axt->qName, qStart-1, qEnd,
+    axt->qStrand, 100.0 * score / (j-i+1));
+  printCigarString(tr->outFile, axt, i, j);
+  fputs("\n", tr->outFile);
+}
+
+
+
+void ceScan1(char *tFilterFile, char *qFilterFile, char *qSizeFile, struct slThreshold *thresholds, int nrAxtFiles, char *axtFiles[])
+/* ceScan - Find conserved elements. */
+{
+  struct lineFile *lf;
+  struct axt *axt;
+  struct hash *tFilter, *qFilter, *qFilterRev, *qSizes;
+  int i;
+  
+  setBpScores(bpScores);
+  qSizes = loadIntHash(qSizeFile);
+  Rprintf("Hello world!\n");
+  tFilter = tFilterFile ? readFilter(tFilterFile) : NULL;
+  qFilter = qFilterFile ? readFilter(qFilterFile) : NULL;
+  qFilterRev = qFilter ? makeReversedFilter(qFilter, qSizes) : NULL;
+
+  i = 0;
+  lf = lineFileOpen(axtFiles[i], TRUE);
+  axt = axtRead(lf);
+  lineFileClose(&lf);
+}
+
+void ceScan(char **tFilterFile, char **qFilterFile, char **qSizeFile, int *winSize, int *minScore, int *nThresholds, char **axtFiles, int *nrAxtFiles, char **outFilePrefix){
+  int i, n;
   struct slThreshold *trList = NULL, *tr;
   char rest, path[PATH_LEN];
-  setBpScores(bpScores);
-  for(i; i<*a;i++)
+  for(i=1; i<=*nThresholds;i++)
   {
-    Rprintf("%d\n", bpScores['A']['A']);
-    Rprintf("%s\n", *tFilterFile);
-    Rprintf("Hello world!\n");
+    tr = needMem(sizeof(*tr));
+    tr->minScore = *minScore++;
+    tr->winSize = *winSize++;
+    safef(path, sizeof(path), "%s_%d_%d", outFilePrefix, minScore, winSize);
+    tr->outFile = mustOpen(path, "w");
+    slAddHead(&trList, tr);
+    Rprintf("The winsiez %d\n", tr->winSize);
   }
+  //Rprintf("The filter1 is %s\n", *tFilterFile++);
+  //Rprintf("The filter1 is %s\n", *tFilterFile);
+  /* Call function ceScan with the arguments */
+  ceScan1(*tFilterFile, *qFilterFile, *qSizeFile, trList, *nrAxtFiles, axtFiles);
+  /* Close all output files */
+  //for(tr = trList; tr != NULL; tr = tr->next)
+  //  fclose(tr->outFile);
+
 }
 
 
