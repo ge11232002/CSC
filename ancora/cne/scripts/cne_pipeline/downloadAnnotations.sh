@@ -57,4 +57,21 @@ cd /export/data/CNEs/ce10/annotation/
 # The rmsk
 rsync -avzP rsync://hgdownload.cse.ucsc.edu/goldenPath/ce10/database/rmsk.* .
 
+##petMar2
+cd /export/data/CNEs/petMar2/annotation
+# The rmsk
+rsync -avzP rsync://hgdownload.cse.ucsc.edu/goldenPath/petMar2/database/rmsk.* .
+# The gap
+rsync -avzP rsync://hgdownload.cse.ucsc.edu/goldenPath/petMar2/database/gap.* .
+rsync -avzP rsync://hgdownload.cse.ucsc.edu/goldenPath/petMar2/database/cpgIslandExt.* .
+
+##ornAna1
+cd /export/data/CNEs/ornAna1/annotation
+rsync -avzP rsync://hgdownload.cse.ucsc.edu/goldenPath/ornAna1/database/rmsk.* .
+rsync -avzP rsync://hgdownload.cse.ucsc.edu/goldenPath/ornAna1/database/gap.* .
+rsync -avzP rsync://hgdownload.cse.ucsc.edu/goldenPath/ornAna1/database/refGene.* .
+rsync -avzP rsync://hgdownload.cse.ucsc.edu/goldenPath/ornAna1/database/refLink.* .
+rsync -avzP rsync://hgdownload.cse.ucsc.edu/goldenPath/ornAna1/database/cpgIslandExt.*
+
+
 
