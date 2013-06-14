@@ -6,6 +6,7 @@
 #include "obscure.h"
 #include "options.h"
 #include "axt.h"
+#include "Rdefines.h"
 
 struct range
 /* Start and end coordinate pair */
@@ -132,20 +133,35 @@ void convertRangeListToArray(struct hashEl *hel)
   arrayEl->end = 1e9+1;
 }
 
-void readFilter(char **fileName)
+SEXP readFilter(SEXP filepath)
 /* Load a filter file. */
 {
-  struct hash *hash = readBed(*fileName);
-  hashTraverseEls(hash, collapseRangeList);
-  hashTraverseEls(hash, convertRangeListToArray);
-  /* hashTraverseEls(hash, printRangeArray); */
-  int i;
+  SEXP filepath_elt;
+  PROTECT(filepath = AS_CHARACTER(filepath));
+  if (!IS_CHARACTER(filepath) || LENGTH(filepath) != 1)
+    error("'filepath' must be a single string");
+  filepath_elt = STRING_ELT(filepath, 0);
+  if(filepath_elt == NA_STRING)
+    error("'filepath' is NA");
+  Rprintf(" %s \n", CHAR(filepath_elt));
+  struct hash *hash = readBed(CHAR(filepath_elt));
+  int i, nChroms, nRanges;
   struct hashEl *hel;
+  struct slRange *list, *slEl;
+  Rprintf("The hash size is %d\n", hash->size);
+  Rprintf("The count of elements is %d\n", hash->elCount);
+  nChroms = 0, nRanges = 0;
   for(i = 0; i < hash->size; ++i){
     for(hel = hash->table[i]; hel != NULL; hel = hel->next){
-      Rprintf("The name is %s\n", hel->name);
+      list = hel->val;
+      while((slPopHead(&list))){
+        nRanges++;
+      }
     }
   }
+  Rprintf("The number of Ranges is %d\n", nRanges);
+  UNPROTECT(1);
+  return(R_NilValue);
 }
 
 
