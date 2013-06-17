@@ -1,7 +1,7 @@
 
 library(rtracklayer)
 
-build = "petMar2"
+build = "ce10"
 ensemblGeneFile = "../annotation/ensembl_genes.txt"
 assembly = file.path("/export/data/goldenpath", build, "assembly.2bit")
 
@@ -9,7 +9,7 @@ ensemblGene = read.table(ensemblGeneFile, sep="\t", header=TRUE, quote="", colCl
 
 bed = ensemblGene[, c("Chromosome.Name", "Exon.Chr.Start..bp.", "Exon.Chr.End..bp.")]
 
-## for hg19, mm10, mm9, tetNig2, canFam3, galGal3, anoCar2, equCab2, ornAna1
+## for hg19, mm10, mm9, tetNig2, canFam3, galGal3, anoCar2, equCab2, ornAna1, ce10
 bed = transform(bed, Chromosome.Name=paste("chr", Chromosome.Name, sep=""))
 bed = transform(bed, Chromosome.Name=sub("chrMT", "chrM", Chromosome.Name))
 

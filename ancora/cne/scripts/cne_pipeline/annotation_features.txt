@@ -34,4 +34,8 @@ ce4
 Gaps, RepeatMasker, RefSeq genes,
 miRBase microRNAs(cel.gff), worm base(c_elegans.WS170.annotations.gff2.gz, geneIDs.WS170.gz)
 
+ce10
+Gaps, ReaptMasker, RefSeq genes,
+Ensembl genes(ensembl_genes.txt), worm base(c_elegans.WS220.annotations.gff3.gz, geneIDs.WS220.gz)
+
 

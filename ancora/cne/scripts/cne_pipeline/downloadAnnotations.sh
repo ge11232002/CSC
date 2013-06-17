@@ -56,6 +56,22 @@ danRer7()
 cd /export/data/CNEs/ce10/annotation/
 # The rmsk
 rsync -avzP rsync://hgdownload.cse.ucsc.edu/goldenPath/ce10/database/rmsk.* .
+# RefGene
+rsync -avzP rsync://hgdownload.cse.ucsc.edu/goldenPath/ce10/database/refGene.* .
+rsync -avzP rsync://hgdownload.cse.ucsc.edu/goldenPath/ce10/database/refLink.* .
+# Gap
+rsync -avzP rsync://hgdownload.cse.ucsc.edu/goldenPath/ce10/database/gap.* .
+# 
+
+##caeRem3
+cd /export/data/CNEs/caeRem3/annotation/
+# Gap
+rsync -avzP rsync://hgdownload.cse.ucsc.edu/goldenPath/caeRem3/database/*_gap.* .
+
+##caePb2
+cd /export/data/CNEs/caePb2/annotation/
+# Gap
+rsync -avzP rsync://hgdownload.cse.ucsc.edu/goldenPath/caePb2/database/*_gap.* .
 
 ##petMar2
 cd /export/data/CNEs/petMar2/annotation
