@@ -11,6 +11,7 @@ xenTro3 4
 xenTro2 4
 anoCar1 4
 petMar1 4
+petMar2 4
 canFam3 4
 canFam2 4
 anoCar2 4
@@ -39,6 +40,7 @@ dp3     4
 droVir3 4
 droMoj3 4
 
+ce10    4
 ce4     4
 cb3     4
 caePb1  4
