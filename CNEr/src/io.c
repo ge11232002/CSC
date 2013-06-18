@@ -150,18 +150,48 @@ SEXP readFilter(SEXP filepath)
   struct slRange *list, *slEl;
   Rprintf("The hash size is %d\n", hash->size);
   Rprintf("The count of elements is %d\n", hash->elCount);
+  
   nChroms = 0, nRanges = 0;
   for(i = 0; i < hash->size; ++i){
     for(hel = hash->table[i]; hel != NULL; hel = hel->next){
       list = hel->val;
+      Rprintf("The is is %d\n", i);
+      Rprintf("The name is %s\n", hel->name);
       while((slPopHead(&list))){
         nRanges++;
       }
     }
   }
+  SEXP chromNames, starts, ends, returnList;
+  PROTECT(chromNames = NEW_CHARACTER(nRanges));
+  PROTECT(starts = NEW_INTEGER(nRanges));
+  PROTECT(ends = NEW_INTEGER(nRanges));
+  PROTECT(returnList = NEW_LIST(3));
+  int *p_starts, *p_ends;
+  p_starts = INTEGER_POINTER(starts);
+  p_ends = INTEGER_POINTER(ends);
+  int j = 0;
+  for(i = 0; i < hash->size; ++i){
+    for(hel = hash->table[i]; hel != NULL; hel = hel->next){
+      list = hel->val;
+      while((slEl = slPopHead(&list))){
+        SET_STRING_ELT(chromNames, j, mkChar(hel->name));
+        p_starts[j] = slEl->start;
+        p_ends[j] = slEl->end;
+        free(slEl);
+        j++;
+      }
+    }
+  }
+  //SET_STRING_ELT(chromNames, 0, mkChar("test chrom"));
   Rprintf("The number of Ranges is %d\n", nRanges);
-  UNPROTECT(1);
-  return(R_NilValue);
+  Rprintf("The chrom name is %s\n", CHAR(STRING_ELT(chromNames, 0)));
+  Rprintf("The start is %d\n", p_starts[0]);
+  SET_VECTOR_ELT(returnList, 0, chromNames);
+  SET_VECTOR_ELT(returnList, 1, starts);
+  SET_VECTOR_ELT(returnList, 2, ends);
+  UNPROTECT(5);
+  return(returnList);
 }
 
 
