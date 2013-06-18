@@ -14,8 +14,11 @@ gff$transcripts = validate_transcripts(gff$transcripts)
 write_gbrowse_gff(gff$genes, gff$transcripts, source="FlyBase", output="flybase.gff")
 
 # WormBase
-gff_fn = "/export/data/CNEs/ce4/annotation/c_elegans.WS170.annotations.gff2"
-genesID_fn = "/export/data/CNEs/ce4/annotation/geneIDs.WS170"
+gff_fn = "/export/data/CNEs/ce10/annotation/c_elegans.WS220.annotations.gff3"
+genesID_fn = "/export/data/CNEs/ce10/annotation/geneIDs.WS220"
 
-gff = read_wormbase_gff(gff_fn)
+gff = read_wormbase_gff(gff_fn, genesID_fn)
+gff$transcripts = validate_transcripts(gff$transcripts)
+
+write_gbrowse_gff(gff$genes, gff$transcripts, source="WormBase", output="wormbase.gff")
 
