@@ -209,6 +209,11 @@
     assembly refGene rmsk gap \
     >/export/data/CNEs/gff/ce10.gff
   wc -l /export/data/CNEs/gff/ce10.gff
+  perl /opt/www/cne/scripts/gbrowse_db/ens2gff.pl \
+    /export/data/goldenpath/ce10/assembly.2bit \
+    /export/data/CNEs/ce10/annotation/ensembl_genes.txt \
+    >>/export/data/CNEs/gff/ce10.gff
+  wc -l /export/data/CNEs/gff/ce10.gff
   cat /export/data/CNEs/ce10/annotation/wormbase.gff \
     >>/export/data/CNEs/gff/ce10.gff
   wc -l /export/data/CNEs/gff/ce10.gff

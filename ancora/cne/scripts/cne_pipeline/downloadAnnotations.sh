@@ -61,7 +61,8 @@ rsync -avzP rsync://hgdownload.cse.ucsc.edu/goldenPath/ce10/database/refGene.* .
 rsync -avzP rsync://hgdownload.cse.ucsc.edu/goldenPath/ce10/database/refLink.* .
 # Gap
 rsync -avzP rsync://hgdownload.cse.ucsc.edu/goldenPath/ce10/database/gap.* .
-# 
+# Human protein
+rsync -avzP rsync://hgdownload.cse.ucsc.edu/goldenPath/ce10/database/blastHg18KG.* .
 
 ##caeRem3
 cd /export/data/CNEs/caeRem3/annotation/
