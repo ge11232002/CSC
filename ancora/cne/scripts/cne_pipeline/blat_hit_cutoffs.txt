@@ -44,7 +44,9 @@ ce10    4
 ce4     4
 cb3     4
 caePb1  4
+caePb2  4
 caeRem2 4
+caeRem3 4
 priPac1 4
 
 MetagenomeScaffold 4
