@@ -766,7 +766,7 @@ obtained from ftp://ftp.informatics.jax.org/pub/reports/index.html
 This is just for fruitfly.
 GFF file from ftp://ftp.flybase.net/. 
 Currently used file is named ```dmel-all-r5.51.gff.gz```.
-The conversion can be done by the script ```cne/scripts/gbrowse_db/extract_flybase_genes.r```.
+The conversion can be done by the script ```cne/scripts/gbrowse_db/extract_genes_from_gff3.r```.
 
 **RedFly**
 
@@ -788,9 +788,9 @@ perl /opt/www/cne/scripts/gbrowse_db/redfly2gff.pl \
 
 **WormBase genes**
 
-GFF file from ftp://ftp.wormbase.org/pub/wormbase/species/c_elegans/gff/. not done
-This script is also broken. Needs to be fixed for gff2 to gbrowse gff.
-
+GFF file from ftp://ftp.wormbase.org/pub/wormbase/releases/WS220/species/c_elegans/.
+File mapping gene and transcript IDs to symbols are downloaded from the same place.
+The conversion can be done by the script ```cne/scripts/gbrowse_db/extract_genes_from_gff3.r```.
 
 ### Creating and loading GFF files
 The annotations in the UCSC MySQL tables and 
@@ -838,7 +838,104 @@ it erases all data stored in the GBrowse annotation databases
 before it loads the GFF files.
 
 ### Creating a configuration file for GBrowse
+GBrowse requires a configuration file for each assembly. 
+We keep the live versions of these files in the repository under ```ancora/gbrowse2/conf```.
+The files are named by assembly id and have the suffix .conf 
+(e.g. hg19.conf for the current human assembly). 
+The configuration files are fairly complex, 
+so the easiest way to set up a file for a new assembly is 
+to copy one written for a different assembly and modify it. 
+The file hg19.conf begins with a few comment lines listing what should be changed 
+when adapting a file for a new assembly. 
+It is typically best to start from a file for a different assembly 
+for the same species, if available, 
+and otherwise from a file for a similar species. 
+The reason for this is that the types of annotation available differs 
+between species and some parameters, 
+in particular the semantic zoom levels, 
+depend on genome compactness. 
+The general format of GBrowse configuration files is well described 
+in the [GBrowse 2.0 HOWTO](http://gmod.org/wiki/GBrowse_2.0_HOWTO), 
+which should be read before editing a configuration file.
 
+The configuration of plugins that display CNE locations and densities 
+deserves a more detailed description. 
+These plugins are configured in three places in the configuration file:
+
+(1) The line starting with “plugins =” specifies 
+what plugins are to be loaded. 
+For example, if CNEs from three comparisons are to be shown, 
+this should be specified as:
+
+```
+plugins = CNEPlotInstance1 CNEPlotInstance2 CNEPlotInstance3
+```
+
+Each of the plugins listed on this line corresponds to a file 
+in the subdirectory plugins under the configuration directory. 
+The files CNEPlotInstance\*.pm in this directory are 
+identical subclasses of the same base class ```Bio::Graphics::Browser2::Plugin::CNEPlot```.
+This is a trick to be able to load several instances of the same plugin. 
+There are currently thirteen CNE plugin files (up to CNEPlotInstance13.pm) 
+in the plugins directory, 
+so up to thirteen comparisons can be shown in any Ancora browser. 
+If you wish to show more comparisons, 
+simply add additional plugin files by copying one of the existing files and changing number on the first line in the new file.
+
+(2) Parameters for each plugin are specified in the section following the comment
+
+```
+# Plugin config
+```
+
+One parameter must be specified for each plugin:
+*	asm_id – Id for the other assembly in the comparison (e.g. hg19)
+
+The following general parameters can also be specified:
+*	asm_name – Name to be displayed for the other assembly in the comparison. 
+	Usually the common name for the species (e.g. Human). 
+    Defaults to asm_id.
+*	window_size – Window size, in kb, to use for density computations. 
+	Defaults to 50 kb.
+*	max_score – Height of density plot. Defaults to 20.
+*	nr_cne_sets – Number of CNE sets from this comparison 
+	that the user can define and simultaneously view. Defaults to 3.
+*	nr_graphs – Separate densities based on chromosome in other genome into this number of graphs. 
+	Defaults to 1 (meaning don’t separate).
+* 	rank_un_low – Give low priority to poorly assembled sequence 
+	and alternative haplotypes when separating densities. Defaults to 0 (no). 
+    Set this option to a true value to activate it.
+
+In addition, the following parameters can also be used to define CNE sets, 
+replacing i with a set number (1,2,3,…):
+*	min_cne_idi - Similarity threshold for the CNE set. 
+	This parameter specifies which CNE set to retrieve from the database, 
+    so it must correspond to a CNE set present in the database. 
+    Specified as: percent-identity/columns. 
+    E.g.: “0.98/50” for 98% identity over 50 alignment columns. 
+    Default: undefined.
+*	min_cne_leni - Required shortest length for CNEs, in bp. Default: 50 bp.
+*	show_cnesi - Show CNE locations. Default: 0 (no). Set to a true value to activate.
+*	show_graphi - Show density plot. Default: 0 (no). Set to a true value to activate.
+
+All of the above parameters except asm_id and asm_name can be modified by the user via the web interface. GBrowse uses cookies to save user settings.
+
+(3) At the end of the configuration file, 
+there is a track definition for each CNE plugin, e.g.:
+
+```
+[plugin:Mouse HCNEs]
+citation = HCNEs conserved in mouse.
+See <a href="/methods.html">Methods</a> for a description of how these were detected.
+```
+
+The order in which the track definitions are listed 
+in the configuration file specifies the default order 
+of the CNE tracks in the browser. 
+This order can be changed by the user, 
+who can also restore the default order by clicking the red “[Reset]” link in the genome browser.
+
+### Making download files
 
 
 **TO DO**
