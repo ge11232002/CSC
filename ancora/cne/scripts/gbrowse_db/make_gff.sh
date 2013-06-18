@@ -202,7 +202,16 @@
     >>/export/data/CNEs/gff/ce4.gff
   wc -l /export/data/CNEs/gff/ce4.gff
 
-
+# ce10
+  perl /opt/www/cne/scripts/gbrowse_db/ucsc2gff.pl \
+    -a /export/data/goldenpath/ce10/assembly.2bit \
+    -d UCSC_ce10 \
+    assembly refGene rmsk gap \
+    >/export/data/CNEs/gff/ce10.gff
+  wc -l /export/data/CNEs/gff/ce10.gff
+  cat /export/data/CNEs/ce10/annotation/wormbase.gff \
+    >>/export/data/CNEs/gff/ce10.gff
+  wc -l /export/data/CNEs/gff/ce10.gff
 
 
 # hg18
