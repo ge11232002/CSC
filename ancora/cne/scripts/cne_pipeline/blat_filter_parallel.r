@@ -5,7 +5,7 @@ nr_cores = 8
 
 
 files = list.files(preBlatFilter, pattern="^cne2w_.*", full.names=TRUE)
-filesExist = list.files(blatFilter, pattern="^cne2wBf_.*")
+filesExist = list.files(blatFilter, pattern="^cne2w.*")
 filesNotToCompute = sub("Bf", "", filesExist)
 filesNotToCompute = sub("-tmp$", "", filesNotToCompute)
 
