@@ -195,7 +195,7 @@ SEXP readFilter(SEXP filepath)
 }
 
 SEXP myReadBed(SEXP filepath){
-  // load a filer file into R, and to be a GRanges
+  // load a filter file into R, and to be a GRanges
   SEXP filepath_elt;
   PROTECT(filepath = AS_CHARACTER(filepath));
   if(!IS_CHARACTER(filepath) || LENGTH(filepath) != 1)
@@ -239,5 +239,85 @@ SEXP myReadBed(SEXP filepath){
   UNPROTECT(5);
   return(returnList);
 }
+
+SEXP myReadAxt(SEXP filepath){
+  // load a axt file into R, and to be axt2
+  SEXP filepath_elt;
+  PROTECT(filepath = AS_CHARACTER(filepath));
+  int nrAxtFiles, i, nrAxts;
+  nrAxtFiles = GET_LENGTH(filepath);
+  Rprintf("The number of axt files %d\n", nrAxtFiles);
+  struct axt *axt=NULL, *curAxt;
+  struct lineFile *lf;
+  nrAxts = 0;
+  for(i = 0; i < nrAxtFiles; i++){
+    lf = lineFileOpen(CHAR(STRING_ELT(filepath, i)), TRUE);
+    while((curAxt = axtRead(lf)) != NULL){
+      //Rprintf("The name of query sequence is %s\n", curAxt->qName);
+      curAxt->next = axt;
+      axt = curAxt;
+      nrAxts++;
+    }
+    lineFileClose(&lf);
+  }
+  axtFree(&curAxt);
+  UNPROTECT(1);
+  Rprintf("The total number of axt is %d\n", nrAxts);
+  SEXP qNames, qStart, qEnd, qStrand, qSym, tNames, tStart, tEnd, tStrand, tSym, returnList;
+  PROTECT(qNames = NEW_CHARACTER(nrAxts));
+  PROTECT(qStart = NEW_INTEGER(nrAxts));
+  PROTECT(qEnd = NEW_INTEGER(nrAxts));
+  PROTECT(qStrand = NEW_CHARACTER(nrAxts));
+  PROTECT(qSym = NEW_CHARACTER(nrAxts));
+  PROTECT(tNames = NEW_CHARACTER(nrAxts));
+  PROTECT(tStart = NEW_INTEGER(nrAxts));
+  PROTECT(tEnd = NEW_INTEGER(nrAxts));
+  PROTECT(tStrand = NEW_CHARACTER(nrAxts));
+  PROTECT(tSym = NEW_CHARACTER(nrAxts));
+  PROTECT(returnList = NEW_LIST(10));
+  int *p_qStart, *p_qEnd, *p_tStart, *p_tEnd;
+  p_qStart = INTEGER_POINTER(qStart);
+  p_qEnd = INTEGER_POINTER(qEnd);
+  p_tStart = INTEGER_POINTER(tStart);
+  p_tEnd = INTEGER_POINTER(tEnd);
+  i = 0;
+  char strand;
+  while(axt){
+    //Rprintf("The name of query seq is %s\n", axt->qName);
+    SET_STRING_ELT(qNames, i, mkChar(axt->qName));
+    p_qStart[i] = axt->qStart;
+    p_qEnd[i] = axt->qEnd;
+    if(axt->qStrand == '+')
+      SET_STRING_ELT(qStrand, i, mkChar("+"));
+    else
+      SET_STRING_ELT(qStrand, i, mkChar("-"));
+    //SET_STRING_ELT(qStrand, i, AS_CHARACTER(axt->qStrand));
+    SET_STRING_ELT(qSym, i, mkChar(axt->qSym));
+    SET_STRING_ELT(tNames, i, mkChar(axt->tName));
+    p_tStart[i] = axt->tStart;
+    p_tEnd[i] = axt->tEnd;
+    if(axt->tStrand == '+')
+      SET_STRING_ELT(tStrand, i, mkChar("+"));
+    else
+      SET_STRING_ELT(tStrand, i, mkChar("-"));
+    //SET_STRING_ELT(tStrand, i, mkChar(axt->tStrand));
+    SET_STRING_ELT(tSym, i, mkChar(axt->tSym));
+    i++;
+    axt = axt->next;
+  }
+  SET_VECTOR_ELT(returnList, 0, qNames);
+  SET_VECTOR_ELT(returnList, 1, qStart);
+  SET_VECTOR_ELT(returnList, 2, qEnd);
+  SET_VECTOR_ELT(returnList, 3, qStrand);
+  SET_VECTOR_ELT(returnList, 4, qSym);
+  SET_VECTOR_ELT(returnList, 5, tNames);
+  SET_VECTOR_ELT(returnList, 6, tStart);
+  SET_VECTOR_ELT(returnList, 7, tEnd);
+  SET_VECTOR_ELT(returnList, 8, tStrand);
+  SET_VECTOR_ELT(returnList, 9, tSym);
+  UNPROTECT(11);
+  return(returnList);
+}
+
 
 
