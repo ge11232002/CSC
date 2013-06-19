@@ -8,6 +8,8 @@
 #include "obscure.h"
 #include "options.h"
 #include "axt.h"
+#include "Rdefines.h"
+
 /********************************************
  *  *** DATA STRUCTURES AND GLOBAL VARIABLES ***
  *   ********************************************/
@@ -524,6 +526,47 @@ void ceScan(char **tFilterFile, char **qFilterFile, char **qSizeFile, int *winSi
   /* Close all output files */
   for(tr = trList; tr != NULL; tr = tr->next)
     fclose(tr->outFile);
+}
+
+/*######################################################*/
+SEXP myCeScan(SEXP tNames, SEXP tStarts, SEXP tEnds){
+  PROTECT(tNames = AS_CHARACTER(tNames));
+  PROTECT(tStarts = AS_INTEGER(tStarts));
+  PROTECT(tEnds = AS_INTEGER(tEnds));
+  int i, n, *p_tStarts, *p_tEnds;
+  struct slRange *range;
+  struct hash *hash = newHash(0);
+  struct hashEl *hel;
+  p_tStarts = INTEGER_POINTER(tStarts);
+  p_tEnds = INTEGER_POINTER(tEnds);
+  n = GET_LENGTH(tNames);
+  Rprintf("The length is %d\n", n);
+  for(i = 0; i < n ; i++){
+    AllocVar(range);
+    range->next = NULL;
+    range->start = p_tStarts[i];
+    range->end = p_tEnds[i];
+    hel = hashLookup(hash, CHAR(STRING_ELT(tNames, i)));
+    if(hel == NULL)
+      hel = hashAdd(hash, CHAR(STRING_ELT(tNames, i)), range);
+    else
+      slSafeAddHead(&hel->val, range);
+  }
+  UNPROTECT(3);
+  int nRanges = 0;
+  struct slRange *list;
+  for(i = 0; i < hash->size; ++i){
+    for(hel = hash->table[i]; hel != NULL; hel = hel->next){
+      list = hel-> val;
+      Rprintf("The is is %d\n", i);
+      Rprintf("The name is %s\n", hel->name);
+      while((slPopHead(&list))){
+        nRanges++;
+      }
+    }
+  }
+  Rprintf("The number of ranges is %d\n", nRanges);
+  return(R_NilValue);
 }
 
 
