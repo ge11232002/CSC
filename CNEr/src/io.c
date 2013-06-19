@@ -194,6 +194,50 @@ SEXP readFilter(SEXP filepath)
   return(returnList);
 }
 
-
+SEXP myReadBed(SEXP filepath){
+  // load a filer file into R, and to be a GRanges
+  SEXP filepath_elt;
+  PROTECT(filepath = AS_CHARACTER(filepath));
+  if(!IS_CHARACTER(filepath) || LENGTH(filepath) != 1)
+    error("'filepath' must be a single string");
+  filepath_elt = STRING_ELT(filepath, 0);
+  if(filepath_elt == NA_STRING)
+    error("'filepath' is NA");
+  Rprintf(" %s \n", CHAR(filepath_elt));
+  struct lineFile *lf = lineFileOpen(CHAR(filepath_elt), TRUE);
+  char *row[3];
+  int nRanges = 0;
+  while(lineFileRow(lf, row)){
+    if(sameString(row[0], "track") || sameString(row[0], "browser")) continue;
+    nRanges++;
+  }
+  lineFileClose(&lf);
+  //Rprintf("The line number is %d\n", nRanges);
+  SEXP chromNames, starts, ends, returnList;
+  PROTECT(chromNames = NEW_CHARACTER(nRanges));
+  PROTECT(starts = NEW_INTEGER(nRanges));
+  PROTECT(ends = NEW_INTEGER(nRanges));
+  PROTECT(returnList = NEW_LIST(3));
+  int *p_starts, *p_ends;
+  int j = 0;
+  p_starts = INTEGER_POINTER(starts);
+  p_ends = INTEGER_POINTER(ends);
+  lf = lineFileOpen(CHAR(filepath_elt), TRUE);
+  while(lineFileRow(lf, row)){
+    if(sameString(row[0], "track") || sameString(row[0], "browser")) continue;
+    p_starts[j] = lineFileNeedNum(lf, row, 1);
+    p_ends[j] = lineFileNeedNum(lf, row, 2);
+    if(p_starts[j] > p_ends[j])
+      errAbort("start after end line %d of %s", lf->lineIx, lf->fileName);
+    SET_STRING_ELT(chromNames, j, mkChar(row[0]));
+    j++;
+  }
+  lineFileClose(&lf);
+  SET_VECTOR_ELT(returnList, 0, chromNames);
+  SET_VECTOR_ELT(returnList, 1, starts);
+  SET_VECTOR_ELT(returnList, 2, ends);
+  UNPROTECT(5);
+  return(returnList);
+}
 
 

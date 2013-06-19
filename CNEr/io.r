@@ -33,8 +33,6 @@ readAxt = function(axtFile){
 
 # tFilterFile = "/export/data/CNEs/danRer7/filters/filter_regions.danRer7.bed"
 # qFilterFile = "/export/data/CNEs/hg19/filters/filter_regions.hg19.bed"
-# tFilter = readBed(tFilterFile)
-# qFilter = readBed(qFilterFile)
 readBed = function(bedFile){
 ## This GRanges is in 1-based.
   require(rtracklayer)
@@ -42,6 +40,22 @@ readBed = function(bedFile){
   strand(bed) = "+"
   bed = reduce(bed)
 }
+# system.time(foo<-readBed(bedFile))
+#    user  system elapsed
+#    51.890   0.757  52.659
+
+readBedToGRanges = function(bedFile){
+  require(GenomicRanges)
+  dyn.load("~/Repos/CSC/CNEr/src/io.so")
+  bed = .Call("myReadBed", bedFile)
+  bed = GRanges(seqnames=Rle(bed[[1]]),
+                ranges=IRanges(start=bed[[2]], end=bed[[3]]),
+                strand=factor("+"))
+  return(bed)
+}
+# system.time(foo<-readBedToGRanges(bedFile))
+#    user  system elapsed
+#    2.272   0.133   2.414
 
 
 
