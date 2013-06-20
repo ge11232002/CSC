@@ -582,12 +582,69 @@ struct hash *buildHashForSizeFile(SEXP names, SEXP sizes){
   return hash;
 }
 
-SEXP myCeScanNow(SEXP tFilterNames, SEXP tFilterStarts, SEXP tFilterEnds, SEXP qFilterNames, SEXP qFilterStarts, SEXP qFilterEnds, SEXP sizeNames, SEXP sizeSizes){
+struct axt *buildAxt(SEXP axtqNames, SEXP axtqStart, SEXP axtqEnd, SEXP axtqStrand, SEXP axtqSym, SEXP axttNames, SEXP axttStart, SEXP axttEnd, SEXP axttStrand, SEXP axttSym, SEXP score, SEXP symCount){
+  PROTECT(axtqNames = AS_CHARACTER(axtqNames));
+  PROTECT(axtqStart = AS_INTEGER(axtqStart));
+  PROTECT(axtqEnd = AS_INTEGER(axtqEnd));
+  PROTECT(axtqStrand = AS_CHARACTER(axtqStrand));
+  PROTECT(axtqSym = AS_CHARACTER(axtqSym));
+  PROTECT(axttNames = AS_CHARACTER(axttNames));
+  PROTECT(axttStart = AS_INTEGER(axttStart));
+  PROTECT(axttEnd = AS_INTEGER(axttEnd));
+  PROTECT(axttStrand = AS_CHARACTER(axttStrand));
+  PROTECT(axttSym = AS_CHARACTER(axttSym));
+  PROTECT(score = AS_INTEGER(score));
+  PROTECT(symCount = AS_INTEGER(symCount));
+  int i, *p_axtqStart, *p_axtqEnd, *p_axttStart, *p_axttEnd, *p_score, *p_symCount;
+  p_axtqStart = INTEGER_POINTER(axtqStart);
+  p_axtqEnd = INTEGER_POINTER(axtqEnd);
+  p_axttStart = INTEGER_POINTER(axttStart);
+  p_axttEnd = INTEGER_POINTER(axttEnd);
+  p_score = INTEGER_POINTER(score);
+  p_symCount = INTEGER_POINTER(symCount);
+
+  struct axt *axt=NULL, *curAxt;
+  int nrAxt = GET_LENGTH(axtqNames);
+  for(i = 0; i < nrAxt; i++){
+    AllocVar(curAxt);
+    //Rprintf("The is is %d\n", i);
+    //This will cause the warning during compilation, but can save time. No need to create a none const char for it.
+    curAxt->qName = CHAR(STRING_ELT(axtqNames, i));
+    //Rprintf("The qName is %s\n", CHAR(STRING_ELT(axtqNames, i)));
+    curAxt->qStart = p_axtqStart[i];
+    //Rprintf("The start is %d\n", p_axtqStart[i]);
+    curAxt->qEnd = p_axtqEnd[i];
+    curAxt->qStrand = CHAR(STRING_ELT(axtqStrand, i))[0];
+    //Rprintf("The strand is %s\n", CHAR(STRING_ELT(axtqStrand, i))); 
+    curAxt->qSym = CHAR(STRING_ELT(axtqSym, i));
+    curAxt->tName = CHAR(STRING_ELT(axttNames, i));
+    curAxt->tStart = p_axttStart[i];
+    curAxt->tEnd = p_axttEnd[i];
+    curAxt->tStrand = CHAR(STRING_ELT(axttStrand, i))[0];
+    curAxt->tSym = CHAR(STRING_ELT(axttSym, i));
+    curAxt->score = p_score[i];
+    curAxt->symCount = p_symCount[i];
+    curAxt->next = axt;
+    axt = curAxt;
+  }
+  //axtFree(curAxt);
+  UNPROTECT(12);
+  return axt;
+}
+
+SEXP myCeScanNow(SEXP tFilterNames, SEXP tFilterStarts, SEXP tFilterEnds, SEXP qFilterNames, SEXP qFilterStarts, SEXP qFilterEnds, SEXP sizeNames, SEXP sizeSizes, SEXP axtqNames, SEXP axtqStart, SEXP axtqEnd, SEXP axtqStrand, SEXP axtqSym, SEXP axttNames, SEXP axttStart, SEXP axttEnd, SEXP axttStrand, SEXP axttSym, SEXP score, SEXP symCount){
   struct hash *tFilter, *qFilter, *qFilterRev, *qSizes;
+  struct axt *axt;
   tFilter = buildHashForBed(tFilterNames, tFilterStarts, tFilterEnds);
   qFilter = buildHashForBed(qFilterNames, qFilterStarts, qFilterEnds);
   qSizes = buildHashForSizeFile(sizeNames, sizeSizes); 
   qFilterRev = qFilter ? makeReversedFilter(qFilter, qSizes) : NULL;
+  axt = buildAxt(axtqNames, axtqStart, axtqEnd, axtqStrand, axtqSym, axttNames, axttStart, axttEnd, axttStrand, axttSym, score, symCount);
+  // here I decided to build axt in the linked axt, rather than one by one. Perhaps it has lower performance than one by one way.
+  while(axt){
+    Rprintf("The name of query seq is %s\n", axt->qName);
+    axt = axt->next;
+  }
   return(R_NilValue);
 }
 
