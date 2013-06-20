@@ -136,15 +136,16 @@ void convertRangeListToArray(struct hashEl *hel)
 SEXP readFilter(SEXP filepath)
 /* Load a filter file. */
 {
-  SEXP filepath_elt;
+  //SEXP filepath_elt;
   PROTECT(filepath = AS_CHARACTER(filepath));
   if (!IS_CHARACTER(filepath) || LENGTH(filepath) != 1)
     error("'filepath' must be a single string");
-  filepath_elt = STRING_ELT(filepath, 0);
-  if(filepath_elt == NA_STRING)
+  if(STRING_ELT(filepath, 0) == NA_STRING)
     error("'filepath' is NA");
-  Rprintf(" %s \n", CHAR(filepath_elt));
-  struct hash *hash = readBed(CHAR(filepath_elt));
+  char *filepath_elt = R_alloc(strlen(CHAR(STRING_ELT(filepath, 0))), sizeof(char));
+  strcpy(filepath_elt, CHAR(STRING_ELT(filepath, 0)));
+  Rprintf(" %s \n", filepath_elt);
+  struct hash *hash = readBed(filepath_elt);
   int i, nChroms, nRanges;
   struct hashEl *hel;
   struct slRange *list, *slEl;
@@ -196,15 +197,20 @@ SEXP readFilter(SEXP filepath)
 
 SEXP myReadBed(SEXP filepath){
   // load a filter file into R, and to be a GRanges
-  SEXP filepath_elt;
+  // SEXP filepath_elt;
   PROTECT(filepath = AS_CHARACTER(filepath));
   if(!IS_CHARACTER(filepath) || LENGTH(filepath) != 1)
     error("'filepath' must be a single string");
-  filepath_elt = STRING_ELT(filepath, 0);
-  if(filepath_elt == NA_STRING)
+  if(STRING_ELT(filepath, 0) == NA_STRING)
     error("'filepath' is NA");
-  Rprintf(" %s \n", CHAR(filepath_elt));
-  struct lineFile *lf = lineFileOpen(CHAR(filepath_elt), TRUE);
+  // If filepath_elt is defined this way, the memory will be reclaimed by the end of .Call by R, do not need the free()
+  char *filepath_elt = R_alloc(strlen(CHAR(STRING_ELT(filepath, 0))), sizeof(char));
+  strcpy(filepath_elt, CHAR(STRING_ELT(filepath, 0)));
+  //filepath_elt = STRING_ELT(filepath, 0);
+  //if(filepath_elt == NA_STRING)
+  //  error("'filepath' is NA");
+  Rprintf(" %s \n", filepath_elt);
+  struct lineFile *lf = lineFileOpen(filepath_elt, TRUE);
   char *row[3];
   int nRanges = 0;
   while(lineFileRow(lf, row)){
@@ -222,7 +228,8 @@ SEXP myReadBed(SEXP filepath){
   int j = 0;
   p_starts = INTEGER_POINTER(starts);
   p_ends = INTEGER_POINTER(ends);
-  lf = lineFileOpen(CHAR(filepath_elt), TRUE);
+  //lf = lineFileOpen(CHAR(filepath_elt), TRUE);
+  lf = lineFileOpen(filepath_elt, TRUE);
   while(lineFileRow(lf, row)){
     if(sameString(row[0], "track") || sameString(row[0], "browser")) continue;
     p_starts[j] = lineFileNeedNum(lf, row, 1);
@@ -242,7 +249,7 @@ SEXP myReadBed(SEXP filepath){
 
 SEXP myReadAxt(SEXP filepath){
   // load a axt file into R, and to be axt2
-  SEXP filepath_elt;
+  //SEXP filepath_elt;
   PROTECT(filepath = AS_CHARACTER(filepath));
   int nrAxtFiles, i, nrAxts;
   nrAxtFiles = GET_LENGTH(filepath);
@@ -251,7 +258,10 @@ SEXP myReadAxt(SEXP filepath){
   struct lineFile *lf;
   nrAxts = 0;
   for(i = 0; i < nrAxtFiles; i++){
-    lf = lineFileOpen(CHAR(STRING_ELT(filepath, i)), TRUE);
+    char *filepath_elt = (char *) malloc(sizeof(char) * strlen(CHAR(STRING_ELT(filepath, i))));
+    strcpy(filepath_elt, CHAR(STRING_ELT(filepath, i)));
+    lf = lineFileOpen(filepath_elt, TRUE);
+    //lf = lineFileOpen(CHAR(STRING_ELT(filepath, i)), TRUE);
     while((curAxt = axtRead(lf)) != NULL){
       //Rprintf("The name of query sequence is %s\n", curAxt->qName);
       curAxt->next = axt;
@@ -259,6 +269,7 @@ SEXP myReadAxt(SEXP filepath){
       nrAxts++;
     }
     lineFileClose(&lf);
+    free(filepath_elt);
   }
   axtFree(&curAxt);
   UNPROTECT(1);
