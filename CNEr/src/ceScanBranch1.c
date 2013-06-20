@@ -529,6 +529,48 @@ void ceScan(char **tFilterFile, char **qFilterFile, char **qSizeFile, int *winSi
 }
 
 /*######################################################*/
+struct hash *buildHash(SEXP tNames, SEXP tStarts, SEXP tEnds){
+/* Given three vectors of names, starts and ends of the filter, return the hash table */
+  PROTECT(tNames = AS_CHARACTER(tNames));
+  PROTECT(tStarts = AS_INTEGER(tStarts));
+  PROTECT(tEnds = AS_INTEGER(tEnds));
+  struct hash *hash = newHash(0);
+  struct slRange *range;
+  struct hashEl *hel;
+  int i, n, *p_tStarts, *p_tEnds;
+  p_tStarts = INTEGER_POINTER(tStarts);
+  p_tEnds = INTEGER_POINTER(tEnds);
+  n = GET_LENGTH(tNames);
+  if(n == 0){
+    UNPROTECT(3);
+    return(NULL);
+  }
+  Rprintf("The length is %d\n", n);
+  for(i = 0; i < n ; i++){
+    AllocVar(range);
+    range->next = NULL;
+    range->start = p_tStarts[i];
+    range->end = p_tEnds[i];
+    hel = hashLookup(hash, CHAR(STRING_ELT(tNames, i)));
+    if(hel == NULL)
+      hel = hashAdd(hash, CHAR(STRING_ELT(tNames, i)), range);
+    else
+      slSafeAddHead(&hel->val, range);
+  }
+  UNPROTECT(3);
+  hashTraverseEls(hash, collapseRangeList);
+  hashTraverseEls(hash, convertRangeListToArray);
+  return(hash);
+}
+
+SEXP myCeScanNow(SEXP tFilterNames, SEXP tFilterStarts, SEXP tFilterEnds, SEXP qFilterNames, SEXP qFilterStarts, SEXP qFilterEnds){
+  struct hash *tFilter, *qFilter, *qFilterRev;
+  tFilter = buildHash(tFilterNames, tFilterStarts, tFilterEnds);
+  qFilter = buildHash(qFilterNames, qFilterStarts, qFilterEnds);
+  //qFilterRev = qFilter ? makeReversedFilter(qFilter, qSizes) : NULL;
+  return(R_NilValue);
+}
+
 SEXP myCeScan(SEXP tNames, SEXP tStarts, SEXP tEnds){
   PROTECT(tNames = AS_CHARACTER(tNames));
   PROTECT(tStarts = AS_INTEGER(tStarts));
