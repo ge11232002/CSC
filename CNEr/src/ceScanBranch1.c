@@ -632,7 +632,26 @@ struct axt *buildAxt(SEXP axtqNames, SEXP axtqStart, SEXP axtqEnd, SEXP axtqStra
   return axt;
 }
 
-SEXP myCeScanNow(SEXP tFilterNames, SEXP tFilterStarts, SEXP tFilterEnds, SEXP qFilterNames, SEXP qFilterStarts, SEXP qFilterEnds, SEXP sizeNames, SEXP sizeSizes, SEXP axtqNames, SEXP axtqStart, SEXP axtqEnd, SEXP axtqStrand, SEXP axtqSym, SEXP axttNames, SEXP axttStart, SEXP axttEnd, SEXP axttStrand, SEXP axttSym, SEXP score, SEXP symCount){
+struct slThreshold *buildThreshold(SEXP winSize, SEXP minScore){
+  struct slThreshold *trList = NULL, *tr;
+  PROTECT(winSize = AS_INTEGER(winSize));
+  PROTECT(minScore = AS_INTEGER(minScore));
+  int i, nThresholds = GET_LENGTH(winSize);
+  Rprintf("The number of thresholds %d\n", nThresholds);
+  int *p_winSize, *p_minScore;
+  p_winSize = INTEGER_POINTER(winSize);
+  p_minScore = INTEGER_POINTER(minScore);
+  for(i = 0; i < nThresholds; i++){
+    tr = needMem(sizeof(*tr));
+    tr->minScore = p_minScore[i];
+    tr->winSize = p_winSize[i];
+    slAddHead(&trList, tr);
+  }
+  UNPROTECT(2);
+  return trList;
+}
+
+SEXP myCeScanNow(SEXP tFilterNames, SEXP tFilterStarts, SEXP tFilterEnds, SEXP qFilterNames, SEXP qFilterStarts, SEXP qFilterEnds, SEXP sizeNames, SEXP sizeSizes, SEXP axtqNames, SEXP axtqStart, SEXP axtqEnd, SEXP axtqStrand, SEXP axtqSym, SEXP axttNames, SEXP axttStart, SEXP axttEnd, SEXP axttStrand, SEXP axttSym, SEXP score, SEXP symCount, SEXP winSize, SEXP minScore){
   struct hash *tFilter, *qFilter, *qFilterRev, *qSizes;
   struct axt *axt;
   tFilter = buildHashForBed(tFilterNames, tFilterStarts, tFilterEnds);
@@ -641,10 +660,12 @@ SEXP myCeScanNow(SEXP tFilterNames, SEXP tFilterStarts, SEXP tFilterEnds, SEXP q
   qFilterRev = qFilter ? makeReversedFilter(qFilter, qSizes) : NULL;
   axt = buildAxt(axtqNames, axtqStart, axtqEnd, axtqStrand, axtqSym, axttNames, axttStart, axttEnd, axttStrand, axttSym, score, symCount);
   // here I decided to build axt in the linked axt, rather than one by one. Perhaps it has lower performance than one by one way.
-  while(axt){
+  struct slThreshold *trList;
+  trList = buildThreshold(winSize, minScore);
+  /*while(axt){
     Rprintf("The name of query seq is %s\n", axt->qName);
     axt = axt->next;
-  }
+  }*/
   return(R_NilValue);
 }
 
