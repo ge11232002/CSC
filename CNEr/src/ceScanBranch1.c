@@ -551,11 +551,14 @@ struct hash *buildHashForBed(SEXP tNames, SEXP tStarts, SEXP tEnds){
     range->next = NULL;
     range->start = p_tStarts[i];
     range->end = p_tEnds[i];
-    hel = hashLookup(hash, CHAR(STRING_ELT(tNames, i)));
+    char *tName = (char *) malloc(sizeof(char) * strlen(CHAR(STRING_ELT(tNames, i))));
+    strcpy(tName, CHAR(STRING_ELT(tNames, i)));
+    hel = hashLookup(hash, tName);
     if(hel == NULL)
-      hel = hashAdd(hash, CHAR(STRING_ELT(tNames, i)), range);
+      hel = hashAdd(hash, tName, range);
     else
       slSafeAddHead(&hel->val, range);
+    free(tName);
   }
   UNPROTECT(3);
   hashTraverseEls(hash, collapseRangeList);
@@ -570,7 +573,10 @@ struct hash *buildHashForSizeFile(SEXP names, SEXP sizes){
   int i, *p_sizes, n = GET_LENGTH(names);
   p_sizes = INTEGER_POINTER(sizes);
   for(i = 0; i < n; i++){
-    hashAddInt(hash, CHAR(STRING_ELT(names, i)), p_sizes[i]);
+    char *name = (char *) malloc(sizeof(char) * strlen(CHAR(STRING_ELT(names, i))));
+    strcpy(name, CHAR(STRING_ELT(names, i)));
+    hashAddInt(hash, name, p_sizes[i]);
+    free(name);
   }
   UNPROTECT(2);
   return hash;
