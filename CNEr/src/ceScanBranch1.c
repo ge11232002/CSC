@@ -529,7 +529,7 @@ void ceScan(char **tFilterFile, char **qFilterFile, char **qSizeFile, int *winSi
 }
 
 /*######################################################*/
-struct hash *buildHash(SEXP tNames, SEXP tStarts, SEXP tEnds){
+struct hash *buildHashForBed(SEXP tNames, SEXP tStarts, SEXP tEnds){
 /* Given three vectors of names, starts and ends of the filter, return the hash table */
   PROTECT(tNames = AS_CHARACTER(tNames));
   PROTECT(tStarts = AS_INTEGER(tStarts));
@@ -543,7 +543,7 @@ struct hash *buildHash(SEXP tNames, SEXP tStarts, SEXP tEnds){
   n = GET_LENGTH(tNames);
   if(n == 0){
     UNPROTECT(3);
-    return(NULL);
+    return NULL;
   }
   Rprintf("The length is %d\n", n);
   for(i = 0; i < n ; i++){
@@ -560,14 +560,28 @@ struct hash *buildHash(SEXP tNames, SEXP tStarts, SEXP tEnds){
   UNPROTECT(3);
   hashTraverseEls(hash, collapseRangeList);
   hashTraverseEls(hash, convertRangeListToArray);
-  return(hash);
+  return hash;
 }
 
-SEXP myCeScanNow(SEXP tFilterNames, SEXP tFilterStarts, SEXP tFilterEnds, SEXP qFilterNames, SEXP qFilterStarts, SEXP qFilterEnds){
-  struct hash *tFilter, *qFilter, *qFilterRev;
-  tFilter = buildHash(tFilterNames, tFilterStarts, tFilterEnds);
-  qFilter = buildHash(qFilterNames, qFilterStarts, qFilterEnds);
-  //qFilterRev = qFilter ? makeReversedFilter(qFilter, qSizes) : NULL;
+struct hash *buildHashForSizeFile(SEXP names, SEXP sizes){
+  PROTECT(names = AS_CHARACTER(names));
+  PROTECT(sizes = AS_INTEGER(sizes));
+  struct hash *hash = newHash(0);
+  int i, *p_sizes, n = GET_LENGTH(names);
+  p_sizes = INTEGER_POINTER(sizes);
+  for(i = 0; i < n; i++){
+    hashAddInt(hash, CHAR(STRING_ELT(names, i)), p_sizes[i]);
+  }
+  UNPROTECT(2);
+  return hash;
+}
+
+SEXP myCeScanNow(SEXP tFilterNames, SEXP tFilterStarts, SEXP tFilterEnds, SEXP qFilterNames, SEXP qFilterStarts, SEXP qFilterEnds, SEXP sizeNames, SEXP sizeSizes){
+  struct hash *tFilter, *qFilter, *qFilterRev, *qSizes;
+  tFilter = buildHashForBed(tFilterNames, tFilterStarts, tFilterEnds);
+  qFilter = buildHashForBed(qFilterNames, qFilterStarts, qFilterEnds);
+  qSizes = buildHashForSizeFile(sizeNames, sizeSizes); 
+  qFilterRev = qFilter ? makeReversedFilter(qFilter, qSizes) : NULL;
   return(R_NilValue);
 }
 
