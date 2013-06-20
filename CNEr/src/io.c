@@ -195,6 +195,8 @@ SEXP readFilter(SEXP filepath)
   return(returnList);
 }
 
+/*############################################*/
+
 SEXP myReadBed(SEXP filepath){
   // load a filter file into R, and to be a GRanges
   // SEXP filepath_elt;
@@ -274,7 +276,7 @@ SEXP myReadAxt(SEXP filepath){
   axtFree(&curAxt);
   UNPROTECT(1);
   Rprintf("The total number of axt is %d\n", nrAxts);
-  SEXP qNames, qStart, qEnd, qStrand, qSym, tNames, tStart, tEnd, tStrand, tSym, returnList;
+  SEXP qNames, qStart, qEnd, qStrand, qSym, tNames, tStart, tEnd, tStrand, tSym, score, symCount, returnList;
   PROTECT(qNames = NEW_CHARACTER(nrAxts));
   PROTECT(qStart = NEW_INTEGER(nrAxts));
   PROTECT(qEnd = NEW_INTEGER(nrAxts));
@@ -285,18 +287,23 @@ SEXP myReadAxt(SEXP filepath){
   PROTECT(tEnd = NEW_INTEGER(nrAxts));
   PROTECT(tStrand = NEW_CHARACTER(nrAxts));
   PROTECT(tSym = NEW_CHARACTER(nrAxts));
-  PROTECT(returnList = NEW_LIST(10));
-  int *p_qStart, *p_qEnd, *p_tStart, *p_tEnd;
+  PROTECT(score = NEW_INTEGER(nrAxts));
+  PROTECT(symCount = NEW_INTEGER(nrAxts));
+  PROTECT(returnList = NEW_LIST(12));
+  int *p_qStart, *p_qEnd, *p_tStart, *p_tEnd, *p_score, *p_symCount;
   p_qStart = INTEGER_POINTER(qStart);
   p_qEnd = INTEGER_POINTER(qEnd);
   p_tStart = INTEGER_POINTER(tStart);
   p_tEnd = INTEGER_POINTER(tEnd);
+  p_score = INTEGER_POINTER(score);
+  p_symCount = INTEGER_POINTER(symCount);
   i = 0;
   char strand;
   while(axt){
     //Rprintf("The name of query seq is %s\n", axt->qName);
     SET_STRING_ELT(qNames, i, mkChar(axt->qName));
-    p_qStart[i] = axt->qStart;
+    // In Kent's axt struct, they use half open zero=based coordinates. It is different from the original coordinates in axt files. To present it in R, we still make it into 1-based coordinates.
+    p_qStart[i] = axt->qStart + 1;
     p_qEnd[i] = axt->qEnd;
     if(axt->qStrand == '+')
       SET_STRING_ELT(qStrand, i, mkChar("+"));
@@ -305,7 +312,7 @@ SEXP myReadAxt(SEXP filepath){
     //SET_STRING_ELT(qStrand, i, AS_CHARACTER(axt->qStrand));
     SET_STRING_ELT(qSym, i, mkChar(axt->qSym));
     SET_STRING_ELT(tNames, i, mkChar(axt->tName));
-    p_tStart[i] = axt->tStart;
+    p_tStart[i] = axt->tStart + 1;
     p_tEnd[i] = axt->tEnd;
     if(axt->tStrand == '+')
       SET_STRING_ELT(tStrand, i, mkChar("+"));
@@ -313,20 +320,24 @@ SEXP myReadAxt(SEXP filepath){
       SET_STRING_ELT(tStrand, i, mkChar("-"));
     //SET_STRING_ELT(tStrand, i, mkChar(axt->tStrand));
     SET_STRING_ELT(tSym, i, mkChar(axt->tSym));
+    p_score[i] = axt->score;
+    p_symCount[i] = axt->symCount;
     i++;
     axt = axt->next;
   }
-  SET_VECTOR_ELT(returnList, 0, qNames);
-  SET_VECTOR_ELT(returnList, 1, qStart);
-  SET_VECTOR_ELT(returnList, 2, qEnd);
-  SET_VECTOR_ELT(returnList, 3, qStrand);
-  SET_VECTOR_ELT(returnList, 4, qSym);
-  SET_VECTOR_ELT(returnList, 5, tNames);
-  SET_VECTOR_ELT(returnList, 6, tStart);
-  SET_VECTOR_ELT(returnList, 7, tEnd);
-  SET_VECTOR_ELT(returnList, 8, tStrand);
-  SET_VECTOR_ELT(returnList, 9, tSym);
-  UNPROTECT(11);
+  SET_VECTOR_ELT(returnList, 0, tNames);
+  SET_VECTOR_ELT(returnList, 1, tStart);
+  SET_VECTOR_ELT(returnList, 2, tEnd);
+  SET_VECTOR_ELT(returnList, 3, tStrand);
+  SET_VECTOR_ELT(returnList, 4, tSym);
+  SET_VECTOR_ELT(returnList, 5, qNames);
+  SET_VECTOR_ELT(returnList, 6, qStart);
+  SET_VECTOR_ELT(returnList, 7, qEnd);
+  SET_VECTOR_ELT(returnList, 8, qStrand);
+  SET_VECTOR_ELT(returnList, 9, qSym);
+  SET_VECTOR_ELT(returnList, 10, score);
+  SET_VECTOR_ELT(returnList, 11, symCount);
+  UNPROTECT(13);
   return(returnList);
 }
 
