@@ -363,6 +363,7 @@ void scanAxt(struct axt *axt, struct hash *qSizes, struct hash *tFilterAll, stru
   int i = 0; /* column in alignment */
   int tPos = axt->tStart; /* position in target sequence */
   int qPos = axt->qStart; /* position in query sequence */
+  //Rprintf("The start %d and end %d\n", tPos, qPos);
   int nrColumns;  /* counter for nr of columns seen after mask */
   int score;    /* sliding window score */
   struct slThreshold *tr;
@@ -380,19 +381,21 @@ void scanAxt(struct axt *axt, struct hash *qSizes, struct hash *tFilterAll, stru
 
   /* tFilter and qFilter are pointers to sorted arrays of coordinate ranges that should not be scanned.
    * The calls to searchFilter find the first filter overlapping or following the alignment */
-  struct range *tFilter = tFilterAll ? searchFilter(tFilterAll, axt->tName, axt->tStart+1) : NULL;
-  struct range *qFilter = qFilterAll ? searchFilter(qFilterAll, axt->qName, axt->qStart+1) : NULL;
+  struct range *tFilter = tFilterAll != NULL ? searchFilter(tFilterAll, axt->tName, axt->tStart+1) : NULL;
+  struct range *qFilter = qFilterAll != NULL ? searchFilter(qFilterAll, axt->qName, axt->qStart+1) : NULL;
   /* Initialize CE bounds for each threshold */
   for(tr = thresholds; tr != NULL; tr = tr->next) {
     tr->ceStart = -1; /* set to -1 = no CE found */
   }
-
+  //Rprintf("The symCount is %d\n", axt->symCount);
+  //Rprintf("The tSym %s\n", axt->tSym);
+  //Rprintf("The qSym %s\n", axt->qSym);
   /* Main loop: go through alignment */
   while(i < axt->symCount) { /* loop until we have looked at entire alignment */
 
     /* if inside a mask, fast forward past it */
     do {
-      if(tFilter) {
+      if(tFilter != NULL) {
   while(tFilter->end <= tPos) tFilter++;
   if(tFilter->start <= tPos) {
     if(tFilter->end >= axt->tEnd) goto endScan; /* using goto to break out of nested loop */
@@ -404,7 +407,7 @@ void scanAxt(struct axt *axt, struct hash *qSizes, struct hash *tFilterAll, stru
     tFilter++;
   }
       }
-      if(qFilter) {
+      if(qFilter != NULL) {
   while(qFilter->end <= qPos) qFilter++;
   if(qFilter->start <= qPos) {
     if(qFilter->end >= axt->qEnd) goto endScan; /* using goto to break out of nested loop */
@@ -416,7 +419,7 @@ void scanAxt(struct axt *axt, struct hash *qSizes, struct hash *tFilterAll, stru
     qFilter++;
   }
       }
-    } while(tFilter && tFilter->start <= tPos);
+    } while(tFilter != NULL && tFilter->start <= tPos);
 
     /* handle first position after mask */
     profile[i] = bpScores[ (int) axt->qSym[i] ][ (int) axt->tSym[i] ];
@@ -427,8 +430,9 @@ void scanAxt(struct axt *axt, struct hash *qSizes, struct hash *tFilterAll, stru
     /* handle remaining positions */
     for(i++; i < axt->symCount; i++) {
       /* break out of loop if we have come to a mask */
-      if((tFilter && tFilter->start <= tPos) || (qFilter && qFilter->start <= qPos)) break;
+      if((tFilter != NULL && tFilter->start <= tPos) || (qFilter != NULL && qFilter->start <= qPos)) break;
       /* set positions */
+      //Rprintf("I am in extending\n");
       tPosList[i] = axt->tSym[i] == '-' ? -1 : ++tPos;
       qPosList[i] = axt->qSym[i] == '-' ? -1 : ++qPos;
       /* set profile */
@@ -632,10 +636,12 @@ struct axt *buildAxt(SEXP axtqNames, SEXP axtqStart, SEXP axtqEnd, SEXP axtqStra
   return axt;
 }
 
-struct slThreshold *buildThreshold(SEXP winSize, SEXP minScore){
+struct slThreshold *buildThreshold(SEXP winSize, SEXP minScore, SEXP outFilePrefix){
   struct slThreshold *trList = NULL, *tr;
+  char path[PATH_LEN];
   PROTECT(winSize = AS_INTEGER(winSize));
   PROTECT(minScore = AS_INTEGER(minScore));
+  PROTECT(outFilePrefix = AS_CHARACTER(outFilePrefix));
   int i, nThresholds = GET_LENGTH(winSize);
   Rprintf("The number of thresholds %d\n", nThresholds);
   int *p_winSize, *p_minScore;
@@ -645,13 +651,16 @@ struct slThreshold *buildThreshold(SEXP winSize, SEXP minScore){
     tr = needMem(sizeof(*tr));
     tr->minScore = p_minScore[i];
     tr->winSize = p_winSize[i];
+    Rprintf("The minScore %d and the winSize %d\n", p_minScore[i], p_winSize[i]);
+    safef(path, sizeof(path), "%s_%d_%d", CHAR(STRING_ELT(outFilePrefix, 0)), tr->minScore, tr->winSize);
+    tr->outFile = mustOpen(path, "w");
     slAddHead(&trList, tr);
   }
-  UNPROTECT(2);
+  UNPROTECT(3);
   return trList;
 }
 
-SEXP myCeScanNow(SEXP tFilterNames, SEXP tFilterStarts, SEXP tFilterEnds, SEXP qFilterNames, SEXP qFilterStarts, SEXP qFilterEnds, SEXP sizeNames, SEXP sizeSizes, SEXP axtqNames, SEXP axtqStart, SEXP axtqEnd, SEXP axtqStrand, SEXP axtqSym, SEXP axttNames, SEXP axttStart, SEXP axttEnd, SEXP axttStrand, SEXP axttSym, SEXP score, SEXP symCount, SEXP winSize, SEXP minScore){
+SEXP myCeScanNow(SEXP tFilterNames, SEXP tFilterStarts, SEXP tFilterEnds, SEXP qFilterNames, SEXP qFilterStarts, SEXP qFilterEnds, SEXP sizeNames, SEXP sizeSizes, SEXP axtqNames, SEXP axtqStart, SEXP axtqEnd, SEXP axtqStrand, SEXP axtqSym, SEXP axttNames, SEXP axttStart, SEXP axttEnd, SEXP axttStrand, SEXP axttSym, SEXP score, SEXP symCount, SEXP winSize, SEXP minScore, SEXP outFilePrefix){
   struct hash *tFilter, *qFilter, *qFilterRev, *qSizes;
   struct axt *axt;
   tFilter = buildHashForBed(tFilterNames, tFilterStarts, tFilterEnds);
@@ -660,12 +669,16 @@ SEXP myCeScanNow(SEXP tFilterNames, SEXP tFilterStarts, SEXP tFilterEnds, SEXP q
   qFilterRev = qFilter ? makeReversedFilter(qFilter, qSizes) : NULL;
   axt = buildAxt(axtqNames, axtqStart, axtqEnd, axtqStrand, axtqSym, axttNames, axttStart, axttEnd, axttStrand, axttSym, score, symCount);
   // here I decided to build axt in the linked axt, rather than one by one. Perhaps it has lower performance than one by one way.
-  struct slThreshold *trList;
-  trList = buildThreshold(winSize, minScore);
-  /*while(axt){
-    Rprintf("The name of query seq is %s\n", axt->qName);
+  struct slThreshold *thresholds, *tr;
+  thresholds = buildThreshold(winSize, minScore, outFilePrefix);
+  setBpScores(bpScores);
+  while(axt){
+    //Rprintf("The name of query seq is %s\n", axt->qName);
+    scanAxt(axt, qSizes, tFilter, axt->qStrand == '+' ? qFilter : qFilterRev, thresholds);
     axt = axt->next;
-  }*/
+  }
+  for(tr = thresholds; tr != NULL; tr = tr->next)
+    fclose(tr->outFile);
   return(R_NilValue);
 }
 
