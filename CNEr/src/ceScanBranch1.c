@@ -615,14 +615,15 @@ struct axt *buildAxt(SEXP axtqNames, SEXP axtqStart, SEXP axtqEnd, SEXP axtqStra
     //This will cause the warning during compilation, but can save time. No need to create a none const char for it.
     curAxt->qName = CHAR(STRING_ELT(axtqNames, i));
     //Rprintf("The qName is %s\n", CHAR(STRING_ELT(axtqNames, i)));
-    curAxt->qStart = p_axtqStart[i];
+    //Make it back to 0-based coordinates for start
+    curAxt->qStart = p_axtqStart[i] - 1;
     //Rprintf("The start is %d\n", p_axtqStart[i]);
     curAxt->qEnd = p_axtqEnd[i];
     curAxt->qStrand = CHAR(STRING_ELT(axtqStrand, i))[0];
     //Rprintf("The strand is %s\n", CHAR(STRING_ELT(axtqStrand, i))); 
     curAxt->qSym = CHAR(STRING_ELT(axtqSym, i));
     curAxt->tName = CHAR(STRING_ELT(axttNames, i));
-    curAxt->tStart = p_axttStart[i];
+    curAxt->tStart = p_axttStart[i] - 1;
     curAxt->tEnd = p_axttEnd[i];
     curAxt->tStrand = CHAR(STRING_ELT(axttStrand, i))[0];
     curAxt->tSym = CHAR(STRING_ELT(axttSym, i));
@@ -660,7 +661,7 @@ struct slThreshold *buildThreshold(SEXP winSize, SEXP minScore, SEXP outFilePref
   return trList;
 }
 
-SEXP myCeScanNow(SEXP tFilterNames, SEXP tFilterStarts, SEXP tFilterEnds, SEXP qFilterNames, SEXP qFilterStarts, SEXP qFilterEnds, SEXP sizeNames, SEXP sizeSizes, SEXP axtqNames, SEXP axtqStart, SEXP axtqEnd, SEXP axtqStrand, SEXP axtqSym, SEXP axttNames, SEXP axttStart, SEXP axttEnd, SEXP axttStrand, SEXP axttSym, SEXP score, SEXP symCount, SEXP winSize, SEXP minScore, SEXP outFilePrefix){
+SEXP myCeScanNow(SEXP tFilterNames, SEXP tFilterStarts, SEXP tFilterEnds, SEXP qFilterNames, SEXP qFilterStarts, SEXP qFilterEnds, SEXP sizeNames, SEXP sizeSizes, SEXP axttNames, SEXP axttStart, SEXP axttEnd, SEXP axttStrand, SEXP axttSym, SEXP axtqNames, SEXP axtqStart, SEXP axtqEnd, SEXP axtqStrand, SEXP axtqSym, SEXP score, SEXP symCount, SEXP winSize, SEXP minScore, SEXP outFilePrefix){
   struct hash *tFilter, *qFilter, *qFilterRev, *qSizes;
   struct axt *axt;
   tFilter = buildHashForBed(tFilterNames, tFilterStarts, tFilterEnds);
