@@ -219,12 +219,12 @@ sub configure_form {
 			      dbuser => $DB_USER)
 	or die "could not connect to db $DB_NAME @ $DB_HOST";
     ## debug
-    warn "I am in the CNE plugin:configure_form now!!!";
-    $Data::Dumper::Indent = 1;
-    $Data::Dumper::Sortkeys = 1;
-    open (FH, '>/mnt/biggley/home/gtan/debug/debug_configure_form.txt');
-    print FH Dumper($db);
-    close FH;
+    #warn "I am in the CNE plugin:configure_form now!!!";
+    #$Data::Dumper::Indent = 1;
+    #$Data::Dumper::Sortkeys = 1;
+    #open (FH, '>/mnt/biggley/home/gtan/debug/debug_configure_form.txt');
+    #print FH Dumper($db);
+    #close FH;
 
 
     my $nr_cne_sets = $self->nr_cne_sets();
@@ -358,15 +358,15 @@ sub annotate {
     my ($self, $segment) = @_;
 
     $self->_set_config_to_default() unless(($self->configuration->{version} || 0) eq $MY_VERSION);
-    warn "I am in the annotate CNE now";
-    $Data::Dumper::Indent = 1;
-    $Data::Dumper::Sortkeys = 1;
-    open (FH, '>/mnt/biggley/home/gtan/debug/debug_CNE_annotate_self.txt');
-    print FH Dumper($self);
-    close FH;
-    open (FH, '>/mnt/biggley/home/gtan/debug/debug_CNE_annotate_segment.txt');
-    print FH Dumper($segment);
-    close FH;
+    #warn "I am in the annotate CNE now";
+    #$Data::Dumper::Indent = 1;
+    #$Data::Dumper::Sortkeys = 1;
+    #open (FH, '>/mnt/biggley/home/gtan/debug/debug_CNE_annotate_self.txt');
+    #print FH Dumper($self);
+    #close FH;
+    #open (FH, '>/mnt/biggley/home/gtan/debug/debug_CNE_annotate_segment.txt');
+    #print FH Dumper($segment);
+    #close FH;
 
     # Create a FeatureFile object to store the result in
     my $out_feature_list = Bio::Graphics::FeatureFile->new;
@@ -386,21 +386,21 @@ sub annotate {
     warn "In annotate, the chr, start, end  ", $chr, " ", $start, "  ", $end;
     # Make the density features
     $self->_make_density_features($out_feature_list, $db, $chr, $start, $end);
-    warn "In annotate, Am I running??";
-    open (FH, '>/mnt/biggley/home/gtan/debug/debug_CNE_annotate_self_after_density_features.txt');
-    print FH Dumper($self);
-    close FH;
-    open (FH, '>/mnt/biggley/home/gtan/debug/debug_CNE_annotate_out_feature_list_after_density_features.txt');
-    print FH Dumper($out_feature_list);
-    close FH;
+    #warn "In annotate, Am I running??";
+    #open (FH, '>/mnt/biggley/home/gtan/debug/debug_CNE_annotate_self_after_density_features.txt');
+    #print FH Dumper($self);
+    #close FH;
+    #open (FH, '>/mnt/biggley/home/gtan/debug/debug_CNE_annotate_out_feature_list_after_density_features.txt');
+    #print FH Dumper($out_feature_list);
+    #close FH;
     # Make the CNE features
     $self->_make_cne_features($out_feature_list, $db, $chr, $start, $end);
-    open (FH, '>/mnt/biggley/home/gtan/debug/debug_CNE_annotate_self_after_CNE_features.txt');
-    print FH Dumper($self);
-    close FH;
-    open (FH, '>/mnt/biggley/home/gtan/debug/debug_CNE_annotate_out_feature_list_after_CNE_features.txt');
-    print FH Dumper($out_feature_list);
-    close FH;
+    #open (FH, '>/mnt/biggley/home/gtan/debug/debug_CNE_annotate_self_after_CNE_features.txt');
+    #print FH Dumper($self);
+    #close FH;
+    #open (FH, '>/mnt/biggley/home/gtan/debug/debug_CNE_annotate_out_feature_list_after_CNE_features.txt');
+    #print FH Dumper($out_feature_list);
+    #close FH;
     # For debug use
     my $msg_string = "";
     # For debug usage
@@ -514,11 +514,11 @@ sub _make_density_features
     warn "In _make_density_features, am I running? The rank_un_low ", $rank_un_low;
 
     my $label = $self->asm2_name . " HCNE density";
-    warn "In _make_density_features, am I running? The label ", $label;
-    warn "In _make_density_features, check the browse_config";
-    open (FH, '>/mnt/biggley/home/gtan/debug/debug_CNE_annotate_self_browser_config.txt');
-    print FH Dumper($self->browser_config);
-    close FH;
+    #warn "In _make_density_features, am I running? The label ", $label;
+    #warn "In _make_density_features, check the browse_config";
+    #open (FH, '>/mnt/biggley/home/gtan/debug/debug_CNE_annotate_self_browser_config.txt');
+    #print FH Dumper($self->browser_config);
+    #close FH;
     #my $pixel_width = $self->browser_config->width;
     my $pixel_width = 800;
     warn "In _make_density_features, am I running? The pixel_width  ", $pixel_width;
