@@ -337,12 +337,9 @@ void addCigarString(struct slCNE *CNE, struct axt *axt, int i, int j){
   int count = 0;
   // This is potentially risky to limit the cigar string to 1000 length long. Use realloc() to replace it later.
   char temp[100];
-  //char *cigar = (char *) malloc(sizeof(char) * 1000);
   char cigar[1000];
-  //Rprintf("Running now!\n");
   strcpy(cigar, "");
   for(; i <= j; i++) {
-    // Rprintf("checking columns\n");
     /* Determine column type */
     if(axt->tSym[i] == '-') newType = 'D';
     else if(axt->qSym[i] == '-') newType = 'I';
@@ -352,10 +349,7 @@ void addCigarString(struct slCNE *CNE, struct axt *axt, int i, int j){
       count++;
     else{
       sprintf(temp, "%d%c", count, type);
-      //Rprintf("The temp is %s\n", temp);
-      //Rprintf("The char1 is %s\n", cigar);
       strcat(cigar, temp);
-      //Rprintf("The char2 is %s\n", cigar);
       type = newType;
       count = 1;
     }
@@ -364,12 +358,9 @@ void addCigarString(struct slCNE *CNE, struct axt *axt, int i, int j){
     sprintf(temp, "%d%c", count, type);
     strcat(cigar, temp);
   }
-  //Rprintf("The cigar string is %s\n", cigar);
   char *holdCigar = (char *) malloc(sizeof(char) * 1000);
   strcpy(holdCigar, cigar); 
   CNE->cigar = holdCigar;
-  //Rprintf("The assigned cigar is %s\n", CNE->cigar);
-  //free(holdCigar);
 }
 
 
@@ -459,15 +450,7 @@ void addCNE(struct slThreshold *tr, struct axt *axt, struct hash *qSizes, int *p
   CNE->strand = axt->qStrand;
   CNE->score = 100.0 * score / (j-i+1);
   addCigarString(CNE, axt, i, j);
-  //Rprintf("In addCNE, the cigar is %s\n", CNE->cigar);
-  //Rprintf("Before slAddHead %s\n", tr->CNE->cigar);
   slAddHead(&(tr->CNE), CNE);
-  //CNE->next = tr->CNE; 
-  //tr->CNE = CNE;
-  //freez(CNE);
-  //Rprintf("After slAddHead %s\n", tr->CNE->cigar);
-  //if(tr->CNE->next != NULL)
-  //  Rprintf("The next CNE cigar is %s\n", tr->CNE->next->cigar);
 }
 
 
@@ -486,7 +469,6 @@ void scanAxt(struct axt *axt, struct hash *qSizes, struct hash *tFilterAll, stru
   int i = 0; /* column in alignment */
   int tPos = axt->tStart; /* position in target sequence */
   int qPos = axt->qStart; /* position in query sequence */
-  //Rprintf("The start %d and end %d\n", tPos, qPos);
   int nrColumns;  /* counter for nr of columns seen after mask */
   int score;    /* sliding window score */
   struct slThreshold *tr;
@@ -508,12 +490,8 @@ void scanAxt(struct axt *axt, struct hash *qSizes, struct hash *tFilterAll, stru
   struct range *qFilter = qFilterAll != NULL ? searchFilter(qFilterAll, axt->qName, axt->qStart+1) : NULL;
   /* Initialize CE bounds for each threshold */
   for(tr = thresholds; tr != NULL; tr = tr->next) {
-    //Rprintf("The threshold win size is %d\n", tr->winSize);
     tr->ceStart = -1; /* set to -1 = no CE found */
   }
-  //Rprintf("The symCount is %d\n", axt->symCount);
-  //Rprintf("The tSym %s\n", axt->tSym);
-  //Rprintf("The qSym %s\n", axt->qSym);
   
   /* Main loop: go through alignment */
   while(i < axt->symCount) { /* loop until we have looked at entire alignment */
@@ -557,7 +535,6 @@ void scanAxt(struct axt *axt, struct hash *qSizes, struct hash *tFilterAll, stru
       /* break out of loop if we have come to a mask */
       if((tFilter != NULL && tFilter->start <= tPos) || (qFilter != NULL && qFilter->start <= qPos)) break;
       /* set positions */
-      //Rprintf("I am in extending\n");
       tPosList[i] = axt->tSym[i] == '-' ? -1 : ++tPos;
       qPosList[i] = axt->qSym[i] == '-' ? -1 : ++qPos;
       /* set profile */
@@ -620,7 +597,6 @@ void ceScan1(char *tFilterFile, char *qFilterFile, char *qSizeFile, struct slThr
   qFilterRev = qFilter ? makeReversedFilter(qFilter, qSizes) : NULL;
 
   //i = 0;
-  //Rprintf("Hello world!%s\n", axtFiles[i]);
   for(i = 0; i < nrAxtFiles; i++) {
     lf = lineFileOpen(axtFiles[i], TRUE);
     while ((axt = axtRead(lf)) != NULL) {
@@ -647,11 +623,7 @@ void ceScan(char **tFilterFile, char **qFilterFile, char **qSizeFile, int *winSi
     safef(path, sizeof(path), "%s_%d_%d", *outFilePrefix, tr->minScore, tr->winSize);
     tr->outFile = mustOpen(path, "w");
     slAddHead(&trList, tr);
-    //Rprintf("The winsize %d\n", tr->winSize);
-    //Rprintf("The path is %s\n", path);
   }
-  //Rprintf("The filter1 is %s\n", *tFilterFile++);
-  //Rprintf("The filter1 is %s\n", *tFilterFile);
   /* Call function ceScan with the arguments */
   ceScan1(*tFilterFile, *qFilterFile, *qSizeFile, trList, *nrAxtFiles, axtFiles);
   /* Close all output files */
@@ -676,7 +648,6 @@ struct hash *buildHashForBed(SEXP tNames, SEXP tStarts, SEXP tEnds){
     UNPROTECT(3);
     return NULL;
   }
-  Rprintf("The length is %d\n", n);
   for(i = 0; i < n ; i++){
     AllocVar(range);
     range->next = NULL;
@@ -738,16 +709,12 @@ struct axt *buildAxt(SEXP axtqNames, SEXP axtqStart, SEXP axtqEnd, SEXP axtqStra
   int nrAxt = GET_LENGTH(axtqNames);
   for(i = 0; i < nrAxt; i++){
     AllocVar(curAxt);
-    //Rprintf("The is is %d\n", i);
     //This will cause the warning during compilation, but can save time. No need to create a none const char for it.
     curAxt->qName = CHAR(STRING_ELT(axtqNames, i));
-    //Rprintf("The qName is %s\n", CHAR(STRING_ELT(axtqNames, i)));
     //Make it back to 0-based coordinates for start
     curAxt->qStart = p_axtqStart[i] - 1;
-    //Rprintf("The start is %d\n", p_axtqStart[i]);
     curAxt->qEnd = p_axtqEnd[i];
     curAxt->qStrand = CHAR(STRING_ELT(axtqStrand, i))[0];
-    //Rprintf("The strand is %s\n", CHAR(STRING_ELT(axtqStrand, i))); 
     curAxt->qSym = CHAR(STRING_ELT(axtqSym, i));
     curAxt->tName = CHAR(STRING_ELT(axttNames, i));
     curAxt->tStart = p_axttStart[i] - 1;
@@ -771,7 +738,6 @@ struct slThreshold *buildThreshold(SEXP winSize, SEXP minScore, SEXP outFilePref
   PROTECT(minScore = AS_INTEGER(minScore));
   PROTECT(outFilePrefix = AS_CHARACTER(outFilePrefix));
   int i, nThresholds = GET_LENGTH(winSize);
-  Rprintf("The number of thresholds %d\n", nThresholds);
   int *p_winSize, *p_minScore;
   p_winSize = INTEGER_POINTER(winSize);
   p_minScore = INTEGER_POINTER(minScore);
@@ -779,7 +745,6 @@ struct slThreshold *buildThreshold(SEXP winSize, SEXP minScore, SEXP outFilePref
     tr = needMem(sizeof(*tr));
     tr->minScore = p_minScore[i];
     tr->winSize = p_winSize[i];
-    Rprintf("The minScore %d and the winSize %d\n", p_minScore[i], p_winSize[i]);
     safef(path, sizeof(path), "%s_%d_%d", CHAR(STRING_ELT(outFilePrefix, 0)), tr->minScore, tr->winSize);
     tr->outFile = mustOpen(path, "w");
     slAddHead(&trList, tr);
@@ -801,7 +766,6 @@ SEXP myCeScanNow(SEXP tFilterNames, SEXP tFilterStarts, SEXP tFilterEnds, SEXP q
   struct slCNE *CNE;
   int nrThresholds;
   nrThresholds = GET_LENGTH(winSize);
-  //Rprintf("The number of thre is %d\n", nrThresholds);
   int nrCNE[nrThresholds], i;
   thresholds = buildThreshold(winSize, minScore, outFilePrefix);
 
@@ -809,7 +773,6 @@ SEXP myCeScanNow(SEXP tFilterNames, SEXP tFilterStarts, SEXP tFilterEnds, SEXP q
   SEXP tName, tStart, tEnd, qName, qStart, qEnd, strand, CNEscore, cigar, returnList, oneList; 
   //int k = 0;
   while(axt){
-    //Rprintf("The name of query seq is %s\n", axt->qName);
     scanAxt(axt, qSizes, tFilter, axt->qStrand == '+' ? qFilter : qFilterRev, thresholds);
     axt = axt->next;
     //if(k > 50) break;
@@ -819,13 +782,6 @@ SEXP myCeScanNow(SEXP tFilterNames, SEXP tFilterStarts, SEXP tFilterEnds, SEXP q
   for(tr = thresholds; tr != NULL; tr = tr->next){
     nrCNE[i] = tr->nrCNE;
     i++;
-  }
-  // For debug
-  for(tr = thresholds; tr != NULL; tr = tr->next){
-    for(CNE = tr->CNE; CNE != NULL; CNE = CNE->next){
-      Rprintf("The cigar is %s\n", CNE->cigar);
-      Rprintf("The score is %f\n", CNE->score);
-    }
   }
 
   PROTECT(returnList = NEW_LIST(nrThresholds));
@@ -850,7 +806,6 @@ SEXP myCeScanNow(SEXP tFilterNames, SEXP tFilterStarts, SEXP tFilterEnds, SEXP q
     p_tEnd = INTEGER_POINTER(tEnd);
     p_CNEscore = NUMERIC_POINTER(CNEscore);
     for(CNE = tr->CNE; CNE != NULL; CNE = CNE->next){
-    //Rprintf("The start is %d, the end is %d\n", CNE->tStart, CNE->tEnd);
       SET_STRING_ELT(tName, i, mkChar(CNE->tName));
       p_tStart[i] = CNE->tStart;
       p_tEnd[i] = CNE->tEnd;
@@ -863,8 +818,6 @@ SEXP myCeScanNow(SEXP tFilterNames, SEXP tFilterStarts, SEXP tFilterEnds, SEXP q
         SET_STRING_ELT(strand, i, mkChar("-"));
       //SET_STRING_ELT(strand, i, mkChar(CNE->strand));
       p_CNEscore[i] = CNE->score;
-      Rprintf("In main, the score is %f\n", CNE->score);
-      Rprintf("In main, the cigar is %s\n", CNE->cigar);
       SET_STRING_ELT(cigar, i, mkChar(CNE->cigar));
       i++;
     }
@@ -897,7 +850,6 @@ SEXP myCeScan(SEXP tNames, SEXP tStarts, SEXP tEnds){
   p_tStarts = INTEGER_POINTER(tStarts);
   p_tEnds = INTEGER_POINTER(tEnds);
   n = GET_LENGTH(tNames);
-  Rprintf("The length is %d\n", n);
   for(i = 0; i < n ; i++){
     AllocVar(range);
     range->next = NULL;
@@ -915,14 +867,11 @@ SEXP myCeScan(SEXP tNames, SEXP tStarts, SEXP tEnds){
   for(i = 0; i < hash->size; ++i){
     for(hel = hash->table[i]; hel != NULL; hel = hel->next){
       list = hel-> val;
-      Rprintf("The is is %d\n", i);
-      Rprintf("The name is %s\n", hel->name);
       while((slPopHead(&list))){
         nRanges++;
       }
     }
   }
-  Rprintf("The number of ranges is %d\n", nRanges);
   return(R_NilValue);
 }
 
