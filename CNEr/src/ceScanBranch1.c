@@ -56,7 +56,31 @@ struct slThreshold
   int winSize;
   int ceStart;
   int ceEnd;
+  int nrCNE;
+  struct slCNE *CNE;
   FILE *outFile;
+};
+
+struct slCNE
+{
+  struct slCNE *next;
+  char *tName; // Name of the target sequence.
+  int tStart; // The 1-based coordinate
+  int tEnd; // The 1-based coordinate
+  char *qName; // Name of the query sequence.
+  int qStart;
+  int qEnd;
+  char strand;
+  float score;
+  char *cigar;
+};
+
+struct slAllCNE
+{
+  struct slAllCNE *next;
+  int minScore;
+  int winSize;
+  struct slCNE *CNE;
 };
 
 /*****************
@@ -306,6 +330,49 @@ void printCigarString(FILE *fh, struct axt *axt, int i, int j)
   if(count) fprintf(fh, "%d%c", count, type);
 }
 
+void addCigarString(struct slCNE *CNE, struct axt *axt, int i, int j){
+  /* Add cigar string to CNE object*/
+  char type = 'M'; /* in our case first column is always match */
+  char newType;
+  int count = 0;
+  // This is potentially risky to limit the cigar string to 1000 length long. Use realloc() to replace it later.
+  char temp[100];
+  //char *cigar = (char *) malloc(sizeof(char) * 1000);
+  char cigar[1000];
+  //Rprintf("Running now!\n");
+  strcpy(cigar, "");
+  for(; i <= j; i++) {
+    // Rprintf("checking columns\n");
+    /* Determine column type */
+    if(axt->tSym[i] == '-') newType = 'D';
+    else if(axt->qSym[i] == '-') newType = 'I';
+    else newType = 'M';
+    /* If same type as previous, just increase count, otherwise output previous */
+    if(type == newType) 
+      count++;
+    else{
+      sprintf(temp, "%d%c", count, type);
+      //Rprintf("The temp is %s\n", temp);
+      //Rprintf("The char1 is %s\n", cigar);
+      strcat(cigar, temp);
+      //Rprintf("The char2 is %s\n", cigar);
+      type = newType;
+      count = 1;
+    }
+  }
+  if(count){
+    sprintf(temp, "%d%c", count, type);
+    strcat(cigar, temp);
+  }
+  //Rprintf("The cigar string is %s\n", cigar);
+  char *holdCigar = (char *) malloc(sizeof(char) * 1000);
+  strcpy(holdCigar, cigar); 
+  CNE->cigar = holdCigar;
+  //Rprintf("The assigned cigar is %s\n", CNE->cigar);
+  //free(holdCigar);
+}
+
+
 void printElement(struct slThreshold *tr, struct axt *axt, struct hash *qSizes, int *profile, int *tPosList, int *qPosList)
 /* Print one conserved element on stdout.
  * Arguments:
@@ -348,6 +415,62 @@ void printElement(struct slThreshold *tr, struct axt *axt, struct hash *qSizes, 
   fputs("\n", tr->outFile);
 }
 
+void addCNE(struct slThreshold *tr, struct axt *axt, struct hash *qSizes, int *profile, int *tPosList, int *qPosList){
+  /* add one cne to slThreshold object's CNE element
+   * Arguments:
+   * tr - contains threshold-specific information:
+   * parameters used to find CE, CE location in alignment, and filehandle to print to
+   * axt - alignment
+   * qSizes - query assembly chromosome sizes
+   * profile - cumulative conservation profile for alignment
+   * tPosList, qPosList - target and query position arrays for alignment
+   */
+  int score, qStart, qEnd, qSize;
+  struct slCNE *CNE=NULL;
+  int i = tr->ceStart; /* start column of conserved element in alignment */
+  int j = tr->ceEnd; /* end column of conserved element in alignment */
+   /* truncate edges (mismatches and gaps) */
+  while(bpScores[ (int) axt->qSym[i] ][ (int) axt->tSym[i] ] <= 0) i++;
+  while(bpScores[ (int) axt->qSym[j] ][ (int) axt->tSym[j] ] <= 0) j--;
+
+  /* compute score */
+  score = profile[j] - profile[i] + bpScores[ (int) axt->qSym[i] ][ (int) axt->tSym[i] ];
+
+  /* recompute query positions if query strand is - */
+  if(axt->qStrand == '+') {
+    qStart = qPosList[i];
+    qEnd = qPosList[j];
+  }
+  else {
+    qSize = hashIntVal(qSizes, axt->qName);
+    qStart = qSize - qPosList[j] + 1;
+    qEnd = qSize - qPosList[i] + 1;
+  }
+  
+  /* add one cne to slThreshold object's CNE element */
+  tr->nrCNE++; // record the number of CNEs
+  CNE = needMem(sizeof(*CNE));
+  CNE->tName = axt->tName;
+  CNE->tStart = tPosList[i]-1;
+  CNE->tEnd = tPosList[j];
+  CNE->qName = axt->qName;
+  CNE->qStart = qStart-1;
+  CNE->qEnd = qEnd;
+  CNE->strand = axt->qStrand;
+  CNE->score = 100.0 * score / (j-i+1);
+  addCigarString(CNE, axt, i, j);
+  //Rprintf("In addCNE, the cigar is %s\n", CNE->cigar);
+  //Rprintf("Before slAddHead %s\n", tr->CNE->cigar);
+  slAddHead(&(tr->CNE), CNE);
+  //CNE->next = tr->CNE; 
+  //tr->CNE = CNE;
+  //freez(CNE);
+  //Rprintf("After slAddHead %s\n", tr->CNE->cigar);
+  //if(tr->CNE->next != NULL)
+  //  Rprintf("The next CNE cigar is %s\n", tr->CNE->next->cigar);
+}
+
+
 void scanAxt(struct axt *axt, struct hash *qSizes, struct hash *tFilterAll, struct hash *qFilterAll, struct slThreshold *thresholds)
 /* Scan one axt alignment and print conserved elements found to stdout.
  * THIS IS THE CORE FUNCTION OF THIS PROGRAM.
@@ -385,11 +508,13 @@ void scanAxt(struct axt *axt, struct hash *qSizes, struct hash *tFilterAll, stru
   struct range *qFilter = qFilterAll != NULL ? searchFilter(qFilterAll, axt->qName, axt->qStart+1) : NULL;
   /* Initialize CE bounds for each threshold */
   for(tr = thresholds; tr != NULL; tr = tr->next) {
+    //Rprintf("The threshold win size is %d\n", tr->winSize);
     tr->ceStart = -1; /* set to -1 = no CE found */
   }
   //Rprintf("The symCount is %d\n", axt->symCount);
   //Rprintf("The tSym %s\n", axt->tSym);
   //Rprintf("The qSym %s\n", axt->qSym);
+  
   /* Main loop: go through alignment */
   while(i < axt->symCount) { /* loop until we have looked at entire alignment */
 
@@ -441,31 +566,33 @@ void scanAxt(struct axt *axt, struct hash *qSizes, struct hash *tFilterAll, stru
       nrColumns++;
       /* loop over user-defined thresholds */
       for(tr = thresholds; tr != NULL; tr = tr->next) {
-  /* if have have seen enough columns to cover a window, evaluate that window */
-  if(nrColumns >= tr->winSize) {
-    /* compute and check window score */
-    score = nrColumns > tr->winSize ? profile[i] - profile[i - tr->winSize] : profile[i];
-    if(score >= tr->minScore) {
-      /* score is above threshold: begin or extend conserved element */
-      if(tr->ceStart == -1) tr->ceStart = i - tr->winSize + 1;
-      tr->ceEnd = i;
-    }
-    else {
-      /* score is below threshold: close and print any open conserved elements that are more than a window away */
-      if(tr->ceStart != -1 && tr->ceEnd < i - tr->winSize + 1) {
-        printElement(tr, axt, qSizes, profile, tPosList, qPosList);
-        tr->ceStart = -1;
-      }
-    }
-  }
+      /* if have have seen enough columns to cover a window, evaluate that window */
+        if(nrColumns >= tr->winSize) {
+        /* compute and check window score */
+          score = nrColumns > tr->winSize ? profile[i] - profile[i - tr->winSize] : profile[i];
+          if(score >= tr->minScore) {
+          /* score is above threshold: begin or extend conserved element */
+            if(tr->ceStart == -1) tr->ceStart = i - tr->winSize + 1;
+              tr->ceEnd = i;
+          }
+          else {
+          /* score is below threshold: close and print any open conserved elements that are more than a window away */
+            if(tr->ceStart != -1 && tr->ceEnd < i - tr->winSize + 1) {
+              //printElement(tr, axt, qSizes, profile, tPosList, qPosList);
+              addCNE(tr, axt, qSizes, profile, tPosList, qPosList);
+              tr->ceStart = -1;
+            }
+          }
+        }
       }
     }
 
     /* close and print any open conserved elements */
     for(tr = thresholds; tr != NULL; tr = tr->next) {
       if(tr->ceStart != -1) {
-  printElement(tr, axt, qSizes, profile, tPosList, qPosList);
-  tr->ceStart = -1;
+        //printElement(tr, axt, qSizes, profile, tPosList, qPosList);
+        addCNE(tr, axt, qSizes, profile, tPosList, qPosList);
+        tr->ceStart = -1;
       }
     }
   }
@@ -520,7 +647,7 @@ void ceScan(char **tFilterFile, char **qFilterFile, char **qSizeFile, int *winSi
     safef(path, sizeof(path), "%s_%d_%d", *outFilePrefix, tr->minScore, tr->winSize);
     tr->outFile = mustOpen(path, "w");
     slAddHead(&trList, tr);
-    //Rprintf("The winsiez %d\n", tr->winSize);
+    //Rprintf("The winsize %d\n", tr->winSize);
     //Rprintf("The path is %s\n", path);
   }
   //Rprintf("The filter1 is %s\n", *tFilterFile++);
@@ -671,16 +798,92 @@ SEXP myCeScanNow(SEXP tFilterNames, SEXP tFilterStarts, SEXP tFilterEnds, SEXP q
   axt = buildAxt(axtqNames, axtqStart, axtqEnd, axtqStrand, axtqSym, axttNames, axttStart, axttEnd, axttStrand, axttSym, score, symCount);
   // here I decided to build axt in the linked axt, rather than one by one. Perhaps it has lower performance than one by one way.
   struct slThreshold *thresholds, *tr;
+  struct slCNE *CNE;
+  int nrThresholds;
+  nrThresholds = GET_LENGTH(winSize);
+  //Rprintf("The number of thre is %d\n", nrThresholds);
+  int nrCNE[nrThresholds], i;
   thresholds = buildThreshold(winSize, minScore, outFilePrefix);
+
   setBpScores(bpScores);
+  SEXP tName, tStart, tEnd, qName, qStart, qEnd, strand, CNEscore, cigar, returnList, oneList; 
+  //int k = 0;
   while(axt){
     //Rprintf("The name of query seq is %s\n", axt->qName);
     scanAxt(axt, qSizes, tFilter, axt->qStrand == '+' ? qFilter : qFilterRev, thresholds);
     axt = axt->next;
+    //if(k > 50) break;
+    //k++;
   }
-  for(tr = thresholds; tr != NULL; tr = tr->next)
-    fclose(tr->outFile);
-  return(R_NilValue);
+  i = 0;
+  for(tr = thresholds; tr != NULL; tr = tr->next){
+    nrCNE[i] = tr->nrCNE;
+    i++;
+  }
+  // For debug
+  for(tr = thresholds; tr != NULL; tr = tr->next){
+    for(CNE = tr->CNE; CNE != NULL; CNE = CNE->next){
+      Rprintf("The cigar is %s\n", CNE->cigar);
+      Rprintf("The score is %f\n", CNE->score);
+    }
+  }
+
+  PROTECT(returnList = NEW_LIST(nrThresholds));
+  int *p_qStart, *p_qEnd, *p_tStart, *p_tEnd;
+  double *p_CNEscore;
+  int j = 0;
+  for(tr = thresholds; tr != NULL; tr = tr->next){
+    PROTECT(tName = NEW_CHARACTER(tr->nrCNE));
+    PROTECT(tStart = NEW_INTEGER(tr->nrCNE));
+    PROTECT(tEnd = NEW_INTEGER(tr->nrCNE));
+    PROTECT(qName = NEW_CHARACTER(tr->nrCNE));
+    PROTECT(qStart = NEW_INTEGER(tr->nrCNE));
+    PROTECT(qEnd = NEW_INTEGER(tr->nrCNE));
+    PROTECT(strand = NEW_CHARACTER(tr->nrCNE));
+    PROTECT(CNEscore = NEW_NUMERIC(tr->nrCNE));
+    PROTECT(cigar = NEW_CHARACTER(tr->nrCNE));
+    PROTECT(oneList = NEW_LIST(9));
+    i = 0;
+    p_qStart = INTEGER_POINTER(qStart);
+    p_qEnd = INTEGER_POINTER(qEnd);
+    p_tStart = INTEGER_POINTER(tStart);
+    p_tEnd = INTEGER_POINTER(tEnd);
+    p_CNEscore = NUMERIC_POINTER(CNEscore);
+    for(CNE = tr->CNE; CNE != NULL; CNE = CNE->next){
+    //Rprintf("The start is %d, the end is %d\n", CNE->tStart, CNE->tEnd);
+      SET_STRING_ELT(tName, i, mkChar(CNE->tName));
+      p_tStart[i] = CNE->tStart;
+      p_tEnd[i] = CNE->tEnd;
+      SET_STRING_ELT(qName, i, mkChar(CNE->qName));
+      p_qStart[i] = CNE->qStart;
+      p_qEnd[i] = CNE->qEnd;
+      if(CNE->strand == '+')
+        SET_STRING_ELT(strand, i, mkChar("+"));
+      else
+        SET_STRING_ELT(strand, i, mkChar("-"));
+      //SET_STRING_ELT(strand, i, mkChar(CNE->strand));
+      p_CNEscore[i] = CNE->score;
+      Rprintf("In main, the score is %f\n", CNE->score);
+      Rprintf("In main, the cigar is %s\n", CNE->cigar);
+      SET_STRING_ELT(cigar, i, mkChar(CNE->cigar));
+      i++;
+    }
+    SET_VECTOR_ELT(oneList, 0, tName);
+    SET_VECTOR_ELT(oneList, 1, tStart);
+    SET_VECTOR_ELT(oneList, 2, tEnd);
+    SET_VECTOR_ELT(oneList, 3, qName);
+    SET_VECTOR_ELT(oneList, 4, qStart);
+    SET_VECTOR_ELT(oneList, 5, qEnd);
+    SET_VECTOR_ELT(oneList, 6, strand);
+    SET_VECTOR_ELT(oneList, 7, CNEscore);
+    SET_VECTOR_ELT(oneList, 8, cigar);
+    SET_VECTOR_ELT(returnList, j, oneList);
+    UNPROTECT(10);
+    j++;
+  }
+  UNPROTECT(1);
+  //return(R_NilValue);
+  return returnList;
 }
 
 SEXP myCeScan(SEXP tNames, SEXP tStarts, SEXP tEnds){
