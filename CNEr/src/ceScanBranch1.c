@@ -770,7 +770,7 @@ SEXP myCeScanNow(SEXP tFilterNames, SEXP tFilterStarts, SEXP tFilterEnds, SEXP q
   thresholds = buildThreshold(winSize, minScore, outFilePrefix);
 
   setBpScores(bpScores);
-  SEXP tName, tStart, tEnd, qName, qStart, qEnd, strand, CNEscore, cigar, returnList, oneList; 
+  SEXP tName, tStart, tEnd, qName, qStart, qEnd, strand, CNEscore, cigar, returnList, oneList, list_names, returnListNames; 
   //int k = 0;
   while(axt){
     scanAxt(axt, qSizes, tFilter, axt->qStrand == '+' ? qFilter : qFilterRev, thresholds);
@@ -785,6 +785,8 @@ SEXP myCeScanNow(SEXP tFilterNames, SEXP tFilterStarts, SEXP tFilterEnds, SEXP q
   }
 
   PROTECT(returnList = NEW_LIST(nrThresholds));
+  PROTECT(returnListNames = NEW_CHARACTER(nrThresholds));
+  char name[20], temp[10];
   int *p_qStart, *p_qEnd, *p_tStart, *p_tEnd;
   double *p_CNEscore;
   int j = 0;
@@ -798,6 +800,7 @@ SEXP myCeScanNow(SEXP tFilterNames, SEXP tFilterStarts, SEXP tFilterEnds, SEXP q
     PROTECT(strand = NEW_CHARACTER(tr->nrCNE));
     PROTECT(CNEscore = NEW_NUMERIC(tr->nrCNE));
     PROTECT(cigar = NEW_CHARACTER(tr->nrCNE));
+    PROTECT(list_names = NEW_CHARACTER(9));
     PROTECT(oneList = NEW_LIST(9));
     i = 0;
     p_qStart = INTEGER_POINTER(qStart);
@@ -830,11 +833,30 @@ SEXP myCeScanNow(SEXP tFilterNames, SEXP tFilterStarts, SEXP tFilterEnds, SEXP q
     SET_VECTOR_ELT(oneList, 6, strand);
     SET_VECTOR_ELT(oneList, 7, CNEscore);
     SET_VECTOR_ELT(oneList, 8, cigar);
+    SET_STRING_ELT(list_names, 0,  mkChar("tName"));
+    SET_STRING_ELT(list_names, 1,  mkChar("tStart"));
+    SET_STRING_ELT(list_names, 2,  mkChar("tEnd"));
+    SET_STRING_ELT(list_names, 3,  mkChar("qName"));
+    SET_STRING_ELT(list_names, 4,  mkChar("qStart"));
+    SET_STRING_ELT(list_names, 5,  mkChar("qEnd"));
+    SET_STRING_ELT(list_names, 6,  mkChar("strand"));
+    SET_STRING_ELT(list_names, 7,  mkChar("score"));
+    SET_STRING_ELT(list_names, 8,  mkChar("cigar"));
+    setAttrib(oneList, R_NamesSymbol, list_names);
+    strcpy(name, "");
+    sprintf(temp, "%d", tr->minScore);
+    strcat(name, temp);
+    sprintf(temp, "%c", ',');
+    strcat(name, temp);
+    sprintf(temp, "%d", tr->winSize);
+    strcat(name, temp); 
+    SET_STRING_ELT(returnListNames, j, mkChar(name)); 
     SET_VECTOR_ELT(returnList, j, oneList);
-    UNPROTECT(10);
+    UNPROTECT(11);
     j++;
   }
-  UNPROTECT(1);
+  setAttrib(returnList, R_NamesSymbol, returnListNames);
+  UNPROTECT(2);
   //return(R_NilValue);
   return returnList;
 }
