@@ -260,14 +260,18 @@ SEXP myReadAxt(SEXP filepath){
   struct lineFile *lf;
   nrAxts = 0;
   for(i = 0; i < nrAxtFiles; i++){
+    Rprintf("reading the axt file %s\n", CHAR(STRING_ELT(filepath, i)));
     char *filepath_elt = (char *) malloc(sizeof(char) * strlen(CHAR(STRING_ELT(filepath, i))));
     strcpy(filepath_elt, CHAR(STRING_ELT(filepath, i)));
     lf = lineFileOpen(filepath_elt, TRUE);
     //lf = lineFileOpen(CHAR(STRING_ELT(filepath, i)), TRUE);
+    //Rprintf("Before reading axt\n");
+    //Rprintf("The number of axt is %d\n", nrAxts);
     while((curAxt = axtRead(lf)) != NULL){
       //Rprintf("The name of query sequence is %s\n", curAxt->qName);
-      curAxt->next = axt;
-      axt = curAxt;
+      //curAxt->next = axt;
+      //axt = curAxt;
+      slAddHead(&axt, curAxt);
       nrAxts++;
     }
     lineFileClose(&lf);
