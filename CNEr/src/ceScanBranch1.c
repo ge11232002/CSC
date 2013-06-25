@@ -753,7 +753,7 @@ struct slThreshold *buildThreshold(SEXP winSize, SEXP minScore, SEXP outFilePref
   return trList;
 }
 
-SEXP myCeScanNow(SEXP tFilterNames, SEXP tFilterStarts, SEXP tFilterEnds, SEXP qFilterNames, SEXP qFilterStarts, SEXP qFilterEnds, SEXP sizeNames, SEXP sizeSizes, SEXP axttNames, SEXP axttStart, SEXP axttEnd, SEXP axttStrand, SEXP axttSym, SEXP axtqNames, SEXP axtqStart, SEXP axtqEnd, SEXP axtqStrand, SEXP axtqSym, SEXP score, SEXP symCount, SEXP winSize, SEXP minScore, SEXP outFilePrefix){
+SEXP myCeScan(SEXP tFilterNames, SEXP tFilterStarts, SEXP tFilterEnds, SEXP qFilterNames, SEXP qFilterStarts, SEXP qFilterEnds, SEXP sizeNames, SEXP sizeSizes, SEXP axttNames, SEXP axttStart, SEXP axttEnd, SEXP axttStrand, SEXP axttSym, SEXP axtqNames, SEXP axtqStart, SEXP axtqEnd, SEXP axtqStrand, SEXP axtqSym, SEXP score, SEXP symCount, SEXP winSize, SEXP minScore, SEXP outFilePrefix){
   struct hash *tFilter, *qFilter, *qFilterRev, *qSizes;
   struct axt *axt;
   tFilter = buildHashForBed(tFilterNames, tFilterStarts, tFilterEnds);
@@ -860,42 +860,4 @@ SEXP myCeScanNow(SEXP tFilterNames, SEXP tFilterStarts, SEXP tFilterEnds, SEXP q
   //return(R_NilValue);
   return returnList;
 }
-
-SEXP myCeScan(SEXP tNames, SEXP tStarts, SEXP tEnds){
-  PROTECT(tNames = AS_CHARACTER(tNames));
-  PROTECT(tStarts = AS_INTEGER(tStarts));
-  PROTECT(tEnds = AS_INTEGER(tEnds));
-  int i, n, *p_tStarts, *p_tEnds;
-  struct slRange *range;
-  struct hash *hash = newHash(0);
-  struct hashEl *hel;
-  p_tStarts = INTEGER_POINTER(tStarts);
-  p_tEnds = INTEGER_POINTER(tEnds);
-  n = GET_LENGTH(tNames);
-  for(i = 0; i < n ; i++){
-    AllocVar(range);
-    range->next = NULL;
-    range->start = p_tStarts[i];
-    range->end = p_tEnds[i];
-    hel = hashLookup(hash, CHAR(STRING_ELT(tNames, i)));
-    if(hel == NULL)
-      hel = hashAdd(hash, CHAR(STRING_ELT(tNames, i)), range);
-    else
-      slSafeAddHead(&hel->val, range);
-  }
-  UNPROTECT(3);
-  int nRanges = 0;
-  struct slRange *list;
-  for(i = 0; i < hash->size; ++i){
-    for(hel = hash->table[i]; hel != NULL; hel = hel->next){
-      list = hel-> val;
-      while((slPopHead(&list))){
-        nRanges++;
-      }
-    }
-  }
-  return(R_NilValue);
-}
-
-
 
