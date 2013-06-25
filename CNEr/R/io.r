@@ -1,6 +1,6 @@
 
 
-readAxt = function(axtFile){
+readAxt_obsolete = function(axtFile){
   axtContent = readLines(axtFile)
   axtContent = axtContent[grep("^#", axtContent, invert=TRUE)]
   axtContent = axtContent[axtContent != ""]
@@ -44,6 +44,7 @@ readBed = function(bedFile){
 #    user  system elapsed
 #    51.890   0.757  52.659
 
+#############################C version######################################
 readBedToGRanges = function(bedFile){
   require(GenomicRanges)
   dyn.load("~/Repos/CSC/CNEr/src/io.so")
@@ -53,9 +54,31 @@ readBedToGRanges = function(bedFile){
                 strand=factor("+"))
   return(bed)
 }
+# bedHuman = readBedToGRanges("/export/data/CNEs/hg19/filters/filter_regions.hg19.bed")
+# bedZebrafish = readBedToGRanges("/export/data/CNEs/danRer7/filters/filter_regions.danRer7.bed")
 # system.time(foo<-readBedToGRanges(bedFile))
 #    user  system elapsed
 #    2.272   0.133   2.414
 
-
-
+# axtFiles = c("/export/downloads/ucsc/axtNet/hg19/chr2.hg19.danRer7.net.axt.gz", "/export/downloads/ucsc/axtNet/hg19/chr3.hg19.danRer7.net.axt.gz", "/export/downloads/ucsc/axtNet/hg19/chr4.hg19.danRer7.net.axt.gz")
+readAxt = function(axtFiles){
+  # Read axt files into R axt object
+  require(GenomicRanges)
+  require(Biostrings)
+  dyn.load("~/Repos/CSC/CNEr/src/io.so")
+  myAxt = .Call("myReadAxt", axtFiles)
+  axt = axt(targetRanges=GRanges(seqnames=Rle(myAxt[[1]]),
+                                 ranges=IRanges(start=myAxt[[2]],
+                                                end=myAxt[[3]]),
+                                 strand=Rle(myAxt[[4]])),
+            targetSeqs=DNAStringSet(myAxt[[5]]),
+            queryRanges=GRanges(seqnames=Rle(myAxt[[6]]),
+                                ranges=IRanges(start=myAxt[[7]],
+                                               end=myAxt[[8]]),
+                                strand=Rle(myAxt[[9]])),
+            querySeqs=DNAStringSet(myAxt[[10]]),
+            score=myAxt[[11]],
+            symCount=myAxt[[12]]
+            )
+  return(axt)
+}
