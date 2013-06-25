@@ -731,12 +731,12 @@ struct axt *buildAxt(SEXP axtqNames, SEXP axtqStart, SEXP axtqEnd, SEXP axtqStra
   return axt;
 }
 
-struct slThreshold *buildThreshold(SEXP winSize, SEXP minScore, SEXP outFilePrefix){
+struct slThreshold *buildThreshold(SEXP winSize, SEXP minScore){
   struct slThreshold *trList = NULL, *tr;
   char path[PATH_LEN];
   PROTECT(winSize = AS_INTEGER(winSize));
   PROTECT(minScore = AS_INTEGER(minScore));
-  PROTECT(outFilePrefix = AS_CHARACTER(outFilePrefix));
+  //PROTECT(outFilePrefix = AS_CHARACTER(outFilePrefix));
   int i, nThresholds = GET_LENGTH(winSize);
   int *p_winSize, *p_minScore;
   p_winSize = INTEGER_POINTER(winSize);
@@ -749,11 +749,11 @@ struct slThreshold *buildThreshold(SEXP winSize, SEXP minScore, SEXP outFilePref
     //tr->outFile = mustOpen(path, "w");
     slAddHead(&trList, tr);
   }
-  UNPROTECT(3);
+  UNPROTECT(2);
   return trList;
 }
 
-SEXP myCeScan(SEXP tFilterNames, SEXP tFilterStarts, SEXP tFilterEnds, SEXP qFilterNames, SEXP qFilterStarts, SEXP qFilterEnds, SEXP sizeNames, SEXP sizeSizes, SEXP axttNames, SEXP axttStart, SEXP axttEnd, SEXP axttStrand, SEXP axttSym, SEXP axtqNames, SEXP axtqStart, SEXP axtqEnd, SEXP axtqStrand, SEXP axtqSym, SEXP score, SEXP symCount, SEXP winSize, SEXP minScore, SEXP outFilePrefix){
+SEXP myCeScan(SEXP tFilterNames, SEXP tFilterStarts, SEXP tFilterEnds, SEXP qFilterNames, SEXP qFilterStarts, SEXP qFilterEnds, SEXP sizeNames, SEXP sizeSizes, SEXP axttNames, SEXP axttStart, SEXP axttEnd, SEXP axttStrand, SEXP axttSym, SEXP axtqNames, SEXP axtqStart, SEXP axtqEnd, SEXP axtqStrand, SEXP axtqSym, SEXP score, SEXP symCount, SEXP winSize, SEXP minScore){
   struct hash *tFilter, *qFilter, *qFilterRev, *qSizes;
   struct axt *axt;
   tFilter = buildHashForBed(tFilterNames, tFilterStarts, tFilterEnds);
@@ -767,7 +767,7 @@ SEXP myCeScan(SEXP tFilterNames, SEXP tFilterStarts, SEXP tFilterEnds, SEXP qFil
   int nrThresholds;
   nrThresholds = GET_LENGTH(winSize);
   int nrCNE[nrThresholds], i;
-  thresholds = buildThreshold(winSize, minScore, outFilePrefix);
+  thresholds = buildThreshold(winSize, minScore);
 
   setBpScores(bpScores);
   SEXP tName, tStart, tEnd, qName, qStart, qEnd, strand, CNEscore, cigar, returnList, oneList, list_names, returnListNames; 
