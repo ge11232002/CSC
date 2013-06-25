@@ -45,8 +45,14 @@ readBed = function(bedFile){
 #    51.890   0.757  52.659
 
 #############################C version######################################
-readBedToGRanges = function(bedFile){
+readBedToGRanges = function(bedFile=NULL){
   require(GenomicRanges)
+  if(is.null(bedFile)){
+    return(NULL)
+  }
+  if(!file.exists(bedFile)){
+    stop("No such file ", bedFile) 
+  }
   dyn.load("~/Repos/CSC/CNEr/src/io.so")
   bed = .Call("myReadBed", bedFile)
   bed = GRanges(seqnames=Rle(bed[[1]]),
@@ -63,6 +69,10 @@ readBedToGRanges = function(bedFile){
 # axtFiles = c("/export/downloads/ucsc/axtNet/hg19/chr2.hg19.danRer7.net.axt.gz", "/export/downloads/ucsc/axtNet/hg19/chr3.hg19.danRer7.net.axt.gz", "/export/downloads/ucsc/axtNet/hg19/chr4.hg19.danRer7.net.axt.gz")
 readAxt = function(axtFiles){
   # Read axt files into R axt object
+  index_noexists = !file.exists(axtFiles)
+  if(any(index_noexists)){
+    stop("No such file ", paste(axtFiles[index_noexists], sep=" "))
+  }
   require(GenomicRanges)
   require(Biostrings)
   dyn.load("~/Repos/CSC/CNEr/src/io.so")

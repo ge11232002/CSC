@@ -1,4 +1,6 @@
-
+library(Biostrings)
+library(GenomicRanges)
+library(rtracklayer)
 
 setClass(Class="axt",
          representation(targetRanges="GRanges",

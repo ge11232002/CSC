@@ -23,3 +23,12 @@ seqToAlignment = function(DNAStringSet){
   return(foo)
 }
 
+
+
+
+
+
+
+
+
+
