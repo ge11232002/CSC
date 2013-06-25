@@ -745,8 +745,8 @@ struct slThreshold *buildThreshold(SEXP winSize, SEXP minScore, SEXP outFilePref
     tr = needMem(sizeof(*tr));
     tr->minScore = p_minScore[i];
     tr->winSize = p_winSize[i];
-    safef(path, sizeof(path), "%s_%d_%d", CHAR(STRING_ELT(outFilePrefix, 0)), tr->minScore, tr->winSize);
-    tr->outFile = mustOpen(path, "w");
+    //safef(path, sizeof(path), "%s_%d_%d", CHAR(STRING_ELT(outFilePrefix, 0)), tr->minScore, tr->winSize);
+    //tr->outFile = mustOpen(path, "w");
     slAddHead(&trList, tr);
   }
   UNPROTECT(3);
