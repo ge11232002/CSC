@@ -7,6 +7,7 @@
 #include "options.h"
 #include "axt.h"
 #include "Rdefines.h"
+#include "IRanges_interface.h"
 
 struct range
 /* Start and end coordinate pair */
@@ -44,10 +45,10 @@ struct slThreshold
 };
 
 
-struct hash *readBed(char *fileName)
+//struct hash *readBed(char *fileName)
 /* Read a 3-column bed file into a hash, where keys are sequence names
  * and values are linked lists of coordinate ranges (slRange structures). */
-{
+/*{
   struct lineFile *lf = lineFileOpen(fileName, TRUE);
   struct hash *hash = newHash(0);
   struct hashEl *hel;
@@ -74,21 +75,21 @@ struct hash *readBed(char *fileName)
   lineFileClose(&lf);
 
   return hash;
-}
+}*/
 
-int slRangeCmpStart(const void *va, const void *vb)
+//int slRangeCmpStart(const void *va, const void *vb)
 /* Comparison function to sort linked list of ranges by start coordinate. */
-{
+/*{
   const struct slRange *a = *((struct slRange **)va);
   const struct slRange *b = *((struct slRange **)vb);
   return a->start - b->start;
-}
+}*/
 
-void collapseRangeList(struct hashEl *hel)
+//void collapseRangeList(struct hashEl *hel)
 /* Collapse a range list to a set of sorted, non-overlapping ranges. */
-{
+/*{
   struct slRange *a, *b;
-  slSort(&hel->val, slRangeCmpStart); /* sort by start coord */
+  slSort(&hel->val, slRangeCmpStart); // sort by start coord 
   a = hel->val;
   while((b = a->next)) {
     if(b->start <= a->end) {
@@ -98,15 +99,15 @@ void collapseRangeList(struct hashEl *hel)
     }
     else a = b;
   }
-  /*for(a = hel->val; a; a=a->next) {
-    printf("%d\t%d\n", a->start, a->end);
-    }*/
-}
+  //for(a = hel->val; a; a=a->next) {
+  //  printf("%d\t%d\n", a->start, a->end);
+  //  }
+}*/
 
-void convertRangeListToArray(struct hashEl *hel)
+//void convertRangeListToArray(struct hashEl *hel)
 /* Convert a linked list of ranges to an array.
  * The reason for doing this is that we can do a fast binary search on the array. */
-{
+/*{
   struct slRange *list, *slEl;
   struct range *arrayEl;
   struct rangeArray *arrayInfo;
@@ -124,17 +125,17 @@ void convertRangeListToArray(struct hashEl *hel)
     arrayEl->end = slEl->end;
     free(slEl);
     arrayEl++;
-  }
+  }*/
 
   /* The last array element is a "dummy" element that contains a coordinate pair
    * beyond any chromosome size. The presence of this element simplifies going
    * through the array in scanAxt() as it removes the need for an out-of-bounds check. */
-  arrayEl->start = 1e9;
+/*  arrayEl->start = 1e9;
   arrayEl->end = 1e9+1;
-}
+}*/
 
-SEXP readFilter(SEXP filepath)
-/* Load a filter file. */
+/*SEXP readFilter(SEXP filepath)
+// Load a filter file. 
 {
   //SEXP filepath_elt;
   PROTECT(filepath = AS_CHARACTER(filepath));
@@ -193,7 +194,7 @@ SEXP readFilter(SEXP filepath)
   SET_VECTOR_ELT(returnList, 2, ends);
   UNPROTECT(5);
   return(returnList);
-}
+}*/
 
 /*############################################*/
 
@@ -345,5 +346,30 @@ SEXP myReadAxt(SEXP filepath){
   return(returnList);
 }
 
-
+SEXP readAxt(SEXP filepath){
+  // load a axt file into R, and to be axt object
+  filepath = AS_CHARACTER(filepath);
+  int nrAxtFiles, i, nrAxts;
+  nrAxtFiles = GET_LENGTH(filepath);
+  Rprintf("The number of axt files %d\n", nrAxtFiles);
+  struct axt *axt=NULL, *curAxt;
+  struct lineFile *lf;
+  nrAxts = 0;
+  /*for(i = 0; i < nrAxtFiles; i++){
+    Rprintf("reading the axt file %s\n", CHAR(STRING_ELT(filepath, i)));
+    char *filepath_elt = (char *) R_alloc(strlen(CHAR(STRING_ELT(filepath, i))), sizeof(char));
+    strcpy(filepath_elt, CHAR(STRING_ELT(filepath, i)));
+    lf = lineFileOpen(filepath_elt, TRUE);
+    while((curAxt = axtRead(lf)) != NULL){
+      //slAddHead(&axt, curAxt);
+      //curAxt->next = axt;
+      //axt = curAxt;
+      axtFree(&curAxt);
+      nrAxts++;
+    }
+    lineFileClose(&lf);
+  }
+  //axtFreeList(&axt);*/
+  return R_NilValue;
+}
 
