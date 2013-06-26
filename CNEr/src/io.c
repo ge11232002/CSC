@@ -1,13 +1,4 @@
-#include "R.h"
-#include  <ctype.h>  //for the tolower()
-#include "common.h"
-#include "linefile.h"
-#include "hash.h"
-#include "obscure.h"
-#include "options.h"
-#include "axt.h"
-#include "Rdefines.h"
-#include "IRanges_interface.h"
+#include "CNEr.h"
 
 struct range
 /* Start and end coordinate pair */
@@ -346,6 +337,7 @@ SEXP myReadAxt(SEXP filepath){
   return(returnList);
 }
 
+/* ------------------------- Use the DNAStringSet way--------------------------*/
 SEXP readAxt(SEXP filepath){
   // load a axt file into R, and to be axt object
   filepath = AS_CHARACTER(filepath);
@@ -373,3 +365,7 @@ SEXP readAxt(SEXP filepath){
   return R_NilValue;
 }
 
+/* --- .Call ENTRY POINT --- */
+SEXP axt_info(){
+
+}
