@@ -346,9 +346,11 @@ SEXP readAxt(SEXP filepath){
   Rprintf("The number of axt files %d\n", nrAxtFiles);
   struct axt *axt=NULL, *curAxt;
   struct lineFile *lf;
+  IntAE width_buf;
   nrAxts = 0;
-  /*for(i = 0; i < nrAxtFiles; i++){
-    Rprintf("reading the axt file %s\n", CHAR(STRING_ELT(filepath, i)));
+  width_buf = new_IntAE(0, 0, 0);
+  for(i = 0; i < nrAxtFiles; i++){
+    //Rprintf("reading the axt file %s\n", CHAR(STRING_ELT(filepath, i)));
     char *filepath_elt = (char *) R_alloc(strlen(CHAR(STRING_ELT(filepath, i))), sizeof(char));
     strcpy(filepath_elt, CHAR(STRING_ELT(filepath, i)));
     lf = lineFileOpen(filepath_elt, TRUE);
@@ -356,16 +358,227 @@ SEXP readAxt(SEXP filepath){
       //slAddHead(&axt, curAxt);
       //curAxt->next = axt;
       //axt = curAxt;
+      //Rprintf("The symCount is %d\n", curAxt->symCount);
+      //Rprintf("The sequence1 is %s\n", CHAR(mkCharLen(curAxt->tSym, curAxt->symCount)));
+      //Rprintf("The sequence2 is %s\n", CHAR(mkChar(curAxt->tSym)));
+      IntAE_insert_at(&width_buf, IntAE_get_nelt(&width_buf), curAxt->symCount);
       axtFree(&curAxt);
       nrAxts++;
     }
     lineFileClose(&lf);
   }
-  //axtFreeList(&axt);*/
-  return R_NilValue;
+  Rprintf("The total number of axt is %d\n", nrAxts);
+  SEXP ans, width;
+  PROTECT(width = new_INTEGER_from_IntAE(&width_buf));
+  PROTECT(ans = alloc_XRawList("BStringSet", "BString", width));
+  cachedXVectorList cached_ans;
+  cachedCharSeq cached_ans_elt;
+  cached_ans = cache_XVectorList(ans);
+  SEXP qNames, qStart, qEnd, qStrand, qSym, tNames, tStart, tEnd, tStrand, tSym, score, symCount, returnList;
+  PROTECT(qNames = NEW_CHARACTER(nrAxts));
+  PROTECT(qStart = NEW_INTEGER(nrAxts));
+  PROTECT(qEnd = NEW_INTEGER(nrAxts));
+  PROTECT(qStrand = NEW_CHARACTER(nrAxts));
+  PROTECT(qSym = NEW_CHARACTER(nrAxts));
+  PROTECT(tNames = NEW_CHARACTER(nrAxts));
+  PROTECT(tStart = NEW_INTEGER(nrAxts));
+  PROTECT(tEnd = NEW_INTEGER(nrAxts));
+  PROTECT(tStrand = NEW_CHARACTER(nrAxts));
+  PROTECT(tSym = NEW_CHARACTER(nrAxts));
+  PROTECT(score = NEW_INTEGER(nrAxts));
+  PROTECT(symCount = NEW_INTEGER(nrAxts));
+  PROTECT(returnList = NEW_LIST(12));
+  int *p_qStart, *p_qEnd, *p_tStart, *p_tEnd, *p_score, *p_symCount;
+  p_qStart = INTEGER_POINTER(qStart);
+  p_qEnd = INTEGER_POINTER(qEnd);
+  p_tStart = INTEGER_POINTER(tStart);
+  p_tEnd = INTEGER_POINTER(tEnd);
+  p_score = INTEGER_POINTER(score);
+  p_symCount = INTEGER_POINTER(symCount);
+  int j = 0;
+  i = 0;
+  for(j = 0; j < nrAxtFiles; j++){
+    char *filepath_elt = (char *) R_alloc(strlen(CHAR(STRING_ELT(filepath, j))), sizeof(char));
+    strcpy(filepath_elt, CHAR(STRING_ELT(filepath, j)));
+    lf = lineFileOpen(filepath_elt, TRUE);
+    while((axt = axtRead(lf)) != NULL){
+      //Rprintf("The width is %d\n", INTEGER(width)[i]);
+      SET_STRING_ELT(qNames, i, mkChar(axt->qName));
+      p_qStart[i] = axt->qStart + 1;
+      p_qEnd[i] = axt->qEnd;
+      if(axt->qStrand == '+')
+        SET_STRING_ELT(qStrand, i, mkChar("+"));
+      else
+        SET_STRING_ELT(qStrand, i, mkChar("-"));
+      //Rprintf("I am here\n");
+      cached_ans_elt = get_cachedXRawList_elt(&cached_ans, i);
+      //get_cachedXRawList_elt(&cached_ans, i);
+      //Rprintf("I am here2\n");
+      memcpy((char *) (&cached_ans_elt)->seq, axt->qSym, axt->symCount * sizeof(char));
+      //SET_STRING_ELT(symTemp, 0, mkChar(axt->qSym));
+      //SET_STRING_ELT(qSym, i, STRING_ELT(symTemp, 0));
+      //SET_STRING_ELT(qSym, i, mkChar(axt->qSym));
+      //STRING_ELT(qSym, i) = (char *) R_alloc(axt->symCount, sizeof(char));
+      //SET_STRING_ELT(qSym, i, mkCharLen(axt->qSym, axt->symCount));
+      SET_STRING_ELT(tNames, i, mkChar(axt->tName));
+      p_tStart[i] = axt->tStart + 1;
+      p_tEnd[i] = axt->tEnd;
+      if(axt->tStrand == '+')
+        SET_STRING_ELT(tStrand, i, mkChar("+"));
+      else
+        SET_STRING_ELT(tStrand, i, mkChar("-"));
+      //mkChar(axt->tSym);
+      //SET_STRING_ELT(tSym, i, mkChar(axt->tSym));
+      //SET_STRING_ELT(tSym, i, mkCharLen(axt->tSym, axt->symCount));
+      p_score[i] = axt->score;
+      p_symCount[i] = axt->symCount;
+      i++;
+      axtFree(&axt);
+    }
+    lineFileClose(&lf);
+  }
+  SET_VECTOR_ELT(returnList, 0, tNames);
+  SET_VECTOR_ELT(returnList, 1, tStart);
+  SET_VECTOR_ELT(returnList, 2, tEnd);
+  SET_VECTOR_ELT(returnList, 3, tStrand);
+  SET_VECTOR_ELT(returnList, 4, tSym);
+  SET_VECTOR_ELT(returnList, 5, qNames);
+  SET_VECTOR_ELT(returnList, 6, qStart);
+  SET_VECTOR_ELT(returnList, 7, qEnd);
+  SET_VECTOR_ELT(returnList, 8, qStrand);
+  SET_VECTOR_ELT(returnList, 9, qSym);
+  SET_VECTOR_ELT(returnList, 10, score);
+  SET_VECTOR_ELT(returnList, 11, symCount);
+  UNPROTECT(15);
+  //axtFree(&curAxt);
+  //return R_NilValue;
+  return ans;
 }
+
+
+/*#define IOBUF_SIZE 20002
+static char errmsg_buf[200];
+
+static const char *AXT_comment_markup = "#", AXT_desc_markup = "0";
+
+typedef struct axt_loader {
+  const int *lkup;
+  int lkup_length;
+  void (*load_desc_line)(struct axt_loader *loader,
+             const cachedCharSeq *desc_line);
+  void (*load_empty_seq)(struct axt_loader *loader);
+  void (*load_seq_data)(struct axt_loader *loader,
+            const cachedCharSeq *seq_data);
+  int nrec;
+  void *ext;  // loader extension (optional)
+} AXTloader;*/
+
+/*
+ * The AXTINFO loader only loads the lengths (and optionally the names)
+ * of the sequences.
+ */
+/*typedef struct axtinfo_loader_ext {
+  CharAEAE ans_names_buf;
+  IntAE seqlengths_buf;
+} AXTINFO_loaderExt;
+
+static void AXTINFO_load_desc_line(AXTloader *loader,
+    const cachedCharSeq *desc_line)
+{
+  AXTINFO_loaderExt *loader_ext;
+  CharAEAE *ans_names_buf;
+
+  loader_ext = loader->ext;
+  ans_names_buf = &(loader_ext->ans_names_buf);
+  // This works only because desc_line->seq is nul-terminated!
+  append_string_to_CharAEAE(ans_names_buf, desc_line->seq);
+  return;
+}
+
+static void AXTINFO_load_empty_seq(AXTloader *loader)
+{
+  AXTINFO_loaderExt *loader_ext;
+  IntAE *seqlengths_buf;
+
+  loader_ext = loader->ext;
+  seqlengths_buf = &(loader_ext->seqlengths_buf);
+  IntAE_insert_at(seqlengths_buf, IntAE_get_nelt(seqlengths_buf), 0);
+  return;
+}
+
+static void AXTINFO_load_seq_data(AXTloader *loader,
+    const cachedCharSeq *seq_data)
+{
+  AXTINFO_loaderExt *loader_ext;
+  IntAE *seqlengths_buf;
+
+  loader_ext = loader->ext;
+  seqlengths_buf = &(loader_ext->seqlengths_buf);
+  seqlengths_buf->elts[IntAE_get_nelt(seqlengths_buf) - 1] +=
+    seq_data->length;
+  return;
+}
+
+static AXTINFO_loaderExt new_AXTINFO_loaderExt()
+{
+  AXTINFO_loaderExt loader_ext;
+
+  loader_ext.ans_names_buf = new_CharAEAE(0, 0);
+  loader_ext.seqlengths_buf = new_IntAE(0, 0, 0);
+  return loader_ext;
+}
+
+static AXTloader new_AXTINFO_loader(SEXP lkup, int load_descs,
+    AXTINFO_loaderExt *loader_ext)
+{
+  AXTloader loader;
+
+  if (lkup == R_NilValue) {
+    loader.lkup = NULL;
+  } else {
+    loader.lkup = INTEGER(lkup);
+    loader.lkup_length = LENGTH(lkup);
+  }
+  loader.load_desc_line = load_descs ? &AXTINFO_load_desc_line : NULL;
+  loader.load_empty_seq = &AXTINFO_load_empty_seq;
+  loader.load_seq_data = &AXTINFO_load_seq_data;
+  loader.nrec = 0;
+  loader.ext = loader_ext;
+  return loader;
+}*/
+
+/*
+ * Ignore empty lines and lines starting with 'FASTA_comment_markup' like in
+ * the original Pearson FASTA format.
+ */
+/*static const char *parse_AXT_file(FILE *stream, int *recno, int *ninvalid,
+    int nrec, int skip, AXTloader *loader)
+{
+  
+}*/
 
 /* --- .Call ENTRY POINT --- */
-SEXP axt_info(){
+/*SEXP axt_info(SEXP efp_list, SEXP nrec, SEXP skip, SEXP use_names, SEXP lkup){
+  int nrec0, skip0, load_descs, i, recno, ninvalid;
+  AXTINFO_loaderExt loader_ext;
+  AXTloader loader;
+  FILE *stream;
+  SEXP ans, ans_names;
+  const char *errmsg;
 
-}
+  nrec0 = INTEGER(nrec)[0];
+  skip0 = INTEGER(skip)[0];
+  load_descs = LOGICAL(use_names)[0];
+  loader_ext = new_AXTINFO_loaderExt();
+  loader = new_AXTINFO_loader(lkup, load_descs, &loader_ext);
+  recno = 0;
+  for(i = 0; i < LENGTH(efp_list); i++){
+    stream = R_ExternalPtrAddr(VECTOR_ELT(efp_list, i));
+    ninvalid = 0;
+    errmsg = parse_AXT_file(stream, &recno, &ninvalid,
+        nrec0, skip0, &loader);
+  }
+}*/
+
+
+
