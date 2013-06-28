@@ -11,5 +11,7 @@ Usage:
 
 
 ## The sites sequences
+use DNAStringSetList to store all the sequences. 
+There are thousands of sets of sequences there, so the speed might not be too bad to fetch from DNAStringSetList.
 
 
