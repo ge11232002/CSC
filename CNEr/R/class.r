@@ -79,7 +79,7 @@ setMethod("[", "axt",
               stop("invalid subsetting")
             if(missing(i))
               return(x)
-            i = IRanges:::normalizeSingleBracketSubscript(i, x)
+            #i = IRanges:::normalizeSingleBracketSubscript(i, x)
             ans_targetRanges = targetRanges(x)[i]
             ans_targetSeqs = targetSeqs(x)[i]
             ans_queryRanges = queryRanges(x)[i]

@@ -370,7 +370,7 @@ SEXP readAxt(SEXP filepath){
   Rprintf("The total number of axt is %d\n", nrAxts);
   SEXP ans, width;
   PROTECT(width = new_INTEGER_from_IntAE(&width_buf));
-  PROTECT(ans = alloc_XRawList("BStringSet", "BString", width));
+  PROTECT(ans = alloc_XRawList("DNAStringSet", "DNAString", width));
   cachedXVectorList cached_ans;
   cachedCharSeq cached_ans_elt;
   cached_ans = cache_XVectorList(ans);

@@ -33,6 +33,7 @@ qFilterStarts = start(qFilter)
 qFilterEnds = end(qFilter)
 # process one alignment
 i = 1
+system.time(for(i in 1:1000){
 tFilterNow = subjectHits(targetOverlaps)[queryHits(targetOverlaps) == i]
 if(length(tFilterNow) == 0){
   tFilterStart = -1
@@ -49,6 +50,7 @@ if(length(qFilterNow) == 0){
   qFilterStart = qFilterStarts[qFilterNow]
   qFilterEnd = qFilterEnds[qFilterNow]
 }
+})
 dyn.load("ceScan.so")
 .C("ceScan", 
       as.character(targetSeqs[i]), 
@@ -65,4 +67,5 @@ dyn.load("ceScan.so")
       )
 
 
-
+####################
+dyn.load("src/")
