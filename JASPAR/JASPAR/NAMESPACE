@@ -1,0 +1,18 @@
+
+import(Biostrings)
+import(RSQLite)
+import(BiocGenerics)
+
+
+
+exportClasses(
+  JASPARDb, JASPAR
+  )
+
+export(
+  JASPARDb, JASPAR
+  )
+
+exportMethods(
+  "[", "show", "searchDb", "metadata", "FMatrix", "seqs", "names"
+  )

@@ -85,15 +85,17 @@ setGeneric("ID", function(x) standardGeneric("ID"))
 setMethod("ID", "JASPAR", function(x) x@ID)
 setGeneric("collection", function(x) standardGeneric("collection"))
 setMethod("collection", "JASPAR", function(x) unique(x@collection))
-setGeneric("name", function(x) standardGeneric("name"))
-setMethod("name", "JASPAR", function(x) x@name)
+setMethod("names", "JASPAR", function(x) x@name)
 setMethod("metadata", "JASPAR", function(x){
                                 res = cbind(x@ID, x@name, as.vector(x@species), as.vector(x@TF_class), as.vector(x@family), as.vector(x@tax_group), x@acc, as.vector(x@type), x@medline, x@pazar_tf_id, x@comment)
                                 colnames(res) = c("ID", "name", "species", "class", "family", "tax_group", "acc", "type", "medline", " Pazar ID", "comment")
                                 rownames(res) = paste(x@ID, x@version, sep=".")
                                 return(res)
                                 })
-
+setGeneric("FMatrix", function(x) standardGeneric("FMatrix"))
+setMethod("FMatrix", "JASPAR", function(x) x@FMatrix)
+setGeneric("seqs", function(x) standardGeneric("seqs"))
+setMethod("seqs", "JASPAR", function(x) x@seqs)
 
 #### setMethods
 setGeneric("openDb", function(x) standardGeneric("openDb"))
@@ -194,16 +196,39 @@ setMethod("[", "JASPAR",
               stop("invalid subsetting")
             if(missing(i))
               return(x)
-            i = IRanges:::normalizeSingleBracketSubscript(i, x)
-            ans_ = targetRanges(x)[i]
-            ans_targetSeqs = targetSeqs(x)[i]
-            ans_queryRanges = queryRanges(x)[i]
-            ans_querySeqs = querySeqs(x)[i]
-            ans_score = score(x)[i]
-            ans_symCount = symCount(x)[i]
-            clone(x, targetRanges=ans_targetRanges, targetSeqs=ans_targetSeqs,
-                  queryRanges=ans_queryRanges, querySeqs=ans_querySeqs,
-                  score=ans_score, symCount=ans_symCount)
+            #i = IRanges:::normalizeSingleBracketSubscript(i, x)
+            ans_ID = x@ID[i]
+            ans_collection = x@collection[i]
+            ans_version = x@version[i]
+            ans_name = x@name[i]
+            ans_species = x@species[i]
+            ans_TF_class = x@TF_class[i]
+            ans_medline = x@medline[i]
+            ans_family = x@family[i]
+            ans_tax_group = x@tax_group[i]
+            ans_acc = x@acc[i]
+            ans_type = x@type[i]
+            ans_pazar_tf_id = x@pazar_tf_id[i]
+            ans_comment = x@comment[i]
+            ans_FMatrix = x@FMatrix[i]
+            ans_seqs = x@seqs[i]
+            clone(x, ID=ans_ID, collection=ans_collection, version=ans_version,
+                  name=ans_name, species=ans_species, TF_class=ans_TF_class,
+                  medline=ans_medline, family=ans_family, tax_group=ans_tax_group,
+                  acc=ans_acc, type=ans_type, pazar_tf_id=ans_pazar_tf_id, 
+                  comment=ans_comment, FMatrix=ans_FMatrix, seqs=ans_seqs)
           }
           )
+
+### - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+### "show" method.
+###
+
+setMethod("show", "JASPAR",
+          function(object){
+            cat(" ", length(object@ID), " matched results in ", class(object))
+            cat("\n")
+          }
+          )
+
 
