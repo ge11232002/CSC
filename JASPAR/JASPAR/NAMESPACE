@@ -1,4 +1,4 @@
-
+import(IRanges)
 import(Biostrings)
 import(RSQLite)
 import(BiocGenerics)

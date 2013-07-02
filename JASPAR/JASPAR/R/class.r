@@ -11,6 +11,7 @@ setClass("JASPARDb",
                         source_url="character",
                         metadata_dirpath="character",
                         conn="SQLiteConnection")
+## perhaps should put a metadata table in JASPAR.sqlite and fill this object dynamically
          )
 
 setClass("JASPAR",
@@ -93,7 +94,10 @@ setMethod("metadata", "JASPAR", function(x){
                                 return(res)
                                 })
 setGeneric("FMatrix", function(x) standardGeneric("FMatrix"))
-setMethod("FMatrix", "JASPAR", function(x) x@FMatrix)
+setMethod("FMatrix", "JASPAR", function(x){
+                                          res = x@FMatrix
+                                          names(res) = paste(x@ID, x@version, sep=".")
+                                          return(res)})
 setGeneric("seqs", function(x) standardGeneric("seqs"))
 setMethod("seqs", "JASPAR", function(x) x@seqs)
 
@@ -177,7 +181,11 @@ setMethod("searchDb", "JASPARDb", function(x, ID=NULL, name=NULL, species=NULL,
         res$FMatrix[[as.character(dbID)]] = matrix(matrix_data_table[matrix_data_table$ID == dbID, "val"], nrow=4, byrow=TRUE, dimnames=list(c("A", "C", "G", "T")))
       }
       # collect DNA Seq from GRL.rda
+      if(!exists("GRL")){
+        data("GRL")
+      }
       res$seqs = GRL[paste(res$ID, res$version, sep=".")]
+      names(res$seqs) = paste(res$ID, res$version, sep=".")
       return(JASPAR(ID=res$ID, collection=Rle(res$collection), version=Rle(res$version),
              name=res$name, species=Rle(res$species), TF_class=Rle(res$class),
              medline=res$medline, family=Rle(res$family), tax_group=Rle(res$tax_group),
