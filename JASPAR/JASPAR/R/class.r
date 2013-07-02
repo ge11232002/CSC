@@ -180,11 +180,11 @@ setMethod("searchDb", "JASPARDb", function(x, ID=NULL, name=NULL, species=NULL,
       for(dbID in dbIDs){
         res$FMatrix[[as.character(dbID)]] = matrix(matrix_data_table[matrix_data_table$ID == dbID, "val"], nrow=4, byrow=TRUE, dimnames=list(c("A", "C", "G", "T")))
       }
-      # collect DNA Seq from GRL.rda
-      if(!exists("GRL")){
-        data("GRL")
+      # collect DNA Seq from sites.rda 
+      if(!exists("sitesSeqs")){
+        data("sitesSeqs")
       }
-      res$seqs = GRL[paste(res$ID, res$version, sep=".")]
+      res$seqs = sitesSeqs[paste(res$ID, res$version, sep=".")]
       names(res$seqs) = paste(res$ID, res$version, sep=".")
       return(JASPAR(ID=res$ID, collection=Rle(res$collection), version=Rle(res$version),
              name=res$name, species=Rle(res$species), TF_class=Rle(res$class),
