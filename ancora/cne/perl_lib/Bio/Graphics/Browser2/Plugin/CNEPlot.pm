@@ -57,7 +57,7 @@ sub type { 'annotator' }
 
 sub init {
     my $self = shift;
-    warn "I am in the init() CNE plogin now!!!";
+    #warn "I am in the init() CNE plogin now!!!";
     $self->{_nr_cne_sets} = $self->static_plugin_setting('nr_cne_sets') || $DEFAULT_NR_CNE_SETS;
     #$self->{_asm1} = $self->browser_config->source();
     $self->{_asm1} =  $self->browser_config->name();
@@ -69,7 +69,7 @@ sub init {
 sub config_defaults {
   my $self = shift;
 
-  warn "I am in CNE config_defaults now!!!";
+  #warn "I am in CNE config_defaults now!!!";
   my $color_cnes = $self->static_plugin_setting('color_cnes');
   $color_cnes = 'dark' unless defined $color_cnes;
 
