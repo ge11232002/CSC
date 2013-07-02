@@ -21,7 +21,7 @@ setClass("JASPAR",
                         name="character",
                         species="Rle",
                         TF_class="Rle",
-                        medline="integer",
+                        medline="character",
                         family="Rle",
                         tax_group="Rle",
                         acc="character",
@@ -29,7 +29,7 @@ setClass("JASPAR",
                         pazar_tf_id="character",
                         comment="character",
                         FMatrix="list",
-                        seqs="DNAStringSetList"
+                        seqs="list"
                         )
          )
                         
@@ -48,29 +48,62 @@ JASPARDb = function(provider=character(), provider_version=character(),
 
 JASPAR = function(ID=character(), collection=Rle(), version=Rle(),
                   name=character(), species=Rle(), TF_class=Rle(),
-                  medline=integer(), family=Rle(), tax_group=Rle(),
+                  medline=character(), family=Rle(), tax_group=Rle(),
                   acc=character(), type=Rle(), pazar_tf_id=character(),
-                  comments=character(), FMatrix=list(), seqs=DNAStringSetList()){
+                  comment=character(), FMatrix=list(), seqs=list()){
   new("JASPAR", ID=ID, collection=collection, version=version, name=name, species=species,
       TF_class=TF_class, medline=medline, family=family, tax_group=tax_group,
-      acc=acc, type=type, pazar_tf_id=pazar_tf_id, comments=comments, 
+      acc=acc, type=type, pazar_tf_id=pazar_tf_id, comment=comment, 
       FMatrix=FMatrix, seqs=seqs)
 }
 
-## Methods
+### Updating and cloning.
+setMethod("update", "JASPAR",
+          function(object, ..., check=TRUE){
+            initialize(object, ...)
+          }
+)
+
+setGeneric("clone", function(x, ...) standardGeneric("clone"))  # not exported
+setMethod("clone", "ANY",  # not exported
+    function(x, ...)
+    {
+        if (nargs() > 1L)
+            initialize(x, ...)
+        else
+            x
+    }
+)
+
+
+## Slot getters and setters.
 setGeneric("sqliteDir", function(x) standardGeneric("sqliteDir"))
 setMethod("sqliteDir", "JASPARDb", function(x) x@metadata_dirpath)
 setGeneric("conn", function(x) standardGeneric("conn"))
 setMethod("conn", "JASPARDb", function(x) x@conn)
+setGeneric("ID", function(x) standardGeneric("ID"))
+setMethod("ID", "JASPAR", function(x) x@ID)
+setGeneric("collection", function(x) standardGeneric("collection"))
+setMethod("collection", "JASPAR", function(x) unique(x@collection))
+setGeneric("name", function(x) standardGeneric("name"))
+setMethod("name", "JASPAR", function(x) x@name)
+setMethod("metadata", "JASPAR", function(x){
+                                res = cbind(x@ID, x@name, as.vector(x@species), as.vector(x@TF_class), as.vector(x@family), as.vector(x@tax_group), x@acc, as.vector(x@type), x@medline, x@pazar_tf_id, x@comment)
+                                colnames(res) = c("ID", "name", "species", "class", "family", "tax_group", "acc", "type", "medline", " Pazar ID", "comment")
+                                rownames(res) = paste(x@ID, x@version, sep=".")
+                                return(res)
+                                })
+
+
+#### setMethods
 setGeneric("openDb", function(x) standardGeneric("openDb"))
 setMethod("openDb", "JASPARDb", function(x) {
           conn(x)=dbConnect(SQLite(), qliteDir(x))
           return(x)})
 setGeneric("closeDb", function(x) standardGeneric("closeDb"))
 setMethod("closeDb", "JASPARDb", function(x) dbDisconnect(conn(x)))
-
-## 
-setGeneric("searchDb", function(x, ID, name, species, class, type) standardGeneric("searchDb"))
+# The main searchDb method
+setGeneric("searchDb", function(x, ID=NULL, name=NULL, species=NULL, class=NULL, type=NULL) standardGeneric("searchDb"))
 setMethod("searchDb", "JASPARDb", function(x, ID=NULL, name=NULL, species=NULL, 
                                          class=NULL, type=NULL){
       conn = conn(x)
@@ -109,12 +142,68 @@ setMethod("searchDb", "JASPARDb", function(x, ID=NULL, name=NULL, species=NULL,
       if(length(dbIDs) == 0){
         stop("No match result!")
       }
-      res = data.frame(row.names=dbIDs)
+      res = list()
       # collect from MATRIX table
       sqlCMD = paste("select * from MATRIX where ID IN ", "(", paste(dbIDs, collapse=","), ")", sep="")
-      res = cbind(res, dbGetQuery(conn, sqlCMD))
+      matrix_table = dbGetQuery(conn, sqlCMD)
+      res$ID = matrix_table[match(dbIDs, matrix_table$ID), "BASE_ID"]
+      res$collection = matrix_table[match(dbIDs, matrix_table$ID), "COLLECTION"]
+      res$version = matrix_table[match(dbIDs, matrix_table$ID), "VERSION"]
+      res$name = matrix_table[match(dbIDs, matrix_table$ID), "NAME"]
       # collect from MATRIX_ANNOTATION table
-
+      sqlCMD = paste("select * from MATRIX_ANNOTATION where ID IN ", "(", paste(dbIDs, collapse=","), ")", sep="")
+      matrix_annotation_table = dbGetQuery(conn, sqlCMD)
+      for(tag in c("class", "medline", "family", "tax_group", "type", "pazar_tf_id", "comment")){
+        temp_table = matrix_annotation_table[matrix_annotation_table$TAG == tag, ]
+        res[[tag]] = temp_table[match(dbIDs, temp_table$ID), "VAL"]
       }
-      
+      # collect from MATRIX_PROTEIN table
+      sqlCMD = paste("select * from MATRIX_PROTEIN where ID IN ", "(", paste(dbIDs, collapse=","), ")", sep="")
+      matrix_protein_table = dbGetQuery(conn, sqlCMD)
+      res$acc = matrix_protein_table[match(dbIDs, matrix_protein_table$ID), "ACC"]
+      # collect from MATRIX_SPECIES and TAX table
+      sqlCMD = paste("select * from MATRIX_SPECIES where ID IN ", "(", paste(dbIDs, collapse=","), ")", sep="")
+      matrix_species_table = dbGetQuery(conn, sqlCMD)
+      sqlCMD = paste("select * from TAX where TAX_ID IN ", "(\"", paste(unique(matrix_species_table$TAX_ID), collapse="\",\""), "\")", sep="")
+      tax_table = dbGetQuery(conn, sqlCMD)
+      res$species = tax_table[match(matrix_species_table[match(dbIDs, matrix_species_table$ID), "TAX_ID"], tax_table$TAX_ID), "SPECIES"]
+      # collect from MATRIX_DATA table
+      sqlCMD = paste("select * from MATRIX_DATA where ID IN ", "(", paste(dbIDs, collapse=","), ")", sep="")
+      matrix_data_table = dbGetQuery(conn, sqlCMD)
+      res$FMatrix = list()
+      for(dbID in dbIDs){
+        res$FMatrix[[as.character(dbID)]] = matrix(matrix_data_table[matrix_data_table$ID == dbID, "val"], nrow=4, byrow=TRUE, dimnames=list(c("A", "C", "G", "T")))
+      }
+      # collect DNA Seq from GRL.rda
+      res$seqs = GRL[paste(res$ID, res$version, sep=".")]
+      return(JASPAR(ID=res$ID, collection=Rle(res$collection), version=Rle(res$version),
+             name=res$name, species=Rle(res$species), TF_class=Rle(res$class),
+             medline=res$medline, family=Rle(res$family), tax_group=Rle(res$tax_group),
+             acc=res$acc, type=Rle(res$type), pazar_tf_id=res$pazar_tf_id, 
+             comment=res$comment, FMatrix=res$FMatrix, seqs=res$seqs))
+      }
 )
+
+### - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+### Subsetting and combining.
+###
+
+setMethod("[", "JASPAR",
+          function(x, i, ..., drop){
+            if(length(list(...)) > 0L)
+              stop("invalid subsetting")
+            if(missing(i))
+              return(x)
+            i = IRanges:::normalizeSingleBracketSubscript(i, x)
+            ans_ = targetRanges(x)[i]
+            ans_targetSeqs = targetSeqs(x)[i]
+            ans_queryRanges = queryRanges(x)[i]
+            ans_querySeqs = querySeqs(x)[i]
+            ans_score = score(x)[i]
+            ans_symCount = symCount(x)[i]
+            clone(x, targetRanges=ans_targetRanges, targetSeqs=ans_targetSeqs,
+                  queryRanges=ans_queryRanges, querySeqs=ans_querySeqs,
+                  score=ans_score, symCount=ans_symCount)
+          }
+          )
+
