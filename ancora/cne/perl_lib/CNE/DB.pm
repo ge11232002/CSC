@@ -116,7 +116,7 @@ sub get_cne_table_names_for_assemblies {
 
 sub get_cne_table_info {
     my ($self, $table) = @_;
-    my ($type, $asm1, $asm2, $len, $id, $version) = $table =~ /^cne_([^_]+)_([^_]+)_([^_]+)_len(\d+)_id(\d+)_v(\d+)$/;
+    my ($type, $asm1, $asm2, $len, $id, $version) = $table =~ /^cne_([^_]+)_([^_]+)_([^_]+)_len(\d+)_id(\d+)_v(\w+)$/;
     croak "Illegal table name $table" unless(defined $version);
     return { assembly1 => $asm1,
 	     assembly2 => $asm2,
