@@ -1,19 +1,14 @@
 Package: JASPAR
 Version: 0.0.1
-Date: 2012-11-26
-Title: R modules for JASPAR databases: a collection of transcription
-        factor DNA-binding preferences, modeled as matrices.
-Author: Xiaobei Zhao <xiaobei@binf.ku.dk>
-Published:
-Maintainer: Xiaobei Zhao <xiaobei@binf.ku.dk>
-Description: R modules for JASPAR data processing and visualization
+Date: 2013-07-03
+Title: Data package for JASPAR
+Description: Data package for JASPAR. Currently, JASPAR 2010 is included.
+Author: Ge Tan <gtan@me.com> 
+Maintainer: Ge Tan <gtan@me.com>
 Depends: R (>= 2.9.0), Biostrings(>= 2.26.3), RSQLite(>= 0.11.4)
 Suggests:
-Enhances:
 License: GPL (>= 2)
-URL:
-Repository: CRAN
-Packaged: 2012-11-26 20:05:08 UTC; xiaobei
+URL: http://jaspar.genereg.net/
 Type: Package
-LazyLoad: yes
-Date/Publication: 2012-11-27 13:49:14
+NeedsCompilation: no
+LazyData: TRUE
