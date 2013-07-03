@@ -46,8 +46,8 @@ JASPARDb = function(provider=character(), provider_version=character(),
   new("JASPARDb", provider=provider, provider_version=provider_version,
       release_date=release_date, release_name=release_name,
       source_url=source_url, #sites_seqs=sites_seqs, 
-      dbdata_dirpath=db_dirpath, 
-      conn=dbConnect(SQLite(), dbdata_dirpath))
+      db_dirpath=db_dirpath, 
+      conn=dbConnect(SQLite(), db_dirpath))
 }
 
 JASPAR = function(ID=character(), collection=Rle(), version=Rle(),
@@ -90,6 +90,7 @@ setMethod("ID", "JASPAR", function(x) x@ID)
 setGeneric("collection", function(x) standardGeneric("collection"))
 setMethod("collection", "JASPAR", function(x) unique(x@collection))
 setMethod("names", "JASPAR", function(x) x@name)
+setGeneric("TFBSinfo", function(x) standardGeneric("TFBSinfo"))
 setMethod("TFBSinfo", "JASPAR", function(x){
                                 res = cbind(x@ID, x@name, as.vector(x@species), as.vector(x@TF_class), as.vector(x@family), as.vector(x@tax_group), x@acc, as.vector(x@type), x@medline, x@pazar_tf_id, x@comment)
                                 colnames(res) = c("ID", "name", "species", "class", "family", "tax_group", "acc", "type", "medline", " Pazar ID", "comment")
