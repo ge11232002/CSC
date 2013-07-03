@@ -228,6 +228,7 @@ sub configure_form {
 
 
     my $nr_cne_sets = $self->nr_cne_sets();
+    warn "The number of cne sets is ", $nr_cne_sets;
     my $asm1 = $self->asm1();
     my $asm2 = $self->asm2();
     my $cne_display_threshold = $self->static_plugin_setting('cne_display_threshold') || $DEFAULT_CNE_DISPLAY_THRESHOLD;
@@ -240,19 +241,23 @@ sub configure_form {
    
     # Get data for HCNE selection form
     my $table_names = $db->get_cne_table_names_for_assemblies($asm1, $asm2);
+    #   $Data::Dumper::Indent = 1;
+    #$Data::Dumper::Sortkeys = 1;
+    #warn "The table names: ", Dumper($table_names);
     my %table_infos = map { $_ => $db->get_cne_table_info($_) } @$table_names;
     $table_names =  
 	[ sort { $table_infos{$a}{min_length} <=> $table_infos{$b}{min_length}
 		 or $table_infos{$a}{min_identity} <=> $table_infos{$b}{min_identity} } @$table_names ];
+ #warn "The table names2: ", Dumper($table_names);
     my (@id_cutoff_codes, %id_cutoff_labels);
     my $seen_100pc;
     foreach my $t (@$table_names) {
 	my $table_info = $table_infos{$t};
 	next unless($table_info->{version} == 1); # reserve tables with version nr != 1 for non-ancora use
-	if($table_info->{min_identity} == 1) {    # if there are several perfect match sets, show that with smallest window size only
-	    next if($seen_100pc);
-	    $seen_100pc = 1;
-	}
+  #if($table_info->{min_identity} == 1) {    # if there are several perfect match sets, show that with smallest window size only
+  #    next if($seen_100pc);
+  #    $seen_100pc = 1;
+  #}
 	my $id_cutoff_code = $table_info->{min_identity}.'/'.$table_info->{min_length};
 	push @id_cutoff_codes, $id_cutoff_code;
 	$id_cutoff_labels{$id_cutoff_code} = (int($table_info->{min_identity}*100)).
