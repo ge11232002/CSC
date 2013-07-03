@@ -14,5 +14,5 @@ export(
   )
 
 exportMethods(
-  "[", "show", "searchDb", "metadata", "FMatrix", "seqs", "names"
+  "[", "show", "searchDb", "TFBSinfo", "FMatrix", "seqs", "names"
   )

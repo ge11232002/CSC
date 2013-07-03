@@ -10,7 +10,7 @@ setClass("JASPARDb",
                         release_name="character",
                         source_url="character",
                         #sites_seqs="character",
-                        metadata_dirpath="character",
+                        db_dirpath="character",
                         conn="SQLiteConnection")
 ## perhaps should put a metadata table in JASPAR.sqlite and fill this object dynamically
          )
@@ -42,12 +42,12 @@ setClass("JASPAR",
 JASPARDb = function(provider=character(), provider_version=character(), 
                   release_date=character(), release_name=character(), 
                   source_url=character(), #sites_seqs=character(), 
-                  metadata_dirpath=character()){
+                  db_dirpath=character()){
   new("JASPARDb", provider=provider, provider_version=provider_version,
       release_date=release_date, release_name=release_name,
       source_url=source_url, #sites_seqs=sites_seqs, 
-      metadata_dirpath=metadata_dirpath, 
-      conn=dbConnect(SQLite(), metadata_dirpath))
+      dbdata_dirpath=db_dirpath, 
+      conn=dbConnect(SQLite(), dbdata_dirpath))
 }
 
 JASPAR = function(ID=character(), collection=Rle(), version=Rle(),
@@ -82,7 +82,7 @@ setMethod("clone", "ANY",  # not exported
 
 ## Slot getters and setters.
 setGeneric("sqliteDir", function(x) standardGeneric("sqliteDir"))
-setMethod("sqliteDir", "JASPARDb", function(x) x@metadata_dirpath)
+setMethod("sqliteDir", "JASPARDb", function(x) x@db_dirpath)
 setGeneric("conn", function(x) standardGeneric("conn"))
 setMethod("conn", "JASPARDb", function(x) x@conn)
 setGeneric("ID", function(x) standardGeneric("ID"))
@@ -90,7 +90,7 @@ setMethod("ID", "JASPAR", function(x) x@ID)
 setGeneric("collection", function(x) standardGeneric("collection"))
 setMethod("collection", "JASPAR", function(x) unique(x@collection))
 setMethod("names", "JASPAR", function(x) x@name)
-setMethod("metadata", "JASPAR", function(x){
+setMethod("TFBSinfo", "JASPAR", function(x){
                                 res = cbind(x@ID, x@name, as.vector(x@species), as.vector(x@TF_class), as.vector(x@family), as.vector(x@tax_group), x@acc, as.vector(x@type), x@medline, x@pazar_tf_id, x@comment)
                                 colnames(res) = c("ID", "name", "species", "class", "family", "tax_group", "acc", "type", "medline", " Pazar ID", "comment")
                                 rownames(res) = paste(x@ID, x@version, sep=".")
