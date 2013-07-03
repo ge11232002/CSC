@@ -4,7 +4,6 @@
 \docType{package}
 \title{
 Data package for JASPAR
-~~ package title ~~
 }
 \description{
 Data package for JASPAR. Currently, JASPAR 2010 is included.
@@ -21,15 +20,13 @@ URL: \tab http://jaspar.genereg.net/\cr
 Type: \tab Package\cr
 NeedsCompilation: \tab no\cr
 LazyData: \tab TRUE\cr
-Packaged: \tab 2013-07-03 15:12:07 UTC; gtan\cr
-Built: \tab R 2.15.2; ; 2013-07-03 15:12:13 UTC; unix\cr
 }
 
 Index:
 \preformatted{
-JASPAR-package          Data package for JASPAR
-JASPAR_2010_SitesSeqs   List of binding sites sequences for JASPAR 2010
-                        release.
+  JASPAR-class            JASPAR object
+  JASPAR-package          Data package for JASPAR
+  JASPARDb-class          JASPARDb object
 }
 ~~ An overview of how to use the package, including the most important functions ~~
 }
@@ -47,5 +44,10 @@ Maintainer: Ge Tan <gtan@me.com>
 ~~ \code{\link[<pkg>:<pkg>-package]{<pkg>}} ~~
 }
 \examples{
-~~ simple examples of the most important functions ~~
+## load the library
+library(JASPAR)
+## list the contents that are loaded into memory
+ls("package:JASPAR")
+## show the db object that is loaded by calling it's name
+JASPAR_2010
 }
