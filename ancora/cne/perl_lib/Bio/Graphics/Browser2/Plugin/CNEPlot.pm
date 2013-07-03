@@ -373,17 +373,17 @@ sub annotate {
     $out_feature_list->mtime(time()); # To prevent gbrowse_img from retrieving a cached image
     
     return $out_feature_list unless($segment);
-    warn "In annotate, still running";
+    #warn "In annotate, still running";
     # Connect to DB
     my $db = CNE::DB->connect(dbhost => $DB_HOST,
 			      dbname => $DB_NAME,
 			      dbuser => $DB_USER)
 	or die "could not connect to db $DB_NAME @ $DB_HOST";
 
-    warn "In annotate,  the db is   ", Dumper($db);
-    warn "In annotate, the out_feature_list is   ", Dumper($out_feature_list);
+#warn "In annotate,  the db is   ", Dumper($db);
+#    warn "In annotate, the out_feature_list is   ", Dumper($out_feature_list);
     my ($chr, $start, $end) = $self->_get_display_bounds($segment);
-    warn "In annotate, the chr, start, end  ", $chr, " ", $start, "  ", $end;
+#    warn "In annotate, the chr, start, end  ", $chr, " ", $start, "  ", $end;
     # Make the density features
     $self->_make_density_features($out_feature_list, $db, $chr, $start, $end);
     #warn "In annotate, Am I running??";
@@ -439,7 +439,7 @@ sub _get_display_bounds
 
 sub _get_sets_to_show
 {
-    warn "I am in _get_sets_to_show now!!!";
+  #warn "I am in _get_sets_to_show now!!!";
 
     my ($self, $prefix) = @_;
     my @set_nrs;
@@ -452,26 +452,26 @@ sub _get_sets_to_show
 
 sub _get_table_names
 {
-    warn "I am in _get_table_names now!!!";
+  #warn "I am in _get_table_names now!!!";
     my ($self, $db, $set_nrs) = @_;
     my $asm1 = $self->asm1();
     my $asm2 = $self->asm2();
     my @tables;
-    warn "In _get_table_names, the asm1 is  ", $asm1;
-    warn "In _get_table_names, the asm2 is  ", $asm2;
+    # warn "In _get_table_names, the asm1 is  ", $asm1;
+    #warn "In _get_table_names, the asm2 is  ", $asm2;
     foreach my $i (@$set_nrs) {
-        warn "In _get_table_names, doing ", $i;
-        warn "The min_cne_id is", $self->configuration->{"min_cne_id$i"};
+      #     warn "In _get_table_names, doing ", $i;
+      #   warn "The min_cne_id is", $self->configuration->{"min_cne_id$i"};
 	my $id_cutoff_code = $self->configuration->{"min_cne_id$i"} or next;
 	my ($min_id, $min_len) = split '/', $id_cutoff_code;
-    warn "The min_id is ", $min_id;
-    warn "The min_len is ", $min_len;
+  #warn "The min_id is ", $min_id;
+  # warn "The min_len is ", $min_len;
 	my $table = $db->get_cne_table_name(assembly1 => $asm1, 
 					    assembly2 => $asm2,
 					    min_identity => $min_id,
 					    min_length => $min_len,
 	                                    version => 1);
-    warn "In _get_table_names, check the table", Dumper($table);
+                                    #warn "In _get_table_names, check the table", Dumper($table);
 	push @tables, $table if($table and $db->cne_table_exists($table));
     }
     return \@tables;
@@ -491,7 +491,7 @@ sub _get_min_lengths
 
 sub _make_density_features
 {
-    warn "I am in _make_density_features now!!!";
+  #warn "I am in _make_density_features now!!!";
     my ($self, $out_feature_list, $db, $chr, $start, $end) = @_;
     
     # For benchmarking
@@ -502,16 +502,16 @@ sub _make_density_features
 
     # Get parameters for this plugin
     my $sets_to_show = $self->_get_sets_to_show('show_graph');
-    warn "In _make_density_features, sets_to_show is ", @$sets_to_show;
+    #  warn "In _make_density_features, sets_to_show is ", @$sets_to_show;
     my $tables = $self->_get_table_names($db, $sets_to_show);
-    warn "In _make_density_features, see tables is", Dumper($tables);
+    #warn "In _make_density_features, see tables is", Dumper($tables);
     my $min_lengths = $self->_get_min_lengths($sets_to_show);
     my $window_size = $self->configuration->{window_size}*1000;  # convert window size value from kb to bp
     my $max_score = $self->configuration->{max_score};
     my $nr_graphs = $self->configuration->{nr_graphs};
-    warn "In _make_density_features, nr_graphs is ", $nr_graphs;
+    #warn "In _make_density_features, nr_graphs is ", $nr_graphs;
     my $rank_un_low = $self->configuration->{rank_un_low};
-    warn "In _make_density_features, am I running? The rank_un_low ", $rank_un_low;
+    #warn "In _make_density_features, am I running? The rank_un_low ", $rank_un_low;
 
     my $label = $self->asm2_name . " HCNE density";
     #warn "In _make_density_features, am I running? The label ", $label;
@@ -521,9 +521,9 @@ sub _make_density_features
     #close FH;
     #my $pixel_width = $self->browser_config->width;
     my $pixel_width = 800;
-    warn "In _make_density_features, am I running? The pixel_width  ", $pixel_width;
+    #warn "In _make_density_features, am I running? The pixel_width  ", $pixel_width;
     my $assembly = $self->browser_config->name;
-    warn "In _make_density_features, am I running? The assembly ", $assembly;
+    #warn "In _make_density_features, am I running? The assembly ", $assembly;
     #my $assembly = $self->browser_config->source;
     my ($my_last_name) = ref($self) =~ /(\w+)$/;
 
@@ -546,7 +546,7 @@ sub _make_density_features
 	    $step_size--;
 	}
     }
-    warn "In _make_density_features, am I running? the step_size  ", $step_size;
+    #warn "In _make_density_features, am I running? the step_size  ", $step_size;
     my $win_nr_steps = $window_size / $step_size;
 #    print STDERR "Calculated step size ".timediff_str($t0,Benchmark->new)."\n";
 
@@ -554,9 +554,9 @@ sub _make_density_features
     # Compute how large region we need to look at around the displayed region
     my $context_start = $start - int((($win_nr_steps-1)*$step_size)/2+0.5);
     $context_start  = 1 if($context_start < 1);
-    warn "In _make_density_features, the context_start is ", $context_start;
+    #warn "In _make_density_features, the context_start is ", $context_start;
     my $context_end = $end + int((($win_nr_steps-1)*$step_size)/2+$step_size+0.5);
-    warn "In _make_density_features, the context_end is ", $context_end;
+    #warn "In _make_density_features, the context_end is ", $context_end;
    
     # Define a feature type with drawing parameters for the curve
     $out_feature_list->add_type('density_curve' => {glyph => 'fast_xyplot',
@@ -633,7 +633,7 @@ sub _make_density_features
 
 sub _make_cne_features
 {
-    warn "I am in _make_cne_features now!!!";
+  #warn "I am in _make_cne_features now!!!";
     my ($self, $out_feature_list, $db, $chr, $start, $end) = @_;
     
     # For benchmarking
