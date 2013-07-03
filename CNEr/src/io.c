@@ -350,7 +350,6 @@ SEXP readAxt(SEXP filepath){
   nrAxts = 0;
   width_buf = new_IntAE(0, 0, 0);
   for(i = 0; i < nrAxtFiles; i++){
-    //Rprintf("reading the axt file %s\n", CHAR(STRING_ELT(filepath, i)));
     char *filepath_elt = (char *) R_alloc(strlen(CHAR(STRING_ELT(filepath, i))), sizeof(char));
     strcpy(filepath_elt, CHAR(STRING_ELT(filepath, i)));
     lf = lineFileOpen(filepath_elt, TRUE);
@@ -358,9 +357,6 @@ SEXP readAxt(SEXP filepath){
       //slAddHead(&axt, curAxt);
       //curAxt->next = axt;
       //axt = curAxt;
-      //Rprintf("The symCount is %d\n", curAxt->symCount);
-      //Rprintf("The sequence1 is %s\n", CHAR(mkCharLen(curAxt->tSym, curAxt->symCount)));
-      //Rprintf("The sequence2 is %s\n", CHAR(mkChar(curAxt->tSym)));
       IntAE_insert_at(&width_buf, IntAE_get_nelt(&width_buf), curAxt->symCount);
       axtFree(&curAxt);
       nrAxts++;
@@ -368,12 +364,14 @@ SEXP readAxt(SEXP filepath){
     lineFileClose(&lf);
   }
   Rprintf("The total number of axt is %d\n", nrAxts);
-  SEXP ans, width;
+  SEXP ans_qSym, ans_tSym, width;
   PROTECT(width = new_INTEGER_from_IntAE(&width_buf));
-  PROTECT(ans = alloc_XRawList("DNAStringSet", "DNAString", width));
-  cachedXVectorList cached_ans;
+  PROTECT(ans_qSym = alloc_XRawList("BStringSet", "BString", width));
+  PROTECT(ans_tSym = alloc_XRawList("BStringSet", "BString", width));
+  cachedXVectorList cached_ans_qSym, cached_ans_tSym;
   cachedCharSeq cached_ans_elt;
-  cached_ans = cache_XVectorList(ans);
+  cached_ans_qSym = cache_XVectorList(ans_qSym);
+  cached_ans_tSym = cache_XVectorList(ans_tSym);
   SEXP qNames, qStart, qEnd, qStrand, qSym, tNames, tStart, tEnd, tStrand, tSym, score, symCount, returnList;
   PROTECT(qNames = NEW_CHARACTER(nrAxts));
   PROTECT(qStart = NEW_INTEGER(nrAxts));
@@ -402,7 +400,6 @@ SEXP readAxt(SEXP filepath){
     strcpy(filepath_elt, CHAR(STRING_ELT(filepath, j)));
     lf = lineFileOpen(filepath_elt, TRUE);
     while((axt = axtRead(lf)) != NULL){
-      //Rprintf("The width is %d\n", INTEGER(width)[i]);
       SET_STRING_ELT(qNames, i, mkChar(axt->qName));
       p_qStart[i] = axt->qStart + 1;
       p_qEnd[i] = axt->qEnd;
@@ -410,16 +407,9 @@ SEXP readAxt(SEXP filepath){
         SET_STRING_ELT(qStrand, i, mkChar("+"));
       else
         SET_STRING_ELT(qStrand, i, mkChar("-"));
-      //Rprintf("I am here\n");
-      cached_ans_elt = get_cachedXRawList_elt(&cached_ans, i);
-      //get_cachedXRawList_elt(&cached_ans, i);
-      //Rprintf("I am here2\n");
+      cached_ans_elt = get_cachedXRawList_elt(&cached_ans_qSym, i);
       memcpy((char *) (&cached_ans_elt)->seq, axt->qSym, axt->symCount * sizeof(char));
-      //SET_STRING_ELT(symTemp, 0, mkChar(axt->qSym));
-      //SET_STRING_ELT(qSym, i, STRING_ELT(symTemp, 0));
-      //SET_STRING_ELT(qSym, i, mkChar(axt->qSym));
-      //STRING_ELT(qSym, i) = (char *) R_alloc(axt->symCount, sizeof(char));
-      //SET_STRING_ELT(qSym, i, mkCharLen(axt->qSym, axt->symCount));
+
       SET_STRING_ELT(tNames, i, mkChar(axt->tName));
       p_tStart[i] = axt->tStart + 1;
       p_tEnd[i] = axt->tEnd;
@@ -427,7 +417,8 @@ SEXP readAxt(SEXP filepath){
         SET_STRING_ELT(tStrand, i, mkChar("+"));
       else
         SET_STRING_ELT(tStrand, i, mkChar("-"));
-      //mkChar(axt->tSym);
+      cached_ans_elt = get_cachedXRawList_elt(&cached_ans_tSym, i);
+      memcpy((char *) (&cached_ans_elt)->seq, axt->tSym, axt->symCount * sizeof(char));
       //SET_STRING_ELT(tSym, i, mkChar(axt->tSym));
       //SET_STRING_ELT(tSym, i, mkCharLen(axt->tSym, axt->symCount));
       p_score[i] = axt->score;
@@ -441,18 +432,17 @@ SEXP readAxt(SEXP filepath){
   SET_VECTOR_ELT(returnList, 1, tStart);
   SET_VECTOR_ELT(returnList, 2, tEnd);
   SET_VECTOR_ELT(returnList, 3, tStrand);
-  SET_VECTOR_ELT(returnList, 4, tSym);
+  SET_VECTOR_ELT(returnList, 4, ans_tSym);
   SET_VECTOR_ELT(returnList, 5, qNames);
   SET_VECTOR_ELT(returnList, 6, qStart);
   SET_VECTOR_ELT(returnList, 7, qEnd);
   SET_VECTOR_ELT(returnList, 8, qStrand);
-  SET_VECTOR_ELT(returnList, 9, qSym);
+  SET_VECTOR_ELT(returnList, 9, ans_qSym);
   SET_VECTOR_ELT(returnList, 10, score);
   SET_VECTOR_ELT(returnList, 11, symCount);
-  UNPROTECT(15);
-  //axtFree(&curAxt);
+  UNPROTECT(16);
   //return R_NilValue;
-  return ans;
+  return returnList;
 }
 
 
