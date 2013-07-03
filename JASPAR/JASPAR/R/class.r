@@ -9,6 +9,7 @@ setClass("JASPARDb",
                         release_date="character",
                         release_name="character",
                         source_url="character",
+                        #sites_seqs="character",
                         metadata_dirpath="character",
                         conn="SQLiteConnection")
 ## perhaps should put a metadata table in JASPAR.sqlite and fill this object dynamically
@@ -40,10 +41,12 @@ setClass("JASPAR",
 ## Constructor
 JASPARDb = function(provider=character(), provider_version=character(), 
                   release_date=character(), release_name=character(), 
-                  source_url=character(), metadata_dirpath=character()){
+                  source_url=character(), #sites_seqs=character(), 
+                  metadata_dirpath=character()){
   new("JASPARDb", provider=provider, provider_version=provider_version,
       release_date=release_date, release_name=release_name,
-      source_url=source_url, metadata_dirpath=metadata_dirpath, 
+      source_url=source_url, #sites_seqs=sites_seqs, 
+      metadata_dirpath=metadata_dirpath, 
       conn=dbConnect(SQLite(), metadata_dirpath))
 }
 
@@ -181,10 +184,13 @@ setMethod("searchDb", "JASPARDb", function(x, ID=NULL, name=NULL, species=NULL,
         res$FMatrix[[as.character(dbID)]] = matrix(matrix_data_table[matrix_data_table$ID == dbID, "val"], nrow=4, byrow=TRUE, dimnames=list(c("A", "C", "G", "T")))
       }
       # collect DNA Seq from sites.rda 
-      if(!exists("sitesSeqs")){
-        data("sitesSeqs")
-      }
-      res$seqs = sitesSeqs[paste(res$ID, res$version, sep=".")]
+      res$seqs = switch(x@release_name,
+                        "JASPAR_2010"=JASPAR_2010_SitesSeqs[paste(res$ID, res$version, sep=".")]
+                        )
+      #if(!exists(x@sites_seqs)){
+      #  data(x@sites_seqs)
+      #}
+      #res$seqs = sitesSeqs[paste(res$ID, res$version, sep=".")]
       names(res$seqs) = paste(res$ID, res$version, sep=".")
       return(JASPAR(ID=res$ID, collection=Rle(res$collection), version=Rle(res$version),
              name=res$name, species=Rle(res$species), TF_class=Rle(res$class),
@@ -231,7 +237,7 @@ setMethod("[", "JASPAR",
 ### - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 ### "show" method.
 ###
-
+## perhaps contain more information
 setMethod("show", "JASPAR",
           function(object){
             cat(" ", length(object@ID), " matched results in ", class(object))
