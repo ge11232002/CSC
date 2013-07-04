@@ -190,9 +190,9 @@ struct slThreshold
 /*############################################*/
 
 SEXP myReadBed(SEXP filepath){
-  // load a filter file into R, and to be a GRanges
-  // SEXP filepath_elt;
-  PROTECT(filepath = AS_CHARACTER(filepath));
+  // load a filter file into R, and to be a GRanges in 1-based coordinates
+  // This is tested and without memory leak!
+  filepath = AS_CHARACTER(filepath);
   if(!IS_CHARACTER(filepath) || LENGTH(filepath) != 1)
     error("'filepath' must be a single string");
   if(STRING_ELT(filepath, 0) == NA_STRING)
@@ -200,10 +200,7 @@ SEXP myReadBed(SEXP filepath){
   // If filepath_elt is defined this way, the memory will be reclaimed by the end of .Call by R, do not need the free()
   char *filepath_elt = R_alloc(strlen(CHAR(STRING_ELT(filepath, 0))), sizeof(char));
   strcpy(filepath_elt, CHAR(STRING_ELT(filepath, 0)));
-  //filepath_elt = STRING_ELT(filepath, 0);
-  //if(filepath_elt == NA_STRING)
-  //  error("'filepath' is NA");
-  Rprintf(" %s \n", filepath_elt);
+  Rprintf("Reading %s \n", filepath_elt);
   struct lineFile *lf = lineFileOpen(filepath_elt, TRUE);
   char *row[3];
   int nRanges = 0;
@@ -212,7 +209,6 @@ SEXP myReadBed(SEXP filepath){
     nRanges++;
   }
   lineFileClose(&lf);
-  //Rprintf("The line number is %d\n", nRanges);
   SEXP chromNames, starts, ends, returnList;
   PROTECT(chromNames = NEW_CHARACTER(nRanges));
   PROTECT(starts = NEW_INTEGER(nRanges));
@@ -222,11 +218,10 @@ SEXP myReadBed(SEXP filepath){
   int j = 0;
   p_starts = INTEGER_POINTER(starts);
   p_ends = INTEGER_POINTER(ends);
-  //lf = lineFileOpen(CHAR(filepath_elt), TRUE);
   lf = lineFileOpen(filepath_elt, TRUE);
   while(lineFileRow(lf, row)){
     if(sameString(row[0], "track") || sameString(row[0], "browser")) continue;
-    p_starts[j] = lineFileNeedNum(lf, row, 1);
+    p_starts[j] = lineFileNeedNum(lf, row, 1) + 1;
     p_ends[j] = lineFileNeedNum(lf, row, 2);
     if(p_starts[j] > p_ends[j])
       errAbort("start after end line %d of %s", lf->lineIx, lf->fileName);
@@ -237,7 +232,7 @@ SEXP myReadBed(SEXP filepath){
   SET_VECTOR_ELT(returnList, 0, chromNames);
   SET_VECTOR_ELT(returnList, 1, starts);
   SET_VECTOR_ELT(returnList, 2, ends);
-  UNPROTECT(5);
+  UNPROTECT(4);
   return(returnList);
 }
 
@@ -279,6 +274,7 @@ SEXP axt_info(SEXP filepath){
 
 SEXP readAxt(SEXP filepath){
   // load a axt file into R, and to be axt object
+  // This is tested and without memory leak!
   filepath = AS_CHARACTER(filepath);
   int nrAxtFiles, i, nrAxts;
   nrAxtFiles = GET_LENGTH(filepath);
@@ -341,8 +337,6 @@ SEXP readAxt(SEXP filepath){
         SET_STRING_ELT(tStrand, i, mkChar("-"));
       cached_ans_elt = get_cachedXRawList_elt(&cached_ans_tSym, i);
       memcpy((char *) (&cached_ans_elt)->seq, axt->tSym, axt->symCount * sizeof(char));
-      //SET_STRING_ELT(tSym, i, mkChar(axt->tSym));
-      //SET_STRING_ELT(tSym, i, mkCharLen(axt->tSym, axt->symCount));
       p_score[i] = axt->score;
       p_symCount[i] = axt->symCount;
       i++;
