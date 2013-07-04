@@ -241,131 +241,53 @@ SEXP myReadBed(SEXP filepath){
   return(returnList);
 }
 
-SEXP myReadAxt(SEXP filepath){
-  // load a axt file into R, and to be axt2
-  //SEXP filepath_elt;
-  PROTECT(filepath = AS_CHARACTER(filepath));
-  int nrAxtFiles, i, nrAxts;
-  nrAxtFiles = GET_LENGTH(filepath);
-  Rprintf("The number of axt files %d\n", nrAxtFiles);
-  struct axt *axt=NULL, *curAxt;
-  struct lineFile *lf;
-  nrAxts = 0;
-  for(i = 0; i < nrAxtFiles; i++){
-    Rprintf("reading the axt file %s\n", CHAR(STRING_ELT(filepath, i)));
-    char *filepath_elt = (char *) malloc(sizeof(char) * strlen(CHAR(STRING_ELT(filepath, i))));
-    strcpy(filepath_elt, CHAR(STRING_ELT(filepath, i)));
-    lf = lineFileOpen(filepath_elt, TRUE);
-    //lf = lineFileOpen(CHAR(STRING_ELT(filepath, i)), TRUE);
-    //Rprintf("Before reading axt\n");
-    //Rprintf("The number of axt is %d\n", nrAxts);
-    while((curAxt = axtRead(lf)) != NULL){
-      //Rprintf("The name of query sequence is %s\n", curAxt->qName);
-      //curAxt->next = axt;
-      //axt = curAxt;
-      slAddHead(&axt, curAxt);
-      nrAxts++;
-    }
-    lineFileClose(&lf);
-    free(filepath_elt);
-  }
-  axtFree(&curAxt);
-  UNPROTECT(1);
-  Rprintf("The total number of axt is %d\n", nrAxts);
-  SEXP qNames, qStart, qEnd, qStrand, qSym, tNames, tStart, tEnd, tStrand, tSym, score, symCount, returnList;
-  PROTECT(qNames = NEW_CHARACTER(nrAxts));
-  PROTECT(qStart = NEW_INTEGER(nrAxts));
-  PROTECT(qEnd = NEW_INTEGER(nrAxts));
-  PROTECT(qStrand = NEW_CHARACTER(nrAxts));
-  PROTECT(qSym = NEW_CHARACTER(nrAxts));
-  PROTECT(tNames = NEW_CHARACTER(nrAxts));
-  PROTECT(tStart = NEW_INTEGER(nrAxts));
-  PROTECT(tEnd = NEW_INTEGER(nrAxts));
-  PROTECT(tStrand = NEW_CHARACTER(nrAxts));
-  PROTECT(tSym = NEW_CHARACTER(nrAxts));
-  PROTECT(score = NEW_INTEGER(nrAxts));
-  PROTECT(symCount = NEW_INTEGER(nrAxts));
-  PROTECT(returnList = NEW_LIST(12));
-  int *p_qStart, *p_qEnd, *p_tStart, *p_tEnd, *p_score, *p_symCount;
-  p_qStart = INTEGER_POINTER(qStart);
-  p_qEnd = INTEGER_POINTER(qEnd);
-  p_tStart = INTEGER_POINTER(tStart);
-  p_tEnd = INTEGER_POINTER(tEnd);
-  p_score = INTEGER_POINTER(score);
-  p_symCount = INTEGER_POINTER(symCount);
-  i = 0;
-  char strand;
-  while(axt){
-    //Rprintf("The name of query seq is %s\n", axt->qName);
-    SET_STRING_ELT(qNames, i, mkChar(axt->qName));
-    // In Kent's axt struct, they use half open zero=based coordinates. It is different from the original coordinates in axt files. To present it in R, we still make it into 1-based coordinates.
-    p_qStart[i] = axt->qStart + 1;
-    p_qEnd[i] = axt->qEnd;
-    if(axt->qStrand == '+')
-      SET_STRING_ELT(qStrand, i, mkChar("+"));
-    else
-      SET_STRING_ELT(qStrand, i, mkChar("-"));
-    //SET_STRING_ELT(qStrand, i, AS_CHARACTER(axt->qStrand));
-    SET_STRING_ELT(qSym, i, mkChar(axt->qSym));
-    SET_STRING_ELT(tNames, i, mkChar(axt->tName));
-    p_tStart[i] = axt->tStart + 1;
-    p_tEnd[i] = axt->tEnd;
-    if(axt->tStrand == '+')
-      SET_STRING_ELT(tStrand, i, mkChar("+"));
-    else
-      SET_STRING_ELT(tStrand, i, mkChar("-"));
-    //SET_STRING_ELT(tStrand, i, mkChar(axt->tStrand));
-    SET_STRING_ELT(tSym, i, mkChar(axt->tSym));
-    p_score[i] = axt->score;
-    p_symCount[i] = axt->symCount;
-    i++;
-    axt = axt->next;
-  }
-  SET_VECTOR_ELT(returnList, 0, tNames);
-  SET_VECTOR_ELT(returnList, 1, tStart);
-  SET_VECTOR_ELT(returnList, 2, tEnd);
-  SET_VECTOR_ELT(returnList, 3, tStrand);
-  SET_VECTOR_ELT(returnList, 4, tSym);
-  SET_VECTOR_ELT(returnList, 5, qNames);
-  SET_VECTOR_ELT(returnList, 6, qStart);
-  SET_VECTOR_ELT(returnList, 7, qEnd);
-  SET_VECTOR_ELT(returnList, 8, qStrand);
-  SET_VECTOR_ELT(returnList, 9, qSym);
-  SET_VECTOR_ELT(returnList, 10, score);
-  SET_VECTOR_ELT(returnList, 11, symCount);
-  UNPROTECT(13);
-  return(returnList);
-}
 
 /* ------------------------- Use the DNAStringSet way--------------------------*/
-SEXP readAxt(SEXP filepath){
-  // load a axt file into R, and to be axt object
+SEXP axt_info(SEXP filepath){
+  // read a axt file and get the alignment length
   filepath = AS_CHARACTER(filepath);
-  int nrAxtFiles, i, nrAxts;
+  int nrAxtFiles, i;
+      //nrec0, skip0;
   nrAxtFiles = GET_LENGTH(filepath);
   Rprintf("The number of axt files %d\n", nrAxtFiles);
-  struct axt *axt=NULL, *curAxt;
+  struct axt *curAxt;
   struct lineFile *lf;
   IntAE width_buf;
-  nrAxts = 0;
   width_buf = new_IntAE(0, 0, 0);
+  //nrec = AS_INTEGER(nrec);
+  //skip = AS_INTEGER(skip);
+  //nrec0 = INTEGER_POINTER(nrec)[0];
+  //skip0 = INTEGER_POINTER(skip)[0];
   for(i = 0; i < nrAxtFiles; i++){
     char *filepath_elt = (char *) R_alloc(strlen(CHAR(STRING_ELT(filepath, i))), sizeof(char));
     strcpy(filepath_elt, CHAR(STRING_ELT(filepath, i)));
     lf = lineFileOpen(filepath_elt, TRUE);
     while((curAxt = axtRead(lf)) != NULL){
-      //slAddHead(&axt, curAxt);
-      //curAxt->next = axt;
-      //axt = curAxt;
+      //if(i < skip0){continue;}
+      //if(nrec != -1 || i >= nrec){break;}
       IntAE_insert_at(&width_buf, IntAE_get_nelt(&width_buf), curAxt->symCount);
       axtFree(&curAxt);
-      nrAxts++;
     }
     lineFileClose(&lf);
   }
-  Rprintf("The total number of axt is %d\n", nrAxts);
-  SEXP ans_qSym, ans_tSym, width;
+  SEXP width;
   PROTECT(width = new_INTEGER_from_IntAE(&width_buf));
+  Rprintf("The number of axt alignments is %d\n", GET_LENGTH(width));
+  UNPROTECT(1);
+  return(width);
+}
+
+SEXP readAxt(SEXP filepath){
+  // load a axt file into R, and to be axt object
+  filepath = AS_CHARACTER(filepath);
+  int nrAxtFiles, i, nrAxts;
+  nrAxtFiles = GET_LENGTH(filepath);
+  struct axt *axt=NULL, *curAxt;
+  struct lineFile *lf;
+  IntAE width_buf;
+  SEXP ans_qSym, ans_tSym, width;
+  PROTECT(width = axt_info(filepath));
+  nrAxts = GET_LENGTH(width);
   PROTECT(ans_qSym = alloc_XRawList("BStringSet", "BString", width));
   PROTECT(ans_tSym = alloc_XRawList("BStringSet", "BString", width));
   cachedXVectorList cached_ans_qSym, cached_ans_tSym;
