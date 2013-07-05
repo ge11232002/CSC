@@ -623,11 +623,43 @@ void ceScan(char **tFilterFile, char **qFilterFile, char **qSizeFile, int *winSi
 }
 
 /*######################################################*/
+void freeMyHash(struct hashEl *hel)
+{
+  struct slRange *a, *b;
+  a = hel->val;
+  while((b = a->next)){
+    free(a);
+    a = b;
+  }
+  free(a);
+}
+
+void freeRangeArray(struct hashEl *hel)
+{
+  struct rangeArray *arrayInfo;
+  arrayInfo = hel->val;
+  free(arrayInfo->ranges);
+  free(arrayInfo);
+}
+
+void freeHashAndValsWithFreez(struct hash **pHash)
+/* Free up hash table and all values associated with it.
+ * (Just calls freeMem on each hel->val) */
+{
+struct hash *hash;
+if ((hash = *pHash) != NULL)
+    {
+    hashTraverseEls(hash, freeRangeArray);
+    freeHash(pHash);
+    }
+}
+
 struct hash *buildHashForBed(SEXP tNames, SEXP tStarts, SEXP tEnds){
 /* Given three vectors of names, starts and ends of the filter, return the hash table */
-  PROTECT(tNames = AS_CHARACTER(tNames));
-  PROTECT(tStarts = AS_INTEGER(tStarts));
-  PROTECT(tEnds = AS_INTEGER(tEnds));
+  // Here the tStarts are in 1-based coordinate. In the hash, it's in 0-based.
+  tNames = AS_CHARACTER(tNames);
+  tStarts = AS_INTEGER(tStarts);
+  tEnds = AS_INTEGER(tEnds);
   struct hash *hash = newHash(0);
   struct slRange *range;
   struct hashEl *hel;
@@ -636,13 +668,12 @@ struct hash *buildHashForBed(SEXP tNames, SEXP tStarts, SEXP tEnds){
   p_tEnds = INTEGER_POINTER(tEnds);
   n = GET_LENGTH(tNames);
   if(n == 0){
-    UNPROTECT(3);
     return NULL;
   }
   for(i = 0; i < n ; i++){
     AllocVar(range);
     range->next = NULL;
-    range->start = p_tStarts[i];
+    range->start = p_tStarts[i] - 1;
     range->end = p_tEnds[i];
     char *tName = (char *) malloc(sizeof(char) * strlen(CHAR(STRING_ELT(tNames, i))));
     strcpy(tName, CHAR(STRING_ELT(tNames, i)));
@@ -652,8 +683,8 @@ struct hash *buildHashForBed(SEXP tNames, SEXP tStarts, SEXP tEnds){
     else
       slSafeAddHead(&hel->val, range);
     free(tName);
+   // freez(&range);
   }
-  UNPROTECT(3);
   hashTraverseEls(hash, collapseRangeList);
   hashTraverseEls(hash, convertRangeListToArray);
   return hash;
@@ -749,7 +780,9 @@ SEXP myCeScan(SEXP tFilterNames, SEXP tFilterStarts, SEXP tFilterEnds, SEXP qFil
   struct axt *axt;
   tFilter = buildHashForBed(tFilterNames, tFilterStarts, tFilterEnds);
   qFilter = buildHashForBed(qFilterNames, qFilterStarts, qFilterEnds);
-  qSizes = buildHashForSizeFile(sizeNames, sizeSizes); 
+  freeHashAndValsWithFreez(&tFilter);
+  freeHashAndValsWithFreez(&qFilter);
+  /*qSizes = buildHashForSizeFile(sizeNames, sizeSizes); 
   qFilterRev = qFilter ? makeReversedFilter(qFilter, qSizes) : NULL;
   axt = buildAxt(axtqNames, axtqStart, axtqEnd, axtqStrand, axtqSym, axttNames, axttStart, axttEnd, axttStrand, axttSym, score, symCount);
   // here I decided to build axt in the linked axt, rather than one by one. Perhaps it has lower performance than one by one way.
@@ -847,8 +880,8 @@ SEXP myCeScan(SEXP tFilterNames, SEXP tFilterStarts, SEXP tFilterEnds, SEXP qFil
     j++;
   }
   setAttrib(returnList, R_NamesSymbol, returnListNames);
-  UNPROTECT(2);
-  //return(R_NilValue);
-  return returnList;
+  UNPROTECT(2);*/
+  return R_NilValue;
+  //return returnList;
 }
 
