@@ -179,6 +179,7 @@ showAxt = function(x, margin="", half_nrow=5L){
 
 setMethod("show", "axt",
           function(object){
+            lx = length(object)
             cat(" A ", class(object), " with ", length(object), " ", 
                 ifelse(lx == 1L, "alignment pair", "alignment pairs"), ":\n", sep="")
             if(length(object) != 0){
