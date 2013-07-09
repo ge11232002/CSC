@@ -712,18 +712,18 @@ struct hash *buildHashForSizeFile(SEXP names, SEXP sizes){
 
 struct axt *buildAxt(SEXP axtqNames, SEXP axtqStart, SEXP axtqEnd, SEXP axtqStrand, SEXP axtqSym, SEXP axttNames, SEXP axttStart, SEXP axttEnd, SEXP axttStrand, SEXP axttSym, SEXP score, SEXP symCount){
   // The built axt can be freed by axtFreeList
-  PROTECT(axtqNames = AS_CHARACTER(axtqNames));
-  PROTECT(axtqStart = AS_INTEGER(axtqStart));
-  PROTECT(axtqEnd = AS_INTEGER(axtqEnd));
-  PROTECT(axtqStrand = AS_CHARACTER(axtqStrand));
-  PROTECT(axtqSym = AS_CHARACTER(axtqSym));
-  PROTECT(axttNames = AS_CHARACTER(axttNames));
-  PROTECT(axttStart = AS_INTEGER(axttStart));
-  PROTECT(axttEnd = AS_INTEGER(axttEnd));
-  PROTECT(axttStrand = AS_CHARACTER(axttStrand));
-  PROTECT(axttSym = AS_CHARACTER(axttSym));
-  PROTECT(score = AS_INTEGER(score));
-  PROTECT(symCount = AS_INTEGER(symCount));
+  axtqNames = AS_CHARACTER(axtqNames);
+  axtqStart = AS_INTEGER(axtqStart);
+  axtqEnd = AS_INTEGER(axtqEnd);
+  axtqStrand = AS_CHARACTER(axtqStrand);
+  axtqSym = AS_CHARACTER(axtqSym);
+  axttNames = AS_CHARACTER(axttNames);
+  axttStart = AS_INTEGER(axttStart);
+  axttEnd = AS_INTEGER(axttEnd);
+  axttStrand = AS_CHARACTER(axttStrand);
+  axttSym = AS_CHARACTER(axttSym);
+  score = AS_INTEGER(score);
+  symCount = AS_INTEGER(symCount);
   int i, *p_axtqStart, *p_axtqEnd, *p_axttStart, *p_axttEnd, *p_score, *p_symCount;
   p_axtqStart = INTEGER_POINTER(axtqStart);
   p_axtqEnd = INTEGER_POINTER(axtqEnd);
@@ -754,7 +754,7 @@ struct axt *buildAxt(SEXP axtqNames, SEXP axtqStart, SEXP axtqEnd, SEXP axtqStra
     axt = curAxt;
   }
   //axtFree(curAxt);
-  UNPROTECT(12);
+  //UNPROTECT(12);
   return axt;
 }
 
@@ -791,16 +791,16 @@ SEXP myCeScan(SEXP tFilterNames, SEXP tFilterStarts, SEXP tFilterEnds, SEXP qFil
   //freeHashAndValsForRanges(&qFilter);
   //freeHash(&qSizes);
   //freeHashAndValsForRanges(&qFilterRev);
-  axt = buildAxt(axtqNames, axtqStart, axtqEnd, axtqStrand, axtqSym, axttNames, axttStart, axttEnd, axttStrand, axttSym, score, symCount);
+  //axt = buildAxt(axtqNames, axtqStart, axtqEnd, axtqStrand, axtqSym, axttNames, axttStart, axttEnd, axttStrand, axttSym, score, symCount);
   // here I decided to build axt in the linked axt, rather than one by one. Perhaps it has lower performance than one by one way.
-  /*struct slThreshold *thresholds, *tr;
+  struct slThreshold *thresholds, *tr;
   struct slCNE *CNE;
   int nrThresholds;
   nrThresholds = GET_LENGTH(winSize);
   int nrCNE[nrThresholds], i;
   thresholds = buildThreshold(winSize, minScore);
 
-  setBpScores(bpScores);
+  /*setBpScores(bpScores);
   SEXP tName, tStart, tEnd, qName, qStart, qEnd, strand, CNEscore, cigar, returnList, oneList, list_names, returnListNames; 
   //int k = 0;
   while(axt){
