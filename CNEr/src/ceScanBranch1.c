@@ -759,11 +759,12 @@ struct axt *buildAxt(SEXP axtqNames, SEXP axtqStart, SEXP axtqEnd, SEXP axtqStra
 }
 
 struct slThreshold *buildThreshold(SEXP winSize, SEXP minScore){
+  // checked for memory leak!
+  // The built slThreshold should be freed by slFreeList 
   struct slThreshold *trList = NULL, *tr;
   char path[PATH_LEN];
-  PROTECT(winSize = AS_INTEGER(winSize));
-  PROTECT(minScore = AS_INTEGER(minScore));
-  //PROTECT(outFilePrefix = AS_CHARACTER(outFilePrefix));
+  winSize = AS_INTEGER(winSize);
+  minScore = AS_INTEGER(minScore);
   int i, nThresholds = GET_LENGTH(winSize);
   int *p_winSize, *p_minScore;
   p_winSize = INTEGER_POINTER(winSize);
@@ -776,7 +777,6 @@ struct slThreshold *buildThreshold(SEXP winSize, SEXP minScore){
     //tr->outFile = mustOpen(path, "w");
     slAddHead(&trList, tr);
   }
-  UNPROTECT(2);
   return trList;
 }
 
@@ -799,7 +799,7 @@ SEXP myCeScan(SEXP tFilterNames, SEXP tFilterStarts, SEXP tFilterEnds, SEXP qFil
   nrThresholds = GET_LENGTH(winSize);
   int nrCNE[nrThresholds], i;
   thresholds = buildThreshold(winSize, minScore);
-
+  slFreeList(&thresholds);
   /*setBpScores(bpScores);
   SEXP tName, tStart, tEnd, qName, qStart, qEnd, strand, CNEscore, cigar, returnList, oneList, list_names, returnListNames; 
   //int k = 0;
