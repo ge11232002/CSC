@@ -248,6 +248,8 @@ struct hash *readFilter(char *fileName)
 struct hash *makeReversedFilter(struct hash *f1, struct hash *chrSizes)
 /* Given a filter, create a reversed filter where coordinates increase in the opposite direction.
  * We use this for filtering alignments that have qStrand == '-'. */
+  // This built hash can be released by freeHashAndValsForRanges
+  // Then this function has no memory leak now!
 {
   struct hash *f2 = newHash(0);
   struct hashCookie cookie = hashFirst(f1);
@@ -781,13 +783,14 @@ SEXP myCeScan(SEXP tFilterNames, SEXP tFilterStarts, SEXP tFilterEnds, SEXP qFil
   struct hash *tFilter, *qFilter, *qFilterRev, *qSizes;
   struct axt *axt;
   //tFilter = buildHashForBed(tFilterNames, tFilterStarts, tFilterEnds);
-  //qFilter = buildHashForBed(qFilterNames, qFilterStarts, qFilterEnds);
+  qFilter = buildHashForBed(qFilterNames, qFilterStarts, qFilterEnds);
   //freeHashAndValsForRanges(&tFilter);
-  //freeHashAndValsForRanges(&qFilter);
   qSizes = buildHashForSizeFile(sizeNames, sizeSizes); 
-  //freeHash(&qSizes);
-  /*qFilterRev = qFilter ? makeReversedFilter(qFilter, qSizes) : NULL;
-  axt = buildAxt(axtqNames, axtqStart, axtqEnd, axtqStrand, axtqSym, axttNames, axttStart, axttEnd, axttStrand, axttSym, score, symCount);
+  qFilterRev = qFilter ? makeReversedFilter(qFilter, qSizes) : NULL;
+  freeHashAndValsForRanges(&qFilter);
+  freeHash(&qSizes);
+  freeHashAndValsForRanges(&qFilterRev);
+  /*axt = buildAxt(axtqNames, axtqStart, axtqEnd, axtqStrand, axtqSym, axttNames, axttStart, axttEnd, axttStrand, axttSym, score, symCount);
   // here I decided to build axt in the linked axt, rather than one by one. Perhaps it has lower performance than one by one way.
   struct slThreshold *thresholds, *tr;
   struct slCNE *CNE;
