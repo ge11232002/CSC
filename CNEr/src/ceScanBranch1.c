@@ -821,7 +821,7 @@ SEXP myCeScan(SEXP tFilterNames, SEXP tFilterStarts, SEXP tFilterEnds, SEXP qFil
   struct slCNE *CNE;
   int nrThresholds;
   nrThresholds = GET_LENGTH(winSize);
-  int nrCNE[nrThresholds], i;
+  int i;
   thresholds = buildThreshold(winSize, minScore);
   setBpScores(bpScores);
   SEXP tName, tStart, tEnd, qName, qStart, qEnd, strand, CNEscore, cigar, returnList, oneList, list_names, returnListNames; 
@@ -834,10 +834,6 @@ SEXP myCeScan(SEXP tFilterNames, SEXP tFilterStarts, SEXP tFilterEnds, SEXP qFil
     //k++;
   }
   i = 0;
-  for(tr = thresholds; tr != NULL; tr = tr->next){
-    nrCNE[i] = tr->nrCNE;
-    i++;
-  }
 
   PROTECT(returnList = NEW_LIST(nrThresholds));
   PROTECT(returnListNames = NEW_CHARACTER(nrThresholds));
