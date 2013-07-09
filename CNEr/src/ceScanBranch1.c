@@ -711,6 +711,7 @@ struct hash *buildHashForSizeFile(SEXP names, SEXP sizes){
 }
 
 struct axt *buildAxt(SEXP axtqNames, SEXP axtqStart, SEXP axtqEnd, SEXP axtqStrand, SEXP axtqSym, SEXP axttNames, SEXP axttStart, SEXP axttEnd, SEXP axttStrand, SEXP axttSym, SEXP score, SEXP symCount){
+  // The built axt can be freed by axtFreeList
   PROTECT(axtqNames = AS_CHARACTER(axtqNames));
   PROTECT(axtqStart = AS_INTEGER(axtqStart));
   PROTECT(axtqEnd = AS_INTEGER(axtqEnd));
@@ -783,16 +784,16 @@ SEXP myCeScan(SEXP tFilterNames, SEXP tFilterStarts, SEXP tFilterEnds, SEXP qFil
   struct hash *tFilter, *qFilter, *qFilterRev, *qSizes;
   struct axt *axt;
   //tFilter = buildHashForBed(tFilterNames, tFilterStarts, tFilterEnds);
-  qFilter = buildHashForBed(qFilterNames, qFilterStarts, qFilterEnds);
+  //qFilter = buildHashForBed(qFilterNames, qFilterStarts, qFilterEnds);
   //freeHashAndValsForRanges(&tFilter);
-  qSizes = buildHashForSizeFile(sizeNames, sizeSizes); 
-  qFilterRev = qFilter ? makeReversedFilter(qFilter, qSizes) : NULL;
-  freeHashAndValsForRanges(&qFilter);
-  freeHash(&qSizes);
-  freeHashAndValsForRanges(&qFilterRev);
-  /*axt = buildAxt(axtqNames, axtqStart, axtqEnd, axtqStrand, axtqSym, axttNames, axttStart, axttEnd, axttStrand, axttSym, score, symCount);
+  //qSizes = buildHashForSizeFile(sizeNames, sizeSizes); 
+  //qFilterRev = qFilter ? makeReversedFilter(qFilter, qSizes) : NULL;
+  //freeHashAndValsForRanges(&qFilter);
+  //freeHash(&qSizes);
+  //freeHashAndValsForRanges(&qFilterRev);
+  axt = buildAxt(axtqNames, axtqStart, axtqEnd, axtqStrand, axtqSym, axttNames, axttStart, axttEnd, axttStrand, axttSym, score, symCount);
   // here I decided to build axt in the linked axt, rather than one by one. Perhaps it has lower performance than one by one way.
-  struct slThreshold *thresholds, *tr;
+  /*struct slThreshold *thresholds, *tr;
   struct slCNE *CNE;
   int nrThresholds;
   nrThresholds = GET_LENGTH(winSize);
