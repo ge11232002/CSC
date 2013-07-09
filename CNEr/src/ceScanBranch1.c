@@ -657,6 +657,7 @@ if ((hash = *pHash) != NULL)
 struct hash *buildHashForBed(SEXP tNames, SEXP tStarts, SEXP tEnds){
 /* Given three vectors of names, starts and ends of the filter, return the hash table */
   // Here the tStarts are in 1-based coordinate. In the hash, it's in 0-based.
+  // The built hash can be released by the freeHashAndValsForRanges.
   tNames = AS_CHARACTER(tNames);
   tStarts = AS_INTEGER(tStarts);
   tEnds = AS_INTEGER(tEnds);
@@ -691,8 +692,10 @@ struct hash *buildHashForBed(SEXP tNames, SEXP tStarts, SEXP tEnds){
 }
 
 struct hash *buildHashForSizeFile(SEXP names, SEXP sizes){
-  PROTECT(names = AS_CHARACTER(names));
-  PROTECT(sizes = AS_INTEGER(sizes));
+  // There is no memory leak for this function now!
+  //This built hash can be released by the freeHash.
+  names = AS_CHARACTER(names);
+  sizes = AS_INTEGER(sizes);
   struct hash *hash = newHash(0);
   int i, *p_sizes, n = GET_LENGTH(names);
   p_sizes = INTEGER_POINTER(sizes);
@@ -702,7 +705,6 @@ struct hash *buildHashForSizeFile(SEXP names, SEXP sizes){
     hashAddInt(hash, name, p_sizes[i]);
     free(name);
   }
-  UNPROTECT(2);
   return hash;
 }
 
@@ -778,12 +780,13 @@ struct slThreshold *buildThreshold(SEXP winSize, SEXP minScore){
 SEXP myCeScan(SEXP tFilterNames, SEXP tFilterStarts, SEXP tFilterEnds, SEXP qFilterNames, SEXP qFilterStarts, SEXP qFilterEnds, SEXP sizeNames, SEXP sizeSizes, SEXP axttNames, SEXP axttStart, SEXP axttEnd, SEXP axttStrand, SEXP axttSym, SEXP axtqNames, SEXP axtqStart, SEXP axtqEnd, SEXP axtqStrand, SEXP axtqSym, SEXP score, SEXP symCount, SEXP winSize, SEXP minScore){
   struct hash *tFilter, *qFilter, *qFilterRev, *qSizes;
   struct axt *axt;
-  tFilter = buildHashForBed(tFilterNames, tFilterStarts, tFilterEnds);
-  qFilter = buildHashForBed(qFilterNames, qFilterStarts, qFilterEnds);
-  freeHashAndValsForRanges(&tFilter);
-  freeHashAndValsForRanges(&qFilter);
-  /*qSizes = buildHashForSizeFile(sizeNames, sizeSizes); 
-  qFilterRev = qFilter ? makeReversedFilter(qFilter, qSizes) : NULL;
+  //tFilter = buildHashForBed(tFilterNames, tFilterStarts, tFilterEnds);
+  //qFilter = buildHashForBed(qFilterNames, qFilterStarts, qFilterEnds);
+  //freeHashAndValsForRanges(&tFilter);
+  //freeHashAndValsForRanges(&qFilter);
+  qSizes = buildHashForSizeFile(sizeNames, sizeSizes); 
+  //freeHash(&qSizes);
+  /*qFilterRev = qFilter ? makeReversedFilter(qFilter, qSizes) : NULL;
   axt = buildAxt(axtqNames, axtqStart, axtqEnd, axtqStrand, axtqSym, axttNames, axttStart, axttEnd, axttStrand, axttSym, score, symCount);
   // here I decided to build axt in the linked axt, rather than one by one. Perhaps it has lower performance than one by one way.
   struct slThreshold *thresholds, *tr;
