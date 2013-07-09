@@ -351,7 +351,8 @@ void addCigarString(struct slCNE *CNE, struct axt *axt, int i, int j){
     sprintf(temp, "%d%c", count, type);
     strcat(cigar, temp);
   }
-  char *holdCigar = (char *) malloc(sizeof(char) * 1000);
+  //char *holdCigar = (char *) malloc(sizeof(char) * 1000);
+  char *holdCigar = (char *) R_alloc(1000, sizeof(char));
   strcpy(holdCigar, cigar); 
   CNE->cigar = holdCigar;
 }
@@ -625,16 +626,6 @@ void ceScan(char **tFilterFile, char **qFilterFile, char **qSizeFile, int *winSi
 }
 
 /*######################################################*/
-void freeMyHash(struct hashEl *hel)
-{
-  struct slRange *a, *b;
-  a = hel->val;
-  while((b = a->next)){
-    free(a);
-    a = b;
-  }
-  free(a);
-}
 
 void freeRangeArray(struct hashEl *hel)
 {
@@ -654,6 +645,38 @@ if ((hash = *pHash) != NULL)
     hashTraverseEls(hash, freeRangeArray);
     freeHash(pHash);
     }
+}
+
+void freeAxtListOnly(struct axt **pList)
+{
+  struct axt *el, *next;
+  for(el = *pList; el != NULL; el = next)
+  {
+    next = el->next;
+    freez(&el);
+  }
+  *pList = NULL;
+}
+
+void freeSlThreshold(struct slThreshold **p_thresholds)
+// Free up a SlThreshold class and the CNEs inside
+{
+  struct slThreshold *thresholds, *nextThreshold, *el_threshold;
+  struct slCNE *CNE, *nextCNE, *el_CNE;
+  nextThreshold = *p_thresholds;
+  while(nextThreshold != NULL)
+  {
+    el_threshold = nextThreshold;
+    nextCNE = el_threshold->CNE;
+    while(nextCNE != NULL){
+      el_CNE = nextCNE;
+      nextCNE = el_CNE->next;
+      freez(&el_CNE);
+    }
+    nextThreshold = el_threshold->next;
+    freez(&el_threshold);
+  }
+  *p_thresholds = NULL;
 }
 
 struct hash *buildHashForBed(SEXP tNames, SEXP tStarts, SEXP tEnds){
@@ -782,16 +805,12 @@ struct slThreshold *buildThreshold(SEXP winSize, SEXP minScore){
 
 SEXP myCeScan(SEXP tFilterNames, SEXP tFilterStarts, SEXP tFilterEnds, SEXP qFilterNames, SEXP qFilterStarts, SEXP qFilterEnds, SEXP sizeNames, SEXP sizeSizes, SEXP axttNames, SEXP axttStart, SEXP axttEnd, SEXP axttStrand, SEXP axttSym, SEXP axtqNames, SEXP axtqStart, SEXP axtqEnd, SEXP axtqStrand, SEXP axtqSym, SEXP score, SEXP symCount, SEXP winSize, SEXP minScore){
   struct hash *tFilter, *qFilter, *qFilterRev, *qSizes;
-  struct axt *axt;
-  //tFilter = buildHashForBed(tFilterNames, tFilterStarts, tFilterEnds);
-  //qFilter = buildHashForBed(qFilterNames, qFilterStarts, qFilterEnds);
-  //freeHashAndValsForRanges(&tFilter);
-  //qSizes = buildHashForSizeFile(sizeNames, sizeSizes); 
-  //qFilterRev = qFilter ? makeReversedFilter(qFilter, qSizes) : NULL;
-  //freeHashAndValsForRanges(&qFilter);
-  //freeHash(&qSizes);
-  //freeHashAndValsForRanges(&qFilterRev);
-  //axt = buildAxt(axtqNames, axtqStart, axtqEnd, axtqStrand, axtqSym, axttNames, axttStart, axttEnd, axttStrand, axttSym, score, symCount);
+  struct axt *axt, *curAxt;
+  tFilter = buildHashForBed(tFilterNames, tFilterStarts, tFilterEnds);
+  qFilter = buildHashForBed(qFilterNames, qFilterStarts, qFilterEnds);
+  qSizes = buildHashForSizeFile(sizeNames, sizeSizes); 
+  qFilterRev = qFilter ? makeReversedFilter(qFilter, qSizes) : NULL;
+  axt = buildAxt(axtqNames, axtqStart, axtqEnd, axtqStrand, axtqSym, axttNames, axttStart, axttEnd, axttStrand, axttSym, score, symCount);
   // here I decided to build axt in the linked axt, rather than one by one. Perhaps it has lower performance than one by one way.
   struct slThreshold *thresholds, *tr;
   struct slCNE *CNE;
@@ -799,13 +818,13 @@ SEXP myCeScan(SEXP tFilterNames, SEXP tFilterStarts, SEXP tFilterEnds, SEXP qFil
   nrThresholds = GET_LENGTH(winSize);
   int nrCNE[nrThresholds], i;
   thresholds = buildThreshold(winSize, minScore);
-  slFreeList(&thresholds);
-  /*setBpScores(bpScores);
+  setBpScores(bpScores);
   SEXP tName, tStart, tEnd, qName, qStart, qEnd, strand, CNEscore, cigar, returnList, oneList, list_names, returnListNames; 
   //int k = 0;
-  while(axt){
-    scanAxt(axt, qSizes, tFilter, axt->qStrand == '+' ? qFilter : qFilterRev, thresholds);
-    axt = axt->next;
+  curAxt = axt;
+  while(curAxt){
+    scanAxt(curAxt, qSizes, tFilter, axt->qStrand == '+' ? qFilter : qFilterRev, thresholds);
+    curAxt = curAxt->next;
     //if(k > 50) break;
     //k++;
   }
@@ -887,7 +906,13 @@ SEXP myCeScan(SEXP tFilterNames, SEXP tFilterStarts, SEXP tFilterEnds, SEXP qFil
     j++;
   }
   setAttrib(returnList, R_NamesSymbol, returnListNames);
-  UNPROTECT(2);*/
+  UNPROTECT(2);
+  freeHashAndValsForRanges(&tFilter);
+  freeHashAndValsForRanges(&qFilter);
+  freeHash(&qSizes);
+  freeHashAndValsForRanges(&qFilterRev);
+  freeAxtListOnly(&axt);
+  freeSlThreshold(&thresholds);
   return R_NilValue;
   //return returnList;
 }
