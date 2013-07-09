@@ -351,8 +351,8 @@ void addCigarString(struct slCNE *CNE, struct axt *axt, int i, int j){
     sprintf(temp, "%d%c", count, type);
     strcat(cigar, temp);
   }
-  //char *holdCigar = (char *) malloc(sizeof(char) * 1000);
-  char *holdCigar = (char *) R_alloc(1000, sizeof(char));
+  char *holdCigar = (char *) malloc(sizeof(char) * 1000);
+  //char *holdCigar = (char *) R_alloc(1000, sizeof(char));
   strcpy(holdCigar, cigar); 
   CNE->cigar = holdCigar;
 }
@@ -445,6 +445,8 @@ void addCNE(struct slThreshold *tr, struct axt *axt, struct hash *qSizes, int *p
   CNE->score = 100.0 * score / (j-i+1);
   addCigarString(CNE, axt, i, j);
   slAddHead(&(tr->CNE), CNE);
+  //free(CNE->cigar);
+  //freez(&CNE);
 }
 
 
@@ -666,11 +668,14 @@ void freeSlThreshold(struct slThreshold **p_thresholds)
   nextThreshold = *p_thresholds;
   while(nextThreshold != NULL)
   {
+    Rprintf("I am in free Slthreshold\n");
     el_threshold = nextThreshold;
     nextCNE = el_threshold->CNE;
     while(nextCNE != NULL){
+      // Rprintf("I am in free CNE\n");
       el_CNE = nextCNE;
       nextCNE = el_CNE->next;
+      free(el_CNE->cigar);
       freez(&el_CNE);
     }
     nextThreshold = el_threshold->next;
