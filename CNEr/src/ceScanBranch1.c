@@ -642,7 +642,7 @@ void freeRangeArray(struct hashEl *hel)
   free(arrayInfo);
 }
 
-void freeHashAndValsWithFreez(struct hash **pHash)
+void freeHashAndValsForRanges(struct hash **pHash)
 /* Free up hash table and all values associated with it.
  * (Just calls freeMem on each hel->val) */
 {
@@ -780,8 +780,8 @@ SEXP myCeScan(SEXP tFilterNames, SEXP tFilterStarts, SEXP tFilterEnds, SEXP qFil
   struct axt *axt;
   tFilter = buildHashForBed(tFilterNames, tFilterStarts, tFilterEnds);
   qFilter = buildHashForBed(qFilterNames, qFilterStarts, qFilterEnds);
-  freeHashAndValsWithFreez(&tFilter);
-  freeHashAndValsWithFreez(&qFilter);
+  freeHashAndValsForRanges(&tFilter);
+  freeHashAndValsForRanges(&qFilter);
   /*qSizes = buildHashForSizeFile(sizeNames, sizeSizes); 
   qFilterRev = qFilter ? makeReversedFilter(qFilter, qSizes) : NULL;
   axt = buildAxt(axtqNames, axtqStart, axtqEnd, axtqStrand, axtqSym, axttNames, axttStart, axttEnd, axttStrand, axttSym, score, symCount);
