@@ -688,9 +688,9 @@ struct hash *buildHashForBed(SEXP tNames, SEXP tStarts, SEXP tEnds){
 /* Given three vectors of names, starts and ends of the filter, return the hash table */
   // Here the tStarts are in 1-based coordinate. In the hash, it's in 0-based.
   // The built hash can be released by the freeHashAndValsForRanges.
-  tNames = AS_CHARACTER(tNames);
-  tStarts = AS_INTEGER(tStarts);
-  tEnds = AS_INTEGER(tEnds);
+  PROTECT(tNames = AS_CHARACTER(tNames));
+  PROTECT(tStarts = AS_INTEGER(tStarts));
+  PROTECT(tEnds = AS_INTEGER(tEnds));
   struct hash *hash = newHash(0);
   struct slRange *range;
   struct hashEl *hel;
@@ -716,6 +716,7 @@ struct hash *buildHashForBed(SEXP tNames, SEXP tStarts, SEXP tEnds){
     free(tName);
    // freez(&range);
   }
+  UNPROTECT(3);
   hashTraverseEls(hash, collapseRangeList);
   hashTraverseEls(hash, convertRangeListToArray);
   return hash;
@@ -724,8 +725,8 @@ struct hash *buildHashForBed(SEXP tNames, SEXP tStarts, SEXP tEnds){
 struct hash *buildHashForSizeFile(SEXP names, SEXP sizes){
   // There is no memory leak for this function now!
   //This built hash can be released by the freeHash.
-  names = AS_CHARACTER(names);
-  sizes = AS_INTEGER(sizes);
+  PROTECT(names = AS_CHARACTER(names));
+  PROTECT(sizes = AS_INTEGER(sizes));
   struct hash *hash = newHash(0);
   int i, *p_sizes, n = GET_LENGTH(names);
   p_sizes = INTEGER_POINTER(sizes);
@@ -735,23 +736,24 @@ struct hash *buildHashForSizeFile(SEXP names, SEXP sizes){
     hashAddInt(hash, name, p_sizes[i]);
     free(name);
   }
+  UNPROTECT(2);
   return hash;
 }
 
 struct axt *buildAxt(SEXP axtqNames, SEXP axtqStart, SEXP axtqEnd, SEXP axtqStrand, SEXP axtqSym, SEXP axttNames, SEXP axttStart, SEXP axttEnd, SEXP axttStrand, SEXP axttSym, SEXP score, SEXP symCount){
   // The built axt can be freed by axtFreeList
-  axtqNames = AS_CHARACTER(axtqNames);
-  axtqStart = AS_INTEGER(axtqStart);
-  axtqEnd = AS_INTEGER(axtqEnd);
-  axtqStrand = AS_CHARACTER(axtqStrand);
-  axtqSym = AS_CHARACTER(axtqSym);
-  axttNames = AS_CHARACTER(axttNames);
-  axttStart = AS_INTEGER(axttStart);
-  axttEnd = AS_INTEGER(axttEnd);
-  axttStrand = AS_CHARACTER(axttStrand);
-  axttSym = AS_CHARACTER(axttSym);
-  score = AS_INTEGER(score);
-  symCount = AS_INTEGER(symCount);
+  PROTECT(axtqNames = AS_CHARACTER(axtqNames));
+  PROTECT(axtqStart = AS_INTEGER(axtqStart));
+  PROTECT(axtqEnd = AS_INTEGER(axtqEnd));
+  PROTECT(axtqStrand = AS_CHARACTER(axtqStrand));
+  PROTECT(axtqSym = AS_CHARACTER(axtqSym));
+  PROTECT(axttNames = AS_CHARACTER(axttNames));
+  PROTECT(axttStart = AS_INTEGER(axttStart));
+  PROTECT(axttEnd = AS_INTEGER(axttEnd));
+  PROTECT(axttStrand = AS_CHARACTER(axttStrand));
+  PROTECT(axttSym = AS_CHARACTER(axttSym));
+  PROTECT(score = AS_INTEGER(score));
+  PROTECT(symCount = AS_INTEGER(symCount));
   int i, *p_axtqStart, *p_axtqEnd, *p_axttStart, *p_axttEnd, *p_score, *p_symCount;
   p_axtqStart = INTEGER_POINTER(axtqStart);
   p_axtqEnd = INTEGER_POINTER(axtqEnd);
@@ -782,7 +784,7 @@ struct axt *buildAxt(SEXP axtqNames, SEXP axtqStart, SEXP axtqEnd, SEXP axtqStra
     axt = curAxt;
   }
   //axtFree(curAxt);
-  //UNPROTECT(12);
+  UNPROTECT(12);
   return axt;
 }
 
@@ -791,8 +793,8 @@ struct slThreshold *buildThreshold(SEXP winSize, SEXP minScore){
   // The built slThreshold should be freed by slFreeList 
   struct slThreshold *trList = NULL, *tr;
   char path[PATH_LEN];
-  winSize = AS_INTEGER(winSize);
-  minScore = AS_INTEGER(minScore);
+  PROTECT(winSize = AS_INTEGER(winSize));
+  PROTECT(minScore = AS_INTEGER(minScore));
   int i, nThresholds = GET_LENGTH(winSize);
   int *p_winSize, *p_minScore;
   p_winSize = INTEGER_POINTER(winSize);
@@ -805,6 +807,7 @@ struct slThreshold *buildThreshold(SEXP winSize, SEXP minScore){
     //tr->outFile = mustOpen(path, "w");
     slAddHead(&trList, tr);
   }
+  UNPROTECT(2);
   return trList;
 }
 
