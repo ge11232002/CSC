@@ -817,7 +817,7 @@ SEXP myCeScan(SEXP tFilterNames, SEXP tFilterStarts, SEXP tFilterEnds, SEXP qFil
   qFilterRev = qFilter ? makeReversedFilter(qFilter, qSizes) : NULL;
   axt = buildAxt(axtqNames, axtqStart, axtqEnd, axtqStrand, axtqSym, axttNames, axttStart, axttEnd, axttStrand, axttSym, score, symCount);
   // here I decided to build axt in the linked axt, rather than one by one. Perhaps it has lower performance than one by one way.
-  struct slThreshold *thresholds, *tr;
+  struct slThreshold *thresholds, *tr, *curThresholds;
   struct slCNE *CNE;
   int nrThresholds;
   nrThresholds = GET_LENGTH(winSize);
@@ -833,7 +833,6 @@ SEXP myCeScan(SEXP tFilterNames, SEXP tFilterStarts, SEXP tFilterEnds, SEXP qFil
     //if(k > 50) break;
     //k++;
   }
-  i = 0;
 
   PROTECT(returnList = NEW_LIST(nrThresholds));
   PROTECT(returnListNames = NEW_CHARACTER(nrThresholds));
@@ -841,7 +840,9 @@ SEXP myCeScan(SEXP tFilterNames, SEXP tFilterStarts, SEXP tFilterEnds, SEXP qFil
   int *p_qStart, *p_qEnd, *p_tStart, *p_tEnd;
   double *p_CNEscore;
   int j = 0;
+  curThresholds = thresholds;
   for(tr = thresholds; tr != NULL; tr = tr->next){
+    Rprintf("The nrCNE is %d\n", tr->nrCNE);
     PROTECT(tName = NEW_CHARACTER(tr->nrCNE));
     PROTECT(tStart = NEW_INTEGER(tr->nrCNE));
     PROTECT(tEnd = NEW_INTEGER(tr->nrCNE));
@@ -860,9 +861,14 @@ SEXP myCeScan(SEXP tFilterNames, SEXP tFilterStarts, SEXP tFilterEnds, SEXP qFil
     p_tEnd = INTEGER_POINTER(tEnd);
     p_CNEscore = NUMERIC_POINTER(CNEscore);
     for(CNE = tr->CNE; CNE != NULL; CNE = CNE->next){
+      //char *temp = (char *) malloc(sizeof(char) * strlen(CNE->tName));
+      //strcpy(temp, CNE->tName);
+      //SET_STRING_ELT(tName, i, mkChar(temp));
+      //free(temp);
       SET_STRING_ELT(tName, i, mkChar(CNE->tName));
       p_tStart[i] = CNE->tStart;
       p_tEnd[i] = CNE->tEnd;
+      //Rprintf("The qName is %s\n", CNE->qName);
       SET_STRING_ELT(qName, i, mkChar(CNE->qName));
       p_qStart[i] = CNE->qStart;
       p_qEnd[i] = CNE->qEnd;
@@ -870,9 +876,8 @@ SEXP myCeScan(SEXP tFilterNames, SEXP tFilterStarts, SEXP tFilterEnds, SEXP qFil
         SET_STRING_ELT(strand, i, mkChar("+"));
       else
         SET_STRING_ELT(strand, i, mkChar("-"));
-      //SET_STRING_ELT(strand, i, mkChar(CNE->strand));
       p_CNEscore[i] = CNE->score;
-      SET_STRING_ELT(cigar, i, mkChar(CNE->cigar));
+      //SET_STRING_ELT(cigar, i, mkChar(CNE->cigar));
       i++;
     }
     SET_VECTOR_ELT(oneList, 0, tName);
@@ -883,7 +888,7 @@ SEXP myCeScan(SEXP tFilterNames, SEXP tFilterStarts, SEXP tFilterEnds, SEXP qFil
     SET_VECTOR_ELT(oneList, 5, qEnd);
     SET_VECTOR_ELT(oneList, 6, strand);
     SET_VECTOR_ELT(oneList, 7, CNEscore);
-    SET_VECTOR_ELT(oneList, 8, cigar);
+    //SET_VECTOR_ELT(oneList, 8, cigar);
     SET_STRING_ELT(list_names, 0,  mkChar("tName"));
     SET_STRING_ELT(list_names, 1,  mkChar("tStart"));
     SET_STRING_ELT(list_names, 2,  mkChar("tEnd"));
@@ -914,7 +919,7 @@ SEXP myCeScan(SEXP tFilterNames, SEXP tFilterStarts, SEXP tFilterEnds, SEXP qFil
   freeHashAndValsForRanges(&qFilterRev);
   freeAxtListOnly(&axt);
   freeSlThreshold(&thresholds);
-  return R_NilValue;
-  //return returnList;
+  //return R_NilValue;
+  return returnList;
 }
 
