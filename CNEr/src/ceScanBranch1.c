@@ -824,7 +824,7 @@ SEXP myCeScan(SEXP tFilterNames, SEXP tFilterStarts, SEXP tFilterEnds, SEXP qFil
   int i;
   thresholds = buildThreshold(winSize, minScore);
   setBpScores(bpScores);
-  SEXP tName, tStart, tEnd, qName, qStart, qEnd, strand, CNEscore, cigar, returnList, oneList, list_names, returnListNames; 
+  SEXP tName, tStart, tEnd, qName, qStart, qEnd, strand, CNEscore, cigar, returnList, oneList, list_names, returnListNames, cigarWidth; 
   //int k = 0;
   curAxt = axt;
   while(curAxt){
@@ -833,7 +833,8 @@ SEXP myCeScan(SEXP tFilterNames, SEXP tFilterStarts, SEXP tFilterEnds, SEXP qFil
     //if(k > 50) break;
     //k++;
   }
-
+  IntAE width_buf;
+  SEXP width;
   PROTECT(returnList = NEW_LIST(nrThresholds));
   PROTECT(returnListNames = NEW_CHARACTER(nrThresholds));
   char name[20], temp[10];
@@ -842,6 +843,11 @@ SEXP myCeScan(SEXP tFilterNames, SEXP tFilterStarts, SEXP tFilterEnds, SEXP qFil
   int j = 0;
   curThresholds = thresholds;
   for(tr = thresholds; tr != NULL; tr = tr->next){
+    width_buf = new_IntAE(0, 0, 0);
+    for(CNE = tr->CNE; CNE != NULL; CNE = CNE->next){
+      IntAE_insert_at(&width_buf, IntAE_get_nelt(&width_buf), strlen(CNE->cigar));
+    }
+    PROTECT(width = new_INTEGER_from_IntAE(&width_buf));
     Rprintf("The nrCNE is %d\n", tr->nrCNE);
     PROTECT(tName = NEW_CHARACTER(tr->nrCNE));
     PROTECT(tStart = NEW_INTEGER(tr->nrCNE));
@@ -851,9 +857,13 @@ SEXP myCeScan(SEXP tFilterNames, SEXP tFilterStarts, SEXP tFilterEnds, SEXP qFil
     PROTECT(qEnd = NEW_INTEGER(tr->nrCNE));
     PROTECT(strand = NEW_CHARACTER(tr->nrCNE));
     PROTECT(CNEscore = NEW_NUMERIC(tr->nrCNE));
-    PROTECT(cigar = NEW_CHARACTER(tr->nrCNE));
+    //PROTECT(cigar = NEW_CHARACTER(tr->nrCNE));
+    PROTECT(cigar = alloc_XRawList("BStringSet", "BString", width));
     PROTECT(list_names = NEW_CHARACTER(9));
     PROTECT(oneList = NEW_LIST(9));
+    cachedXVectorList cached_ans_cigar;
+    cachedCharSeq cached_ans_elt;
+    cached_ans_cigar = cache_XVectorList(cigar);
     i = 0;
     p_qStart = INTEGER_POINTER(qStart);
     p_qEnd = INTEGER_POINTER(qEnd);
@@ -878,6 +888,8 @@ SEXP myCeScan(SEXP tFilterNames, SEXP tFilterStarts, SEXP tFilterEnds, SEXP qFil
         SET_STRING_ELT(strand, i, mkChar("-"));
       p_CNEscore[i] = CNE->score;
       //SET_STRING_ELT(cigar, i, mkChar(CNE->cigar));
+      cached_ans_elt = get_cachedXRawList_elt(&cached_ans_cigar, i);
+      memcpy((char *) (&cached_ans_elt)->seq, CNE->cigar, INTEGER(width)[i] * sizeof(char));
       i++;
     }
     SET_VECTOR_ELT(oneList, 0, tName);
@@ -888,7 +900,7 @@ SEXP myCeScan(SEXP tFilterNames, SEXP tFilterStarts, SEXP tFilterEnds, SEXP qFil
     SET_VECTOR_ELT(oneList, 5, qEnd);
     SET_VECTOR_ELT(oneList, 6, strand);
     SET_VECTOR_ELT(oneList, 7, CNEscore);
-    //SET_VECTOR_ELT(oneList, 8, cigar);
+    SET_VECTOR_ELT(oneList, 8, cigar);
     SET_STRING_ELT(list_names, 0,  mkChar("tName"));
     SET_STRING_ELT(list_names, 1,  mkChar("tStart"));
     SET_STRING_ELT(list_names, 2,  mkChar("tEnd"));
@@ -908,7 +920,7 @@ SEXP myCeScan(SEXP tFilterNames, SEXP tFilterStarts, SEXP tFilterEnds, SEXP qFil
     strcat(name, temp); 
     SET_STRING_ELT(returnListNames, j, mkChar(name)); 
     SET_VECTOR_ELT(returnList, j, oneList);
-    UNPROTECT(11);
+    UNPROTECT(12);
     j++;
   }
   setAttrib(returnList, R_NamesSymbol, returnListNames);
