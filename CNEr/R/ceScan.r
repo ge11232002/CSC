@@ -2,17 +2,28 @@
 
 # tFilter = bedHuman
 # qFilter = bedZebrafish
-ceScan = function(axt, tFilter=NULL, qFilter=NULL, qSizes=NULL, thresholds=c("30,40", "40,50")){
-  dyn.load("~/Repos/CSC/CNEr/src/ceScanBranch1.so")
+ceScan = function(axts, tFilter=NULL, qFilter=NULL, qSizes=NULL, thresholds=c("30,40", "40,50")){
+  dyn.load("~/Repos/CSC/CNEr/src/CNEr.so")
+  if(!is.null(qFilter))
+    if(is.null(qSizes) || !is(qSizes, "Seqinfo"))
+      stop("qSizes must exist and be a Seqinfo object when qFilter exists")
+  
   winSize = as.integer(sapply(strsplit(thresholds, ","), "[", 2))
   minScore = as.integer(sapply(strsplit(thresholds, ","), "[", 1))
-  CNE = .Call("myCeScan", as.vector(seqnames(tFilter)), start(tFilter), end(tFilter),
+  resFiles = tempfile(pattern = paste(minScore, winSize, "ceScan", sep="-"), tmpdir = tempdir(), fileext = "")
+  .Call("myCeScan", as.vector(seqnames(tFilter)), start(tFilter), end(tFilter),
               as.vector(seqnames(qFilter)), start(qFilter), end(qFilter),
-              as.vector(qSizes[[1]]), as.vector(qSizes[[2]]), 
-              as.vector(seqnames(targetRanges(axt))), start(targetRanges(axt)), end(targetRanges(axt)), as.vector(strand(targetRanges(axt))), as.vector(targetSeqs(axt)),
-              as.vector(seqnames(queryRanges(axt))), start(queryRanges(axt)), end(queryRanges(axt)), as.vector(strand(queryRanges(axt))), as.vector(querySeqs(axt)),
-              score(axt), symCount(axt), winSize, minScore
+              as.vector(seqnames(qSizes)), as.vector(seqlengths(qSizes)), 
+              as.vector(seqnames(targetRanges(axts))), start(targetRanges(axts)), end(targetRanges(axts)), as.vector(strand(targetRanges(axts))), as.vector(targetSeqs(axts)),
+              as.vector(seqnames(queryRanges(axts))), start(queryRanges(axts)), end(queryRanges(axts)), as.vector(strand(queryRanges(axts))), as.vector(querySeqs(axts)),
+              score(axts), symCount(axts), winSize, minScore, as.vector(resFiles)
               )
+  CNE = lapply(resFiles, 
+               function(x){res=read.table(x, header=FALSE, sep="\t")
+               colnames(res)=c("tName", "tStart", "tEnd", "qName", "qStart", "qEnd", "strand", "score", "cigar")
+               return(res)})
+  names(CNE) =  paste(minScore, winSize, sep="_")
+  unlink(resFiles)
   return(CNE)
 }
 
