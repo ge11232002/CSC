@@ -822,6 +822,7 @@ SEXP myCeScan(SEXP tFilterNames, SEXP tFilterStarts, SEXP tFilterEnds, SEXP qFil
   // here I decided to build axt in the linked axt, rather than one by one. Perhaps it has lower performance than one by one way.
   struct slThreshold *thresholds, *tr, *curThresholds;
   struct slCNE *CNE;
+  //struct hashEl *hel;
   int nrThresholds;
   nrThresholds = GET_LENGTH(winSize);
   int i;
@@ -831,6 +832,11 @@ SEXP myCeScan(SEXP tFilterNames, SEXP tFilterStarts, SEXP tFilterEnds, SEXP qFil
   //int k = 0;
   curAxt = axt;
   while(curAxt){
+    //if(qSizes != NULL){
+    //  hel = hashLookup(qSizes, curAxt->qName);
+    //    if(hel == NULL)
+    //      continue;
+    //}
     scanAxt(curAxt, qSizes, tFilter, axt->qStrand == '+' ? qFilter : qFilterRev, thresholds);
     curAxt = curAxt->next;
     //if(k > 50) break;
