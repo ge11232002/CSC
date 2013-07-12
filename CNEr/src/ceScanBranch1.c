@@ -411,6 +411,7 @@ void addCNE(struct slThreshold *tr, struct axt *axt, struct hash *qSizes, int *p
    * tPosList, qPosList - target and query position arrays for alignment
    */
   // The returned coodinates with start in 1-based, different from the original C version.
+  // All the coordinates are based on the positive strand.
   int score, qStart, qEnd, qSize;
   struct slCNE *CNE=NULL;
   int i = tr->ceStart; /* start column of conserved element in alignment */
