@@ -41,6 +41,7 @@ ceMerge = function(cne1, cne2){
   cne2Q = GRanges(seqnames=cne2$tName, ranges=IRanges(start=cne2$tStart+1, end=cne2$tEnd), strand=cne2$strand)
   cneT = c(cne1T, cne2T)
   cneQ = c(cne1Q, cne2Q)
+  # Here, I just removed the CNEs which are within another big CNEs. In very rare cases, some cnes may overlap part and need to merge them. Needs to be done in the future (perhaps not easy to be done in R).
   cneT_overlap = findOverlaps(cneT, type="within", ignoreSelf=TRUE, ignoreRedundant=TRUE)
   #cneT_overlap1 = findOverlaps(cneT, type="equal", ignoreSelf=TRUE, ignoreRedundant=TRUE)
   #cneT_overlap2 = findOverlaps(cneT, type="any", ignoreSelf=TRUE, ignoreRedundant=TRUE)
