@@ -410,6 +410,7 @@ void addCNE(struct slThreshold *tr, struct axt *axt, struct hash *qSizes, int *p
    * profile - cumulative conservation profile for alignment
    * tPosList, qPosList - target and query position arrays for alignment
    */
+  // The returned coodinates with start in 1-based, different from the original C version.
   int score, qStart, qEnd, qSize;
   struct slCNE *CNE=NULL;
   int i = tr->ceStart; /* start column of conserved element in alignment */
@@ -436,10 +437,10 @@ void addCNE(struct slThreshold *tr, struct axt *axt, struct hash *qSizes, int *p
   tr->nrCNE++; // record the number of CNEs
   CNE = needMem(sizeof(*CNE));
   CNE->tName = axt->tName;
-  CNE->tStart = tPosList[i]-1;
+  CNE->tStart = tPosList[i]; // 0-based
   CNE->tEnd = tPosList[j];
   CNE->qName = axt->qName;
-  CNE->qStart = qStart-1;
+  CNE->qStart = qStart; // 0-based
   CNE->qEnd = qEnd;
   CNE->strand = axt->qStrand;
   CNE->score = 100.0 * score / (j-i+1);

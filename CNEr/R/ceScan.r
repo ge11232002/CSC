@@ -3,6 +3,7 @@
 # tFilter = bedHuman
 # qFilter = bedZebrafish
 ceScan = function(axts, tFilter=NULL, qFilter=NULL, qSizes=NULL, thresholds=c("30,40", "40,50")){
+  ## Here the returned tStart and qStart are in 1-based coordinates.
   dyn.load("~/Repos/CSC/CNEr/src/CNEr.so")
   if(!is.null(qFilter))
     if(is.null(qSizes) || !is(qSizes, "Seqinfo"))
@@ -27,8 +28,23 @@ ceScan = function(axts, tFilter=NULL, qFilter=NULL, qSizes=NULL, thresholds=c("3
   return(CNE)
 }
 
+# cne1 = read.table("/mnt/biggley/home/gtan/debug/ceScan_C_Filter/11-07-2013/cne_hg19_danRer7_30_40", header=FALSE, sep="\t")
+# cne2 = read.table("/mnt/biggley/home/gtan/debug/ceScan_C_Filter/11-07-2013/cne_danRer7_hg19_30_40", header=FALSE, sep="\t")
+# colnames(cne1) = c("tName", "tStart", "tEnd", "qName", "qStart", "qEnd", "strand", "score", "cigar")
+# colnames(cne2) = c("tName", "tStart", "tEnd", "qName", "qStart", "qEnd", "strand", "score", "cigar")
 ceMerge = function(cne1, cne2){
-
+  require(GenomicRanges)
+  cne1T = GRanges(seqnames=cne1$tName, ranges=IRanges(start=cne1$tStart+1, end=cne1$tEnd), strand="+")
+  cne1Q = GRanges(seqnames=cne1$qName, ranges=IRanges(start=cne1$qStart+1, end=cne1$qEnd), strand=cne1$strand)
+  cne2T = GRanges(seqnames=cne2$qName, ranges=IRanges(start=cne2$qStart+1, end=cne2$qEnd), strand=cne2$strand)
+  cne2Q = GRanges(seqnames=cne2$tName, ranges=IRanges(start=cne2$tStart+1, end=cne2$tEnd), strand="+")
+  cneT = c(cne1T, cne2T)
+  cneQ = c(cne1Q, cne2Q)
+  cneT_overlap = findOverlaps(cneT, type="within", ignoreSelf=TRUE)
+  cneT_overlap2 = findOverlaps(cneT, type="any", ignoreSelf=TRUE)
+  cneQ_overlap = findOverlaps(cneQ, type="within", ignoreSelf=TRUE)
+  cneQ_overlap2 = findOverlaps(cneQ, type="any", ignoreSelf=TRUE)
+  foo = intersect(cneT_overlap2, cneQ_overlap2)
 }
 
 # axtFiles = list.files(path="/export/downloads/ucsc/axtNet/hg19", pattern=".*hg19\\.mm10*", full.names=TRUE)

@@ -275,6 +275,7 @@ SEXP axt_info(SEXP filepath){
 SEXP readAxt(SEXP filepath){
   // load a axt file into R, and to be axt object
   // This is tested and without memory leak!
+  // The jim kent's axt struct holds the starts in 0-based. Here we put it into 1-based.
   filepath = AS_CHARACTER(filepath);
   int nrAxtFiles, i, nrAxts;
   nrAxtFiles = GET_LENGTH(filepath);
