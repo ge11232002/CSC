@@ -28,8 +28,8 @@ ceScan = function(axts, tFilter=NULL, qFilter=NULL, qSizes=NULL, thresholds=c("3
   return(CNE)
 }
 
-# cne1 = read.table("/mnt/biggley/home/gtan/debug/ceScan_C_Filter/11-07-2013/cne_hg19_danRer7_30_40", header=FALSE, sep="\t")
-# cne2 = read.table("/mnt/biggley/home/gtan/debug/ceScan_C_Filter/11-07-2013/cne_danRer7_hg19_30_40", header=FALSE, sep="\t")
+# cne1 = read.table("/mnt/biggley/home/gtan/debug/ceScan_C_Filter/15-07-2013/cne_hg19_mm10_29_30", header=FALSE, sep="\t")
+# cne2 = read.table("/mnt/biggley/home/gtan/debug/ceScan_C_Filter/15-07-2013/cne_mm10_hg19_29_30", header=FALSE, sep="\t")
 # colnames(cne1) = c("tName", "tStart", "tEnd", "qName", "qStart", "qEnd", "strand", "score", "cigar")
 # colnames(cne2) = c("tName", "tStart", "tEnd", "qName", "qStart", "qEnd", "strand", "score", "cigar")
 ceMerge = function(cne1, cne2){
@@ -41,7 +41,7 @@ ceMerge = function(cne1, cne2){
   cne2Q = GRanges(seqnames=cne2$tName, ranges=IRanges(start=cne2$tStart+1, end=cne2$tEnd), strand=cne2$strand)
   cneT = c(cne1T, cne2T)
   cneQ = c(cne1Q, cne2Q)
-  # Here, I just removed the CNEs which are within another big CNEs. In very rare cases, some cnes may overlap part and need to merge them. Needs to be done in the future (perhaps not easy to be done in R).
+  # Here, I just removed the CNEs which are within another big CNEs. In very rare cases(1 in 100000), some cnes may just connect and need to merge them. Needs to be done in the future (perhaps not easy to be done in R).
   cneT_overlap = findOverlaps(cneT, type="within", ignoreSelf=TRUE, ignoreRedundant=TRUE)
   #cneT_overlap1 = findOverlaps(cneT, type="equal", ignoreSelf=TRUE, ignoreRedundant=TRUE)
   #cneT_overlap2 = findOverlaps(cneT, type="any", ignoreSelf=TRUE, ignoreRedundant=TRUE)
@@ -49,10 +49,11 @@ ceMerge = function(cne1, cne2){
   #cneQ_overlap1 = findOverlaps(cneQ, type="equal", ignoreSelf=TRUE, ignoreRedundant=TRUE)
   #cneQ_overlap2 = findOverlaps(cneQ, type="any", ignoreSelf=TRUE, ignoreRedundant=TRUE)
   redundance = intersect(cneT_overlap, cneQ_overlap)
+  #any_overlap = intersect(cneT_overlap2, cneQ_overlap2)
+  #foo = setdiff(any_overlap, redundance)
+  #paste(subjectHits(foo), queryHits(foo), sep=",") %in% paste(queryHits(redundance), subjectHits(redundance), sep=",")
   res = rbind(cne1, cne2)[-queryHits(redundance), ] 
   return(res)
-  #stopifnot(length(setdiff (cneT[queryHits(redundance)],  cneT[subjectHits(redundance)])) != 0)
-  #stopifnot(length(setdiff (cneQ[queryHits(redundance)],  cneQ[subjectHits(redundance)])) != 0)
 }
 
 # axtFiles = list.files(path="/export/downloads/ucsc/axtNet/hg19", pattern=".*hg19\\.mm10*", full.names=TRUE)
@@ -67,6 +68,6 @@ ceMerge = function(cne1, cne2){
 detectCNEs = function(axt1, filter1=NULL, sizes1, axt2, filter2=NULL, sizes2, thresholds=NULL){
   CNE1 = ceScan(axt1, filter1, filter2, sizes2, thresholds)
   CNE2 = ceScan(axt2, filter2, filter1, sizes1, thresholds)
-  ceMerge(CNE1, CNE2)
+  CNE = ceMerge(CNE1, CNE2)
 
 }
