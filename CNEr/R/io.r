@@ -48,21 +48,23 @@ readAxt = function(axtFiles){
   require(GenomicRanges)
   require(Biostrings)
   dyn.load("~/Repos/CSC/CNEr/src/CNEr.so")
+  #axtFiles = c("/export/downloads/ucsc/axtNet/hg19/chr2.hg19.danRer7.net.axt.gz", "/export/downloads/ucsc/axtNet/hg19/chr3.hg19.danRer7.net.axt.gz", "/export/downloads/ucsc/axtNet/hg19/chr4.hg19.danRer7.net.axt.gz")
   myAxt = .Call("readAxt", axtFiles)
-  axt = axt(targetRanges=GRanges(seqnames=Rle(myAxt[[1]]),
+  #myAxtInfo = .Call("axt_info", axtFiles)
+  axts = axt(targetRanges=GRanges(seqnames=Rle(myAxt[[1]]),
                                  ranges=IRanges(start=myAxt[[2]],
                                                 end=myAxt[[3]]),
                                  strand=Rle(myAxt[[4]])),
-            targetSeqs=DNAStringSet(myAxt[[5]]),
+            targetSeqs=myAxt[[5]],
             queryRanges=GRanges(seqnames=Rle(myAxt[[6]]),
                                 ranges=IRanges(start=myAxt[[7]],
                                                end=myAxt[[8]]),
                                 strand=Rle(myAxt[[9]])),
-            querySeqs=DNAStringSet(myAxt[[10]]),
+            querySeqs=myAxt[[10]],
             score=myAxt[[11]],
             symCount=myAxt[[12]]
             )
-  return(axt)
+  return(axts)
 }
 
 axt.info = function(filepath){

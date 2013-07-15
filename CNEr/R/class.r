@@ -4,9 +4,9 @@ library(rtracklayer)
 
 setClass(Class="axt",
          representation(targetRanges="GRanges",
-                        targetSeqs="DNAStringSet",
+                        targetSeqs="BStringSet",
                         queryRanges="GRanges",
-                        querySeqs="DNAStringSet",
+                        querySeqs="BStringSet",
                         score="integer",
                         symCount="integer"
                         )

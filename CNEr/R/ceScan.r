@@ -56,18 +56,27 @@ ceMerge = function(cne1, cne2){
   return(res)
 }
 
-# axtFiles = list.files(path="/export/downloads/ucsc/axtNet/hg19", pattern=".*hg19\\.mm10*", full.names=TRUE)
+# axtFiles = "/mnt/biggley/data/pairwiseAlignments/ucsc/axtNet/hg19.danRer7.net.axt"
 # axt1 = readAxt(axtFiles)
-# axtFiles = list.files(path="/export/downloads/ucsc/axtNet/mm10", pattern=".*mm10\\.hg19.*", full.names=TRUE)
+# axtFiles = "/mnt/biggley/data/pairwiseAlignments/ucsc/axtNet/danRer7.hg19.net.axt"
 # axt2 = readAxt(axtFiles)
-# thresholds=c("30,40", "40,50")
-# sizes1 = data.frame(seqnames=seqnames(seqinfo(TwoBitFile("/export/data/goldenpath/hg19/assembly.2bit"))), seqlengths=seqlengths(seqinfo(TwoBitFile("/export/data/goldenpath/hg19/assembly.2bit"))), stringsAsFactors=FALSE)
-# sizes2 = data.frame(seqnames=seqnames(seqinfo(TwoBitFile("/export/data/goldenpath/mm10/assembly.2bit"))), seqlengths=seqlengths(seqinfo(TwoBitFile("/export/data/goldenpath/mm10/assembly.2bit"))), stringsAsFactors=FALSE)
+# thresholds=c("27,30", "49,50")
+# sizes1 = seqinfo(TwoBitFile("/export/data/goldenpath/hg19/assembly.2bit"))
+# sizes2 = seqinfo(TwoBitFile("/export/data/goldenpath/mm10/assembly.2bit"))
 # filter1 = readBedToGRanges("/export/data/CNEs/hg19/filters/filter_regions.hg19.bed")
 # filter2 = readBedToGRanges("/export/data/CNEs/mm10/filters/filter_regions.mm10.bed")
-detectCNEs = function(axt1, filter1=NULL, sizes1, axt2, filter2=NULL, sizes2, thresholds=NULL){
+
+blatCNE = function(CNE, cutoffs=NULL, assembly1Twobit=NULL, assembly2Twobit=NULL){
+  blatOptions = list("DEF_BLAT_OPT_WSLO"="-tileSize=9 -minScore=24 -repMatch=16384",
+                     "DEF_BLAT_OPT_WSMID"="-tileSize=10 -minScore=28 -repMatch=4096",
+                     "DEF_BLAT_OPT_WSHI"="-tileSize=11 -minScore=30 -repMatch=1024")
+  
+
+}
+
+detectCNEs = function(axt1, filter1=NULL, sizes1, axt2, filter2=NULL, sizes2, thresholds=c("27,30", "49,50")){
   CNE1 = ceScan(axt1, filter1, filter2, sizes2, thresholds)
   CNE2 = ceScan(axt2, filter2, filter1, sizes1, thresholds)
   CNE = ceMerge(CNE1, CNE2)
-
+  
 }
