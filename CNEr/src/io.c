@@ -198,7 +198,7 @@ SEXP myReadBed(SEXP filepath){
   if(STRING_ELT(filepath, 0) == NA_STRING)
     error("'filepath' is NA");
   // If filepath_elt is defined this way, the memory will be reclaimed by the end of .Call by R, do not need the free()
-  char *filepath_elt = R_alloc(strlen(CHAR(STRING_ELT(filepath, 0))), sizeof(char));
+  char *filepath_elt = R_alloc(strlen(CHAR(STRING_ELT(filepath, 0))) + 1, sizeof(char));
   strcpy(filepath_elt, CHAR(STRING_ELT(filepath, 0)));
   Rprintf("Reading %s \n", filepath_elt);
   struct lineFile *lf = lineFileOpen(filepath_elt, TRUE);
@@ -249,12 +249,13 @@ SEXP axt_info(SEXP filepath){
   struct lineFile *lf;
   IntAE width_buf;
   width_buf = new_IntAE(0, 0, 0);
+  char *filepath_elt;
   //nrec = AS_INTEGER(nrec);
   //skip = AS_INTEGER(skip);
   //nrec0 = INTEGER_POINTER(nrec)[0];
   //skip0 = INTEGER_POINTER(skip)[0];
   for(i = 0; i < nrAxtFiles; i++){
-    char *filepath_elt = (char *) R_alloc(strlen(CHAR(STRING_ELT(filepath, i))), sizeof(char));
+    filepath_elt = (char *) R_alloc(strlen(CHAR(STRING_ELT(filepath, i)))+1, sizeof(char));
     strcpy(filepath_elt, CHAR(STRING_ELT(filepath, i)));
     lf = lineFileOpen(filepath_elt, TRUE);
     while((curAxt = axtRead(lf)) != NULL){
@@ -362,6 +363,108 @@ SEXP readAxt(SEXP filepath){
   return returnList;
 }
 
+SEXP axt_info_scratch(SEXP filepath){
+  filepath = AS_CHARACTER(filepath);
+  int nrAxtFiles, i;
+  nrAxtFiles = GET_LENGTH(filepath);
+  Rprintf("The number of axt files %d\n", nrAxtFiles);
+  char str[20000];
+  FILE *fp;
+  char *filepath_elt;
+  SEXP width, returnList;
+  PROTECT(width = NEW_INTEGER(246786));
+  int *p_width = INTEGER_POINTER(width);
+  PROTECT(returnList = NEW_LIST(1));
+  int j = 0;
+  for(i = 0; i < nrAxtFiles; i++){
+    //filepath_elt = (char *) R_alloc(strlen(CHAR(STRING_ELT(filepath, i)))+1, sizeof(char));
+    //strcpy(filepath_elt, CHAR(STRING_ELT(filepath, i)));
+    //fp = fopen(filepath_elt, "r");
+    fp = fopen(CHAR(STRING_ELT(filepath, i)), "r");
+    if(fp == NULL){
+      perror("Error opening file");
+    }
+    int k = 0;
+    while(fgets(str, 20000, fp) != NULL){
+      //if(k > 50)
+      //  break;
+      //k++;
+      if(str[0] == '#')
+        continue;
+      fgets(str, 20000, fp);
+      //p_width[j] = j;
+      //j++;
+      //Rprintf("The read length is %d\n", strlen(str));
+      fgets(str, 20000, fp);
+      fgets(str, 20000, fp);
+    }
+    fclose(fp);
+  }
+  SET_VECTOR_ELT(returnList, 0,width);
+  UNPROTECT(2);
+  //return R_NilValue;
+  return returnList;
+}
+
+SEXP axt_info_memory(SEXP filepath){
+  // do not use axt read
+  filepath = AS_CHARACTER(filepath);
+  int nrAxtFiles, i;
+  nrAxtFiles = GET_LENGTH(filepath);
+  Rprintf("The number of axt files %d\n", nrAxtFiles);
+  //IntAE width_buf;
+  struct lineFile *lf;
+  struct axt *curAxt;
+  //width_buf = new_IntAE(0, 0, 0);
+  char *words[10], *line;
+  char *seqs[1];
+  int wordCount;
+  int nrAxts = 0;
+  char *filepath_elt;
+  for(i = 0; i < nrAxtFiles; i++){
+    filepath_elt = (char *) R_alloc(strlen(CHAR(STRING_ELT(filepath, i)))+1, sizeof(char));
+    strcpy(filepath_elt, CHAR(STRING_ELT(filepath, i)));
+    struct lineFile *lf = lineFileOpen(filepath_elt, TRUE);
+    while(lineFileChop(lf, words) > 0){
+      nrAxts++;
+      lineFileNeedNext(lf, &line, NULL);
+      //lineFileRow(lf, seqs);
+      //Rprintf("The seq is %s\n", seqs[0]);
+    //  Rprintf("The seq is %s\n", line);
+      //IntAE_insert_at(&width_buf, IntAE_get_nelt(&width_buf),  strlen(line));
+      lineFileNeedNext(lf, &line, NULL);
+      lineFileNeedNext(lf, &line, NULL);
+    }
+    /*while((curAxt = axtRead(lf)) != NULL){
+      axtFree(&curAxt);
+    }*/
+    lineFileClose(&lf);
+    //free(filepath_elt);
+  }
+  SEXP width;
+  PROTECT(width = NEW_INTEGER(nrAxts));
+  int *p_widths;
+  p_widths = INTEGER_POINTER(width);
+  int j = 0;
+  for(i = 0; i < nrAxtFiles; i++){
+    filepath_elt = (char *) R_alloc(strlen(CHAR(STRING_ELT(filepath, i)))+1, sizeof(char));
+    strcpy(filepath_elt, CHAR(STRING_ELT(filepath, i)));
+    lf = lineFileOpen(filepath_elt, TRUE);
+    while(lineFileChop(lf, words) > 0){
+      p_widths[j] = lineFileNeedNum(lf, words, 2);
+      lineFileNeedNext(lf, &line, NULL);
+      lineFileNeedNext(lf, &line, NULL);
+      lineFileNeedNext(lf, &line, NULL);
+      j++;
+    }
+    lineFileClose(&lf);
+    //free(filepath_elt);
+  }
+  //Rprintf("The number of axt alignments is %d\n", GET_LENGTH(width));
+  UNPROTECT(1);
+  return width;
+  //return R_NilValue;
+}
 
 /*#define IOBUF_SIZE 20002
 static char errmsg_buf[200];
