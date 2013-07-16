@@ -316,7 +316,7 @@ SEXP readAxt(SEXP filepath){
   int j = 0;
   i = 0;
   for(j = 0; j < nrAxtFiles; j++){
-    char *filepath_elt = (char *) R_alloc(strlen(CHAR(STRING_ELT(filepath, j))), sizeof(char));
+    char *filepath_elt = (char *) R_alloc(strlen(CHAR(STRING_ELT(filepath, j)))+1, sizeof(char));
     strcpy(filepath_elt, CHAR(STRING_ELT(filepath, j)));
     lf = lineFileOpen(filepath_elt, TRUE);
     while((axt = axtRead(lf)) != NULL){
@@ -499,6 +499,33 @@ SEXP axt_info_memory(SEXP filepath){
   return width;
   //return R_NilValue;
 }
+
+/*void axt_info_dotC(char **filepath, int *width){
+  //struct lineFile *lf;
+  //struct axt *curAxt;
+  //lf = lineFileOpen(filepath[0], TRUE);
+  //Rprintf("The filepath is %s\n", filepath[0]);
+  int i = 0;
+  while((curAxt = axtRead(lf)) != NULL){
+    width[i] = curAxt->symCount;
+    axtFree(&curAxt);
+    i++;
+  }
+  //lineFileClose(&lf);
+  FILE *fp;
+  char str[20000];
+  fp = fopen(filepath[0], "r");
+  while(fgets(str, 20000, fp) != NULL){
+    if(str[0] == '#')
+      continue;
+    fgets(str, 20000, fp);
+    width[i] = strlen(str);
+    fgets(str, 20000, fp);
+    fgets(str, 20000, fp);
+    i++;
+  }
+  fclose(fp);
+}*/
 
 /*#define IOBUF_SIZE 20002
 static char errmsg_buf[200];
