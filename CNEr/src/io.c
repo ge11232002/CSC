@@ -365,22 +365,57 @@ SEXP readAxt(SEXP filepath){
 
 SEXP axt_info_scratch(SEXP filepath){
   filepath = AS_CHARACTER(filepath);
-  int nrAxtFiles, i;
+  if(!IS_CHARACTER(filepath) || LENGTH(filepath) != 1)
+    error("'filepath' must be a single string");
+  if(STRING_ELT(filepath, 0) == NA_STRING)
+    error("'filepath' is NA");
+  char *filepath_elt = R_alloc(strlen(CHAR(STRING_ELT(filepath, 0))) + 1, sizeof(char));
+  strcpy(filepath_elt, CHAR(STRING_ELT(filepath, 0)));
+  Rprintf("Reading %s \n", filepath_elt);
+  struct lineFile *lf = lineFileOpen(filepath_elt, TRUE);
+  char *row[1], *seq[1];
+  int nRanges = 0;
+  while(lineFileRow(lf, row)){
+    //if(sameString(row[0], "track") || sameString(row[0], "browser")) continue;
+    nRanges++;
+    lineFileRow(lf, row);
+    lineFileRow(lf, row);
+  }
+  lineFileClose(&lf);
+  SEXP starts;
+  PROTECT(starts = NEW_INTEGER(nRanges));
+  int *p_starts;
+  int j = 0;
+  p_starts = INTEGER_POINTER(starts);
+  lf = lineFileOpen(filepath_elt, TRUE);
+  while(lineFileRow(lf, row)){
+    //if(sameString(row[0], "track") || sameString(row[0], "browser")) continue;
+    //p_starts[j] = lineFileNeedNum(lf, row, 1) + 1;
+    p_starts[j] = lineFileNeedNum(lf, row, 0);
+    //lineFileRow(lf, row);
+    lineFileRow(lf, row);
+    lineFileRow(lf, row);
+    j++;
+  }
+  lineFileClose(&lf);
+  UNPROTECT(1);
+  return(starts);
+  /*int nrAxtFiles, i;
   nrAxtFiles = GET_LENGTH(filepath);
   Rprintf("The number of axt files %d\n", nrAxtFiles);
   char str[20000];
   FILE *fp;
   char *filepath_elt;
-  SEXP width, returnList;
-  PROTECT(width = NEW_INTEGER(246786));
+  SEXP width;
+  //PROTECT(width = NEW_INTEGER(246786));
+  PROTECT(width = NEW_INTEGER(5344189));
   int *p_width = INTEGER_POINTER(width);
-  PROTECT(returnList = NEW_LIST(1));
   int j = 0;
-  for(i = 0; i < nrAxtFiles; i++){
+  //for(i = 0; i < nrAxtFiles; i++){
     //filepath_elt = (char *) R_alloc(strlen(CHAR(STRING_ELT(filepath, i)))+1, sizeof(char));
     //strcpy(filepath_elt, CHAR(STRING_ELT(filepath, i)));
     //fp = fopen(filepath_elt, "r");
-    fp = fopen(CHAR(STRING_ELT(filepath, i)), "r");
+    fp = fopen(CHAR(STRING_ELT(filepath, 0)), "r");
     if(fp == NULL){
       perror("Error opening file");
     }
@@ -391,19 +426,18 @@ SEXP axt_info_scratch(SEXP filepath){
       //k++;
       if(str[0] == '#')
         continue;
-      fgets(str, 20000, fp);
-      //p_width[j] = j;
-      //j++;
+      //fgets(str, 20000, fp);
+      p_width[j] = strlen(str);
+      j++;
       //Rprintf("The read length is %d\n", strlen(str));
-      fgets(str, 20000, fp);
-      fgets(str, 20000, fp);
+      //fgets(str, 20000, fp);
+      //fgets(str, 20000, fp);
     }
     fclose(fp);
-  }
-  SET_VECTOR_ELT(returnList, 0,width);
-  UNPROTECT(2);
+  //}
+  UNPROTECT(1);
   //return R_NilValue;
-  return returnList;
+  return(width);*/
 }
 
 SEXP axt_info_memory(SEXP filepath){
