@@ -24,10 +24,13 @@ SEXP myReadBed(SEXP filepath){
   }
   lineFileClose(&lf);
   SEXP chromNames, starts, ends, returnList;
-  PROTECT(chromNames = NEW_CHARACTER(nRanges));
-  PROTECT(starts = NEW_INTEGER(nRanges));
-  PROTECT(ends = NEW_INTEGER(nRanges));
   PROTECT(returnList = NEW_LIST(3));
+  chromNames = NEW_CHARACTER(nRanges);
+  SET_VECTOR_ELT(returnList, 0, chromNames);
+  starts = NEW_INTEGER(nRanges);
+  SET_VECTOR_ELT(returnList, 1, starts);
+  ends = NEW_INTEGER(nRanges);
+  SET_VECTOR_ELT(returnList, 2, ends);
   int *p_starts, *p_ends;
   int j = 0;
   p_starts = INTEGER_POINTER(starts);
@@ -43,10 +46,7 @@ SEXP myReadBed(SEXP filepath){
     j++;
   }
   lineFileClose(&lf);
-  SET_VECTOR_ELT(returnList, 0, chromNames);
-  SET_VECTOR_ELT(returnList, 1, starts);
-  SET_VECTOR_ELT(returnList, 2, ends);
-  UNPROTECT(4);
+  UNPROTECT(1);
   return(returnList);
 }
 
