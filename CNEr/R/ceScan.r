@@ -20,7 +20,7 @@ ceScan = function(axts, tFilter=NULL, qFilter=NULL, qSizes=NULL, thresholds=c("3
               score(axts), symCount(axts), winSize, minScore, as.vector(resFiles)
               )
   CNE = lapply(resFiles, 
-               function(x){res=read.table(x, header=FALSE, sep="\t")
+               function(x){res=read.table(x, header=FALSE, sep="\t", as.is=TRUE)
                colnames(res)=c("tName", "tStart", "tEnd", "qName", "qStart", "qEnd", "strand", "score", "cigar")
                return(res)})
   names(CNE) =  paste(minScore, winSize, sep="_")
@@ -30,11 +30,14 @@ ceScan = function(axts, tFilter=NULL, qFilter=NULL, qSizes=NULL, thresholds=c("3
 
 ceMerge = function(cne1, cne2){
   require(GenomicRanges)
-  ## clean the +1 leater as in R, we already use the 1-based start coordinates.
+  ## first reverse the cne2's cigar
+  cne2 = transform(cne2, cigar=chartr("DI", "ID", cigar))
+  cne2[cne2$strand=="-" , ] = transform(subset(cne2, strand=="-"), cigar=reverseCigar(cigar))
+  colnames(cne2) = c("qName", "qStart", "qEnd", "tName", "tStart", "tEnd", "strand", "score", "cigar")
   cne1T = GRanges(seqnames=cne1$tName, ranges=IRanges(start=cne1$tStart, end=cne1$tEnd), strand="+")
   cne1Q = GRanges(seqnames=cne1$qName, ranges=IRanges(start=cne1$qStart, end=cne1$qEnd), strand="+")
-  cne2T = GRanges(seqnames=cne2$qName, ranges=IRanges(start=cne2$qStart, end=cne2$qEnd), strand="+")
-  cne2Q = GRanges(seqnames=cne2$tName, ranges=IRanges(start=cne2$tStart, end=cne2$tEnd), strand="+")
+  cne2T = GRanges(seqnames=cne2$tName, ranges=IRanges(start=cne2$tStart, end=cne2$tEnd), strand="+")
+  cne2Q = GRanges(seqnames=cne2$qName, ranges=IRanges(start=cne2$qStart, end=cne2$qEnd), strand="+")
   cneT = c(cne1T, cne2T)
   cneQ = c(cne1Q, cne2Q)
   # Here, I just removed the CNEs which are within another big CNEs. In very rare cases(1 in 100000), some cnes may just connect and need to merge them. Needs to be done in the future (perhaps not easy to be done in R).
@@ -53,11 +56,32 @@ ceMerge = function(cne1, cne2){
 }
 
 
-blatCNE = function(CNE, cutoffs=NULL, assembly1Twobit=NULL, assembly2Twobit=NULL){
-  blatOptions = list("DEF_BLAT_OPT_WSLO"="-tileSize=9 -minScore=24 -repMatch=16384",
-                     "DEF_BLAT_OPT_WSMID"="-tileSize=10 -minScore=28 -repMatch=4096",
-                     "DEF_BLAT_OPT_WSHI"="-tileSize=11 -minScore=30 -repMatch=1024")
-  
+blatCNE = function(CNE, winSize, cutoffs1, cutoffs2, assembly1Twobit, assembly2Twobit, 
+                   blatOptions=NULL, cutIdentity=NULL, tmpDir=NULL){
+  blatOptionsALL = list("DEF_BLAT_OPT_WSLO"="-tileSize=9 -minScore=24 -repMatch=16384",
+                        "DEF_BLAT_OPT_WSMID"="-tileSize=10 -minScore=28 -repMatch=4096",
+                        "DEF_BLAT_OPT_WSHI"="-tileSize=11 -minScore=30 -repMatch=1024")
+  if(is.null(blatOptions)){
+    if(winSize > 45)
+      blatOptions = blatOptionsALL[["DEF_BLAT_OPT_WSHI"]]
+    else if(winSize > 35)
+      blatOptions = blatOptionsALL[["DEF_BLAT_OPT_WSMID"]]
+    else
+      blatOptions = blatOptionsALL[["DEF_BLAT_OPT_WSLO"]]
+  }
+  if(is.null(cutIdentity)){
+    cutIdentity = 90
+  }
+  if(is.null(tmpDir)){
+    tmpDir = tempdir()
+  }
+  .run_blat = function(cne, cutIdentity, number, assemblyTwobit, blatBinary, tmpDir){
+    temp_cne = tempfile(tmpdir=tmpDir)
+    if(number == 1){
+      cne = paste0(cne[,1], ":", cne[,2], "-", cne[,3])
+      cne = unique(cne)
+          }
+  }
 
 }
 
