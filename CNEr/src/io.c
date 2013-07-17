@@ -52,11 +52,11 @@ SEXP myReadBed(SEXP filepath){
 
 
 /* ------------------------- Use the DNAStringSet way--------------------------*/
+// The advantage of this way is that it allocates the large memory together (in Linux, the mmep way) which can be released by the OS immediately after deletion.
 SEXP axt_info(SEXP filepath){
   // read a axt file and get the alignment length
   filepath = AS_CHARACTER(filepath);
   int nrAxtFiles, i;
-      //nrec0, skip0;
   nrAxtFiles = GET_LENGTH(filepath);
   Rprintf("The number of axt files %d\n", nrAxtFiles);
   struct axt *curAxt;
@@ -64,17 +64,11 @@ SEXP axt_info(SEXP filepath){
   IntAE width_buf;
   width_buf = new_IntAE(0, 0, 0);
   char *filepath_elt;
-  //nrec = AS_INTEGER(nrec);
-  //skip = AS_INTEGER(skip);
-  //nrec0 = INTEGER_POINTER(nrec)[0];
-  //skip0 = INTEGER_POINTER(skip)[0];
   for(i = 0; i < nrAxtFiles; i++){
     filepath_elt = (char *) R_alloc(strlen(CHAR(STRING_ELT(filepath, i)))+1, sizeof(char));
     strcpy(filepath_elt, CHAR(STRING_ELT(filepath, i)));
     lf = lineFileOpen(filepath_elt, TRUE);
     while((curAxt = axtRead(lf)) != NULL){
-      //if(i < skip0){continue;}
-      //if(nrec != -1 || i >= nrec){break;}
       IntAE_insert_at(&width_buf, IntAE_get_nelt(&width_buf), curAxt->symCount);
       axtFree(&curAxt);
     }
