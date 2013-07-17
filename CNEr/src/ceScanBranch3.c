@@ -312,6 +312,8 @@ void printElement(struct slThreshold *tr, struct axt *axt, struct hash *qSizes, 
  * profile - cumulative conservation profile for alignment
  * tPosList, qPosList - target and query position arrays for alignment
  */
+  // The returned coodinates with start in 1-based, different from the original C version.
+  // All the coordinates are based on the positive strand.
 {
   int score, qStart, qEnd, qSize;
   int i = tr->ceStart; /* start column of conserved element in alignment */
@@ -337,8 +339,10 @@ void printElement(struct slThreshold *tr, struct axt *axt, struct hash *qSizes, 
 
   /* output */
   fprintf(tr->outFile, "%s\t%d\t%d\t%s\t%d\t%d\t%c\t%.2f\t",
-    axt->tName, tPosList[i]-1, tPosList[j],
-    axt->qName, qStart-1, qEnd,
+    //axt->tName, tPosList[i]-1, tPosList[j],
+    axt->tName, tPosList[i], tPosList[j], // start 0-based
+    //axt->qName, qStart-1, qEnd,
+    axt->qName, qStart, qEnd,  // end 0-based
     axt->qStrand, 100.0 * score / (j-i+1));
   printCigarString(tr->outFile, axt, i, j);
   fputs("\n", tr->outFile);
