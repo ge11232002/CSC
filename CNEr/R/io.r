@@ -55,12 +55,12 @@ readAxt = function(axtFiles){
                                  ranges=IRanges(start=myAxt[[2]],
                                                 end=myAxt[[3]]),
                                  strand=Rle(myAxt[[4]])),
-            targetSeqs=myAxt[[5]],
+            targetSeqs=DNAStringSet(myAxt[[5]]),
             queryRanges=GRanges(seqnames=Rle(myAxt[[6]]),
                                 ranges=IRanges(start=myAxt[[7]],
                                                end=myAxt[[8]]),
                                 strand=Rle(myAxt[[9]])),
-            querySeqs=myAxt[[10]],
+            querySeqs=DNAStringSet(myAxt[[10]]),
             score=myAxt[[11]],
             symCount=myAxt[[12]]
             )
