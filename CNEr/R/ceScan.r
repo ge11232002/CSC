@@ -28,17 +28,13 @@ ceScan = function(axts, tFilter=NULL, qFilter=NULL, qSizes=NULL, thresholds=c("3
   return(CNE)
 }
 
-# cne1 = read.table("/mnt/biggley/home/gtan/debug/ceScan_C_Filter/15-07-2013/cne_hg19_mm10_29_30", header=FALSE, sep="\t")
-# cne2 = read.table("/mnt/biggley/home/gtan/debug/ceScan_C_Filter/15-07-2013/cne_mm10_hg19_29_30", header=FALSE, sep="\t")
-# colnames(cne1) = c("tName", "tStart", "tEnd", "qName", "qStart", "qEnd", "strand", "score", "cigar")
-# colnames(cne2) = c("tName", "tStart", "tEnd", "qName", "qStart", "qEnd", "strand", "score", "cigar")
 ceMerge = function(cne1, cne2){
   require(GenomicRanges)
   ## clean the +1 leater as in R, we already use the 1-based start coordinates.
-  cne1T = GRanges(seqnames=cne1$tName, ranges=IRanges(start=cne1$tStart+1, end=cne1$tEnd), strand="+")
-  cne1Q = GRanges(seqnames=cne1$qName, ranges=IRanges(start=cne1$qStart+1, end=cne1$qEnd), strand=cne1$strand)
-  cne2T = GRanges(seqnames=cne2$qName, ranges=IRanges(start=cne2$qStart+1, end=cne2$qEnd), strand="+")
-  cne2Q = GRanges(seqnames=cne2$tName, ranges=IRanges(start=cne2$tStart+1, end=cne2$tEnd), strand=cne2$strand)
+  cne1T = GRanges(seqnames=cne1$tName, ranges=IRanges(start=cne1$tStart, end=cne1$tEnd), strand="+")
+  cne1Q = GRanges(seqnames=cne1$qName, ranges=IRanges(start=cne1$qStart, end=cne1$qEnd), strand="+")
+  cne2T = GRanges(seqnames=cne2$qName, ranges=IRanges(start=cne2$qStart, end=cne2$qEnd), strand="+")
+  cne2Q = GRanges(seqnames=cne2$tName, ranges=IRanges(start=cne2$tStart, end=cne2$tEnd), strand="+")
   cneT = c(cne1T, cne2T)
   cneQ = c(cne1Q, cne2Q)
   # Here, I just removed the CNEs which are within another big CNEs. In very rare cases(1 in 100000), some cnes may just connect and need to merge them. Needs to be done in the future (perhaps not easy to be done in R).
@@ -56,15 +52,6 @@ ceMerge = function(cne1, cne2){
   return(res)
 }
 
-# axtFiles = "/mnt/biggley/data/pairwiseAlignments/ucsc/axtNet/hg19.danRer7.net.axt"
-# axt1 = readAxt(axtFiles)
-# axtFiles = "/mnt/biggley/data/pairwiseAlignments/ucsc/axtNet/danRer7.hg19.net.axt"
-# axt2 = readAxt(axtFiles)
-# thresholds=c("27,30", "49,50")
-# sizes1 = seqinfo(TwoBitFile("/export/data/goldenpath/hg19/assembly.2bit"))
-# sizes2 = seqinfo(TwoBitFile("/export/data/goldenpath/mm10/assembly.2bit"))
-# filter1 = readBedToGRanges("/export/data/CNEs/hg19/filters/filter_regions.hg19.bed")
-# filter2 = readBedToGRanges("/export/data/CNEs/mm10/filters/filter_regions.mm10.bed")
 
 blatCNE = function(CNE, cutoffs=NULL, assembly1Twobit=NULL, assembly2Twobit=NULL){
   blatOptions = list("DEF_BLAT_OPT_WSLO"="-tileSize=9 -minScore=24 -repMatch=16384",
