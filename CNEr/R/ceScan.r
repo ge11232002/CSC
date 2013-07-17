@@ -75,14 +75,26 @@ blatCNE = function(CNE, winSize, cutoffs1, cutoffs2, assembly1Twobit, assembly2T
   if(is.null(tmpDir)){
     tmpDir = tempdir()
   }
-  .run_blat = function(cne, cutIdentity, number, assemblyTwobit, blatBinary, tmpDir){
-    temp_cne = tempfile(tmpdir=tmpDir)
-    if(number == 1){
-      cne = paste0(cne[,1], ":", cne[,2], "-", cne[,3])
-      cne = unique(cne)
-          }
+  blatBinary = "/mnt/biggley/home/gtan/Repos/CSC/CNEr/inst/blat"
+  
+  .run_blat = function(cne, cutIdentity, whichAssembly, assemblyTwobit, blatBinary, blatOptions, tmpDir){
+    temp_cne = tempfile(pattern="cne-", tmpdir=tmpDir)
+    temp_psl = tempfile(pattern="psl-", tmpdir=tmpDir)
+    if(whichAssembly == 1){
+      cne = paste0(assemblyTwobit, ":", cne[,1], ":", cne[,2], "-", cne[,3])
+    }else{
+      cne = paste0(assemblyTwobit, ":", cne[,4], ":", cne[,5], "-", cne[,6])
+    }
+    cne = unique(cne)
+    writeLines(cne, con=temp_cne)
+    cmd = paste0(blatBinary, " ", blatOptions, " ", "-minIdentity=", cutIdentity,
+                 " ", assemblyTwobit, " ", temp_cne, " ", temp_psl)
+    my.system(cmd)
+    unlink(temp_cne)
+    return(temp_psl)
   }
-
+  psl1Fn = .run_blat(CNE, cutIdentity, 1, assembly1Twobit, blatBinary, blatOptions, tmpDir)
+  psl2Fn = .run_blat(CNE, cutIdentity, 2, assembly2Twobit, blatBinary, blatOptions, tmpDir)
 }
 
 detectCNEs = function(axt1, filter1=NULL, sizes1, axt2, filter2=NULL, sizes2, thresholds=c("27,30", "49,50")){

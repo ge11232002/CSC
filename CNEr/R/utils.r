@@ -23,3 +23,23 @@ seqToAlignment = function(DNAStringSet){
   return(foo)
 }
 
+reverseCigar = function(cigar){
+  require(GenomicRanges)
+  cigar = sapply(splitCigar(cigar), function(x){
+                 paste0(rev(x[[2]]), rev(rawToChar(x[[1]], multiple=TRUE)), 
+                        collapse="")
+                         }
+  )
+  return(cigar)
+}
+
+my.system = function(cmd, echo=TRUE, intern=FALSE, ...){
+  if (echo){
+    message(cmd)
+  }
+  res = system(cmd, intern=intern, ...)
+  if (!intern){
+    stopifnot(res == 0)
+  }
+  return(res)
+}
