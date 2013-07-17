@@ -11,7 +11,8 @@
 #include "IRanges_interface.h"
 
 
-
+/* Data structures to represent start and end coordinate pairs.
+ *  * Used to store filters in memory. */
 struct range
 /* Start and end coordinate pair */
 {
@@ -44,6 +45,29 @@ struct slThreshold
   int winSize;
   int ceStart;
   int ceEnd;
+  int nrCNE;
+  struct slCNE *CNE;
   FILE *outFile;
 };
 
+struct slCNE
+{
+  struct slCNE *next;
+  char *tName; // Name of the target sequence.
+  int tStart; // The 1-based coordinate
+  int tEnd; // The 1-based coordinate
+  char *qName; // Name of the query sequence.
+  int qStart;
+  int qEnd;
+  char strand;
+  float score;
+  char *cigar;
+};
+
+struct slAllCNE
+{
+  struct slAllCNE *next;
+  int minScore;
+  int winSize;
+  struct slCNE *CNE;
+};
