@@ -197,10 +197,13 @@ sub run_blat
     foreach my $cne (@$cnes) {
 	my $id;
 	if($asm_nr == 1) {
-	    $id = $cne->[0].":".($cne->[1]+1)."-".$cne->[2];
+    # The blat takes the start as 0-based, end as 1-based. Here the old script is wrong!
+    #$id = $cne->[0].":".($cne->[1]+1)."-".$cne->[2];
+    $id = $cne->[0].":".$cne->[1]."-".$cne->[2];
 	}
 	else {
-	    $id = $cne->[3].":".($cne->[4]+1)."-".$cne->[5];
+    #$id = $cne->[3].":".($cne->[4]+1)."-".$cne->[5];
+    $id = $cne->[3].":".$cne->[4]."-".$cne->[5];
 	}
 	next if($seen{$id});
 	$seen{$id} = 1;
@@ -260,8 +263,8 @@ sub process_psl
     open OUT, ">$out_fn"; # output file
     foreach my $cne (@$cnes) {
 	my ($chr1,$start1,$end1,$chr2,$start2,$end2,$score) = @$cne;
-
-	my $asm1_loc_id = $chr1.":".($start1+1)."-".$end1;
+	
+  my $asm1_loc_id = $chr1.":".($start1+1)."-".$end1;
 	my $asm2_loc_id = $chr2.":".($start2+1)."-".$end2;
 
 	my $nr_hits_above_id_asm1 = defined($count_above_id_asm1{$asm1_loc_id}) ? $count_above_id_asm1{$asm1_loc_id} : 0;
