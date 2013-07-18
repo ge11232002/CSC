@@ -3,7 +3,7 @@
 # tFilter = bedHuman
 # qFilter = bedZebrafish
 ceScan = function(axts, tFilter=NULL, qFilter=NULL, qSizes=NULL, thresholds=c("30,40", "40,50")){
-  ## Here the returned tStart and qStart are in 1-based coordinates.
+  ## Here the returned tStart and qStart are 1-based coordinates. Of course ends are also 1-based.
   dyn.load("~/Repos/CSC/CNEr/src/CNEr.so")
   if(!is.null(qFilter))
     if(is.null(qSizes) || !is(qSizes, "Seqinfo"))
@@ -29,6 +29,7 @@ ceScan = function(axts, tFilter=NULL, qFilter=NULL, qSizes=NULL, thresholds=c("3
 }
 
 ceMerge = function(cne1, cne2){
+  # In this function, cne's start is 1-based coordinates. ends are 1-based too. 
   require(GenomicRanges)
   ## first reverse the cne2's cigar
   cne2 = transform(cne2, cigar=chartr("DI", "ID", cigar))
@@ -55,9 +56,12 @@ ceMerge = function(cne1, cne2){
   return(res)
 }
 
+#cutoffs1 = 4
+#cutoffs2 = 8
 
 blatCNE = function(CNE, winSize, cutoffs1, cutoffs2, assembly1Twobit, assembly2Twobit, 
-                   blatOptions=NULL, cutIdentity=NULL, tmpDir=NULL){
+                   blatOptions=NULL, cutIdentity=NULL, tmpDir=NULL, blatBinary=NULL){
+  # In this function, the input CNE's start and end are 1-based coordinates.
   blatOptionsALL = list("DEF_BLAT_OPT_WSLO"="-tileSize=9 -minScore=24 -repMatch=16384",
                         "DEF_BLAT_OPT_WSMID"="-tileSize=10 -minScore=28 -repMatch=4096",
                         "DEF_BLAT_OPT_WSHI"="-tileSize=11 -minScore=30 -repMatch=1024")
@@ -75,15 +79,19 @@ blatCNE = function(CNE, winSize, cutoffs1, cutoffs2, assembly1Twobit, assembly2T
   if(is.null(tmpDir)){
     tmpDir = tempdir()
   }
-  blatBinary = "/mnt/biggley/home/gtan/Repos/CSC/CNEr/inst/blat"
+  if(is.null(blatBinary)){
+    blatBinary = "blat"
+  }
   
   .run_blat = function(cne, cutIdentity, whichAssembly, assemblyTwobit, blatBinary, blatOptions, tmpDir){
     temp_cne = tempfile(pattern="cne-", tmpdir=tmpDir)
     temp_psl = tempfile(pattern="psl-", tmpdir=tmpDir)
+    # For Blat, the start is 0-based and end is 1-based. 
+    # So make cne's coordinates to comply with it.
     if(whichAssembly == 1){
-      cne = paste0(assemblyTwobit, ":", cne[,1], ":", cne[,2], "-", cne[,3])
+      cne = paste0(assemblyTwobit, ":", cne[,1], ":", cne[,2]-1, "-", cne[,3])
     }else{
-      cne = paste0(assemblyTwobit, ":", cne[,4], ":", cne[,5], "-", cne[,6])
+      cne = paste0(assemblyTwobit, ":", cne[,4], ":", cne[,5]-1, "-", cne[,6])
     }
     cne = unique(cne)
     writeLines(cne, con=temp_cne)
@@ -95,6 +103,19 @@ blatCNE = function(CNE, winSize, cutoffs1, cutoffs2, assembly1Twobit, assembly2T
   }
   psl1Fn = .run_blat(CNE, cutIdentity, 1, assembly1Twobit, blatBinary, blatOptions, tmpDir)
   psl2Fn = .run_blat(CNE, cutIdentity, 2, assembly2Twobit, blatBinary, blatOptions, tmpDir)
+  psl1 = read.table(psl1Fn, header=FALSE, sep="\t", skip=5, as.is=TRUE)
+  psl2 = read.table(psl2Fn, header=FALSE, sep="\t", skip=5, as.is=TRUE)
+  colnames(psl1) = colnames(psl2) = c("matches", "misMatches", "repMatches", "nCount", "qNumInsert", "qBaseInsert", "tNumInsert", "tBaseInsert", "strand", "qName", "qSize", "qStart", "qEnd", "tName", "tSize", "tStart", "tEnd", "blockCount", "blockSizes", "qStarts", "tStarts")
+  psl1 = subset(psl1, matches/qSize >= cutIdentity/100)
+  psl2 = subset(psl2, matches/qSize >= cutIdentity/100)
+  psl1 = table(psl1[ , "qName"])
+  psl2 = table(psl2[ , "qName"])
+  CNEtNameIndex = unname(psl1[paste0(CNE[ ,1], ":", CNE[ ,2]-1, "-", CNE[ ,3])])
+  CNEtNameIndex[is.na(CNEtNameIndex)] = 0
+  CNEqNameIndex = unname(psl2[paste0(CNE[ ,4], ":", CNE[ ,5]-1, "-", CNE[ ,6])])
+  CNEqNameIndex[is.na(CNEqNameIndex)] = 0
+  CNE = CNE[CNEtNameIndex <= cutoffs1 & CNEqNameIndex <= cutoffs2, ]
+  return(CNE)
 }
 
 detectCNEs = function(axt1, filter1=NULL, sizes1, axt2, filter2=NULL, sizes2, thresholds=c("27,30", "49,50")){
