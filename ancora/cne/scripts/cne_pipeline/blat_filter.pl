@@ -264,9 +264,10 @@ sub process_psl
     foreach my $cne (@$cnes) {
 	my ($chr1,$start1,$end1,$chr2,$start2,$end2,$score) = @$cne;
 	
-  my $asm1_loc_id = $chr1.":".($start1+1)."-".$end1;
-	my $asm2_loc_id = $chr2.":".($start2+1)."-".$end2;
-
+  #my $asm1_loc_id = $chr1.":".($start1+1)."-".$end1;
+  #my $asm2_loc_id = $chr2.":".($start2+1)."-".$end2;
+  my $asm1_loc_id = $chr1.":".$start1."-".$end1;
+  my $asm2_loc_id = $chr2.":".$start2."-".$end2;
 	my $nr_hits_above_id_asm1 = defined($count_above_id_asm1{$asm1_loc_id}) ? $count_above_id_asm1{$asm1_loc_id} : 0;
 	my $nr_hits_above_id_asm2 = defined($count_above_id_asm2{$asm2_loc_id}) ? $count_above_id_asm2{$asm2_loc_id} : 0;
 	my $nr_hits_tot_asm1 = defined($count_tot_asm1{$asm1_loc_id}) ? $count_tot_asm1{$asm1_loc_id} : 0;
