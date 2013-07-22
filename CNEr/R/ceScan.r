@@ -116,6 +116,7 @@ blatCNE = function(CNE, winSize, cutoffs1, cutoffs2, assembly1Twobit, assembly2T
   CNEqNameIndex[is.na(CNEqNameIndex)] = 0
   CNE = CNE[CNEtNameIndex <= cutoffs1 & CNEqNameIndex <= cutoffs2, ]
   return(CNE)
+  # Here, the CNE's starts and ends are still 1-based.
 }
 
 detectCNEs = function(axt1, filter1=NULL, sizes1, axt2, filter2=NULL, sizes2, thresholds=c("27,30", "49,50")){
