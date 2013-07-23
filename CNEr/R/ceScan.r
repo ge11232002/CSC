@@ -12,7 +12,7 @@ ceScan = function(axts, tFilter=NULL, qFilter=NULL, qSizes=NULL, thresholds=c("3
   winSize = as.integer(sapply(strsplit(thresholds, ","), "[", 2))
   minScore = as.integer(sapply(strsplit(thresholds, ","), "[", 1))
   resFiles = tempfile(pattern = paste(minScore, winSize, "ceScan", sep="-"), tmpdir = tempdir(), fileext = "")
-  .Call("myCeScan", as.vector(seqnames(tFilter)), start(tFilter), end(tFilter),
+  .Call2("myCeScan", as.vector(seqnames(tFilter)), start(tFilter), end(tFilter),
               as.vector(seqnames(qFilter)), start(qFilter), end(qFilter),
               as.vector(seqnames(qSizes)), as.vector(seqlengths(qSizes)), 
               as.vector(seqnames(targetRanges(axts))), start(targetRanges(axts)), end(targetRanges(axts)), as.vector(strand(targetRanges(axts))), as.vector(targetSeqs(axts)),
