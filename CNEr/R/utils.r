@@ -23,6 +23,7 @@ seqToAlignment = function(DNAStringSet){
   return(foo)
 }
 
+### rever the cigar string. i.e. 20M15I10D will be reversed to 10D15I20M.
 reverseCigar = function(cigar){
   require(GenomicRanges)
   cigar = sapply(splitCigar(cigar), function(x){
@@ -43,3 +44,9 @@ my.system = function(cmd, echo=TRUE, intern=FALSE, ...){
   }
   return(res)
 }
+
+binFromCoordRange = function(starts, ends){
+  bins = .Call("bin_from_coord_range", as.integer(starts), as.integer(ends))
+  return(bins)
+}
+
