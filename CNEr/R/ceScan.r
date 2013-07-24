@@ -53,6 +53,8 @@ ceMerge = function(cne1, cne2){
   #foo = setdiff(any_overlap, redundance)
   #paste(subjectHits(foo), queryHits(foo), sep=",") %in% paste(queryHits(redundance), subjectHits(redundance), sep=",")
   res = rbind(cne1, cne2)[-queryHits(redundance), ] 
+  # After the merge, we'd better name them as 1 and 2 rather than the tName and qName. Use the names in mysql cne db.
+  colnames(res) = c("chr1", "start1", "end1", "chr2", "start2", "end2", "stand", "similarity", "cigar")
   return(res)
 }
 
@@ -89,9 +91,9 @@ blatCNE = function(CNE, winSize, cutoffs1, cutoffs2, assembly1Twobit, assembly2T
     # For Blat, the start is 0-based and end is 1-based. 
     # So make cne's coordinates to comply with it.
     if(whichAssembly == 1){
-      cne = paste0(assemblyTwobit, ":", cne[,1], ":", cne[,2]-1, "-", cne[,3])
+      cne = paste0(assemblyTwobit, ":", cne[,"chr1"], ":", cne[,"start1"]-1, "-", cne[,"end1"])
     }else{
-      cne = paste0(assemblyTwobit, ":", cne[,4], ":", cne[,5]-1, "-", cne[,6])
+      cne = paste0(assemblyTwobit, ":", cne[,"chr2"], ":", cne[,"start2"]-1, "-", cne[,"end2"])
     }
     cne = unique(cne)
     writeLines(cne, con=temp_cne)
