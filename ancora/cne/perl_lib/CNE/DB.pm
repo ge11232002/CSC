@@ -50,7 +50,9 @@ use AT::DB::MySQLdb;
 use AT::DB::Binner;
 use AT::DB::Importer;
 use CNE::CNE;
-
+#use Data::Dumper;
+#$Data::Dumper::Indent = 1;
+#$Data::Dumper::Sortkeys = 1;
 
 @ISA = qw(AT::DB::MySQLdb AT::DB::Binner);
 
@@ -176,14 +178,14 @@ sub get_cnes_in_region
 	my $bin_string = $self->bin_restriction_string($start, $end, 'bin1');
 	$query = "SELECT id, chr1, start1, end1, chr2, start2, end2, strand, similarity
 	          FROM $table
-		  WHERE chr1 = ? AND end1 >= ? AND start1 <= ? AND ($bin_string)";
+		  WHERE chr1 = ? AND start1 >= ? AND end1 <= ? AND ($bin_string)";
     }
     elsif($assembly eq $asm2) {
 	($asm1, $asm2) = ($asm2, $asm1);
 	my $bin_string = $self->bin_restriction_string($start, $end, 'bin2');
 	$query = "SELECT id, chr2, start2, end2, chr1, start1, end1, strand, similarity
 	          FROM $table
-		  WHERE chr2 = ? AND end2 >= ? AND start2 <= ? AND ($bin_string)";
+		  WHERE chr2 = ? AND start2 >= ? AND end2 <= ? AND ($bin_string)";
     }
     else {
 	croak "Table $table does not have CNEs for assembly $assembly";
@@ -215,29 +217,35 @@ sub get_cne_ranges_in_region
 	my $bin_string = $self->bin_restriction_string($start, $end, 'bin1');
 	$query = "SELECT start1, end1
 	          FROM $table
-		  WHERE chr1 = ? AND end1 >= ? AND start1 <= ? AND ($bin_string)";
+		  WHERE chr1 = ? AND start1 >= ? AND end1 <= ? AND ($bin_string)";
     }
     elsif($assembly eq $asm2) {
 	my $bin_string = $self->bin_restriction_string($start, $end, 'bin2');
 	$query = "SELECT start2, end2
 	          FROM $table
-		  WHERE chr2 = ? AND end2 >= ? AND start2 <= ? AND ($bin_string)";
+		  WHERE chr2 = ? AND start2 >= ? AND end2 <= ? AND ($bin_string)";
     }
     else {
 	croak "Table $table does not have CNEs for assembly $assembly";
     }
+    #open (FH, '>/mnt/biggley/home/gtan/debug/DB.pm.txt');
+    #print FH $start, "\n", $end, "\n";
+    #print FH Dumper($query);
+    #close FH;
     $query .= " AND end1-start1 >= $min_length AND end2-start2 >= $min_length" if($min_length);
 
     # Prepare and execute query
     my $sth = $self->dbh->prepare($query) or croak "Failed to prepare query [$query]";
     $sth->execute($chr, $start-1, $end) or croak "Failed to execute query [$query]";
-
     # Fetch data and create CNE objects
     my @cnes;
     while(my ($start1, $end1) = $sth->fetchrow_array) {
 	push @cnes, [$start1+1, $end1];
 	next;
     }
+    #open (FH, '>/mnt/biggley/home/gtan/debug/DB2.pm.txt');
+    #print FH Dumper(@cnes);
+    #close FH;
 
     return \@cnes;
 }
@@ -257,13 +265,13 @@ sub get_cne_ranges_in_region_partitioned_by_other_chr
 	my $bin_string = $self->bin_restriction_string($start, $end, 'bin1');
 	$query = "SELECT start1, end1, chr2
 	          FROM $table
-		  WHERE chr1 = ? AND end1 >= ? AND start1 <= ? AND ($bin_string)";
+		  WHERE chr1 = ? AND start1 >= ? AND end1 <= ? AND ($bin_string)";
     }
     elsif($assembly eq $asm2) {
 	my $bin_string = $self->bin_restriction_string($start, $end, 'bin2');
 	$query = "SELECT start2, end2, chr1
 	          FROM $table
-		  WHERE chr2 = ? AND end2 >= ? AND start2 <= ? AND ($bin_string)";
+		  WHERE chr2 = ? AND start2 >= ? AND end2 <= ? AND ($bin_string)";
     }
     else {
 	croak "Table $table does not have CNEs for assembly $assembly";
