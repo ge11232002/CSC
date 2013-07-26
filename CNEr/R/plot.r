@@ -33,36 +33,35 @@ CNEAnnotate = function(CNE, whichAssembly=c(1,2), chr, CNEstart, CNEend, windowS
   resEnd = min(CNEend, computeEnd-(windowSize-1)/2)
   resCoords = seq(resStart, resEnd, by=step_size)
   runMeanRes = runMeanAll[resCoords]*100
-  #plotCNE(cne) 
-  #calc_window_scores(CNEstart, CNEend, cne, win_nr_steps, step_size)
+  return(list(resCoords=resCoords, runMeanRes=runMeanRes))
 }
 
 
-calc_window_scores = function(CNEstart, CNEend, ranges, win_nr_steps, step_size){
-  ## Here the starts and ends are 1-based.
-  CNElength = CNEend - CNEstart + 1
-  win_size = win_nr_steps * step_size
-  offsetBlk = as.integer(((win_nr_steps-1)*step_size)/2+0.5)
-  context_start = CNEstart - offsetBlk
-  if(context_start < 1)
-    context_start = 1
-  context_end = CNEend + offsetBlk
-  context_size = context_end - context_start + 1
-  #nr_blocks = as.integer(context_size/step_size) + ifelse(context_size%%step_size, 1, 0)
-  #blk_scores = numeric(ifelse(nr_blocks>win_nr_steps, nr_blocks, win_nr_steps+1))
+#calc_window_scores = function(CNEstart, CNEend, ranges, win_nr_steps, step_size){
+#  ## Here the starts and ends are 1-based.
+#  CNElength = CNEend - CNEstart + 1
+#  win_size = win_nr_steps * step_size
+#  offsetBlk = as.integer(((win_nr_steps-1)*step_size)/2+0.5)
+#  context_start = CNEstart - offsetBlk
+#  if(context_start < 1)
+#    context_start = 1
+#  context_end = CNEend + offsetBlk
+#  context_size = context_end - context_start + 1
+#  #nr_blocks = as.integer(context_size/step_size) + ifelse(context_size%%step_size, 1, 0)
+#  #blk_scores = numeric(ifelse(nr_blocks>win_nr_steps, nr_blocks, win_nr_steps+1))
+#
+#  covAll = coverage(ranges, width=context_end)
+#   
+#  #runMeanAll = runmean(covAll, k=windowSize, "constant")
+#  #resStart = max(CNEstart, (windowSize-1)/2+1)
+#  #resEnd = min(CNEend, computeEnd-(windowSize-1)/2)
+#  #height = runMeanAll[resStart:resEnd]*100
+#}
 
-  covAll = coverage(ranges, width=context_end)
-   
-  #runMeanAll = runmean(covAll, k=windowSize, "constant")
-  #resStart = max(CNEstart, (windowSize-1)/2+1)
-  #resEnd = min(CNEend, computeEnd-(windowSize-1)/2)
-  #height = runMeanAll[resStart:resEnd]*100
-}
 
+plotCNE = function(listToPlot){
+  for(ele in listToPlot){
 
-plotCNE = function(ranges){
-  ranges = reduce(ranges)
-  
 
 
 }
