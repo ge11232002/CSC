@@ -1,4 +1,5 @@
-CNEAnnotate = function(CNE, whichAssembly=c(1,2), chr, CNEstart, CNEend, windowSize, min_length){
+CNEAnnotate = function(CNE, whichAssembly=c(1,2), chr, CNEstart, CNEend, windowSize, min_length, name){
+  # name should include the information of winsize, minCount,.. more?
   # This is the pipeline of doing the density plot
   # The windowSize is in kb.
   windowSize = windowSize * 1000
@@ -33,7 +34,9 @@ CNEAnnotate = function(CNE, whichAssembly=c(1,2), chr, CNEstart, CNEend, windowS
   resEnd = min(CNEend, computeEnd-(windowSize-1)/2)
   resCoords = seq(resStart, resEnd, by=step_size)
   runMeanRes = runMeanAll[resCoords]*100
-  return(list(resCoords=resCoords, runMeanRes=runMeanRes))
+  res = cbind(resCoords, as.vector(runMeanRes))
+  colnames(res) = c("coordinates", name)
+  return(res)
 }
 
 
@@ -58,14 +61,48 @@ CNEAnnotate = function(CNE, whichAssembly=c(1,2), chr, CNEstart, CNEend, windowS
 #  #height = runMeanAll[resStart:resEnd]*100
 #}
 
+#resToPlot = list(a=res, b=res)
 
 plotCNE = function(listToPlot){
-  for(ele in listToPlot){
+  mergedDf = as.data.frame(do.call(rbind, listToPlot))
+  mergedDf$grouping = rep(names(listToPlot), sapply(listToPlot, nrow))
+  mergedDf = mergedDf[ ,c("coordinates", "grouping", "values")]
+  horizon.panel.ggplot(mergedDf)
+}
 
+horizon.panel.ggplot = function(mergedDf, horizonscale=2){
+  origin = 0
+  nbands = 3
+  colnames(mergedDf) = c("coordinates", "grouping", "y")
+  for(i in 1:nbands){
+    #do positive
+    mergedDf[ ,paste("ypos",i,sep="")] = ifelse(mergedDf$y > origin,
+                                          ifelse(abs(mergedDf$y) > horizonscale * i,
+                                                 horizonscale,
+                                                 ifelse(abs(mergedDf$y) - (horizonscale * (i - 1) - origin) > origin, abs(mergedDf$y) - (horizonscale * (i - 1) - origin), origin)),
+                                          origin)
+  }
+  mergedDf.melt = melt(mergedDf[,c(1,2,4:6)],id.vars=1:2)
+  colnames(mergedDf.melt) = c("coordinates","grouping","band","value")
+  p = ggplot(data=mergedDf.melt) +
+    geom_area(aes(x = coordinates, y = value, fill=band),
+                position="identity") +
+    scale_fill_manual(values=c("ypos1"=col.brew[7],
+                               "ypos2"=col.brew[8],
+                               "ypos3"=col.brew[9]))+
+    ylim(origin,horizonscale) +
+    facet_grid(grouping ~ .) +
+    theme_bw() +
+    opts(legend.position = "none",
+         strip.text.y = theme_text(),
+         axis.text.y = theme_blank(),
+         axis.ticks = theme_blank(),
+         axis.title.y = theme_blank(),
+         axis.title.x = theme_blank(),
+         title = title,
+         plot.title = theme_text(size=16, face="bold", hjust=0))
 
 
 }
-
-
 
 
