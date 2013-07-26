@@ -90,3 +90,27 @@ SEXP bin_ranges_from_coord_range(SEXP start, SEXP end){
   else
     return bin_ranges_from_coord_range_extended(start, end);
 }
+
+
+
+SEXP calc_window_scores(SEXP coverage, SEXP context_start, SEXP context_end, SEXP win_nr_steps, SEXP step_size){
+  // Here the start and end are 1-based
+  win_nr_steps = AS_INTEGER(win_nr_steps);
+  step_size = AS_INTEGER(step_size);
+  context_start = AS_INTEGER(context_start);
+  context_end = AS_INTEGER(context_end);
+  int context_size = INTEGER(context_end)[0] - INTEGER(context_start)[0] + 1;
+  int nr_blocks;
+  nr_blocks = (((context_size % INTEGER(step_size)[0]) != 0)?(context_size/INTEGER(step_size)[0] + 1):(context_size/INTEGER(step_size)[0]));
+  Rprintf("The nr_blocks %d\n", nr_blocks);
+  //int blk_scores[((nr_blocks>INTEGER(win_nr_steps)[0])?(nr_blocks):(INTEGER(win_nr_steps)[0]+1))] = {0};
+  int *blk_scores;
+  blk_scores = (int *) R_alloc(((nr_blocks>INTEGER(win_nr_steps)[0])?(nr_blocks):(INTEGER(win_nr_steps)[0]+1)), sizeof(int));
+  int blk_start = INTEGER(context_start)[0];
+  int blk_end = INTEGER(context_start)[0] + INTEGER(step_size)[0] - 1;
+  int prev_win_score = 0; 
+  int i;// The blocks index
+  for(i=0; i < nr_blocks
+
+  return R_NilValue;
+}
