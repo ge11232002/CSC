@@ -10,6 +10,8 @@ use CNE::DB;
 use AT::GFX::SeqColorIndex;
 use AT::Tools::RangeHandler;
 use Data::Dumper;
+$Data::Dumper::Indent = 1;
+$Data::Dumper::Sortkeys = 1;
 
 $VERSION = '0.1'; # This supposed to be the version number for the library, I think...
 
@@ -587,6 +589,7 @@ sub _make_density_features
 			    start => $context_start,
 			    end => $context_end,
 			    min_length => $min_length);
+        #warn "In _make_density_features, the nr_graphs is ", $nr_graphs;
 	if($nr_graphs > 1) {
 	    my $ranges_by_chr2 = $db->get_cne_ranges_in_region_partitioned_by_other_chr(@get_cne_args);
 	    while(my ($chr2, $ranges) = each %$ranges_by_chr2) {
@@ -599,6 +602,10 @@ sub _make_density_features
 	}
     }
 #    print STDERR "Got features ".timediff_str($t0,Benchmark->new)."\n";
+    #open (FH, '>/mnt/biggley/home/gtan/debug/CNEPlugin.pm.txt');
+    #print FH Dumper($tables), "\n";
+    #print FH Dumper(%range_lists_by_graphs);
+    #close FH;
 
     organize_range_lists(\%range_lists_by_graphs, $nr_graphs, $rank_un_low);
 
@@ -609,11 +616,16 @@ sub _make_density_features
 	# Calculate the window scores
 	$t0 = Benchmark->new;
 	my ($first_score_start, @win_scores_list);
+
 	foreach my $ranges (@$range_lists) {
 	    my $win_scores;
 	    ($first_score_start, $win_scores) = calc_window_scores($start, $end, $ranges, $win_nr_steps, $step_size);
 	    push @win_scores_list, $win_scores;
 	}
+  #open (FH, '>/mnt/biggley/home/gtan/debug/CNEPlugin_win_scores_list.pm.txt');
+  #print FH $win_nr_steps, "\n";
+  #print FH Dumper(@win_scores_list);
+  #close FH;
 #	print STDERR "Calculated window scores ".timediff_str($t0,Benchmark->new)."\n";
 	
 	# Create a Bio::Graphics::Feature object for the curve and add it to the FeatureFile object
@@ -917,6 +929,9 @@ sub calc_window_scores
 	# Compute number of blocks in the computed region.
 	# This is the same as the number of windows scores we will compute.
 	my $nr_blocks = int($compute_size / $blk_size) + ($compute_size % $blk_size ? 1 : 0); 
+  #open (FH, '>/mnt/biggley/home/gtan/debug/CNEPlugin_nr_blocks.pm.txt');
+  #print FH $nr_blocks, "\n";
+  #close FH;
 	 # ^ add an extra block in case the region does not contain an even number of blocks
 
 	# Allocate at space for at least win_nr_blocks+1 blocks. This is needed to make sure
