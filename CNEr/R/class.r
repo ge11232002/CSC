@@ -91,6 +91,23 @@ setMethod("[", "axt",
                   score=ans_score, symCount=ans_symCount)
           }
           )
+setGeneric("subAxt", function(x, searchGRanges, select=c("target", "query"), type=c("any", "within")) standardGeneric("subAxt"))
+setMethod("subAxt", "axt",
+## This is to fetch the axts within the specific chrs, starts, ends based on target sequences.
+          function(x, searchGRanges, select=c("target", "query"),
+                   type=c("any", "widthin")){
+            type = match.arg(type)
+            select = match.arg(select)
+            if(length(searchGRanges) == 0)
+              return(x)
+            if(select == "target"){
+              index = which(!is.na(findOverlaps(targetRanges(x), searchGRanges, type=type, select="first")))
+            }else{
+              index = which(!is.na(findOverlaps(queryRanges(x), searchGRanges, type=type, select="first")))
+            }
+            return(x[index])
+          }
+          )
 
 ### - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 ### "show" method.

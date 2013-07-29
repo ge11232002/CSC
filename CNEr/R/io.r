@@ -22,7 +22,7 @@ readBedToGRanges = function(bedFile=NULL){
     stop("No such file ", bedFile) 
   }
   dyn.load("~/Repos/CSC/CNEr/src/CNEr.so")
-  bed = .Call2("myReadBed", bedFile)
+  bed = .Call("myReadBed", bedFile)
   bed = GRanges(seqnames=Rle(bed[[1]]),
                 ranges=IRanges(start=bed[[2]], end=bed[[3]]),
                 strand=factor("+"))
@@ -34,10 +34,6 @@ readBedToGRanges = function(bedFile=NULL){
 #    user  system elapsed
 #    2.272   0.133   2.414
 
-# axtFiles = c("/export/downloads/ucsc/axtNet/hg19/chr2.hg19.danRer7.net.axt.gz", "/export/downloads/ucsc/axtNet/hg19/chr3.hg19.danRer7.net.axt.gz", "/export/downloads/ucsc/axtNet/hg19/chr4.hg19.danRer7.net.axt.gz")
-# axtFiles = list.files(path="/export/downloads/ucsc/axtNet/hg19", pattern=".*hg19\\.mm10*", full.names=TRUE)
-# axt = readAxt(axtFiles)
-
 readAxt = function(axtFiles){
   # Read axt files into R axt object.
   # The coordinates are 1-based for start and end.
@@ -48,8 +44,7 @@ readAxt = function(axtFiles){
   require(GenomicRanges)
   require(Biostrings)
   dyn.load("~/Repos/CSC/CNEr/src/CNEr.so")
-  #axtFiles = c("/export/downloads/ucsc/axtNet/hg19/chr2.hg19.danRer7.net.axt.gz", "/export/downloads/ucsc/axtNet/hg19/chr3.hg19.danRer7.net.axt.gz", "/export/downloads/ucsc/axtNet/hg19/chr4.hg19.danRer7.net.axt.gz")
-  myAxt = .Call2("readAxt", axtFiles)
+  myAxt = .Call("readAxt", axtFiles)
   #myAxtInfo = .Call("axt_info", axtFiles)
   axts = axt(targetRanges=GRanges(seqnames=Rle(myAxt[[1]]),
                                  ranges=IRanges(start=myAxt[[2]],
