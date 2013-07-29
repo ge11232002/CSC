@@ -35,7 +35,7 @@ CNEAnnotate = function(CNE, whichAssembly=c(1,2), chr, CNEstart, CNEend, windowS
   resCoords = seq(resStart, resEnd, by=step_size)
   runMeanRes = runMeanAll[resCoords]*100
   res = cbind(resCoords, as.vector(runMeanRes))
-  colnames(res) = c("coordinates", name)
+  colnames(res) = c("coordinates", "y")
   return(res)
 }
 
@@ -61,18 +61,20 @@ CNEAnnotate = function(CNE, whichAssembly=c(1,2), chr, CNEstart, CNEend, windowS
 #  #height = runMeanAll[resStart:resEnd]*100
 #}
 
-#resToPlot = list(a=res, b=res)
+#listToPlot = list(a=res, b=res)
 
 plotCNE = function(listToPlot){
   mergedDf = as.data.frame(do.call(rbind, listToPlot))
   mergedDf$grouping = rep(names(listToPlot), sapply(listToPlot, nrow))
-  mergedDf = mergedDf[ ,c("coordinates", "grouping", "values")]
-  horizon.panel.ggplot(mergedDf)
+  mergedDf = mergedDf[ ,c("coordinates", "grouping", "y")]
+  p = horizon.panel.ggplot(mergedDf)
 }
 
-horizon.panel.ggplot = function(mergedDf, horizonscale=2){
+horizon.panel.ggplot = function(mergedDf, horizonscale=2, my.title="fun"){
   origin = 0
   nbands = 3
+  require(RColorBrewer)
+  col.brew = brewer.pal(name="RdBu",n=10)
   colnames(mergedDf) = c("coordinates", "grouping", "y")
   for(i in 1:nbands){
     #do positive
@@ -93,16 +95,15 @@ horizon.panel.ggplot = function(mergedDf, horizonscale=2){
     ylim(origin,horizonscale) +
     facet_grid(grouping ~ .) +
     theme_bw() +
-    opts(legend.position = "none",
-         strip.text.y = theme_text(),
-         axis.text.y = theme_blank(),
-         axis.ticks = theme_blank(),
-         axis.title.y = theme_blank(),
-         axis.title.x = theme_blank(),
-         title = title,
-         plot.title = theme_text(size=16, face="bold", hjust=0))
-
-
+    theme(legend.position = "none",
+         strip.text.y = element_text(),
+         #axis.text.y = element_blank(), ## remove the y lables
+         axis.ticks = element_blank(),
+         axis.title.y = element_blank(),
+         axis.title.x = element_blank(),
+         plot.title = element_text(size=16, face="bold", hjust=0))+
+    ggtitle(my.title)
+    return(p)
 }
 
 
