@@ -121,18 +121,6 @@ blatCNE = function(CNE, winSize, cutoffs1, cutoffs2, assembly1Twobit, assembly2T
   # Here, the CNE's starts and ends are still 1-based.
 }
 
-saveCNEToSQLite = function(CNE, tableName, dbName, overwrite=FALSE){
-  require(RSQLite)
-  CNE$bin1 = binFromCoordRange(CNE$start1, CNE$end1)
-  CNE$bin2 = binFromCoordRange(CNE$start2, CNE$end2)
-  # reorder it
-  CNE = CNE[ ,c("bin1", "chr1", "start1", "end1", "bin2", "chr2", "start2", "end2", "strand", "similarity", "cigar")]
-  drv = dbDriver("SQLite")
-  dbName = dbName
-  con = dbConnect(drv, dbname=dbName)
-  dbWriteTable(con, tableName, CNE, row.names=FALSE, overwrite=overwrite)
-  dbDisconnect(con)
-}
 
 detectCNEs = function(axt1, filter1=NULL, sizes1, axt2, filter2=NULL, sizes2, thresholds=c("49,50")){
   CNE1 = ceScan(axt1, filter1, filter2, sizes2, thresholds)
