@@ -50,6 +50,25 @@ binFromCoordRange = function(starts, ends){
   return(bins)
 }
 
+binRangesFromCoordRange = function(start, end){
+  binRanges = .Call("bin_ranges_from_coord_range", as.integer(start), as.integer(end))
+  return(binRanges)
+}
+
+binRestrictionString = function(start, end, field="bin"){
+  binRanges = binRangesFromCoordRange(start, end)
+  cmdString = mapply(function(x,y, field){
+                     if(x==y){
+                       paste(field, "=", x)
+                     }else{
+                       paste(field, ">=", x, "and", field, "<=", y)
+                     }
+                    }, binRanges[ ,1], binRanges[ ,2], field=field
+                    )
+  cmdString = paste(cmdString, collapse=") or (")
+  cmdString = paste0("((", cmdString, "))")
+  return(cmdString)
+}
 
 get_cne_ranges_in_region = function(CNE, whichAssembly=c(1,2), chr, CNEstart, CNEend, min_length){
  ## This CNE data.frame does not have the bin column yet. I am not sure whether it is necessary to add this column in R since it's quiet fast to select the cnes which meet the criteria (~0.005 second).
@@ -84,11 +103,37 @@ saveCNEToSQLite = function(CNE, dbName, tableName, overwrite=FALSE){
   # reorder it
   CNE = CNE[ ,c("bin1", "chr1", "start1", "end1", "bin2", "chr2", "start2", "end2", "strand", "similarity", "cigar")]
   drv = dbDriver("SQLite")
-  dbName = dbName
   con = dbConnect(drv, dbname=dbName)
   dbWriteTable(con, tableName, CNE, row.names=FALSE, overwrite=overwrite)
   dbDisconnect(con)
 }
 
-readCNEFromSQLite = function(dbName, tableName, whichAssembly=c(1,2))
+readCNERangesFromSQLite = function(dbName, tableName, chr, CNEstart, CNEend, whichAssembly=c("1","2"), minLength=NULL, nrGraphs=1){
+  require(RSQLite)
+  whichAssembly = match.arg(whichAssembly)
+  drv = dbDriver("SQLite")
+  con = dbConnect(drv, dbname=dbName)
+  if(nrGraphs == 1){    
+    sqlCmd = switch(whichAssembly,
+                    "1"=paste("SELECT start1,end1 from", tableName, "WHERE chr1=", chr, "AND start1 >=", CNEstart, "AND end1 <=", CNEend, "AND", binRestrictionString(CNEstart, CNEend, "bin1")),
+                    "2"=paste("SELECT start2,end2 from", tableName, "WHERE chr2=", chr, "AND start2 >=", CNEstart, "AND end2 <=", CNEend, "AND", binRestrictionString(CNEstart, CNEend, "bin2"))
+                    )
+    if(!is.null(minLength))
+      sqlCmd = paste(sqlCmd, "AND end1-start1+1 >=", minLength, "AND end2-start2+1 >=", minLength)
+    fetchedCNE = dbGetQuery(con, sqlCmd)
+    fetchedCNE = IRanges(start=fetchedCNE[ ,1], end=fetchedCNE[, 2])
+  }else if(nrGraphs > 1){
+    sqlCmd = switch(whichAssembly,
+                    "1"=paste("SELECT chr2,start1,end1 from", tableName, "WHERE chr1=", chr, "AND start1 >=", CNEstart, "AND end1 <=", CNEend, "AND", binRestrictionString(CNEstart, CNEend, "bin1")),
+                    "2"=paste("SELECT chr1,start2,end2 from", tableName, "WHERE chr2=", chr, "AND start2 >=", CNEstart, "AND end2 <=", CNEend, "AND", binRestrictionString(CNEstart, CNEend, "bin2"))
+                    )
+    if(!is.null(minLength))
+      sqlCmd = paste(sqlCmd, "AND end1-start1+1 >=", minLength, "AND end2-start2+1 >=", minLength)
+    fetchedCNE = dbGetQuery(con, sqlCmd)
+    fetchedCNE = GRanges(seqnames=fetchedCNE[ ,1], 
+                         ranges=IRanges(start=fetchedCNE[ ,2], end=fetchedCNE[ ,3]))
+  }
+  dbDisconnect(con)
+  return(fetchedCNE)
+}
 

@@ -1,7 +1,7 @@
-CNEAnnotate = function(CNE, whichAssembly=c(1,2), chr, CNEstart, CNEend, windowSize, min_length, name){
-  # name should include the information of winsize, minCount,.. more?
+CNEAnnotate = function(dbName, tableName, whichAssembly=c("1","2"), chr, CNEstart, CNEend, windowSize, minLength=NULL, nrGraphs=1){
   # This is the pipeline of doing the density plot
   # The windowSize is in kb.
+  whichAssembly = match.arg(whichAssembly)
   windowSize = windowSize * 1000
   CNElength = CNEend - CNEstart + 1
   pixel_width = 800
@@ -25,13 +25,13 @@ CNEAnnotate = function(CNE, whichAssembly=c(1,2), chr, CNEstart, CNEend, windowS
   #if(context_start < 1)
   #  context_start = 1
   #context_end = CNEend + as.integer(((win_nr_steps-1)*step_size)/2+step_size+0.5)
-  ranges = get_cne_ranges_in_region(CNE, whichAssembly, chr, context_start, context_end, min_length)
+  ranges = readCNERangesFromSQLite(dbName, tableName, chr, context_start, context_end, whichAssembly, minLength, nrGraphs)
   # Implement get_cne_ranges_in_region_partitioned_by_other_chr later!!!
   ranges = reduce(ranges)
   covAll = coverage(ranges, width=context_end)
   runMeanAll = runmean(covAll, k=windowSize, "constant")
   resStart = max(CNEstart, (windowSize-1)/2+1)
-  resEnd = min(CNEend, computeEnd-(windowSize-1)/2)
+  resEnd = min(CNEend, context_end-(windowSize-1)/2)
   resCoords = seq(resStart, resEnd, by=step_size)
   runMeanRes = runMeanAll[resCoords]*100
   res = cbind(resCoords, as.vector(runMeanRes))
