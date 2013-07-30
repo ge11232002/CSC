@@ -54,7 +54,7 @@ ceMerge = function(cne1, cne2){
   #paste(subjectHits(foo), queryHits(foo), sep=",") %in% paste(queryHits(redundance), subjectHits(redundance), sep=",")
   res = rbind(cne1, cne2)[-queryHits(redundance), ] 
   # After the merge, we'd better name them as 1 and 2 rather than the tName and qName. Use the names in mysql cne db.
-  colnames(res) = c("chr1", "start1", "end1", "chr2", "start2", "end2", "stand", "similarity", "cigar")
+  colnames(res) = c("chr1", "start1", "end1", "chr2", "start2", "end2", "strand", "similarity", "cigar")
   return(res)
 }
 
@@ -119,6 +119,19 @@ blatCNE = function(CNE, winSize, cutoffs1, cutoffs2, assembly1Twobit, assembly2T
   CNE = CNE[CNEtNameIndex <= cutoffs1 & CNEqNameIndex <= cutoffs2, ]
   return(CNE)
   # Here, the CNE's starts and ends are still 1-based.
+}
+
+saveCNEToSQLite = function(CNE, tableName, dbName, overwrite=FALSE){
+  require(RSQLite)
+  CNE$bin1 = binFromCoordRange(CNE$start1, CNE$end1)
+  CNE$bin2 = binFromCoordRange(CNE$start2, CNE$end2)
+  # reorder it
+  CNE = CNE[ ,c("bin1", "chr1", "start1", "end1", "bin2", "chr2", "start2", "end2", "strand", "similarity", "cigar")]
+  drv = dbDriver("SQLite")
+  dbName = dbName
+  con = dbConnect(drv, dbname=dbName)
+  dbWriteTable(con, tableName, CNE, row.names=FALSE, overwrite=overwrite)
+  dbDisconnect(con)
 }
 
 detectCNEs = function(axt1, filter1=NULL, sizes1, axt2, filter2=NULL, sizes2, thresholds=c("49,50")){
