@@ -71,10 +71,13 @@ plotCNE = function(listToPlot){
 }
 
 horizon.panel.ggplot = function(mergedDf, horizonscale=2, my.title="fun"){
+  require(ggplot2)
+  require(reshape2)
   origin = 0
   nbands = 3
-  require(RColorBrewer)
-  col.brew = brewer.pal(name="RdBu",n=10)
+  #require(RColorBrewer)
+  #col.brew = brewer.pal(name="RdBu",n=10)
+  col.brew = c("#67001F", "#B2182B", "#D6604D", "#F4A582", "#FDDBC7", "#D1E5F0", "#92C5DE", "#4393C3", "#2166AC", "#053061")
   colnames(mergedDf) = c("coordinates", "grouping", "y")
   for(i in 1:nbands){
     #do positive
