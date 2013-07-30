@@ -121,7 +121,7 @@ blatCNE = function(CNE, winSize, cutoffs1, cutoffs2, assembly1Twobit, assembly2T
   # Here, the CNE's starts and ends are still 1-based.
 }
 
-detectCNEs = function(axt1, filter1=NULL, sizes1, axt2, filter2=NULL, sizes2, thresholds=c("27,30", "49,50")){
+detectCNEs = function(axt1, filter1=NULL, sizes1, axt2, filter2=NULL, sizes2, thresholds=c("49,50")){
   CNE1 = ceScan(axt1, filter1, filter2, sizes2, thresholds)
   CNE2 = ceScan(axt2, filter2, filter1, sizes1, thresholds)
   CNE = ceMerge(CNE1, CNE2)
