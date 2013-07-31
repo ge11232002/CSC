@@ -115,8 +115,8 @@ readCNERangesFromSQLite = function(dbName, tableName, chr, CNEstart, CNEend, whi
   con = dbConnect(drv, dbname=dbName)
   if(nrGraphs == 1){    
     sqlCmd = switch(whichAssembly,
-                    "1"=paste("SELECT start1,end1 from", tableName, "WHERE chr1=", chr, "AND start1 >=", CNEstart, "AND end1 <=", CNEend, "AND", binRestrictionString(CNEstart, CNEend, "bin1")),
-                    "2"=paste("SELECT start2,end2 from", tableName, "WHERE chr2=", chr, "AND start2 >=", CNEstart, "AND end2 <=", CNEend, "AND", binRestrictionString(CNEstart, CNEend, "bin2"))
+                    "1"=paste("SELECT start1,end1 from", tableName, "WHERE chr1=", paste0("'", chr, "'"), "AND start1 >=", CNEstart, "AND end1 <=", CNEend, "AND", binRestrictionString(CNEstart, CNEend, "bin1")),
+                    "2"=paste("SELECT start2,end2 from", tableName, "WHERE chr2=", paste0("'", chr, "'"), "AND start2 >=", CNEstart, "AND end2 <=", CNEend, "AND", binRestrictionString(CNEstart, CNEend, "bin2"))
                     )
     if(!is.null(minLength))
       sqlCmd = paste(sqlCmd, "AND end1-start1+1 >=", minLength, "AND end2-start2+1 >=", minLength)
@@ -124,8 +124,8 @@ readCNERangesFromSQLite = function(dbName, tableName, chr, CNEstart, CNEend, whi
     fetchedCNE = IRanges(start=fetchedCNE[ ,1], end=fetchedCNE[, 2])
   }else if(nrGraphs > 1){
     sqlCmd = switch(whichAssembly,
-                    "1"=paste("SELECT chr2,start1,end1 from", tableName, "WHERE chr1=", chr, "AND start1 >=", CNEstart, "AND end1 <=", CNEend, "AND", binRestrictionString(CNEstart, CNEend, "bin1")),
-                    "2"=paste("SELECT chr1,start2,end2 from", tableName, "WHERE chr2=", chr, "AND start2 >=", CNEstart, "AND end2 <=", CNEend, "AND", binRestrictionString(CNEstart, CNEend, "bin2"))
+                    "1"=paste("SELECT chr2,start1,end1 from", tableName, "WHERE chr1=", paste0("'", chr, "'"), "AND start1 >=", CNEstart, "AND end1 <=", CNEend, "AND", binRestrictionString(CNEstart, CNEend, "bin1")),
+                    "2"=paste("SELECT chr1,start2,end2 from", tableName, "WHERE chr2=", paste0("'", chr, "'"), "AND start2 >=", CNEstart, "AND end2 <=", CNEend, "AND", binRestrictionString(CNEstart, CNEend, "bin2"))
                     )
     if(!is.null(minLength))
       sqlCmd = paste(sqlCmd, "AND end1-start1+1 >=", minLength, "AND end2-start2+1 >=", minLength)
