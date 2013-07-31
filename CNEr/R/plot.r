@@ -68,6 +68,11 @@ plotCNE = function(listToPlot){
   mergedDf$grouping = rep(names(listToPlot), sapply(listToPlot, nrow))
   mergedDf = mergedDf[ ,c("coordinates", "grouping", "y")]
   p = horizon.panel.ggplot(mergedDf)
+  #if(!is.null(file)){
+  #  postscript(file=file)
+  #  on.exit(dev.off())
+  #}
+  return(p)
 }
 
 horizon.panel.ggplot = function(mergedDf, horizonscale=2, my.title="fun"){
