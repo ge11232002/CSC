@@ -33,9 +33,19 @@ CNEAnnotate = function(dbName, tableName, whichAssembly=c("1","2"), chr, CNEstar
   resStart = max(CNEstart, (windowSize-1)/2+1)
   resEnd = min(CNEend, context_end-(windowSize-1)/2)
   resCoords = seq(resStart, resEnd, by=step_size)
-  runMeanRes = runMeanAll[resCoords]*100
-  res = cbind(resCoords, as.vector(runMeanRes))
-  colnames(res) = c("coordinates", "y")
+  if(nrGraphs == 1){
+    runMeanRes = runMeanAll[resCoords]*100
+    res = cbind(resCoords, as.vector(runMeanRes))
+    colnames(res) = c("coordinates", "y")
+  }else{
+    runMeanRes = lapply(runMeanAll, "[", resCoords)
+    runMeanRes = lapply(runMeanRes, "*", 100)
+    res = list()
+    for(i in 1:length(runMeanRes)){
+      res[[names(runMeanRes)[i]]] = cbind(resCoords, as.vector(runMeanRes[[i]]))
+      colnames(res[[names(runMeanRes)[i]]]) = c("coordinates", "y")
+    }
+  }
   return(res)
 }
 
@@ -63,11 +73,11 @@ CNEAnnotate = function(dbName, tableName, whichAssembly=c("1","2"), chr, CNEstar
 
 #listToPlot = list(a=res, b=res)
 
-plotCNE = function(listToPlot){
+plotCNE = function(listToPlot, horizonscale=2){
   mergedDf = as.data.frame(do.call(rbind, listToPlot))
   mergedDf$grouping = rep(names(listToPlot), sapply(listToPlot, nrow))
   mergedDf = mergedDf[ ,c("coordinates", "grouping", "y")]
-  p = horizon.panel.ggplot(mergedDf)
+  p = horizon.panel.ggplot(mergedDf, horizonscale=horizonscale)
   #if(!is.null(file)){
   #  postscript(file=file)
   #  on.exit(dev.off())
