@@ -73,11 +73,11 @@ CNEAnnotate = function(dbName, tableName, whichAssembly=c("1","2"), chr, CNEstar
 
 #listToPlot = list(a=res, b=res)
 
-plotCNE = function(listToPlot, horizonscale=2){
+plotCNE = function(listToPlot, horizonscale=2, nbands=3){
   mergedDf = as.data.frame(do.call(rbind, listToPlot))
   mergedDf$grouping = rep(names(listToPlot), sapply(listToPlot, nrow))
   mergedDf = mergedDf[ ,c("coordinates", "grouping", "y")]
-  p = horizon.panel.ggplot(mergedDf, horizonscale=horizonscale)
+  p = horizon.panel.ggplot(mergedDf, horizonscale=horizonscale, nbands=nbands)
   #if(!is.null(file)){
   #  postscript(file=file)
   #  on.exit(dev.off())
@@ -85,14 +85,14 @@ plotCNE = function(listToPlot, horizonscale=2){
   return(p)
 }
 
-horizon.panel.ggplot = function(mergedDf, horizonscale=2, my.title="fun"){
+horizon.panel.ggplot = function(mergedDf, horizonscale=2, nbands=3, my.title="fun"){
   require(ggplot2)
   require(reshape2)
   origin = 0
-  nbands = 3
   #require(RColorBrewer)
   #col.brew = brewer.pal(name="RdBu",n=10)
-  col.brew = c("#67001F", "#B2182B", "#D6604D", "#F4A582", "#FDDBC7", "#D1E5F0", "#92C5DE", "#4393C3", "#2166AC", "#053061")
+  #col.brew = c("#67001F", "#B2182B", "#D6604D", "#F4A582", "#FDDBC7", "#D1E5F0", "#92C5DE", "#4393C3", "#2166AC", "#053061")
+  col.brew = c("yellow", "orange", "red", "chartreuse", "blue")
   colnames(mergedDf) = c("coordinates", "grouping", "y")
   for(i in 1:nbands){
     #do positive
@@ -102,14 +102,16 @@ horizon.panel.ggplot = function(mergedDf, horizonscale=2, my.title="fun"){
                                                  ifelse(abs(mergedDf$y) - (horizonscale * (i - 1) - origin) > origin, abs(mergedDf$y) - (horizonscale * (i - 1) - origin), origin)),
                                           origin)
   }
-  mergedDf.melt = melt(mergedDf[,c(1,2,4:6)],id.vars=1:2)
+  mergedDf.melt = melt(mergedDf[,c(1,2,4:8)],id.vars=1:2)
   colnames(mergedDf.melt) = c("coordinates","grouping","band","value")
   p = ggplot(data=mergedDf.melt) +
     geom_area(aes(x = coordinates, y = value, fill=band),
                 position="identity") +
-    scale_fill_manual(values=c("ypos1"=col.brew[7],
-                               "ypos2"=col.brew[8],
-                               "ypos3"=col.brew[9]))+
+    scale_fill_manual(values=c("ypos1"=col.brew[1],
+                               "ypos2"=col.brew[2],
+                               "ypos3"=col.brew[3],
+                               "ypos4"=col.brew[4],
+                               "ypos5"=col.brew[5]))+
     ylim(origin,horizonscale) +
     facet_grid(grouping ~ .) +
     theme_bw() +
