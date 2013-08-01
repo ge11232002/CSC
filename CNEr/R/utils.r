@@ -46,11 +46,13 @@ my.system = function(cmd, echo=TRUE, intern=FALSE, ...){
 }
 
 binFromCoordRange = function(starts, ends){
+  dyn.load("~/Repos/CSC/CNEr/src/CNEr.so")
   bins = .Call("bin_from_coord_range", as.integer(starts), as.integer(ends))
   return(bins)
 }
 
 binRangesFromCoordRange = function(start, end){
+  dyn.load("~/Repos/CSC/CNEr/src/CNEr.so")
   binRanges = .Call("bin_ranges_from_coord_range", as.integer(start), as.integer(end))
   return(binRanges)
 }
