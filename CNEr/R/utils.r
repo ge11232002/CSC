@@ -45,6 +45,10 @@ my.system = function(cmd, echo=TRUE, intern=FALSE, ...){
   return(res)
 }
 
+isSingleString = function(x){
+  is.character(x) && length(x) == 1L && !is.na(x)
+}
+
 binFromCoordRange = function(starts, ends){
   dyn.load("~/Repos/CSC/CNEr/src/CNEr.so")
   bins = .Call("bin_from_coord_range", as.integer(starts), as.integer(ends))
