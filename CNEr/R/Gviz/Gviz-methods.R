@@ -1960,7 +1960,7 @@ setMethod("drawGD", signature("DataTrack"), function(GdObject, minBase, maxBase,
     imageMap(GdObject) <- NULL
     type <- .dpOrDefault(GdObject, "type", "p")
     type <- match.arg(type, c("p", "l", "b", "a", "s", "g", "r", "S", "smooth",
-                              "histogram", "mountain", "h", "boxplot", "gradient", "heatmap", "polygon"),
+                              "histogram", "mountain", "h", "boxplot", "gradient", "heatmap", "polygon", "horizon"),
                       several.ok=TRUE)
     ## Grouping may be useful for some of the plot types, may be ignored for others
     vals <- values(GdObject)
@@ -2168,6 +2168,14 @@ setMethod("drawGD", signature("DataTrack"), function(GdObject, minBase, maxBase,
                         baseline=mbaseline)
         if(!is.na(mbaseline))
             panel.abline(h=mbaseline, col=col.baseline, lwd=lwd.baseline, lty=lty.baseline, alpha=alpha)
+    }
+    if("horizon" %in% type){
+      fill.horizonScale = .dpOrDefault(GdObject, "fill.horizonScale", 2)
+      nband = round(max(y)/fill.horizonScale,0)+1
+      if(nband > 5)
+        stop("horizonScale too small, too many bands", nband)
+      fill.horizon = .dpOrDefault(GdObject, "fill.horizon", superpose.symbol$fill)[1:nband]
+      .panel.horizon(x, y, fill.horizonScale, col=fill.horizon, nband)
     }
     ## The special type 'polygon' has to be handled separately
     if("polygon" %in% type) {

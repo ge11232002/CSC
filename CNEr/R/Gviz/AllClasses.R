@@ -1234,7 +1234,10 @@ setClass("DataTrack",
                                             na.rm=FALSE,
                                             showSampleNames=FALSE,
                                             cex.sampleNames=NULL,
-                                            col.sampleNames="white")))
+                                            col.sampleNames="white",
+                                            ## paras for horizon plot
+                                            fill.horizon=c("yellow", "orange", "red", "chartreuse", "blue"),
+                                            fill.horizonScale=2)))
 
 ## Only pass on the stuff to the GdObject initializer
 setMethod("initialize", "DataTrack", function(.Object, data=matrix(), strand, ...){

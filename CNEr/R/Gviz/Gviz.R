@@ -524,6 +524,16 @@
                default.units="native", ...)
 }
 
+
+.panel.horizon = function(x, y, fill.horizonScale, col, nband){
+  xyplot(y~x, xlab=NULL,ylab=NULL, ylim=c(0, fill.horizonScale),origin=0,
+         panel=function(x,y,...){
+           for (i in 0:(nband-1)){
+             panel.xyarea(x,y=ifelse(y>0,y,NA)-(fill.horizonScale * i),col=col[i+1],border=col[i+1])}
+         })
+
+}
+
 ## A lattice-style panel function to draw polygons (like coverage)
 ## Arguments:
 ##    o x, y: the x and y coordinates form the plot
