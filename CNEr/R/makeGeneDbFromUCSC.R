@@ -9,7 +9,7 @@
 
 .SUPPORTED_UCSC_TABLES = list(
     "UCSC Genes"    = c("knownGene", "knownIsoforms", "kgXref"),
-    "RefSeq Genes"  = c("refGene", "refLink"),
+    "RefSeq Genes"  = c("refGene"),
     "Ensembl Genes" = c("ensGene")
     )
 
@@ -18,9 +18,9 @@ supportedUCSCtables = function(){
 }
 
 queryRefSeq = function(con, tableNames){
-  query = "SELECT distinct locusLinkId, refGene.name, refGene.name2, 'RefSeq Gene', chrom, strand, exonStarts, exonEnds, cdsStart, cdsEnd
-                   FROM refGene, refLink WHERE refGene.name = refLink.mrnaAcc
-                   ORDER BY locusLinkId, name2, name"
+  query = "SELECT distinct name, name2, chrom, strand, exonStarts, exonEnds
+                   FROM refGene
+                   ORDER BY name2, name"
   ans = dbGetQuery(con, query)
 
 }
@@ -46,7 +46,20 @@ makeGeneDbFromUCSC = function(genome="hg19",
   ans = switch(tablename,
                "RefSeq Genes"=queryRefSeq(con)
                )
-
+  dbDisconnect(con)
+  # process the ans into one exon per line
+  exonStarts = strsplit(ans$exonStarts, ",")
+  exonEnds = strsplit(ans$exonEnds, ",")
+  stopifnot(all(sapply(exonStarts, length) == sapply(exonEnds, length)))
+  repNum = sapply(exonStarts, length)
+  res = data.frame(chromosome=rep(ans$chrom, repNum), 
+                   start=as.integer(unlist(exonStarts)),
+                   end=as.integer(unlist(exonEnds)),
+                   strand=rep(ans$strand, repNum),
+                   transcript=rep(ans$name, repNum),
+                   symbol=rep(ans$name2, repNum))
+  # add the bin column
+  res$bin = binFromCoordRange(res$start, res$end)
 }
 
 
