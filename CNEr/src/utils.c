@@ -93,7 +93,7 @@ SEXP bin_ranges_from_coord_range(SEXP start, SEXP end){
 
 
 
-SEXP calc_window_scores(SEXP coverage, SEXP context_start, SEXP context_end, SEXP win_nr_steps, SEXP step_size){
+/*SEXP calc_window_scores(SEXP coverage, SEXP context_start, SEXP context_end, SEXP win_nr_steps, SEXP step_size){
   // Here the start and end are 1-based
   win_nr_steps = AS_INTEGER(win_nr_steps);
   step_size = AS_INTEGER(step_size);
@@ -113,4 +113,4 @@ SEXP calc_window_scores(SEXP coverage, SEXP context_start, SEXP context_end, SEX
   for(i=0; i < nr_blocks
 
   return R_NilValue;
-}
+}*/
