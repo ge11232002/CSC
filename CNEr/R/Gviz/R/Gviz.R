@@ -108,7 +108,7 @@
     }
     if(is(x, "DataTrack") && is.null(displayPars(x, "size"))){
         type <- match.arg(.dpOrDefault(x, "type", "p"), c("p", "l", "b", "a", "s", "g", "r", "S", "smooth",
-                                                          "histogram", "mountain", "h", "boxplot", "gradient", "heatmap", "polygon"),
+                                                          "histogram", "mountain", "h", "boxplot", "gradient", "heatmap", "polygon", "horizon"),
                           several.ok=TRUE)
         size <- if(length(type)==1L){ if(type=="gradient") 1 else if(type=="heatmap") nrow(values(x)) else 5} else 5
         return(size)
@@ -163,7 +163,7 @@
         objects <- list(objects)
     atrack <- sapply(objects, function(x){
         type <- match.arg(.dpOrDefault(x, "type", "p"), c("p", "l", "b", "a", "s", "g", "r", "S", "smooth",
-                                                         "histogram", "mountain", "h", "boxplot", "gradient", "heatmap", "polygon"),
+                                                         "histogram", "mountain", "h", "boxplot", "gradient", "heatmap", "polygon", "horizon"),
                           several.ok=TRUE)
         is(x, "NumericTrack") || (is(x, "AlignedReadTrack") && .dpOrDefault(x, "detail", "coverage")=="coverage")})
     return(atrack & sapply(objects, .dpOrDefault, "showAxis", TRUE))
@@ -241,7 +241,7 @@
                 at[at>=sort(ylim)[1] & at<=sort(ylim)[2]]
                 atSpace <- max(as.numeric(convertWidth(stringWidth(at), "inches"))+0.18)*cex.axis[names(GdObject)]
                 type <- match.arg(.dpOrDefault(GdObject, "type", "p"), c("p", "l", "b", "a", "s", "g", "r", "S", "smooth", "polygon",
-                                                                         "histogram", "mountain", "h", "boxplot", "gradient", "heatmap"),
+                                                                         "histogram", "mountain", "h", "boxplot", "gradient", "heatmap", "horizon"),
                                   several.ok=TRUE)
                 if(any(c("heatmap", "gradient") %in% type)){
                     nlevs <- max(1, nlevels(factor(getPar(GdObject, "groups"))))-1
@@ -526,11 +526,21 @@
 
 
 .panel.horizon = function(x, y, fill.horizonScale, col, nband){
-  xyplot(y~x, xlab=NULL,ylab=NULL, ylim=c(0, fill.horizonScale),origin=0,
-         panel=function(x,y,...){
-           for (i in 0:(nband-1)){
-             panel.xyarea(x,y=ifelse(y>0,y,NA)-(fill.horizonScale * i),col=col[i+1],border=col[i+1])}
-         })
+  #panel.polygon(x, y, col="red")
+  #panel.xyplot(x, y, xlab=NULL,ylab=NULL, ylim=c(0, fill.horizonScale),origin=0,
+  #       panel=function(x,y,...){
+           for (i in 1:nband){
+             #panel.xyarea(x,ifelse(ifelse(y>0,y,0)-(fill.horizonScale * (i-1)) >fill.horizonScale, fill.horizonScale, ifelse(y>0,y,NA)-(fill.horizonScale * (i-1))),col=col[i],border=col[i], origin=0)}
+             panel.xyarea(x,y=ifelse(y>0,y,NA)-(fill.horizonScale* (i-1)),col=col[i],border=col[i])}
+
+  #panel.horizonplot(x, y, horizonscale=fill.horizonScale) 
+             #panel.xyarea(x,y=ifelse(y<0,y,NA)-fill.horizonScale*(i-1),col=col[i],border=col[i], lwd=2)}
+  #           cat(x[1], x, x[length(x)])
+  #           cat("\n")
+  #           cat(c(0, ifelse(y>0, ifelse(y >fill.horizonScale*i, fill.horizonScale , ifelse(y-fill.horizonScale*(i-1)>0, y-fill.horizonScale*(i-1), 0)),0),0))
+  #           cat("\n")
+#             panel.polygon(c(x[1], x, x[length(x)]), c(0, ifelse(y>0, ifelse(y >fill.horizonScale*i, fill.horizonScale , ifelse(y-fill.horizonScale*(i-1)>0, y-fill.horizonScale*(i-1), 0)),0),0),col=col[i],border=col[i])}
+         #})
 
 }
 

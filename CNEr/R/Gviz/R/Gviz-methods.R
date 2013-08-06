@@ -1124,7 +1124,7 @@ setMethod("drawAxis", signature(GdObject="DataTrack"), function(GdObject, ...) {
 
 setMethod("drawAxis", signature(GdObject="NumericTrack"), function(GdObject, from, to, ...) {
     type <- match.arg(.dpOrDefault(GdObject, "type", "p"), c("p", "l", "b", "a", "s", "g", "r", "S", "smooth", "polygon",
-                                                             "histogram", "mountain", "h", "boxplot", "gradient", "heatmap"),
+                                                             "histogram", "mountain", "h", "boxplot", "gradient", "heatmap", "horizon"),
                       several.ok=TRUE)
     yvals <- values(GdObject)
     ylim <- .dpOrDefault(GdObject, "ylim", if(!is.null(yvals) && length(yvals)) 
@@ -1132,7 +1132,8 @@ setMethod("drawAxis", signature(GdObject="NumericTrack"), function(GdObject, fro
     if(diff(ylim)==0)
         ylim <- ylim+c(-1,1) 
     hSpaceAvail <- vpLocation()$isize["width"]/6
-    yscale <- extendrange(r=ylim, f=0.05)
+    #yscale <- extendrange(r=ylim, f=0.05)
+    yscale = ylim
     col <- .dpOrDefault(GdObject, "col.axis", "white")
     acex <- .dpOrDefault(GdObject, "cex.axis", NULL)
     acol <- .dpOrDefault(GdObject, "col.axis", "white")
@@ -2125,7 +2126,8 @@ setMethod("drawGD", signature("DataTrack"), function(GdObject, minBase, maxBase,
         ylim <- ylim+c(-1,1)
     if(all(is.infinite(ylim)))
         ylim <- c(0,1)
-    ylimExt <- extendrange(r=ylim, f=0.05)
+    #ylimExt <- extendrange(r=ylim, f=0.05)
+    ylimExt = ylim
     pushViewport(viewport(xscale=c(minBase, maxBase), yscale=ylimExt, clip=TRUE))
     ## The plotting parameters, some defaults from the lattice package first
     plot.symbol <- trellis.par.get("plot.symbol")
