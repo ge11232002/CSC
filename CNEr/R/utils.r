@@ -143,3 +143,11 @@ readCNERangesFromSQLite = function(dbName, tableName, chr, CNEstart, CNEend, whi
   return(fetchedCNE)
 }
 
+queryAnnotationSQLite = function(dbname, tablename, chr, start, end){
+  require(RSQLite)
+  con = dbConnect(SQLite(), dbname=dbname)
+  query = paste("SELECT * from", tablename, "WHERE", binRestrictionString(start, end, "bin"), "AND", "chromosome=", paste0("'", chr, "'"), "AND start >=", start, "AND end <=", end)
+  ans = dbGetQuery(con, query)
+  ans = ans[ ,c("chromosome", "start", "end", "strand", "transcript", "gene", "symbol")]
+
+}

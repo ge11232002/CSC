@@ -8,30 +8,83 @@
 #  )
 
 .SUPPORTED_UCSC_TABLES = list(
-    "UCSC Genes"    = c("knownGene", "knownIsoforms", "kgXref"),
-    "RefSeq Genes"  = c("refGene"),
-    "Ensembl Genes" = c("ensGene")
+    "knownGene"    = c("knownGene", "kgXref"),
+    "refGene"  = c("refGene"),
+    "ensGene" = c("ensGene", "ensemblToGeneName")
     )
 
 supportedUCSCtables = function(){
   .SUPPORTED_UCSC_TABLES
 }
 
-queryRefSeq = function(con, tableNames){
+queryrefGene = function(con){
   query = "SELECT distinct name, name2, chrom, strand, exonStarts, exonEnds
                    FROM refGene
                    ORDER BY name2, name"
   ans = dbGetQuery(con, query)
+  # process the ans into one exon per line
+  exonStarts = strsplit(ans$exonStarts, ",")
+  exonEnds = strsplit(ans$exonEnds, ",")
+  stopifnot(all(sapply(exonStarts, length) == sapply(exonEnds, length)))
+  repNum = sapply(exonStarts, length)
+  res = data.frame(chromosome=rep(ans$chrom, repNum),
+                   start=as.integer(unlist(exonStarts))+1,
+                   end=as.integer(unlist(exonEnds)),
+                   strand=rep(ans$strand, repNum),
+                   transcript=rep(ans$name, repNum),
+                   symbol=rep(ans$name2, repNum))
+  return(res)
+}
 
+queryknownGene = function(con){
+  query = "SELECT distinct kgID, geneSymbol, chrom, strand, exonStarts, exonEnds
+                   FROM knownGene, kgXref WHERE knownGene.name=kgXref.kgID 
+                   ORDER BY geneSymbol, kgID"
+  ans = dbGetQuery(con, query)
+  # process the ans into one exon per line
+  exonStarts = strsplit(ans$exonStarts, ",")
+  exonEnds = strsplit(ans$exonEnds, ",")
+  stopifnot(all(sapply(exonStarts, length) == sapply(exonEnds, length)))
+  repNum = sapply(exonStarts, length)
+  res = data.frame(chromosome=rep(ans$chrom, repNum),
+                   start=as.integer(unlist(exonStarts))+1,# The internal ucsc database use the 0-based start, 1-based end. We only use 1-based.
+                   end=as.integer(unlist(exonEnds)),
+                   strand=rep(ans$strand, repNum),
+                   transcript=rep(ans$kgID, repNum),
+                   symbol=rep(ans$geneSymbol, repNum))
+  return(res)
+}
+
+queryensGene = function(con){
+  query = "SELECT distinct chrom, strand, exonStarts, exonEnds, ensGene.name, ensemblToGeneName.value
+          FROM ensGene, ensemblToGeneName WHERE ensGene.name=ensemblToGeneName.name
+          ORDER BY ensGene.name, ensemblToGeneName.value"
+  ans = dbGetQuery(con, query)
+  # process the ans into one exon per line
+  exonStarts = strsplit(ans$exonStarts, ",")
+  exonEnds = strsplit(ans$exonEnds, ",")
+  stopifnot(all(sapply(exonStarts, length) == sapply(exonEnds, length)))
+  repNum = sapply(exonStarts, length)
+  res = data.frame(chromosome=rep(ans$chrom, repNum),
+                   start=as.integer(unlist(exonStarts))+1,
+                   end=as.integer(unlist(exonEnds)),
+                   strand=rep(ans$strand, repNum),
+                   transcript=rep(ans$name, repNum),
+                   symbol=rep(ans$value, repNum))
+  return(res)
 }
 
 makeGeneDbFromUCSC = function(genome="hg19",
-                              tablename="RefSeq Genes",
+                              tablename="refGene",
                               host="genome-mysql.cse.ucsc.edu",
                               user="genome",
                               password=NULL,
-                              opts=NULL){
+                              dbnameSQLite="geneAnnotation.sqlite",
+                              tablenameSQLite=paste(genome, tablename, sep="_"),
+                              overwrite=FALSE 
+                              ){
   require(RMySQL)
+  require(RSQLite)
   if(!isSingleString(genome))
     stop("'genome' must be a single string")
   if(!isSingleString(tablename))
@@ -44,22 +97,18 @@ makeGeneDbFromUCSC = function(genome="hg19",
   tableNames = .SUPPORTED_UCSC_TABLES[[tablename]] 
   message("Download the ", tablename, " table ... ")
   ans = switch(tablename,
-               "RefSeq Genes"=queryRefSeq(con)
+               "refGene"=queryrefGene(con),
+               "knownGene"=queryknownGene(con),
+               "ensGene"=queryensGene(con)
                )
   dbDisconnect(con)
-  # process the ans into one exon per line
-  exonStarts = strsplit(ans$exonStarts, ",")
-  exonEnds = strsplit(ans$exonEnds, ",")
-  stopifnot(all(sapply(exonStarts, length) == sapply(exonEnds, length)))
-  repNum = sapply(exonStarts, length)
-  res = data.frame(chromosome=rep(ans$chrom, repNum), 
-                   start=as.integer(unlist(exonStarts)),
-                   end=as.integer(unlist(exonEnds)),
-                   strand=rep(ans$strand, repNum),
-                   transcript=rep(ans$name, repNum),
-                   symbol=rep(ans$name2, repNum))
   # add the bin column
-  res$bin = binFromCoordRange(res$start, res$end)
+  ans$bin = binFromCoordRange(ans$start, ans$end)
+  # reorder the columns, not necessary
+  ans = ans[ ,c("bin","chromosome","start","end","strand","transcript","symbol")]
+  con = dbConnect(SQLite(), dbname=dbnameSQLite)
+  dbWriteTable(con, tablenameSQLite, ans, overwrite=overwrite)
+  dbDisconnect(con)
 }
 
 
