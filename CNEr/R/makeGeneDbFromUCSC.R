@@ -31,6 +31,7 @@ queryrefGene = function(con){
                    start=as.integer(unlist(exonStarts))+1,
                    end=as.integer(unlist(exonEnds)),
                    strand=rep(ans$strand, repNum),
+                   gene=rep(ans$name2, repNum),
                    transcript=rep(ans$name, repNum),
                    symbol=rep(ans$name2, repNum))
   return(res)
@@ -50,13 +51,14 @@ queryknownGene = function(con){
                    start=as.integer(unlist(exonStarts))+1,# The internal ucsc database use the 0-based start, 1-based end. We only use 1-based.
                    end=as.integer(unlist(exonEnds)),
                    strand=rep(ans$strand, repNum),
+                   gene=rep(ans$geneSymbol, repNum),
                    transcript=rep(ans$kgID, repNum),
                    symbol=rep(ans$geneSymbol, repNum))
   return(res)
 }
 
 queryensGene = function(con){
-  query = "SELECT distinct chrom, strand, exonStarts, exonEnds, ensGene.name, ensemblToGeneName.value
+  query = "SELECT distinct chrom, strand, exonStarts, exonEnds, ensGene.name2, ensGene.name, ensemblToGeneName.value
           FROM ensGene, ensemblToGeneName WHERE ensGene.name=ensemblToGeneName.name
           ORDER BY ensGene.name, ensemblToGeneName.value"
   ans = dbGetQuery(con, query)
@@ -69,6 +71,7 @@ queryensGene = function(con){
                    start=as.integer(unlist(exonStarts))+1,
                    end=as.integer(unlist(exonEnds)),
                    strand=rep(ans$strand, repNum),
+                   gene=rep(ans$name2, repNum),
                    transcript=rep(ans$name, repNum),
                    symbol=rep(ans$value, repNum))
   return(res)
@@ -105,7 +108,7 @@ makeGeneDbFromUCSC = function(genome="hg19",
   # add the bin column
   ans$bin = binFromCoordRange(ans$start, ans$end)
   # reorder the columns, not necessary
-  ans = ans[ ,c("bin","chromosome","start","end","strand","transcript","symbol")]
+  ans = ans[ ,c("bin","chromosome","start","end","strand","gene", "transcript","symbol")]
   con = dbConnect(SQLite(), dbname=dbnameSQLite)
   dbWriteTable(con, tablenameSQLite, ans, overwrite=overwrite)
   dbDisconnect(con)
