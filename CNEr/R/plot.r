@@ -126,4 +126,10 @@ horizon.panel.ggplot = function(mergedDf, horizonscale=2, nbands=3, my.title="fu
     return(p)
 }
 
+prepareCNETracks = function(dataMatrix, chr, strand, genome){
+  require(Gviz)
+  dTrack = DataTrack(start=dataMatrix[ ,1], end=dataMatrix[ ,1], data=dataMatrix[ ,2], chromosome=chr, strand=strand, genome=genome)
+
+}
+
 
