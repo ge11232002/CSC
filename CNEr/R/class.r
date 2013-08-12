@@ -91,13 +91,54 @@ setMethod("[", "axt",
                   score=ans_score, symCount=ans_symCount)
           }
           )
-setGeneric("subAxt", function(x, searchGRanges, select=c("target", "query"), type=c("any", "within")) standardGeneric("subAxt"))
+
+setMethod("c", "axt",
+          function(x, ...){
+            if(missing(x)){
+              args = unname(list(...))
+              x = args[[1L]]
+            }else{
+              args = unname(list(x, ...))
+            }
+            if(length(args) == 1L)
+              return(x)
+            arg_is_null = sapply(args, is.null)
+            if(any(arg_is_null))
+              args[arg_is_null] = NULL
+            if(!all(sapply(args, is, class(x))))
+              stop("all arguments in '...' must be ", class(x), " objects (or NULLs)")
+            new_targetRanges = do.call(c, lapply(args, targetRanges))
+            new_targetSeqs = do.call(c, lapply(args, targetSeqs))
+            new_queryRanges = do.call(c, lapply(args, queryRanges))
+            new_querySeqs = do.call(c, lapply(args, querySeqs))
+            new_score = do.call(c, lapply(args, score))
+            new_symCount = do.call(c, lapply(args, symCount))
+
+            initialize(x,
+                       targetRanges = new_targetRanges,
+                       targetSeqs = new_targetSeqs,
+                       queryRanges = new_queryRanges,
+                       querySeqs = new_querySeqs,
+                       score = new_score,
+                       symCount = new_symCount)
+          }
+          )
+
+
+setGeneric("subAxt", function(x, chr, start, end, strand=c("+", "-", "*"),
+                              select=c("target", "query"), 
+                              type=c("any", "within")) standardGeneric("subAxt"))
 setMethod("subAxt", "axt",
 ## This is to fetch the axts within the specific chrs, starts, ends based on target sequences.
-          function(x, searchGRanges, select=c("target", "query"),
-                   type=c("any", "widthin")){
+          function(x, chr, start, end, strand=c("+", "-", "*"), 
+                   select=c("target", "query"),
+                   type=c("any", "within")){
+            strand = match.arg(strand)
             type = match.arg(type)
             select = match.arg(select)
+            searchGRanges = GRanges(seqnames=chr, 
+                                    ranges=IRanges(start=start, end=end),
+                                    strand=strand)
             if(length(searchGRanges) == 0)
               return(x)
             if(select == "target"){
