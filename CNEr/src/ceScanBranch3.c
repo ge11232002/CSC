@@ -754,7 +754,7 @@ struct axt *buildAxt(SEXP axtqNames, SEXP axtqStart, SEXP axtqEnd, SEXP axtqStra
 
 struct slThreshold *buildThreshold(SEXP winSize, SEXP minScore, SEXP outputFiles){
   struct slThreshold *trList = NULL, *tr;
-  char path[PATH_LEN];
+  //char path[PATH_LEN];
   PROTECT(winSize = AS_INTEGER(winSize));
   PROTECT(minScore = AS_INTEGER(minScore));
   PROTECT(outputFiles = AS_CHARACTER(outputFiles));
@@ -816,5 +816,5 @@ SEXP myCeScan(SEXP tFilterNames, SEXP tFilterStarts, SEXP tFilterEnds, SEXP qFil
 SEXP ceScanFile(SEXP axtFiles, SEXP tFilterFile, SEXP qFilterFile, SEXP qSize,
                 SEXP winSize, SEXP minScore, SEXP outputFiles){
   int nrThresholds = GET_LENGTH(winSize);
-
+  
 }
