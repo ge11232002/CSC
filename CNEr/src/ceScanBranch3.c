@@ -670,7 +670,7 @@ struct hash *buildHashForBed(SEXP tNames, SEXP tStarts, SEXP tEnds){
     range->next = NULL;
     range->start = p_tStarts[i] - 1;
     range->end = p_tEnds[i];
-    char *tName = (char *) malloc(sizeof(char) * strlen(CHAR(STRING_ELT(tNames, i))));
+    char *tName = (char *) malloc(sizeof(char) * (strlen(CHAR(STRING_ELT(tNames, i)))+1));
     strcpy(tName, CHAR(STRING_ELT(tNames, i)));
     hel = hashLookup(hash, tName);
     if(hel == NULL)
@@ -692,7 +692,7 @@ struct hash *buildHashForSizeFile(SEXP names, SEXP sizes){
   int i, *p_sizes, n = GET_LENGTH(names);
   p_sizes = INTEGER_POINTER(sizes);
   for(i = 0; i < n; i++){
-    char *name = (char *) malloc(sizeof(char) * strlen(CHAR(STRING_ELT(names, i))));
+    char *name = (char *) malloc(sizeof(char) * (strlen(CHAR(STRING_ELT(names, i)))+1));
     strcpy(name, CHAR(STRING_ELT(names, i)));
     hashAddInt(hash, name, p_sizes[i]);
     free(name);
@@ -769,7 +769,7 @@ struct slThreshold *buildThreshold(SEXP winSize, SEXP minScore, SEXP outputFiles
     tr->winSize = p_winSize[i];
    // Rprintf("The minScore %d and the winSize %d\n", p_minScore[i], p_winSize[i]);
    //safef(path, sizeof(path), "%s_%d_%d", CHAR(STRING_ELT(outFilePrefix, 0)), tr->minScore, tr->winSize);
-    char *filepath_elt = (char *) R_alloc(strlen(CHAR(STRING_ELT(outputFiles, i))), sizeof(char));
+    char *filepath_elt = (char *) R_alloc(strlen(CHAR(STRING_ELT(outputFiles, i)))+1, sizeof(char));
     strcpy(filepath_elt, CHAR(STRING_ELT(outputFiles, i)));
     tr->outFile = mustOpen(filepath_elt, "w");
     slAddHead(&trList, tr);
@@ -811,3 +811,10 @@ SEXP myCeScan(SEXP tFilterNames, SEXP tFilterStarts, SEXP tFilterEnds, SEXP qFil
   return(R_NilValue);
 }
 
+
+//----------------- the version works on files directly--------------
+SEXP ceScanFile(SEXP axtFiles, SEXP tFilterFile, SEXP qFilterFile, SEXP qSize,
+                SEXP winSize, SEXP minScore, SEXP outputFiles){
+  int nrThresholds = GET_LENGTH(winSize);
+
+}
