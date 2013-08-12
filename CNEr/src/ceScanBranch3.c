@@ -813,8 +813,52 @@ SEXP myCeScan(SEXP tFilterNames, SEXP tFilterStarts, SEXP tFilterEnds, SEXP qFil
 
 
 //----------------- the version works on files directly--------------
-SEXP ceScanFile(SEXP axtFiles, SEXP tFilterFile, SEXP qFilterFile, SEXP qSize,
+SEXP ceScanFile(SEXP axtFiles, SEXP tFilterFile, SEXP qFilterFile, 
+                SEXP sizeNames, SEXP sizeSizes,
                 SEXP winSize, SEXP minScore, SEXP outputFiles){
+  if(!IS_CHARACTER(tFilterFile) || LENGTH(tFilterFile) != 1)
+    error("'Target filter file' must be a single string");
+  if(!IS_CHARACTER(qFilterFile) || LENGTH(qFilterFile) != 1)
+    error("'Query filter file' must be a single string");
   int nrThresholds = GET_LENGTH(winSize);
-  
+  struct slThreshold *thresholds, *tr;
+  struct hash *tFilter, *qFilter, *qFilterRev, *qSizes;
+  thresholds = buildThreshold(winSize, minScore, outputFiles);
+  setBpScores(bpScores);
+  qSizes = buildHashForSizeFile(sizeNames, sizeSizes);
+  char *filepath_elt;
+  filepath_elt = (char *) R_alloc(strlen(CHAR(STRING_ELT(tFilterFile, 0)))+1, sizeof(char));
+  strcpy(filepath_elt, CHAR(STRING_ELT(tFilterFile, 0)));
+  tFilter = tFilterFile ? readFilter(filepath_elt) : NULL;
+  filepath_elt = (char *) R_alloc(strlen(CHAR(STRING_ELT(qFilterFile, 0)))+1, sizeof(char));
+  strcpy(filepath_elt, CHAR(STRING_ELT(qFilterFile, 0)));
+  qFilter = qFilterFile ? readFilter(filepath_elt) : NULL;
+  qFilterRev = qFilter ? makeReversedFilter(qFilter, qSizes) : NULL;
+
+  int nrAxtFiles = GET_LENGTH(axtFiles);
+  int i;
+  struct lineFile *lf;
+  struct axt *axt;
+  for(i=0; i<nrAxtFiles; i++){
+    filepath_elt = (char *) R_alloc(strlen(CHAR(STRING_ELT(axtFiles, i)))+1, sizeof(char));
+    strcpy(filepath_elt, CHAR(STRING_ELT(axtFiles, i)));
+    lf = lineFileOpen(filepath_elt, TRUE);
+    while ((axt = axtRead(lf)) != NULL){
+      scanAxt(axt,
+          qSizes,
+          tFilter,
+          axt->qStrand == '+' ? qFilter : qFilterRev,
+          thresholds);
+      axtFree(&axt);
+    }
+    lineFileClose(&lf);
+  }
+  for(tr = thresholds; tr != NULL; tr = tr->next)
+    fclose(tr->outFile);
+  freeHashAndValsForRanges(&tFilter);
+  freeHashAndValsForRanges(&qFilter);
+  freeHash(&qSizes);
+  freeHashAndValsForRanges(&qFilterRev);
+  freeSlThreshold(&thresholds);
+  return(R_NilValue);
 }

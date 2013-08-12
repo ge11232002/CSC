@@ -28,6 +28,29 @@ ceScan = function(axts, tFilter=NULL, qFilter=NULL, qSizes=NULL, thresholds=c("4
   return(CNE)
 }
 
+ceScanFile = function(axtFiles, tFilterFile=NULL, qFilterFile=NULL, qSizes=NULL,
+                      thresholds=c("49,50")){
+  ## Here the returned tStart and qStart are 1-based coordinates. Of course ends are also 1-based.
+  dyn.load("~/Repos/CSC/CNEr/src/CNEr.so")
+  if(!is.null(qFilterFile))
+    if(is.null(qSizes) || !is(qSizes, "Seqinfo"))
+      stop("qSizes must exist and be a Seqinfo object when qFilter exists")
+  winSize = as.integer(sapply(strsplit(thresholds, ","), "[", 2))
+  minScore = as.integer(sapply(strsplit(thresholds, ","), "[", 1))
+  resFiles = tempfile(pattern = paste(minScore, winSize, "ceScan", sep="-"), tmpdir = tempdir(), fileext = "")
+  .Call("ceScanFile", axtFiles, tFilterFile, qFilterFile, 
+        as.vector(seqnames(qSizes)), as.vector(seqlengths(qSizes)),
+        winSize, minScore,
+        resFiles)
+  CNE = lapply(resFiles,
+               function(x){res=read.table(x, header=FALSE, sep="\t", as.is=TRUE)
+               colnames(res)=c("tName", "tStart", "tEnd", "qName", "qStart", "qEnd", "strand", "score", "cigar")
+               return(res)})
+  names(CNE) =  paste(minScore, winSize, sep="_")
+  unlink(resFiles)
+  return(CNE)
+}
+
 ceMerge = function(cne1, cne2){
   # In this function, cne's start is 1-based coordinates. ends are 1-based too. 
   require(GenomicRanges)
