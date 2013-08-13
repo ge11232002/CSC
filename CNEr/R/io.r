@@ -62,9 +62,9 @@ readAxt = function(axtFiles){
   return(axts)
 }
 
-axt.info = function(filepath){
+axt.info = function(axtFiles){
   dyn.load("~/Repos/CSC/CNEr/src/CNEr.so")
-  ans = .Call2("axt_info", filepath)
+  ans = .Call2("axt_info", axtFiles)
   return(ans)
 }
 
