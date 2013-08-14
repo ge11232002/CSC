@@ -845,7 +845,7 @@ bp_bulk_load_gff.pl -u $USER -p $PASS -c -d gbrowse_gff_hg19 --maxfeature 100000
 
 And for gff3 files,
 ```sh
-bp_seqfeature_load.pl -u $USER -p $PASS -d gbrowse_gff_hg19 -f -c genome1.gff3 genome2.gff3
+bp_seqfeature_load.pl -u $USER -p $PASS -d gbrowse_gff_hg19 -f -c genome1.gff3 genome1.fasta
 ```
 
 ### Creating a configuration file for GBrowse
