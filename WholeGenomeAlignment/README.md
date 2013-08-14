@@ -56,5 +56,9 @@ To reduce the number of chromosome comparison pairs
 and since we are interested in ordinary chromosomes (e.g. chr\*),
 the chromosomes names contain the "_" symbol are skipped.
 
+The distance between two compared assemblies can refer to 
+the [UCSC Multiple Alignments](http://genomewiki.ucsc.edu/index.php/UCSC_Multiple_Alignments).
+and [UCSC topologies](http://genomewiki.ucsc.edu/index.php/Phylogenetic_Tree#Vertebrate_topology_used_at_UCSC_genome_browser).
+
 
 
