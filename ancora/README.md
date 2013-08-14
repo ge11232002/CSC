@@ -837,6 +837,17 @@ NOTE: use this script with caution as
 it erases all data stored in the GBrowse annotation databases 
 before it loads the GFF files.
 
+In details, for gff2 files,
+
+```sh
+bp_bulk_load_gff.pl -u $USER -p $PASS -c -d gbrowse_gff_hg19 --maxfeature 1000000000 /export/data/CNEs/gff/hg19.gff
+```
+
+And for gff3 files,
+```sh
+bp_seqfeature_load.pl -u $USER -p $PASS -d gbrowse_gff_hg19 -f -c genome1.gff3 genome2.gff3
+```
+
 ### Creating a configuration file for GBrowse
 GBrowse requires a configuration file for each assembly. 
 We keep the live versions of these files in the repository under ```ancora/gbrowse2/conf```.
