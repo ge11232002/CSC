@@ -656,6 +656,8 @@ mysql -u root -p -e 'create database gbrowse_gff_hg19'
 mysql -u root -p -e 'grant select on gbrowse_gff_hg19.* to nobody@localhost'
 ```
 
+Note: please make sure the work in database name can not start with capital, i.e., gbrowse_gff_Hg19 will not work.
+
 ### Obtaining genome annotations
 This step usually involves more manual work than the other steps, 
 because annotations are available in diverse databases and 
