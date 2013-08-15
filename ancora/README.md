@@ -464,8 +464,35 @@ We produce filter files from exon and repeat annotation.
 Please refer to the section “Obtaining genome annotations” 
 below for information about how to download exon and repeat annotation 
 from UCSC and load it into a local MySQL database or from other sources.
-We maintain a text file ```cne/scripts/cne_pipeline/filter_features.txt``` 
-to record the genes and repeats information we used.
+Here's genes and repeats information we used.
+
+| Assembly   |   name    |        Exon  |        Repeat  |
+| -----------|-----------|------------- | -------------- |
+| hg19       | Human     |RefSeq Genes, Ensembl Genes, UCSC Known Genes | RepeatMasker |
+| mm10       | Mouse     |RefSeq Genes, Ensembl Genes, UCSC Known Genes | RepeatMasker |
+| xenTro3    | Frog      |RefSeq Genes, Ensembl Genes                   | RepeatMasker |
+| tetNig2    | Tetraodon |Ensembl Genes                                 |              |
+| canFam3    | Dog       |RefSeq Genes, Ensembl Genes                   | RepeatMasker |
+| galGal4    | Chicken   |RefSeq Genes, Ensembl Genes                   | RepeatMasker |
+| danRer7    | Zebrafish |RefSeq Genes, Ensembl Genes                   | RepeatMasker |
+| fr3        | Fugu      |RefSeq Genes                                  | RepeatMasker |
+| anoCar2    | Lizard    |Ensembl Genes                                 | RepeatMasker |
+| equCab2    | Horse     |RefSeq Genes, Ensembl Genes                   | RepeatMasker |
+| oryLat2    | Medaka    |RefSeq Genes, Ensembl Genes                   | RepeatMasker |
+| monDom5    | Opossum   |RefSeq Genes, Ensembl Genes                   | RepeatMasker |
+| gasAcu1    |Stickleback|RefSeq Genes, Ensembl Genes                   | RepeatMasker |
+| rn5        | Rat       |RefSeq Genes, Ensembl Genes                   | RepeatMasker |
+| dm3        | D. melanogaster| RefSeq Genes, Ensembl Genes             | RepeatMasker |
+| droAna2    | D. ananassae   |                                         | RepeatMasker |
+| dp3        |D. pseudoobscura|                                         | RepeatMasker |
+| ce4        | C. elegans     | RefSeq Genes                            | RepeatMasker |
+| cb3        | C. briggsae    |                                         | RepeatMasker |
+| caeRem2    | C. remanei     |                                         | RepeatMasker |
+| caePb1     | C. brenneri    |                                         | RepeatMasker |
+| C_albicans_SC5314_A21 |     | CDG exon                               | CGD repeat_region, long_terminal_repeat  |
+| C_dubliniensis_CD36   |     | CDG exon                               | CGD repeat_region, long_terminal_repeat  |
+| C_glabrata_CBS138     |     | CDG exon                               | CGD repeat_region, long_terminal_repeat  |
+| C_parapsilosis_CDC317 |     | CDG exon                               | CGD repeat_region, long_terminal_repeat  |
 
 To prepare the exon file from ensembl gff, use the script ```cne/scripts/cne_pipeline/ens4filters.r```.
 
