@@ -490,6 +490,9 @@ Here's genes and repeats information we used.
 | caeRem2    | C. remanei     |                                         | RepeatMasker |
 | caePb1     | C. brenneri    |                                         | RepeatMasker |
 | C_albicans_SC5314_A21 |     | CDG exon                               | CGD repeat_region, long_terminal_repeat  |
+| C_dubliniensis_CD36   |     | CDG exon                               | CGD repeat_region, long_terminal_repeat  |
+| C_glabrata_CBS138     |     | CDG exon                               | CGD repeat_region, long_terminal_repeat  |
+| C_parapsilosis_CDC317 |     | CDG exon                               | CGD repeat_region, long_terminal_repeat  |
 
 To prepare the exon file from ensembl gff, use the script ```cne/scripts/cne_pipeline/ens4filters.r```.
 
