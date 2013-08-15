@@ -1,5 +1,5 @@
 preBlatFilter = "/export/data/CNEs/pre-blatFilter"
-blatFilter = "/export/data/CNEs/blatFiltered"
+blatFilter = "."
 
 nr_cores = 8
 
@@ -17,7 +17,7 @@ cmd = "perl /opt/www/cne/scripts/cne_pipeline/blat_filter.pl --tmp "
 setwd(blatFilter)
 report = mclapply(files, function(oneFile){
                   message("Doing ", oneFile);
-                  res=try(system(paste0(cmd, basename(oneFile),"-tmp ", oneFile))); 
+                  res=system(paste0(cmd, basename(oneFile),"-tmp ", oneFile)); 
                   if(res != 0){return(oneFile)}}, mc.cores=nr_cores)
 
 
