@@ -792,6 +792,14 @@ GFF file from ftp://ftp.wormbase.org/pub/wormbase/releases/WS220/species/c_elega
 File mapping gene and transcript IDs to symbols are downloaded from the same place.
 The conversion can be done by the script ```cne/scripts/gbrowse_db/extract_genes_from_gff3.r```.
 
+**CGD annotations**
+The annotation for Candida is downloaded from [CGD](http://www.candidagenome.org/download/).
+They provide ```tab``` format and ```gff3``` format. 
+For display in GBrowse, we use the ```gff3``` format 
+with lasted version [C_albicans_SC5314_version_A19-s01-m04-r03_features.gff](http://www.candidagenome.org/download/gff/C_albicans_SC5314/C_albicans_SC5314_version_A19-s01-m04-r03_features.gff).
+
+
+
 ### Creating and loading GFF files
 The annotations in the UCSC MySQL tables and 
 the flat files must be converted to a GFF format suitable for 
