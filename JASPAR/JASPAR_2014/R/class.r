@@ -1,5 +1,3 @@
-library(RSQLite)
-library(Biostrings)
 
 
 setClass("JASPARDb",

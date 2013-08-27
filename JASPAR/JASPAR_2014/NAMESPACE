@@ -1,9 +1,6 @@
 import(IRanges)
 import(Biostrings)
 import(RSQLite)
-import(BiocGenerics)
-
-
 
 exportClasses(
   JASPARDb, JASPAR
