@@ -25,7 +25,7 @@ LazyData: \tab TRUE\cr
 Index:
 \preformatted{
   JASPAR-class            JASPAR object
-  JASPAR-package          Data package for JASPAR
+  JASPAR_data-package     Data package for JASPAR
   JASPARDb-class          JASPARDb object
 }
 
@@ -35,9 +35,16 @@ A typical usage of the JASPAR data package is:
   \item Load the package:
   \preformatted{
     library(JASPAR_data)
+  }
   \item Query the database:
   \preformatted{
   ans = searchDb(JASPAR_2010, class="Zipper-Type", type="SELEX")
+  }
+  \item Display the results:
+  \preformatted{
+    TFBSinfo(ans)
+    FMatrix(ans)
+    seqs(ans)
   }
 }
 }
@@ -47,18 +54,14 @@ Ge Tan <gtan@me.com>
 Maintainer: Ge Tan <gtan@me.com>
 }
 \references{
-~~ Literature or other references for background information ~~
+  See \url{http://jaspar.genereg.net/} for more details about JASPAR.
 }
 \keyword{ package }
-\seealso{
-~~ Optional links to other man pages, e.g. ~~
-~~ \code{\link[<pkg>:<pkg>-package]{<pkg>}} ~~
-}
 \examples{
 ## load the library
-library(JASPAR)
+library(JASPAR_data)
 ## list the contents that are loaded into memory
-ls("package:JASPAR")
+ls("package:JASPAR_data")
 ## show the db object that is loaded by calling it's name
 JASPAR_2010
 }

@@ -19,7 +19,7 @@
 \examples{
 ## load the library
 library(JASPAR)
-## show the db object that is loaded by calling it's name
+## show the db object that is loaded by calling its name
 JASPAR_2010
 }
 \keyword{datasets}
