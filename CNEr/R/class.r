@@ -247,7 +247,7 @@ setMethod("show", "axt",
             lx = length(object)
             cat(" A ", class(object), " with ", length(object), " ", 
                 ifelse(lx == 1L, "alignment pair", "alignment pairs"), ":\n", sep="")
-            if(length(object) != 0){
+            if(lx != 0){
               showAxt(object, margin="  ")
             }
           }
