@@ -1,5 +1,5 @@
-\name{JASPAR-package}
-\alias{JASPAR-package}
+\name{JASPARData-package}
+\alias{JASPARData-package}
 \alias{JASPAR}
 \docType{package}
 \title{
@@ -10,7 +10,7 @@ Data package for JASPAR. Currently, JASPAR 2010 is included.
 }
 \details{
 \tabular{ll}{
-Package: \tab JASPAR_data\cr
+Package: \tab JASPARData\cr
 Version: \tab 0.0.1\cr
 Date: \tab 2013-07-03\cr
 Depends: \tab R (>= 2.9.0), Biostrings(>= 2.26.3), RSQLite(>= 0.11.4)\cr
@@ -25,7 +25,7 @@ LazyData: \tab TRUE\cr
 Index:
 \preformatted{
   JASPAR-class            JASPAR object
-  JASPAR_data-package     Data package for JASPAR
+  JASPARData-package     Data package for JASPAR
   JASPARDb-class          JASPARDb object
 }
 
@@ -34,7 +34,7 @@ A typical usage of the JASPAR data package is:
 \enumerate{
   \item Load the package:
   \preformatted{
-    library(JASPAR_data)
+    library(JASPARData)
   }
   \item Query the database:
   \preformatted{
@@ -59,9 +59,9 @@ Maintainer: Ge Tan <gtan@me.com>
 \keyword{ package }
 \examples{
 ## load the library
-library(JASPAR_data)
+library(JASPARData)
 ## list the contents that are loaded into memory
-ls("package:JASPAR_data")
+ls("package:JASPARData")
 ## show the db object that is loaded by calling it's name
 JASPAR_2010
 }

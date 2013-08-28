@@ -260,7 +260,7 @@ setMethod("show", "JASPAR",
                 " ", "in", class(object))
             cat("\n")
             if(lx != 0)
-              TFBSinfo(object)
+              print(TFBSinfo(object))
           }
           )
 
