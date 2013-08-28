@@ -10,7 +10,7 @@ Data package for JASPAR. Currently, JASPAR 2010 is included.
 }
 \details{
 \tabular{ll}{
-Package: \tab JASPAR\cr
+Package: \tab JASPAR_data\cr
 Version: \tab 0.0.1\cr
 Date: \tab 2013-07-03\cr
 Depends: \tab R (>= 2.9.0), Biostrings(>= 2.26.3), RSQLite(>= 0.11.4)\cr
@@ -28,7 +28,18 @@ Index:
   JASPAR-package          Data package for JASPAR
   JASPARDb-class          JASPARDb object
 }
-~~ An overview of how to use the package, including the most important functions ~~
+
+Overview:
+A typical usage of the JASPAR data package is:
+\enumerate{
+  \item Load the package:
+  \preformatted{
+    library(JASPAR_data)
+  \item Query the database:
+  \preformatted{
+  ans = searchDb(JASPAR_2010, class="Zipper-Type", type="SELEX")
+  }
+}
 }
 \author{
 Ge Tan <gtan@me.com> 
