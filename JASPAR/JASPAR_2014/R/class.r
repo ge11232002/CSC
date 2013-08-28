@@ -110,6 +110,9 @@ setMethod("openDb", "JASPARDb", function(x) {
           return(x)})
 setGeneric("closeDb", function(x) standardGeneric("closeDb"))
 setMethod("closeDb", "JASPARDb", function(x) dbDisconnect(conn(x)))
+setMethod("length", "JASPAR", function(x) length(x@ID))
+
+
 # The main searchDb method
 setGeneric("searchDb", function(x, ID=NULL, name=NULL, species=NULL, class=NULL, type=NULL) standardGeneric("searchDb"))
 setMethod("searchDb", "JASPARDb", function(x, ID=NULL, name=NULL, species=NULL, 
@@ -236,11 +239,28 @@ setMethod("[", "JASPAR",
 ### - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 ### "show" method.
 ###
-## perhaps contain more information
+showJASPAR = function(x, half_nrow=5L){
+  lx = length(x)
+  if(is.null((head_nrow = getOption("showHeadLines"))))
+    head_nrow = half_nrow
+  if(is.null((tail_nrow = getOption("showTailLines"))))
+    tail_nrow = half_nrow
+  iW = nchar(as.character(lx))
+  if(lx < (2*half_nrow+1L) | (lx < (head_nrow+tail_nrow+1L))){
+    IDW = max(nchar(ID(x)))
+    collectionW = max(nchar(collection(x)))
+  }
+}
+
 setMethod("show", "JASPAR",
           function(object){
-            cat(" ", length(object@ID), " matched results in ", class(object))
+            lx = length(object)
+            cat(" ", lx, " ", 
+                ifelse(lx == 1L, "matched result", "matched results"), 
+                " ", "in", class(object))
             cat("\n")
+            if(lx != 0)
+              TFBSinfo(object)
           }
           )
 
