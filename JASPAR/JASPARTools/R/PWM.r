@@ -44,6 +44,7 @@ setMethod("toPWM", "matrix",
               p = (x + bg_probabilities %*% t(pseudocounts)) / (nseq + pseudocounts)
             prior.probs = bg_probabilities / priorN
             #ans = log2(p / prior.probs)
+            #Here ans's colSums is 1s. Need to be adapted for seq logo maybe later.
             ans = log2(sweep(p, MARGIN=1, prior.probs, "/"))
             return(ans)
           }
