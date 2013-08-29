@@ -2,26 +2,26 @@
 
 ### ------------------------------------------------------------------------
 ### The "ICM" generic and methods
-setGeneric("ICM", signature="x",
+setGeneric("toICM", signature="x",
            function(x, pseudocounts=NULL, schneider=FALSE,
                     bg_probabilities=c(A=0.25, C=0.25, G=0.25, T=0.25))
-             standardGeneric("ICM")
+             standardGeneric("toICM")
            )
 
-setMethod("ICM", "character",
+setMethod("toICM", "character",
           function(x, pseudocounts=NULL, schneider=FALSE,
                    bg_probabilities=c(A=0.25, C=0.25, G=0.25, T=0.25)){
             dnaset = DNAStringSet(x)
-            ICM(dnaset, bg_probabilities=bg_probabilities)
+            toICM(dnaset, bg_probabilities=bg_probabilities)
           }
           )
-setMethod("ICM", "DNAStringSet",
+setMethod("toICM", "DNAStringSet",
           function(x, pseudocounts=NULL, schneider=FALSE,
                    bg_probabilities=c(A=0.25, C=0.25, G=0.25, T=0.25)){
             if(!isConstant(width(x)))
               stop("'x' must be rectangular (i.e. have a constant width)")
             pfm = consensusMatrix(x)
-            ICM(pfm, bg_probabilities=bg_probabilities)
+            toICM(pfm, bg_probabilities=bg_probabilities)
           }
           )
 
@@ -115,7 +115,7 @@ schneider_correction = function(x, bg_probabilities){
   return(-Hg + Hnbs)
 }
 
-setMethod("ICM", "matrix",
+setMethod("toICM", "matrix",
     ## This is validated by the TFBS perl module implemenation.
           function(x, pseudocounts=NULL, ## This is the recommended value from http://nar.oxfordjournals.org/content/37/3/939.long.
                    schneider=FALSE,
@@ -124,10 +124,14 @@ setMethod("ICM", "matrix",
             ## From here 'x' is guaranteed to have at least 1 column and to have
             ## all its columns sum to the same value.
             bg_probabilities = Biostrings:::.normargPriorParams(bg_probabilities)
-            nseq = sum(x[ ,1L])
+            #nseq = sum(x[ ,1L])
+            nseq = colSums(x)
             if(is.null(pseudocounts))
               pseudocounts = 0.8
-            p = (x + bg_probabilities*pseudocounts) / (nseq + pseudocounts)
+            if(length(pseudocounts) == 1)
+              p = (x + bg_probabilities*pseudocounts) / (nseq + pseudocounts)
+            else
+              p = (x + bg_probabilities %*% t(pseudocounts)) / (nseq + pseudocounts)
             D = log2(nrow(x)) + colSums(p * log2(p), na.rm=TRUE)
             #ICMMatrix = t(t(p) * D)
             ICMMatrix = sweep(p, MARGIN=2, D, "*") ## This core function might be better than the operation above
