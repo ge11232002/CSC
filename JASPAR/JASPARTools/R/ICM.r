@@ -116,7 +116,8 @@ schneider_correction = function(x, bg_probabilities){
 }
 
 setMethod("ICM", "matrix",
-          function(x, pseudocounts=0.8, ## This is the recommended value from http://nar.oxfordjournals.org/content/37/3/939.long.
+    ## This is validated by the TFBS perl module implemenation.
+          function(x, pseudocounts=NULL, ## This is the recommended value from http://nar.oxfordjournals.org/content/37/3/939.long.
                    schneider=FALSE,
                    bg_probabilities=c(A=0.25, C=0.25, G=0.25, T=0.25)){
             x = Biostrings:::.normargPfm(x)
@@ -124,8 +125,10 @@ setMethod("ICM", "matrix",
             ## all its columns sum to the same value.
             bg_probabilities = Biostrings:::.normargPriorParams(bg_probabilities)
             nseq = sum(x[ ,1L])
+            if(is.null(pseudocounts))
+              pseudocounts = 0.8
             p = (x + bg_probabilities*pseudocounts) / (nseq + pseudocounts)
-            D = log2(nrow(x)) + colSums(p * log2(p))
+            D = log2(nrow(x)) + colSums(p * log2(p), na.rm=TRUE)
             #ICMMatrix = t(t(p) * D)
             ICMMatrix = sweep(p, MARGIN=2, D, "*") ## This core function might be better than the operation above
             
@@ -136,5 +139,9 @@ setMethod("ICM", "matrix",
             return(ICMMatrix)
           }
           )
+
+'Here is an example
+pfm = matrix(as.integer(c(12, 3, 0, 0, 4, 0, 0, 0, 0, 11, 7, 0, 0, 9, 12, 0, 0, 0, 0, 0, 0, 1, 1, 12)), byrow=TRUE, nrow=4, dimnames=list(c("A", "C", "G", "T")))
+
 
 
