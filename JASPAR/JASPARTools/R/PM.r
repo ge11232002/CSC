@@ -1,19 +1,65 @@
-
 ### ------------------------------------------------------------------------
 ### The generic position matrix objects.
-setClass("XMatrix", contains=c("matrix", "VIRTUAL"),
+#setClass("XMatrix", contains=c("matrix"),
+#         slots=c(ID="character",
+#                 name="character",
+#                 matrixClass="character",
+#                 strand="character",
+#                 bg="numeric"
+#                 ))
+#
+### -----------------------------------------------------------------------
+### XMatrix subclasses without additional slots
+###
+setClass("PFMatrix", 
          slots=c(ID="character",
                  name="character",
                  matrixClass="character",
                  strand="character",
-                 bg="numeric"
+                 bg="numeric",
+                 matrix="matrix")
+         )
+setClass("ICMatrix", contains="PFMatrix",
+         slots=c(pseudocounts="numeric",
+                 schneider="logical"
+                 )
+         )
+#setClass("ICMatrix", contains="matrix",
+#         slots=c(ID="character",
+#                 name="character",
+#                 matrixClass="character",
+#                 strand="character",
+#                 pseudocounts="numeric",
+#                 schneider="logical",
+#                 bg="numeric"
+#                 ))
+setClass("PWMatrix", contains="PFMatrix",
+         slots=c(pseudocounts="numeric")
+         )
+#setClass("PWMatrix", contains="matrix",
+#         slots=c(ID="character",
+#                 name="character",
+#                 matrixClass="character",
+#                 strand="character",
+#                 pseudocounts="numeric",
+#                 bg="numeric"
+#                 )
+#         )
+setClassUnion("XMatrix", c("PFMatrix", "ICMatrix", "PWMatrix"))
+
+### ------------------------------------------------------------------------
+### The generic position matrix objects.
+### 
+setClass("JASPAR", contains=c("XMatrix"),
+         slots=c(ID="character",
+                 collection="character",
+                 version="character",
+                 name="character",
+                 species="Rle",
+                 TFClass="character",
+                 medline="character",
+                 family="character"
                  ))
-
-### XMatrix subclasses without additional slots
-setClass("PFMatrix", contains="XMatrix")
-setClass("ICMatrix", contains="XMatrix")
-setClass("PWMatrix", contains="XMatrix")
-
 
 ### ----------------------------------------------------------------------
 ### The accessor-like method
@@ -26,6 +72,10 @@ setMethod("matrixClass", "XMatrix", function(x) x@matrixClass)
 setMethod("strand", "XMatrix", function(x) x@strand)
 setGeneric("bg", signature="x", function(x) standardGeneric("bg"))
 setMethod("bg", "XMatrix", function(x) x@bg)
+setGeneric("matrixType", signature="x", function(x) standardGeneric("matrixType"))
+setMethod("matrixType", "PFMatrix", function(x) "PFM")
+setMethod("matrixType", "ICMatrix", function(x) "ICM")
+setMethod("matrixType", "PWMatrix", function(x) "PWM")
 
 setReplaceMethod("ID", "XMatrix", 
                  function(x, value){
@@ -57,6 +107,24 @@ setReplaceMethod("bg", "XMatrix",
                    return(x)
                  }
                  )
+
+
+### ----------------------------------------------------------------------
+### The constructor
+###
+ICMatrix = function(ID=character(), name=character(), matrixClass=character(),
+                    strand=character(), bg=numeric(), matrix=matrix(),
+                    pseudocounts=numeric(), schneider=logical()){
+  new("ICMatrix", ID=ID, name=name, matrixClass=matrixClass, strand=strand, bg=bg,
+      matrix=matrix, pseudocounts=pseudocounts, schneider=schneider)
+}
+PFMatrix = function(ID=character(), name=character(), matrixClass=character(),
+                    strand=character(), bg=numeric(), matrix=matrix()){
+  new("PFMatrix", ID=ID, name=name, matrixClass=matrixClass, strand=strand, bg=bg,
+      matrix=matrix)
+}
+# 
+# pfm = PFMatrix(ID="M0001", name="MyProfile", bg=c(A=0.25, C=0.25, G=0.25, T=0.25), matrix=matrix(as.integer(c(12, 3, 0, 0, 4, 0, 0, 0, 0, 11, 7, 0, 0, 9, 12, 0, 0, 0, 0, 0, 0, 1, 1, 12)), byrow=TRUE, nrow=4, dimnames=list(c("A", "C", "G", "T"))))
 
 ### -----------------------------------------------------------------------
 ### The "show" method.
