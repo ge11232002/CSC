@@ -197,4 +197,3 @@ setMethod("show", "XMatrix",
           }
           )
 
-
