@@ -1,3 +1,6 @@
+library(Biostrings) ##consensusMatrix,
+library(seqLogo)  ## plot SeqLogo
+
 ### ------------------------------------------------------------------------
 ### The generic position matrix objects.
 #setClass("XMatrix", contains=c("matrix"),
@@ -59,7 +62,8 @@ setClass("JASPAR", contains=c("XMatrix"),
                  TFClass="character",
                  medline="character",
                  family="character"
-                 ))
+                 )
+         )
 
 ### ----------------------------------------------------------------------
 ### The accessor-like method

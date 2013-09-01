@@ -1,5 +1,3 @@
-library(Biostrings) ##consensusMatrix,
-library(seqLogo)   
 
 ### ------------------------------------------------------------------------
 ### 
@@ -15,8 +13,12 @@ setGeneric("toICM", signature="x",
 setMethod("toICM", "character",
           function(x, pseudocounts=NULL, schneider=FALSE,
                    bg_probabilities=c(A=0.25, C=0.25, G=0.25, T=0.25)){
+            if(is.null(pseudocounts))
+              pseudocounts = 0.8
             dnaset = DNAStringSet(x)
-            toICM(dnaset, bg_probabilities=bg_probabilities)
+            toICM(dnaset, schneider=schneider,
+                  pseudocounts=pseudocounts,
+                  bg_probabilities=bg_probabilities)
           }
           )
 setMethod("toICM", "DNAStringSet",
@@ -24,10 +26,25 @@ setMethod("toICM", "DNAStringSet",
                    bg_probabilities=c(A=0.25, C=0.25, G=0.25, T=0.25)){
             if(!isConstant(width(x)))
               stop("'x' must be rectangular (i.e. have a constant width)")
+            if(is.null(pseudocounts))
+              pseudocounts = 0.8
             pfm = consensusMatrix(x)
-            toICM(pfm, bg_probabilities=bg_probabilities)
+            toICM(pfm, schneider=schneider, pseudocounts=pseudocounts,
+                  bg_probabilities=bg_probabilities)
           }
           )
+setMethod("toICM", "PFMatrix",
+          function(x, pseudocounts=NULL, schneider=FALSE){
+            if(is.null(pseudocounts))
+              pseudocounts = 0.8
+            icmMatrix = toICM(Matrix(x), pseudocounts=pseudocounts,
+                              schneider=schneider, bg_probabilities=bg(x))
+            icm = ICMatrix(ID=ID(x), name=name(x), matrixClass=matrixClass(x),
+                           strand=strand(x), bg=bg(x), matrix=icmMatrix,
+                           pseudocounts=pseudocounts, schneider=schneider)
+          }
+          )
+                   
 
 ### Assumes 'x' is a Position *Frequency* Matrix (PFM) and computes the
 ### corresponding Information *Content* Matrix (ICM).
@@ -147,9 +164,6 @@ setMethod("toICM", "matrix",
             return(ICMMatrix)
           }
           )
-
-'Here is an example
-pfm = matrix(as.integer(c(12, 3, 0, 0, 4, 0, 0, 0, 0, 11, 7, 0, 0, 9, 12, 0, 0, 0, 0, 0, 0, 1, 1, 12)), byrow=TRUE, nrow=4, dimnames=list(c("A", "C", "G", "T")))
 
 
 

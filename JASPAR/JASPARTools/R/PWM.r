@@ -12,8 +12,11 @@ setGeneric("toPWM", signature="x",
 setMethod("toPWM", "character",
           function(x, pseudocounts=NULL, 
                    bg_probabilities=c(A=0.25, C=0.25, G=0.25, T=0.25)){
+            if(is.null(pseudocounts))
+              pseudocounts = 0.8
             dnaset = DNAStringSet(x)
-            toPWM(dnaset, bg_probabilities=bg_probabilities)
+            toPWM(dnaset, pseudocounts=pseudocounts,
+                  bg_probabilities=bg_probabilities)
           }
           )
 setMethod("toPWM", "DNAStringSet",
@@ -21,8 +24,22 @@ setMethod("toPWM", "DNAStringSet",
                    bg_probabilities=c(A=0.25, C=0.25, G=0.25, T=0.25)){
             if(!isConstant(width(x)))
               stop("'x' must be rectangular (i.e. have a constant width)")
+            if(is.null(pseudocounts))
+              pseudocounts = 0.8
             pfm = consensusMatrix(x)
-            toPWM(pfm, bg_probabilities=bg_probabilities)
+            toPWM(pfm, pseudocounts=pseudocounts,
+                  bg_probabilities=bg_probabilities)
+          }
+          )
+setMethod("toPWM", "PFMatrix",
+          function(x, pseudocounts=NULL){
+            if(is.null(pseudocounts))
+              pseudocounts = 0.8
+            pwmMatrix = toPWM(Matrix(x), pseudocounts=pseudocounts,
+                              bg_probabilities=bg(x))
+            pwm = PWMatrix(ID=ID(x), name=name(x), matrixClass=matrixClass(x),
+                           strand=strand(x), bg=bg(x), matrix=pwmMatrix,
+                           pseudocounts=pseudocounts)
           }
           )
 
