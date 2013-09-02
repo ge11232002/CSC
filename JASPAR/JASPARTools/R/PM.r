@@ -152,6 +152,47 @@ setReplaceMethod("schneider", "ICMatrix",
                    return(x)
                  }
                  )
+
+### --------------------------------------------------------------------
+### Updating and cloing
+###
+### An object is either 'update'd in place (usually with a replacement
+### method) or 'clone'd (copied), with specified slots/fields overridden.
+setMethod("update", "XMatrix",
+          function(object, ..., check=TRUE){
+            initialize(object, ...)
+          }
+          )
+setGeneric("clone", signature="x", function(x, ...) standardGeneric("clone"))
+setMethod("clone", "ANY",
+          function(x, ...){
+            if(nargs() > 1L)
+              initialize(x, ...)
+            else
+              x
+          }
+          )
+
+### ---------------------------------------------------------
+### Some utilities functions for XMatrix object
+###
+setMethod("length", "XMatrix",
+# gets the pattern length in nucleotides (i.e. number of columns in the matrix)
+          function(x){
+            ncol(Matrix(x))
+          }
+          )
+
+setGeneric("revcom", signature="x", function(x) standardGeneric("revcom"))
+setMethod("revcom", "XMatrix",
+          function(x){
+            ans = x
+            Matrix(ans) = reverseComplement(Matrix(x))
+            if(length(strand(x)) != 0)
+              strand(ans) = ifelse(strand(x) == "+", "-", "+")
+            return(ans)
+          }
+          )
 ### ----------------------------------------------------------------------
 ### The constructor
 ###
@@ -174,8 +215,6 @@ PWMatrix = function(ID=character(), name=character(), matrixClass=character(),
 }
 # 
 # pfm = PFMatrix(ID="M0001", name="MyProfile", bg=c(A=0.25, C=0.25, G=0.25, T=0.25), matrix=matrix(as.integer(c(12, 3, 0, 0, 4, 0, 0, 0, 0, 11, 7, 0, 0, 9, 12, 0, 0, 0, 0, 0, 0, 1, 1, 12)), byrow=TRUE, nrow=4, dimnames=list(c("A", "C", "G", "T"))))
-# pwm = PWMatrix(ID="M0001", name="MyProfile2", bg=c(A=0.25, C=0.25, G=0.25, T=0.25), matrix=matrix(as.integer(c(12, 3, 0, 0, 4, 0, 0, 0, 0, 11, 7, 0, 0, 9, 12, 0, 0, 0, 0, 0, 0, 1, 1, 12)), byrow=TRUE, nrow=4, dimnames=list(c("A", "C", "G", "T"))), pseudocounts=0.8)
-# icm = ICMatrix(ID="M0001", name="MyProfile3", bg=c(A=0.25, C=0.25, G=0.25, T=0.25), matrix=matrix(as.integer(c(12, 3, 0, 0, 4, 0, 0, 0, 0, 11, 7, 0, 0, 9, 12, 0, 0, 0, 0, 0, 0, 1, 1, 12)), byrow=TRUE, nrow=4, dimnames=list(c("A", "C", "G", "T"))), pseudocounts=0.8, schneider=TRUE)
 
 ### -----------------------------------------------------------------------
 ### The "show" method.
