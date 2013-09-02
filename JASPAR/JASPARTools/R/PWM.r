@@ -111,6 +111,7 @@ calculate_conservation = function(x, windowSize, which=c("1", "2")){
   alignedSeq2 = alignedSeq2[!indexGap]
   matches = alignedSeq1 == alignedSeq2
   conservations = runmean(matches, k=windowSize, alg="C", endrule="mean")
+  return(conservations)
 }
 
 do_sitesearch = function(pwm, x, min.score, windowSize, cutoff, conservation){
