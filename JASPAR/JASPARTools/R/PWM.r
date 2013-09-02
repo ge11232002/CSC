@@ -73,7 +73,7 @@ setMethod("toPWM", "matrix",
 ### Currently we make it as a normal function. Is it necessary to make it a setMethod?
 searchSeq = function(pwm, subject, min.score="80%", ...){
   pwmMatrix = unitScale(Matrix(pwm))
-  matchPWM(pwm, subject, min.score=min.score)
+  matchPWM(pwmMatrix, subject, min.score=min.score)
 }
 
 ### ----------------------------------------------------------------------
@@ -106,7 +106,7 @@ calculate_conservation = function(x, windowSize, which=c("1", "2")){
   stopifnot(nchar(alignedSeq1) == nchar(alignedSeq2))
   alignedSeq1 = strsplit(as.character(alignedSeq1), "")[[1]]
   alignedSeq2 = strsplit(as.character(alignedSeq2), "")[[1]]
-  indexGap = alignedSeq1 == "-" | alignedSeq1 == "."
+  indexGap = alignedSeq1 == "-" | alignedSeq1 == "." | alignedSeq1 == "_"
   alignedSeq1 = alignedSeq1[!indexGap]
   alignedSeq2 = alignedSeq2[!indexGap]
   matches = alignedSeq1 == alignedSeq2
@@ -114,14 +114,37 @@ calculate_conservation = function(x, windowSize, which=c("1", "2")){
 }
 
 do_sitesearch = function(pwm, x, min.score, windowSize, cutoff, conservation){
+  windowSize = as.integer(windowSize)
+  if(cutoff > 1 || cutoff < 0)
+    stop("cutoff must be from 0 to 1.")
+  seq1 = gsub("(-|_|\\.)", "", x[1])
+  seq2 = gsub("(-|_|\\.)", "", x[2])
+  siteset1 = searchSeq(pwm, seq1, min.score=min.score)
+  siteset2 = searchSeq(pwm, seq2, min.score=min.score)
+  stopifnot(all(diff(start(siteset1)) >= 1 & diff(start(siteset2)) >= 1))
+  # not quite sure the views returned by matchPWM is ordered by start, just check here.
+  alignedSeq1 = strsplit(as.character(x[1]), "")[[1]]
+  alignedSeq2 = strsplit(as.character(x[2]), "")[[1]]
+  indexGap = alignedSeq1 == "-" | alignedSeq1 == "." | alignedSeq1 == "_"
+  seq12aln = seq_len(length(alignedSeq1))[!indexGap]
+  indexGap = alignedSeq2 == "-" | alignedSeq2 == "." | alignedSeq2 == "_"
+  seq22aln = seq_len(length(alignedSeq2))[!indexGap]
+  
+  conservations1 = calculate_conservation(x, windowSize=windowSize, which="1")
+
+  pos1_in_aln = seq12aln[start(siteset1)]
+  pos2_in_aln = seq22aln[start(siteset2)]
+  matchedPairs = match(pos1_in_aln, pos2_in_aln)
+  keep = conservations1[start(siteset1)[!is.na(matchedPairs)]] >= cutoff
+  ans_siteset1 = siteset1[(!is.na(matchedPairs))[keep]]
+  ans_siteset2 = siteset2[(na.omit(matchedPairs))[keep]]
+  return(list(siteset1=ans_siteset1, siteset2=ans_siteset2)) 
+## Maybe later prepare a siteset pair object to hold the res
 }
 
 setMethod("searchAln", "DNAStringSet",
           function(pwm, x, min.score="80%", windowSize=51L, cutoff=0.7,
                    conservation=NULL){
-            windowSize = as.integer(windowSize)
-            if(cutoff > 1 || cutoff < 0)
-              stop("cutoff must be from 0 to 1.")
             do_sitesearch(pwm, x, min.score=min.score, windowSize=windowSize, cutoff=cutoff, conservation=conservation)
           }
           )
