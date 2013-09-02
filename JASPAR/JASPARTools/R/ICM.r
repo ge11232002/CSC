@@ -152,9 +152,11 @@ setMethod("toICM", "matrix",
             if(is.null(pseudocounts))
               pseudocounts = 0.8
             if(length(pseudocounts) == 1)
-              p = (x + bg_probabilities*pseudocounts) / (nseq + pseudocounts)
+              #p = (x + bg_probabilities*pseudocounts) / (nseq + pseudocounts)
+              p = sweep(x + bg_probabilities*pseudocounts, MARGIN=2, nseq + pseudocounts, "/")
             else
-              p = (x + bg_probabilities %*% t(pseudocounts)) / (nseq + pseudocounts)
+              #p = (x + bg_probabilities %*% t(pseudocounts)) / (nseq + pseudocounts)
+              p = sweep(x + bg_probabilities %*% t(pseudocounts), MARGIN=2, nseq + pseudocounts, "/")
             D = log2(nrow(x)) + colSums(p * log2(p), na.rm=TRUE)
             #ICMMatrix = t(t(p) * D)
             ICMMatrix = sweep(p, MARGIN=2, D, "*") ## This core function might be better than the operation above

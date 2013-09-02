@@ -56,9 +56,11 @@ setMethod("toPWM", "matrix",
             if(is.null(pseudocounts))
               pseudocounts = 0.8
             if(length(pseudocounts) == 1)
-              p = (x + bg_probabilities*pseudocounts) / (nseq + pseudocounts)
+              p = sweep(x + bg_probabilities*pseudocounts, MARGIN=2, nseq + pseudocounts, "/")
+              #p = (x + bg_probabilities*pseudocounts) / (nseq + pseudocounts)
             else
-              p = (x + bg_probabilities %*% t(pseudocounts)) / (nseq + pseudocounts)
+              #p = (x + bg_probabilities %*% t(pseudocounts)) / (nseq + pseudocounts)
+              p = sweep(x + bg_probabilities %*% t(pseudocounts), MARGIN=2, nseq + pseudocounts, "/")
             prior.probs = bg_probabilities / priorN
             #ans = log2(p / prior.probs)
             #Here ans's colSums is 1s. Need to be adapted for seq logo maybe later.
@@ -67,5 +69,6 @@ setMethod("toPWM", "matrix",
           }
           )
 
-
+## search seq: scans a nucleotide sequence with the pattern represented by the PWM
+#search_seq = function(pwm, seq)
 
