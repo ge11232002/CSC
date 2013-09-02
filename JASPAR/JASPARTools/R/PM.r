@@ -1,5 +1,6 @@
 library(Biostrings) ##consensusMatrix,
 library(seqLogo)  ## plot SeqLogo
+library(caTools)  ## runmean
 
 ### ------------------------------------------------------------------------
 ### The generic position matrix objects.
