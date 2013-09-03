@@ -230,9 +230,9 @@ setMethod("show", "XMatrix",
             cat("Background:", bg(object), "\n")
             cat("Matrix:", "\n") 
             print(Matrix(object))
-            if(class(object) != "PFMatrix")
+            if(!is(object, "PFMatrix"))
               cat("Pseudocounts:", pseudocounts(object), "\n")
-            if(class(object) == "ICMatrix")
+            if(is(object, "ICMatrix"))
               cat("Schneider correction:", schneider(object), "\n")
           }
           )
