@@ -83,7 +83,7 @@ setMethod("searchSeq", "PWMatrix",
             if(length(strand) == 1)
               strand = rep(strand, length(ans_views))
             stopifnot(length(strand) == length(ans_views))
-            ans_site = Site(views=ans_views, seqname=seqname,
+            ans_site = newSite(views=ans_views, seqname=seqname,
                             score=score, strand=strand, 
                             sitesource="TFBS", primary="TF binding site",
                             pattern=x
