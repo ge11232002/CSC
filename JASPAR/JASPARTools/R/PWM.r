@@ -72,16 +72,27 @@ setMethod("toPWM", "matrix",
 ### searchSeq: scans a nucleotide sequence with the pattern represented by the PWM
 ### Currently we make it as a normal function. Is it necessary to make it a setMethod? Yes. It's necessary to make it a setMethod.
 setGeneric("searchSeq", signature="x",
-           function(x, subject, min.score="80%") standardGeneric("searchSeq"))
+           function(x, subject, seqname="Unknown", strand="*", min.score="80%") 
+             standardGeneric("searchSeq"))
 setMethod("searchSeq", "PWMatrix",
 # scans a nucleotide sequence with the pattern represented by the PWM.
-          function(x, subject, min.score="80%"){
-            matchPWM(unitScale(Matrix(x)), subject, min.score=min.score)
+          function(x, subject, seqname="Unknown", strand="*", min.score="80%"){
+            ans_views = matchPWM(unitScale(Matrix(x)), subject, min.score=min.score)
+            score = rep(0, length(ans_views)) # fix the score issue....
+            stopifnot(strand %in% c("+", "-", "*")) # need to ask Boris strand.
+            if(length(strand) == 1)
+              strand = rep(strand, length(ans_views))
+            stopifnot(length(strand) == length(ans_views))
+            ans_site = Site(views=ans_views, seqname=seqname,
+                            score=score, strand=strand, 
+                            sitesource="TFBS", primary="TF binding site",
+                            pattern=x
+                            )
           }
           )
 setMethod("searchSeq", "PWMatrixList",
 # scans a nucleotide sequence with all patterns represented stored in $matrixset;
-          function(x, subject, min.score="80%"){
+          function(x, subject, seqname="Unknown", strand="*", min.score="80%"){
             pwms = lapply(Matrix(x), unitScale)
             ans = lapply(pwms, matchPWM, subject, min.score)
             return(ans)
