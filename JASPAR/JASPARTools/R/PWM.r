@@ -70,18 +70,32 @@ setMethod("toPWM", "matrix",
           )
 ### ---------------------------------------------------------------------
 ### searchSeq: scans a nucleotide sequence with the pattern represented by the PWM
-### Currently we make it as a normal function. Is it necessary to make it a setMethod?
-searchSeq = function(pwm, subject, min.score="80%", ...){
-  pwmMatrix = unitScale(Matrix(pwm))
-  matchPWM(pwmMatrix, subject, min.score=min.score)
-}
+### Currently we make it as a normal function. Is it necessary to make it a setMethod? Yes. It's necessary to make it a setMethod.
+setGeneric("searchSeq", signature="x",
+           function(x, subject, min.score="80%") standardGeneric("searchSeq"))
+setMethod("searchSeq", "PWMatrix",
+          function(x, subject, min.score="80%"){
+            matchPWM(unitScale(Matrix(x)), subject, min.score=min.score)
+          }
+          )
+setMethod("searchSeq", "PWMatrixList",
+          function(x, subject, min.score="80%"){
+            pwms = lapply(Matrix(x), unitScale)
+            ans = lapply(pwms, matchPWM, subject, min.score)
+            return(ans)
+          }
+          )
+#searchSeq = function(pwm, subject, min.score="80%", ...){
+#  pwmMatrix = unitScale(Matrix(pwm))
+#  matchPWM(pwmMatrix, subject, min.score=min.score)
+#}
 
 ### ----------------------------------------------------------------------
 ### searchAln: Scans a pairwise alignment of nucleotide sequences with the pattern represented by the PWM: it reports only those hits that are present in equivalent positions of both sequences and exceed a specified threshold score in both, AND are found in regions of the alignment above the specified
 ### Let's make it a setMethod function for taking different subject (alignment).
 setGeneric("searchAln", signature="x",
            function(pwm, x, min.score="80%", windowSize=50L, cutoff="70%",
-                    conservation=NULL, ...)
+                    conservation=NULL)
              standardGeneric("searchAln")
            )
 
