@@ -195,7 +195,7 @@ setMethod("revcom", "XMatrix",
           )
 ### ----------------------------------------------------------------------
 ### The constructor
-###
+###  rename these functions to newICMatrix etc
 ICMatrix = function(ID=character(), name=character(), matrixClass=character(),
                     strand=character(), bg=numeric(), matrix=matrix(),
                     pseudocounts=numeric(), schneider=logical()){
