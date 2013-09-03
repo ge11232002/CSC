@@ -148,7 +148,10 @@ do_sitesearch = function(pwm, x, min.score, windowSize, cutoff, conservation){
   indexGap = alignedSeq2 == "-" | alignedSeq2 == "." | alignedSeq2 == "_"
   seq22aln = seq_len(length(alignedSeq2))[!indexGap]
   
-  conservations1 = calculate_conservation(x, windowSize=windowSize, which="1")
+  if(is.null(conservation))
+    conservations1 = calculate_conservation(x, windowSize=windowSize, which="1")
+  else
+    conservations1 = conservation
 
   pos1_in_aln = seq12aln[start(siteset1)]
   pos2_in_aln = seq22aln[start(siteset2)]
