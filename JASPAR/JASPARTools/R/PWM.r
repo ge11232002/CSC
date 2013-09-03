@@ -92,9 +92,14 @@ setMethod("searchSeq", "PWMatrixList",
 ### searchAln: Scans a pairwise alignment of nucleotide sequences with the pattern represented by the PWM: it reports only those hits that are present in equivalent positions of both sequences and exceed a specified threshold score in both, AND are found in regions of the alignment above the specified
 ### Let's make it a setMethod function for taking different subject (alignment).
 setGeneric("searchAln", signature="x",
-           function(pwm, x, min.score="80%", windowSize=50L, cutoff="70%",
+           function(x, subject, min.score="80%", windowSize=50L, cutoff="70%",
                     conservation=NULL)
              standardGeneric("searchAln")
+           )
+setGeneric("doSiteSearch", signature="x",
+           function(pwm, x, min.score="80%", windowSize=50L, cutoff="70%",
+                    conservation=NULL)
+             standardGeneric("doSiteSearch")
            )
 
 calculate_conservation = function(x, windowSize, which=c("1", "2")){
@@ -155,10 +160,25 @@ do_sitesearch = function(pwm, x, min.score, windowSize, cutoff, conservation){
 ## Maybe later prepare a siteset pair object to hold the res
 }
 
-setMethod("searchAln", "DNAStringSet",
+setMethod("doSiteSearch", "DNAStringSet",
           function(pwm, x, min.score="80%", windowSize=51L, cutoff=0.7,
                    conservation=NULL){
             do_sitesearch(pwm, x, min.score=min.score, windowSize=windowSize, cutoff=cutoff, conservation=conservation)
           }
           )
+
+setMethod("searchAln", "PWMatrix",
+          function(x, subject, min.score="80%", windowSize=51L, cutoff=0.7,
+                   conservation=NULL){
+            doSiteSearch(x, subject, min.score=min.score, windowSize=windowSize, cutoff=cutoff, conservation=conservation)
+          }
+          )
+setMethod("searchAln", "PWMatrixList",
+          function(x, subject, min.score="80%", windowSize=51L, cutoff=0.7,
+                   conservation=NULL){
+            ans = lapply(x, doSiteSearch, subject, min.score=min.score, windowSize=windowSize, cutoff=cutoff, conservation=conservation)
+            return(ans)
+          }
+          )
+
 
