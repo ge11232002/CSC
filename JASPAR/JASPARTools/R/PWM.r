@@ -74,21 +74,19 @@ setMethod("toPWM", "matrix",
 setGeneric("searchSeq", signature="x",
            function(x, subject, min.score="80%") standardGeneric("searchSeq"))
 setMethod("searchSeq", "PWMatrix",
+# scans a nucleotide sequence with the pattern represented by the PWM.
           function(x, subject, min.score="80%"){
             matchPWM(unitScale(Matrix(x)), subject, min.score=min.score)
           }
           )
 setMethod("searchSeq", "PWMatrixList",
+# scans a nucleotide sequence with all patterns represented stored in $matrixset;
           function(x, subject, min.score="80%"){
             pwms = lapply(Matrix(x), unitScale)
             ans = lapply(pwms, matchPWM, subject, min.score)
             return(ans)
           }
           )
-#searchSeq = function(pwm, subject, min.score="80%", ...){
-#  pwmMatrix = unitScale(Matrix(pwm))
-#  matchPWM(pwmMatrix, subject, min.score=min.score)
-#}
 
 ### ----------------------------------------------------------------------
 ### searchAln: Scans a pairwise alignment of nucleotide sequences with the pattern represented by the PWM: it reports only those hits that are present in equivalent positions of both sequences and exceed a specified threshold score in both, AND are found in regions of the alignment above the specified
