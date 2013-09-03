@@ -93,6 +93,14 @@ setMethod("writeGFF2", "Site",
           }
           )
 
+setGeneric("relScore", signature="x", function(x) standardGeneric("relScore"))
+setMethod("relScore", "Site",
+          function(x){
+          # Luckliy, the maxScore, minScore implementation is same with TFBS perl module. Validated!
+            ans = (score(x) - minScore(Matrix(pattern(x)))) / (maxScore(Matrix(pattern(x))) - minScore(Matrix(pattern(x))))
+            return(ans)
+          }
+          )
           
 ### -----------------------------------------------------------------
 ### The "show" method
