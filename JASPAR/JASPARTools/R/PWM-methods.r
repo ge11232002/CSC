@@ -1,14 +1,6 @@
 
 ### ------------------------------------------------------------------------
 ### The "PWM" generic and methods. This is a bit different from the implementation of Biostrings.
-
-
-setGeneric("toPWM", signature="x",
-           function(x, pseudocounts=NULL,
-                    bg_probabilities=c(A=0.25, C=0.25, G=0.25, T=0.25))
-             standardGeneric("toPWM")
-           )
-
 setMethod("toPWM", "character",
           function(x, pseudocounts=NULL, 
                    bg_probabilities=c(A=0.25, C=0.25, G=0.25, T=0.25)){
@@ -71,9 +63,6 @@ setMethod("toPWM", "matrix",
 ### ---------------------------------------------------------------------
 ### searchSeq: scans a nucleotide sequence with the pattern represented by the PWM
 ### Currently we make it as a normal function. Is it necessary to make it a setMethod? Yes. It's necessary to make it a setMethod.
-setGeneric("searchSeq", signature="x",
-           function(x, subject, seqname="Unknown", strand="*", min.score="80%") 
-             standardGeneric("searchSeq"))
 setMethod("searchSeq", "PWMatrix",
 # scans a nucleotide sequence with the pattern represented by the PWM.
           function(x, subject, seqname="Unknown", strand="*", min.score="80%"){
@@ -110,18 +99,6 @@ setMethod("searchSeq", "PWMatrixList",
 ### ----------------------------------------------------------------------
 ### searchAln: Scans a pairwise alignment of nucleotide sequences with the pattern represented by the PWM: it reports only those hits that are present in equivalent positions of both sequences and exceed a specified threshold score in both, AND are found in regions of the alignment above the specified
 ### Let's make it a setMethod function for taking different subject (alignment).
-setGeneric("searchAln", signature="x",
-           function(x, subject, min.score="80%", windowSize=50L, cutoff="70%",
-                    conservation=NULL)
-             standardGeneric("searchAln")
-           )
-setGeneric("doSiteSearch", signature="x",
-           function(pwm, x, min.score="80%", windowSize=50L, cutoff="70%",
-                    conservation=NULL)
-             standardGeneric("doSiteSearch")
-           )
-
-
 do_sitesearch = function(pwm, x, min.score, windowSize, cutoff, conservation){
   windowSize = as.integer(windowSize)
   if(cutoff > 1 || cutoff < 0)

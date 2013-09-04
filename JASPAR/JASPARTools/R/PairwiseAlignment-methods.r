@@ -30,3 +30,12 @@ calculate_conservation = function(x, windowSize, which=c("1", "2")){
   return(conservations)
 }
 
+setMethod("calConservation", "DNAStringSet",
+          function(x, windowSize=51L, which=c("1", "2")){
+            calculate_conservation(x, windowSize=windowSize, which=which)
+          }
+          )
+setMethod("calConservation", "PairwiseAlignmentTFBS",
+          function(x, windowSize=51L){
+          }
+          )

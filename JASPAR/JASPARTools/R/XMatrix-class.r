@@ -68,40 +68,25 @@ setClass("JASPAR", contains=c("XMatrix"),
 
 ### ----------------------------------------------------------------------
 ### The accessor-like method
-setGeneric("ID", signature="x", function(x) standardGeneric("ID"))
-setGeneric("ID<-", signature="x", function(x, value) standardGeneric("ID<-"))
 setMethod("ID", "XMatrix", function(x) x@ID)
 
-setGeneric("name", signature="x", function(x) standardGeneric("name"))
-setGeneric("name<-", signature="x", function(x, value) standardGeneric("name<-"))
 setMethod("name", "XMatrix", function(x) x@name)
 
-setGeneric("matrixClass", signature="x", function(x) standardGeneric("matrixClass"))
-setGeneric("matrixClass<-", signature="x", function(x, value) standardGeneric("matrixClass<-"))
 setMethod("matrixClass", "XMatrix", function(x) x@matrixClass)
 
-setGeneric("Matrix", signature="x", function(x) standardGeneric("Matrix"))
-setGeneric("Matrix<-", signature="x", function(x, value) standardGeneric("Matrix<-"))
 setMethod("Matrix", "XMatrix", function(x) x@matrix)
 
 #setGeneric("strand<-", signature="x", function(x, value) standardGeneric("strand<-"))
 setMethod("strand", "XMatrix", function(x) x@strand)
 
-setGeneric("bg", signature="x", function(x) standardGeneric("bg"))
-setGeneric("bg<-", signature="x", function(x, value) standardGeneric("bg<-"))
 setMethod("bg", "XMatrix", function(x) x@bg)
 
-setGeneric("matrixType", signature="x", function(x) standardGeneric("matrixType"))
 setMethod("matrixType", "PFMatrix", function(x) "PFM")
 setMethod("matrixType", "ICMatrix", function(x) "ICM")
 setMethod("matrixType", "PWMatrix", function(x) "PWM")
 
-setGeneric("pseudocounts", signature="x", function(x) standardGeneric("pseudocounts"))
-setGeneric("pseudocounts<-", signature="x", function(x, value) standardGeneric("pseudocounts<-"))
 setMethod("pseudocounts", "PWMatrix", function(x) x@pseudocounts)
 
-setGeneric("schneider", signature="x", function(x) standardGeneric("schneider"))
-setGeneric("schneider<-", signature="x", function(x, value) standardGeneric("schneider<-"))
 setMethod("schneider", "ICMatrix", function(x) x@schneider)
 
 setReplaceMethod("ID", "XMatrix", 
@@ -163,7 +148,6 @@ setMethod("update", "XMatrix",
             initialize(object, ...)
           }
           )
-setGeneric("clone", signature="x", function(x, ...) standardGeneric("clone"))
 setMethod("clone", "ANY",
           function(x, ...){
             if(nargs() > 1L)
@@ -183,7 +167,6 @@ setMethod("length", "XMatrix",
           }
           )
 
-setGeneric("revcom", signature="x", function(x) standardGeneric("revcom"))
 setMethod("revcom", "XMatrix",
           function(x){
             ans = x

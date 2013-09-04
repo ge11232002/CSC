@@ -6,12 +6,6 @@ library(seqLogo)  ## plot SeqLogo
 
 ### ------------------------------------------------------------------------
 ### The "ICM" generic and methods
-setGeneric("toICM", signature="x",
-           function(x, pseudocounts=NULL, schneider=FALSE,
-                    bg_probabilities=c(A=0.25, C=0.25, G=0.25, T=0.25))
-             standardGeneric("toICM")
-           )
-
 setMethod("toICM", "character",
           function(x, pseudocounts=NULL, schneider=FALSE,
                    bg_probabilities=c(A=0.25, C=0.25, G=0.25, T=0.25)){
@@ -172,10 +166,6 @@ setMethod("toICM", "matrix",
 ### --------------------------------------------------------------------
 ### Plot the seqlogo
 ###
-setGeneric("plotLogo", signature="x",
-           function(x, ic.scale = TRUE, xaxis = TRUE, yaxis = TRUE, 
-                    xfontsize = 15, yfontsize = 15) standardGeneric("plotLogo")
-           )
 setMethod("plotLogo", "ICMatrix",
           function(x, ic.scale = TRUE, xaxis = TRUE, yaxis = TRUE,
                    xfontsize = 15, yfontsize = 15){

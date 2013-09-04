@@ -10,10 +10,8 @@ setClass("SitePair",
 ### -------------------------------------------------------------------
 ### The accessor-like method
 ### 
-setGeneric("site1", signature="x", function(x) standardGeneric("site1"))
 setMethod("site1", "SitePair", function(x) x@site1)
 
-setGeneric("site2", signature="x", function(x) standardGeneric("site2"))
 setMethod("site2", "SitePair", function(x) x@site2)
 
 setMethod("length", "SitePair", function(x) length(site1(x)))

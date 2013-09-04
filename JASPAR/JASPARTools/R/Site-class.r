@@ -17,22 +17,17 @@ setClass("Site",
 ### -------------------------------------------------------------------
 ### The accessor-like method
 ###
-setGeneric("views", signature="x", function(x) standardGeneric("views"))
 setMethod("views", "Site", function(x) x@views)
 
 setMethod("score", "Site", function(x) x@score)
 setMethod("strand", "Site", function(x) x@strand)
 
-setGeneric("seqname", signature="x", function(x) standardGeneric("seqname"))
 setMethod("seqname", "Site", function(x) x@seqname)
 
-setGeneric("sitesource", signature="x", function(x) standardGeneric("sitesource"))
 setMethod("sitesource", "Site", function(x) x@sitesource)
 
-setGeneric("primary", signature="x", function(x) standardGeneric("primary"))
 setMethod("primary", "Site", function(x) x@primary)
 
-setGeneric("pattern", signature="x", function(x) standardGeneric("pattern"))
 setMethod("pattern", "Site", function(x) x@pattern)
 
 setMethod("length", "Site", function(x) length(views(x)))
@@ -64,7 +59,6 @@ setMethod("[", "Site",
 ### -----------------------------------------------------------------
 ### Methods
 ###
-setGeneric("writeGFF3", signature="x", function(x) standardGeneric("writeGFF3"))
 setMethod("writeGFF3", "Site",
           function(x){
             gff = list(seqname=seqname(x),
@@ -85,7 +79,6 @@ setMethod("writeGFF3", "Site",
             return(gff)
           }
           )
-setGeneric("writeGFF2", signature="x", function(x) standardGeneric("writeGFF2"))
 setMethod("writeGFF2", "Site",
           function(x){
             gff = list(seqname=seqname(x),
@@ -107,7 +100,6 @@ setMethod("writeGFF2", "Site",
           }
           )
 
-setGeneric("relScore", signature="x", function(x) standardGeneric("relScore"))
 setMethod("relScore", "Site",
           function(x){
           # Luckliy, the maxScore, minScore implementation is same with TFBS perl module. Validated!

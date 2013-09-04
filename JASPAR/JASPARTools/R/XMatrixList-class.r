@@ -78,10 +78,6 @@ setMethod("schneider", "ICMatrixList", function(x) sapply(x, schneider))
 ### XMatrixList() constructor.
 ###
 
-setGeneric("XMatrixList", signature="x",
-           function(x, use.names=TRUE, ...)
-             standardGeneric("XMatrixList")
-           )
 setMethod("XMatrixList", "list",
           function(x, use.names=TRUE, type, ...){
             ok = sapply(x, is, "XMatrix")
