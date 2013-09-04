@@ -27,6 +27,8 @@ SitePair = function(site1, site2){
 ###
 setMethod("writeGFF3", "SitePair",
           function(x){
+            if(length(x) == 0)
+              return(data.frame())
             gff1 = writeGFF3(site1(x))
             gff2 = writeGFF3(site2(x))
             ans = rbind(gff1, gff2)
@@ -35,6 +37,8 @@ setMethod("writeGFF3", "SitePair",
           )
 setMethod("writeGFF2", "SitePair",
           function(x){
+            if(length(x) == 0)
+              return(data.frame())
             gff1 = writeGFF2(site1(x))
             gff2 = writeGFF2(site2(x))
             ans = rbind(gff1, gff2)
