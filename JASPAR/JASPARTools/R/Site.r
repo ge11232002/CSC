@@ -47,6 +47,20 @@ newSite = function(views, score, strand="*",
       sitesource=sitesource, primary=primary, pattern=pattern)
 }
 
+### ------------------------------------------------------------------
+### The getters
+###
+setMethod("[", "Site", 
+          function(x, i){
+            if(missing(i))
+              return(x)
+            ans_views = views(x)[i]
+            ans_score = score(x)[i]
+            ans_strand = strand(x)[i]
+            clone(x, views=ans_views, score=ans_score, strand=ans_strand)
+          }
+          )
+
 ### -----------------------------------------------------------------
 ### Methods
 ###
