@@ -199,11 +199,13 @@ setMethod("searchAln", "PWMatrix",
             doSiteSearch(x, subject, min.score=min.score, windowSize=windowSize, cutoff=cutoff, conservation=conservation)
           }
           )
+
 setMethod("searchAln", "PWMatrixList",
           function(x, subject, min.score="80%", windowSize=51L, cutoff=0.7,
                    conservation=NULL){
             #ans = lapply(x, doSiteSearch, subject, min.score=min.score, windowSize=windowSize, cutoff=cutoff, conservation=conservation)
-            ans = lapply(x, searchAln, subject, min.score=min.score, windowSize=windowSize, cutoff=cutoff, conservation=conservation)
+            ans_list = lapply(x, searchAln, subject, min.score=min.score, windowSize=windowSize, cutoff=cutoff, conservation=conservation)
+            ans = SitePairList(ans_list)
             return(ans)
           }
           )
