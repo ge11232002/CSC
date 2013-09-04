@@ -20,8 +20,8 @@ setGeneric("searchSeq", signature="x",
            function(x, subject, seqname="Unknown", strand="*", min.score="80%")
              standardGeneric("searchSeq"))
 
-setGeneric("searchAln", signature="x",
-           function(x, aln1, aln2, min.score="80%", windowSize=51L, cutoff=0.7,
+setGeneric("searchAln", 
+           function(pwm, aln1, aln2, min.score="80%", windowSize=51L, cutoff=0.7,
                     conservation=NULL)
              standardGeneric("searchAln")
            )
