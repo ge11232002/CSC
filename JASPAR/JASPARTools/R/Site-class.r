@@ -61,6 +61,8 @@ setMethod("[", "Site",
 ###
 setMethod("writeGFF3", "Site",
           function(x){
+            if(length(x) == 0)
+              return(data.frame())
             gff = list(seqname=seqname(x),
                        source=sitesource(x),
                        feature=sitesource(x),
@@ -81,6 +83,8 @@ setMethod("writeGFF3", "Site",
           )
 setMethod("writeGFF2", "Site",
           function(x){
+            if(length(x) == 0)
+              return(data.frame())
             gff = list(seqname=seqname(x),
                        source=sitesource(x),
                        feature=sitesource(x),
@@ -113,12 +117,13 @@ setMethod("relScore", "Site",
 ### Perhaps it is not a bad idea to show them in gff format.
 setMethod("show", "Site",
           function(object){
-            gff = writeGFF3(object)
             cat("An object of class", class(object), "with", 
                 length(object), "site", 
                 ifelse(length(object)==1, "sequence", "sequences"))
             cat("\n")
+            gff = writeGFF3(object)
             print(gff)
+            
           }
           )
 
