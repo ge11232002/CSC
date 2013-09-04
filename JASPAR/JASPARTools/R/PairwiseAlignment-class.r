@@ -49,6 +49,9 @@ PairwiseAlignmentTFBS = function(pattern, subject, type="global",
       cutoff=cutoff, seq1length=seq1length, seq2length=seq2length)
 }
 
+##  Is there any way to update the conservation automatically when windowSize is changed???
+
+
 ### ---------------------------------------------------------------
 ### The "show" method
 ### Add later... what is the pretty way?
