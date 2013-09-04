@@ -119,7 +119,7 @@ do_sitesearch = function(pwm, x, min.score, windowSize, cutoff, conservation){
   seq22aln = seq_len(length(alignedSeq2))[!indexGap]
   
   if(is.null(conservation))
-    conservations1 = calculate_conservation(x, windowSize=windowSize, which="1")
+    conservations1 = calConservation(x, windowSize=windowSize, which="1")
   else
     conservations1 = conservation
 

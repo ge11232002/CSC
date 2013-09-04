@@ -31,8 +31,8 @@ setGeneric("doSiteSearch", signature="x",
              standardGeneric("doSiteSearch")
            )
 
-setGeneric("calConservation", signature="x",
-           function(x, windowSize, which=c("1", "2"))
+setGeneric("calConservation", 
+           function(aln1, aln2, windowSize=51L, which="1")
              standardGeneric("calConservation")
            )
 
@@ -66,6 +66,9 @@ setGeneric("pattern", signature="x", function(x) standardGeneric("pattern"))
 setGeneric("site1", signature="x", function(x) standardGeneric("site1"))
 setGeneric("site2", signature="x", function(x) standardGeneric("site2"))
 setGeneric("alignments", signature="x", function(x) standardGeneric("alignments"))
+setGeneric("conservation1", signature="x", function(x) standardGeneric("conservation1"))
+setGeneric("seqlength", signature="x", function(x) standardGeneric("seqlength"))
+setGeneric("alnlength", signature="x", function(x) standardGeneric("alnlength"))
 
 setGeneric("XMatrixList", signature="x",
            function(x, use.names=TRUE, ...)
