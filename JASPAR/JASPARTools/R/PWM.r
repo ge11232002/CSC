@@ -78,18 +78,23 @@ setMethod("searchSeq", "PWMatrix",
 # scans a nucleotide sequence with the pattern represented by the PWM.
           function(x, subject, seqname="Unknown", strand="*", min.score="80%"){
             ans_views = matchPWM(unitScale(Matrix(x)), subject, min.score=min.score)
-            score = rep(0, length(ans_views)) # fix the score issue....
+            #score = rep(0, length(ans_views)) # fix the score issue....
+            score = PWMscoreStartingAt(unitScale(Matrix(x)), subject(ans_views),
+                                       start(ans_views))
+            # The score here from PWMscoreStartingAt is the unitscaled score. Let's make it into original one, synced with TFBS module. This is validated!
+            score = score * (maxScore(Matrix(x)) - minScore(Matrix(x))) + minScore(Matrix(x))
             stopifnot(strand %in% c("+", "-", "*")) # need to ask Boris strand.
             if(length(strand) == 1)
               strand = rep(strand, length(ans_views))
             stopifnot(length(strand) == length(ans_views))
             ans_site = newSite(views=ans_views, seqname=seqname,
-                            score=score, strand=strand, 
-                            sitesource="TFBS", primary="TF binding site",
-                            pattern=x
-                            )
+                               score=score, strand=strand, 
+                               sitesource="TFBS", primary="TF binding site",
+                               pattern=x
+                               )
           }
           )
+
 setMethod("searchSeq", "PWMatrixList",
 # scans a nucleotide sequence with all patterns represented stored in $matrixset;
           function(x, subject, seqname="Unknown", strand="*", min.score="80%"){
