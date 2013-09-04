@@ -98,8 +98,11 @@ setMethod("searchSeq", "PWMatrix",
 setMethod("searchSeq", "PWMatrixList",
 # scans a nucleotide sequence with all patterns represented stored in $matrixset;
           function(x, subject, seqname="Unknown", strand="*", min.score="80%"){
-            pwms = lapply(Matrix(x), unitScale)
-            ans = lapply(pwms, matchPWM, subject, min.score)
+            #pwms = lapply(Matrix(x), unitScale)
+            #ans = lapply(pwms, matchPWM, subject, min.score)
+            ans_list = lapply(x, searchSeq, subject=subject, seqname=seqname, 
+                              strand=strand, min.score=min.score)
+            ans = SiteList(ans_list)
             return(ans)
           }
           )
