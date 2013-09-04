@@ -99,61 +99,19 @@ setMethod("searchSeq", "PWMatrixList",
 ### ----------------------------------------------------------------------
 ### searchAln: Scans a pairwise alignment of nucleotide sequences with the pattern represented by the PWM: it reports only those hits that are present in equivalent positions of both sequences and exceed a specified threshold score in both, AND are found in regions of the alignment above the specified
 ### Let's make it a setMethod function for taking different subject (alignment).
-do_sitesearch = function(pwm, x, min.score, windowSize, cutoff, conservation){
-  windowSize = as.integer(windowSize)
-  if(cutoff > 1 || cutoff < 0)
-    stop("cutoff must be from 0 to 1.")
-  seq1 = gsub("(-|_|\\.)", "", x[1])
-  seq2 = gsub("(-|_|\\.)", "", x[2])
-  site1 = searchSeq(pwm, seq1, min.score=min.score)
-  site2 = searchSeq(pwm, seq2, min.score=min.score)
-  siteset1 = views(site1)
-  siteset2 = views(site2)
-  stopifnot(all(diff(start(siteset1)) >= 1) && all(diff(start(siteset2)) >= 1))
-  # not quite sure the views returned by matchPWM is ordered by start, just check here.
-  alignedSeq1 = strsplit(as.character(x[1]), "")[[1]]
-  alignedSeq2 = strsplit(as.character(x[2]), "")[[1]]
-  indexGap = alignedSeq1 == "-" | alignedSeq1 == "." | alignedSeq1 == "_"
-  seq12aln = seq_len(length(alignedSeq1))[!indexGap]
-  indexGap = alignedSeq2 == "-" | alignedSeq2 == "." | alignedSeq2 == "_"
-  seq22aln = seq_len(length(alignedSeq2))[!indexGap]
-  
-  if(is.null(conservation))
-    conservations1 = calConservation(x, windowSize=windowSize, which="1")
-  else
-    conservations1 = conservation
-
-  pos1_in_aln = seq12aln[start(siteset1)]
-  pos2_in_aln = seq22aln[start(siteset2)]
-  matchedPairs = match(pos1_in_aln, pos2_in_aln)
-  keep = conservations1[start(siteset1)[!is.na(matchedPairs)]] >= cutoff
-  #ans_siteset1 = siteset1[(!is.na(matchedPairs))[keep]]
-  ans_siteset1 = site1[(!is.na(matchedPairs))[keep]]
-  #ans_siteset2 = siteset2[(na.omit(matchedPairs))[keep]]
-  ans_siteset2 = site2[(na.omit(matchedPairs))[keep]]
-  #return(list(siteset1=ans_siteset1, siteset2=ans_siteset2)) 
-  return(SitePair(site1=ans_siteset1, site2=ans_siteset2))
-}
-
-setMethod("doSiteSearch", "DNAStringSet",
-          function(pwm, x, min.score="80%", windowSize=51L, cutoff=0.7,
-                   conservation=NULL){
-            do_sitesearch(pwm, x, min.score=min.score, windowSize=windowSize, cutoff=cutoff, conservation=conservation)
-          }
-          )
 
 setMethod("searchAln", "PWMatrix",
-          function(x, subject, min.score="80%", windowSize=51L, cutoff=0.7,
+          function(x, aln1, aln2, min.score="80%", windowSize=51L, cutoff=0.7,
                    conservation=NULL){
-            doSiteSearch(x, subject, min.score=min.score, windowSize=windowSize, cutoff=cutoff, conservation=conservation)
+            doSiteSearch(x, aln1, aln2, min.score=min.score, windowSize=windowSize, cutoff=cutoff, conservation=conservation)
           }
           )
 
 setMethod("searchAln", "PWMatrixList",
-          function(x, subject, min.score="80%", windowSize=51L, cutoff=0.7,
+          function(x, aln1, aln2, min.score="80%", windowSize=51L, cutoff=0.7,
                    conservation=NULL){
             #ans = lapply(x, doSiteSearch, subject, min.score=min.score, windowSize=windowSize, cutoff=cutoff, conservation=conservation)
-            ans_list = lapply(x, searchAln, subject, min.score=min.score, windowSize=windowSize, cutoff=cutoff, conservation=conservation)
+            ans_list = lapply(x, searchAln, aln1, aln2, min.score=min.score, windowSize=windowSize, cutoff=cutoff, conservation=conservation)
             ans = SitePairList(ans_list)
             return(ans)
           }
