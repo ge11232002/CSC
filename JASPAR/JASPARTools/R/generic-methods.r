@@ -21,12 +21,12 @@ setGeneric("searchSeq", signature="x",
              standardGeneric("searchSeq"))
 
 setGeneric("searchAln", signature="x",
-           function(x, subject, min.score="80%", windowSize=50L, cutoff="70%",
+           function(x, aln1, aln2, min.score="80%", windowSize=51L, cutoff=0.7,
                     conservation=NULL)
              standardGeneric("searchAln")
            )
-setGeneric("doSiteSearch", signature="x",
-           function(pwm, x, min.score="80%", windowSize=50L, cutoff="70%",
+setGeneric("doSiteSearch",
+           function(pwm, aln1, aln2, min.score="80%", windowSize=51L, cutoff=0.7,
                     conservation=NULL)
              standardGeneric("doSiteSearch")
            )
@@ -62,7 +62,6 @@ setGeneric("views", signature="x", function(x) standardGeneric("views"))
 setGeneric("seqname", signature="x", function(x) standardGeneric("seqname"))
 setGeneric("sitesource", signature="x", function(x) standardGeneric("sitesource"))
 setGeneric("primary", signature="x", function(x) standardGeneric("primary"))
-setGeneric("pattern", signature="x", function(x) standardGeneric("pattern"))
 setGeneric("site1", signature="x", function(x) standardGeneric("site1"))
 setGeneric("site2", signature="x", function(x) standardGeneric("site2"))
 setGeneric("alignments", signature="x", function(x) standardGeneric("alignments"))
