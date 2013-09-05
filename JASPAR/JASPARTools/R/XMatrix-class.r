@@ -218,7 +218,7 @@ setMethod("show", "XMatrix",
                              "Matrix class"=matrixClass(object),
                              Strand=strand(object)
                              )
-            if(!is(object, "PFMatrix"))
+            if(is(object, "PWMatrix"))
               printList = c(printList, list(Pseudocounts=pseudocounts(object)))
             if(is(object, "ICMatrix"))
               printList = c(printList, list("Schneider correction"=schneider(object)))
