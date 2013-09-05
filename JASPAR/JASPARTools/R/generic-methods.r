@@ -56,6 +56,8 @@ setGeneric("Matrix", signature="x", function(x) standardGeneric("Matrix"))
 setGeneric("Matrix<-", signature="x", function(x, value) standardGeneric("Matrix<-"))
 setGeneric("bg", signature="x", function(x) standardGeneric("bg"))
 setGeneric("bg<-", signature="x", function(x, value) standardGeneric("bg<-"))
+setGeneric("tags", signature="x", function(x) standardGeneric("tags"))
+
 setGeneric("matrixType", signature="x", function(x) standardGeneric("matrixType"))
 setGeneric("pseudocounts", signature="x", function(x) standardGeneric("pseudocounts"))
 setGeneric("pseudocounts<-", signature="x", function(x, value) standardGeneric("pseudocounts<-"))

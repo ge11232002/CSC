@@ -1,6 +1,7 @@
-library(Biostrings) ##consensusMatrix,
+library(Biostrings) ##consensusMatrix, matchPWM
 library(seqLogo)  ## plot SeqLogo
 library(caTools)  ## runmean
+library(RSQLite)
 
 ### ------------------------------------------------------------------------
 ### The generic position matrix objects.
@@ -21,6 +22,7 @@ setClass("PFMatrix",
                  matrixClass="character",
                  strand="character",
                  bg="numeric",
+                 tags="list",
                  matrix="matrix")
          )
 setClass("PWMatrix", contains="PFMatrix",
@@ -80,6 +82,7 @@ setMethod("Matrix", "XMatrix", function(x) x@matrix)
 setMethod("strand", "XMatrix", function(x) x@strand)
 
 setMethod("bg", "XMatrix", function(x) x@bg)
+setMethod("tags", "XMatrix", function(x) x@tags)
 
 setMethod("matrixType", "PFMatrix", function(x) "PFM")
 setMethod("matrixType", "ICMatrix", function(x) "ICM")
