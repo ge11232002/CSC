@@ -183,20 +183,20 @@ setMethod("revcom", "XMatrix",
 ### The constructor
 ###  
 ICMatrix = function(ID=character(), name=character(), matrixClass=character(),
-                    strand=character(), bg=c(A=0.25, C=0.25, G=0.25, T=0.25), tags=list(), matrix=matrix(),
+                    strand="*", bg=c(A=0.25, C=0.25, G=0.25, T=0.25), tags=list(), matrix=matrix(),
                     pseudocounts=numeric(), schneider=logical()){
   new("ICMatrix", ID=ID, name=name, matrixClass=matrixClass, strand=strand, bg=bg,
       tags=tags,
       matrix=matrix, pseudocounts=pseudocounts, schneider=schneider)
 }
 PFMatrix = function(ID=character(), name=character(), matrixClass=character(),
-                    strand=character(), bg=c(A=0.25, C=0.25, G=0.25, T=0.25), tags=list(), matrix=matrix()){
+                    strand="*", bg=c(A=0.25, C=0.25, G=0.25, T=0.25), tags=list(), matrix=matrix()){
   new("PFMatrix", ID=ID, name=name, matrixClass=matrixClass, strand=strand, bg=bg,
       tags=tags,
       matrix=matrix)
 }
 PWMatrix = function(ID=character(), name=character(), matrixClass=character(),
-                    strand=character(), bg=c(A=0.25, C=0.25, G=0.25, T=0.25), tags=list(), matrix=matrix(),
+                    strand="*", bg=c(A=0.25, C=0.25, G=0.25, T=0.25), tags=list(), matrix=matrix(),
                     pseudocounts=numeric()){
   new("PWMatrix", ID=ID, name=name, matrixClass=matrixClass, strand=strand, bg=bg,
       tags=tags,
@@ -212,18 +212,22 @@ PWMatrix = function(ID=character(), name=character(), matrixClass=character(),
 setMethod("show", "XMatrix",
           function(object){
             cat("An object of class ", class(object), "\n", sep="") 
-            cat("ID:", ID(object), "\n")
-            cat("Name:", name(object), "\n")
-            cat("Matrix class:", matrixClass(object), "\n")
-            cat("Strand:", strand(object), "\n")
+            printList = list(
+                             ID=ID(object),
+                             Name=name(object),
+                             "Matrix class"=matrixClass(object),
+                             Strand=strand(object)
+                             )
+            if(!is(object, "PFMatrix"))
+              printList = c(printList, list(Pseudocounts=pseudocounts(object)))
+            if(is(object, "ICMatrix"))
+              printList = c(printList, list("Schneider correction"=schneider(object)))
+            printList = as.data.frame(c(printList, tags(object)))
+            print(printList)
             cat("Background:", bg(object), "\n")
-            cat("Matrix:", "\n") 
+            cat("Matrix:", "\n")
   # add the tags later and print pretty
             print(Matrix(object))
-            if(!is(object, "PFMatrix"))
-              cat("Pseudocounts:", pseudocounts(object), "\n")
-            if(is(object, "ICMatrix"))
-              cat("Schneider correction:", schneider(object), "\n")
           }
           )
 
