@@ -183,20 +183,23 @@ setMethod("revcom", "XMatrix",
 ### The constructor
 ###  rename these functions to newICMatrix etc
 ICMatrix = function(ID=character(), name=character(), matrixClass=character(),
-                    strand=character(), bg=numeric(), matrix=matrix(),
+                    strand=character(), bg=numeric(), tags=list(), matrix=matrix(),
                     pseudocounts=numeric(), schneider=logical()){
   new("ICMatrix", ID=ID, name=name, matrixClass=matrixClass, strand=strand, bg=bg,
+      tags=tags,
       matrix=matrix, pseudocounts=pseudocounts, schneider=schneider)
 }
 PFMatrix = function(ID=character(), name=character(), matrixClass=character(),
-                    strand=character(), bg=numeric(), matrix=matrix()){
+                    strand=character(), bg=numeric(), tags=list(), matrix=matrix()){
   new("PFMatrix", ID=ID, name=name, matrixClass=matrixClass, strand=strand, bg=bg,
+      tags=tags,
       matrix=matrix)
 }
 PWMatrix = function(ID=character(), name=character(), matrixClass=character(),
-                    strand=character(), bg=numeric(), matrix=matrix(),
+                    strand=character(), bg=numeric(), tags=list(), matrix=matrix(),
                     pseudocounts=numeric()){
   new("PWMatrix", ID=ID, name=name, matrixClass=matrixClass, strand=strand, bg=bg,
+      tags=tags,
       matrix=matrix, pseudocounts=pseudocounts)
 }
 # 
@@ -215,6 +218,7 @@ setMethod("show", "XMatrix",
             cat("Strand:", strand(object), "\n")
             cat("Background:", bg(object), "\n")
             cat("Matrix:", "\n") 
+  # add the tags later and print pretty
             print(Matrix(object))
             if(!is(object, "PFMatrix"))
               cat("Pseudocounts:", pseudocounts(object), "\n")
