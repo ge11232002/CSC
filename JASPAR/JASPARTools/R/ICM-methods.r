@@ -38,6 +38,7 @@ setMethod("toICM", "PFMatrix",
             icm = ICMatrix(ID=ID(x), name=name(x), matrixClass=matrixClass(x),
                            strand=strand(x), bg=bg(x), matrix=icmMatrix,
                            pseudocounts=pseudocounts, schneider=schneider)
+            return(icm)
           }
           )
                    
