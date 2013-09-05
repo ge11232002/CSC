@@ -181,22 +181,22 @@ setMethod("revcom", "XMatrix",
           )
 ### ----------------------------------------------------------------------
 ### The constructor
-###  rename these functions to newICMatrix etc
+###  
 ICMatrix = function(ID=character(), name=character(), matrixClass=character(),
-                    strand=character(), bg=numeric(), tags=list(), matrix=matrix(),
+                    strand=character(), bg=c(A=0.25, C=0.25, G=0.25, T=0.25), tags=list(), matrix=matrix(),
                     pseudocounts=numeric(), schneider=logical()){
   new("ICMatrix", ID=ID, name=name, matrixClass=matrixClass, strand=strand, bg=bg,
       tags=tags,
       matrix=matrix, pseudocounts=pseudocounts, schneider=schneider)
 }
 PFMatrix = function(ID=character(), name=character(), matrixClass=character(),
-                    strand=character(), bg=numeric(), tags=list(), matrix=matrix()){
+                    strand=character(), bg=c(A=0.25, C=0.25, G=0.25, T=0.25), tags=list(), matrix=matrix()){
   new("PFMatrix", ID=ID, name=name, matrixClass=matrixClass, strand=strand, bg=bg,
       tags=tags,
       matrix=matrix)
 }
 PWMatrix = function(ID=character(), name=character(), matrixClass=character(),
-                    strand=character(), bg=numeric(), tags=list(), matrix=matrix(),
+                    strand=character(), bg=c(A=0.25, C=0.25, G=0.25, T=0.25), tags=list(), matrix=matrix(),
                     pseudocounts=numeric()){
   new("PWMatrix", ID=ID, name=name, matrixClass=matrixClass, strand=strand, bg=bg,
       tags=tags,
