@@ -7,10 +7,8 @@ library(seqLogo)  ## plot SeqLogo
 ### ------------------------------------------------------------------------
 ### The "ICM" generic and methods
 setMethod("toICM", "character",
-          function(x, pseudocounts=NULL, schneider=FALSE,
+          function(x, pseudocounts=0.8, schneider=FALSE,
                    bg_probabilities=c(A=0.25, C=0.25, G=0.25, T=0.25)){
-            if(is.null(pseudocounts))
-              pseudocounts = 0.8
             dnaset = DNAStringSet(x)
             toICM(dnaset, schneider=schneider,
                   pseudocounts=pseudocounts,
@@ -18,25 +16,24 @@ setMethod("toICM", "character",
           }
           )
 setMethod("toICM", "DNAStringSet",
-          function(x, pseudocounts=NULL, schneider=FALSE,
+          function(x, pseudocounts=0.8, schneider=FALSE,
                    bg_probabilities=c(A=0.25, C=0.25, G=0.25, T=0.25)){
             if(!isConstant(width(x)))
               stop("'x' must be rectangular (i.e. have a constant width)")
-            if(is.null(pseudocounts))
-              pseudocounts = 0.8
             pfm = consensusMatrix(x)
             toICM(pfm, schneider=schneider, pseudocounts=pseudocounts,
                   bg_probabilities=bg_probabilities)
           }
           )
 setMethod("toICM", "PFMatrix",
-          function(x, pseudocounts=NULL, schneider=FALSE){
-            if(is.null(pseudocounts))
-              pseudocounts = 0.8
+          function(x, pseudocounts=0.8, schneider=FALSE, bg_probabilities=NULL){
+            if(is.null(bg_probabilities))
+              bg_probabilities = bg(x)
             icmMatrix = toICM(Matrix(x), pseudocounts=pseudocounts,
-                              schneider=schneider, bg_probabilities=bg(x))
+                              schneider=schneider, bg_probabilities=bg_probabilities)
             icm = ICMatrix(ID=ID(x), name=name(x), matrixClass=matrixClass(x),
-                           strand=strand(x), bg=bg(x), matrix=icmMatrix,
+                           strand=strand(x), bg=bg_probabilities, 
+                           tags=tags(x), matrix=icmMatrix,
                            pseudocounts=pseudocounts, schneider=schneider)
             return(icm)
           }
@@ -135,7 +132,7 @@ schneider_correction = function(x, bg_probabilities){
 
 setMethod("toICM", "matrix",
     ## This is validated by the TFBS perl module implemenation.
-          function(x, pseudocounts=NULL, ## This is the recommended value from http://nar.oxfordjournals.org/content/37/3/939.long.
+          function(x, pseudocounts=0.8, ## This is the recommended value from http://nar.oxfordjournals.org/content/37/3/939.long.
                    schneider=FALSE,
                    bg_probabilities=c(A=0.25, C=0.25, G=0.25, T=0.25)){
             x = Biostrings:::.normargPfm(x)
@@ -144,8 +141,6 @@ setMethod("toICM", "matrix",
             bg_probabilities = Biostrings:::.normargPriorParams(bg_probabilities)
             #nseq = sum(x[ ,1L])
             nseq = colSums(x)
-            if(is.null(pseudocounts))
-              pseudocounts = 0.8
             if(length(pseudocounts) == 1)
               #p = (x + bg_probabilities*pseudocounts) / (nseq + pseudocounts)
               p = sweep(x + bg_probabilities*pseudocounts, MARGIN=2, nseq + pseudocounts, "/")
