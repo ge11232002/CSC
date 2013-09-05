@@ -27,6 +27,7 @@ setMethod("toPWM", "PFMatrix",
           function(x, pseudocounts=NULL){
             if(is.null(pseudocounts))
               pseudocounts = 0.8
+  ## fix the bg later.
             pwmMatrix = toPWM(Matrix(x), pseudocounts=pseudocounts,
                               bg_probabilities=bg(x))
             pwm = PWMatrix(ID=ID(x), name=name(x), matrixClass=matrixClass(x),
