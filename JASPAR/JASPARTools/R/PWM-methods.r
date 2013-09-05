@@ -2,36 +2,33 @@
 ### ------------------------------------------------------------------------
 ### The "PWM" generic and methods. This is a bit different from the implementation of Biostrings.
 setMethod("toPWM", "character",
-          function(x, pseudocounts=NULL, 
+          function(x, pseudocounts=0.8, 
                    bg_probabilities=c(A=0.25, C=0.25, G=0.25, T=0.25)){
-            if(is.null(pseudocounts))
-              pseudocounts = 0.8
             dnaset = DNAStringSet(x)
             toPWM(dnaset, pseudocounts=pseudocounts,
                   bg_probabilities=bg_probabilities)
           }
           )
 setMethod("toPWM", "DNAStringSet",
-          function(x, pseudocounts=NULL,
+          function(x, pseudocounts=0.8,
                    bg_probabilities=c(A=0.25, C=0.25, G=0.25, T=0.25)){
             if(!isConstant(width(x)))
               stop("'x' must be rectangular (i.e. have a constant width)")
-            if(is.null(pseudocounts))
-              pseudocounts = 0.8
             pfm = consensusMatrix(x)
             toPWM(pfm, pseudocounts=pseudocounts,
                   bg_probabilities=bg_probabilities)
           }
           )
 setMethod("toPWM", "PFMatrix",
-          function(x, pseudocounts=NULL){
-            if(is.null(pseudocounts))
-              pseudocounts = 0.8
+          function(x, pseudocounts=0.8, bg_probabilities=NULL){
+            if(is.null(bg_probabilities))
+              bg_probabilities = bg(x)
   ## fix the bg later.
             pwmMatrix = toPWM(Matrix(x), pseudocounts=pseudocounts,
-                              bg_probabilities=bg(x))
+                              bg_probabilities=bg_probabilities)
             pwm = PWMatrix(ID=ID(x), name=name(x), matrixClass=matrixClass(x),
-                           strand=strand(x), bg=bg(x), matrix=pwmMatrix,
+                           strand=strand(x), bg=bg_probabilities, 
+                           tags=tags(x), matrix=pwmMatrix,
                            pseudocounts=pseudocounts)
           }
           )
@@ -40,14 +37,12 @@ setMethod("toPWM", "PFMatrix",
 ### corresponding Position *Weight* Matrix (PWM).
 setMethod("toPWM", "matrix",
     ## This is validated by the TFBS perl module version.
-          function(x, pseudocounts=NULL,
+          function(x, pseudocounts=0.8,
                    bg_probabilities=c(A=0.25, C=0.25, G=0.25, T=0.25)){
             x = Biostrings:::.normargPfm(x)
             bg_probabilities = Biostrings:::.normargPriorParams(bg_probabilities)
             nseq = colSums(x)
             priorN = sum(bg_probabilities)
-            if(is.null(pseudocounts))
-              pseudocounts = 0.8
             if(length(pseudocounts) == 1)
               p = sweep(x + bg_probabilities*pseudocounts, MARGIN=2, nseq + pseudocounts, "/")
               #p = (x + bg_probabilities*pseudocounts) / (nseq + pseudocounts)
