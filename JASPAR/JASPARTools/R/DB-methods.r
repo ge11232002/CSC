@@ -1,3 +1,13 @@
+.fillDBOptsWithDefaults = function(opts=list()){
+  if(!"collection" %in% names(opts))
+    opts[["collection"]] = "CORE"
+  if(!"all_versions" %in% names(opts))
+    opts[["all_versions"]] = FALSE
+  if(!"matrixtype" %in% names(opts))
+    opts[["matrixtype"]] = "PFM"
+  return(opts)
+}
+
 
 .get_latest_version = function(con, baseID){
   sqlCMD = paste0("SELECT VERSION FROM MATRIX WHERE BASE_ID='", baseID, 
@@ -118,8 +128,41 @@ setMethod("get_Matrix_by_name", "character",
             if(length(baseID) == 0)
               return(NA)
             if(length(baseID) > 1)
-              warning("There are ", length(baseID), " distinct stable IDs with name ", name)
+              warning("There are ", length(baseID), " distinct stable IDs with name ", name, ": ", baseID)
             get_Matrix_by_ID(x, baseID[1], type=type)
           }
           )
+
+
+### get_MatrixSet fetches matrix data under for all matrices in the database matching criteria defined by the named arguments and returns a XMatrixList object
+# Returns : a XMatrixList object
+# Notes: This method accepts named arguments, corresponding to arbitrary tags, and also some utility functions. Note that this is different from JASPAR2 and to some extent JASPAR4. As any tag is supported for database storage, any tag can be used for information retrieval. Additionally, arguments as 'name','class','collection' can be used (even though they are not tags). By default, only the last version of the matrix is given. The only way to get older matrices out of this to use an array of IDs with actual versions like MA0001.1, or set the argyment -all_versions=>1, in which  case you get all versions for each stable ID.
+# Args: 
+  # -all: gives absolutely all matrix entry, regardless of versin and collection. Only useful for backup situations and sanity checks. Takes precedence over everything else
+  # -ID: a reference to an array of stable IDs (strings), with or without version, as above. tyically something like "MA0001.2" . Takes precedence over everything salve -all
+  # -name: a reference to an array of transcription factor names (string). Will only take latest version. NOT a preferred way to access since names change over time.
+  # -collection: a string corresponding to a JASPAR collection. Per default CORE
+  # -all_versions: gives all matrix versions that fit with rest of criteria, including obsolete ones. Is off per default. Typical usage is in combiation with a stable IDs without versions to get all versinos of a particular matrix.
+  ## typical tags:
+  # -class: structural class names (strings)
+  # -species: NCBI Taxonomy IDs (integers)
+  # -taxgroup: higher taxonomic categories (string)
+  ## Computed features of the matrices
+  # -min_ic: float, minimum total information content of the matrix.
+  # -matrixtype: string describing type of matrix to retrieve. If left out, the format will revert to the database format, which is PFM.
+  # The arguments that expect list references are used in database query formulation: elements within lists are combined with 'OR' operators, and the lists of different types with 'AND'.
+  # For example,
+    # my $matrixset = $db->(-class => ['TRP_CLUSTER', 'FORKHEAD'],
+    #                       -species => ['Homo sapiens', 'Mus musculus'],
+    #                      );
+    # gives a set of TFBS::Matrix::PFM objects (given that the matrix models are stored as such) whose (structural clas is 'TRP_CLUSTER' OR'FORKHEAD') AND (the species they are derived from is 'Homo sapiens'OR 'Mus musculus').
+  # As above, unless IDs with version numbers are used, only one matrix per stable ID wil be returned: the matrix with the highest version number
+  #The -min_ic filter is applied after the query in the sense that the matrices profiles with total information content less than specified are not included in the set.
+setMethod("get_MatrixSet", "character",
+         function(x, opts){
+           opts = .fillDBOptsWithDefaults(opts)
+           
+         }
+         )
+
 

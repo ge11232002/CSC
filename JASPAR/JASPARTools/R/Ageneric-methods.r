@@ -44,6 +44,7 @@ setGeneric("relScore", signature="x", function(x) standardGeneric("relScore"))
 
 setGeneric("get_Matrix_by_ID", signature="x", function(x, ID, type="PFM") standardGeneric("get_Matrix_by_ID"))
 setGeneric("get_Matrix_by_name", signature="x", function(x, name, type="PFM") standardGeneric("get_Matrix_by_name"))
+setGeneric("get_MatrixSet", signature="x", function(x, opts) standardGeneric("get_MatrixSet")
 
 ## Accessors
 setGeneric("ID", signature="x", function(x) standardGeneric("ID"))
