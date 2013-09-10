@@ -143,7 +143,7 @@
   sqlCMD = paste0("SELECT ID FROM MATRIX WHERE BASE_ID='", baseID,"' AND VERSION='", version, "'")
   ini_id = dbGetQuery(con, sqlCMD)[["ID"]]
   if(length(ini_id) != 1)
-    stop("There are ", length(ini_id), " records with this based id and version combination!")
+    warning("There are ", length(ini_id), " records with this based id and version combination!")
   return(ini_id)
 }
 
@@ -331,4 +331,37 @@ setMethod("get_MatrixSet", "character",
             get_MatrixSet(x, opts)
           }
           )
+
+
+setMethod("delete_Matrix_having_ID", "SQLiteConnection",
+# Deletes the matrix having the given ID from the database
+# Args    : (ID)
+#               A string. Has to be a matrix ID with version suffix in JASPAR5.
+          function(x, IDs){
+            for(ID in IDs){
+              # this has to be versioned IDs
+              baseID = strsplit(ID, "\\.")[[1]][1]
+              version = strsplit(ID, "\\.")[[1]][2]
+              if(is.na(version))
+                stop("You have supplied a non-versioned matrix ID to delete. Skipping: ", ID)
+              # get relevant internal ID
+              int_id = .get_internal_id(baseID, version)
+              for(dbTable in c("MATRIX_DATA", "MATRIX", "MATRIX_SPECIES", "MATRIX_PROTEIN", "MATRIX_ANNOTATION")){
+                sqlCMD = paste0("DELETE from ", dbTable, " where ID='", int_id, "'")
+                ans = dbGetQuery(con, sqlCMD)
+              }
+            }
+          }
+          )
+
+setMethod("delete_Matrix_having_ID", "character",
+          function(x, IDs){
+            con = dbConnect(SQLite(), x)
+            on.exit(dbDisconnect(con))
+            delete_Matrix_having_ID(con, IDs)
+          }
+          )
+
+
+
 
