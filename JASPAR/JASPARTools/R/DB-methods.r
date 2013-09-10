@@ -1,15 +1,51 @@
 .fillDBOptsWithDefaults = function(opts=list()){
-  if(!"all" %in% names(opt))
+  ## Here are the parameters for get_MatrixSet (searching the jaspar DB)
+  ## Setting to NULL seems unnecessary, but for the track of parameters here.
+  ## DB used criteria
+  if(!"all" %in% names(opts))
     opts[["all"]] = FALSE
-  if(!"ID" %in% names(opt))
+  if(!"ID" %in% names(opts))
     opts[["ID"]] = NULL
+  if(!"name" %in% names(opts))
+    opt[["name"]] = NULL
   if(!"collection" %in% names(opts))
     opts[["collection"]] = "CORE"
   if(!"all_versions" %in% names(opts))
     opts[["all_versions"]] = FALSE
+  if(!"species" %in% names(opts))
+    opts[["species"]] = NULL
   if(!"matrixtype" %in% names(opts))
     opts[["matrixtype"]] = "PFM"
+  ## DB used TAGs
+  if(!"class" %in% names(opts))
+    opts[["class"]] = NULL
+  if(!"type" %in% names(opts))
+    opts[["type"]] = NULL
+  if(!"comment" %in% names(opts))
+    opts[["comment"]] = NULL
+  if(!"family" %in% names(opts))
+    opts[["family"]] = NULL
+  if(!"medline" %in% names(opts))
+    opts[["medline"]] = NULL
+  if(!"tax_group" %in% names(opts))
+    opts[["tax_group"]] = NULL
+  ## some other criterias used later
+  if(!"min_ic" %in% names(opts))
+    opts[["min_ic"]] = NULL
+  if(!"length" %in% names(opts))
+    opts[["length"]] = NULL
+  if(!"sites" %in% names(opts))
+    opts[["sites"]] = NULL
   return(opts)
+}
+
+.is_latest_version = function(con, int_id){
+  sqlCMD = paste0("select count(*) from MATRIX where BASE_ID= (SELECT BASE_ID from MATRIX where ID='",
+                  int_id, "') ", 
+                  "AND VERSION>(SELECT VERSION from MATRIX where ID='", int_id, "')"
+                    )
+  count = dbGetQuery(con, sqlCMD)[["count(*)"]]
+  return(ifelse(count==0, TRUE, FALSE))
 }
 
 .get_IDlist_by_query = function(con, opts){
@@ -17,13 +53,81 @@
   if(opts[["all"]]){
   # special case 1: get ALL matrices. Higher priority than all
     sqlCMD = paste0("SELECT ID FROM MATRIX")
-    ids = dbGetQuery(con, sqlCMD)[["ID"]]
+    ans_ids = dbGetQuery(con, sqlCMD)[["ID"]]
+    return(ans_ids)
   }
+  # ids: special case2 which is has higher priority than any other except the above (ignore all others)
+  # these might be either stable IDs or stableid.version.
+  # if just stable ID and if all_versions==1, take all versions, otherwise the latest
   if(!is.null(opts[["ID"]])){
+    ans_ids = c()
     if(opt[["all_versions"]]){
-      
+      for(id in opts[["ID"]]){
+        baseID = strsplit(id, "\\.")[[1]][1] # ignore vesion here, this is a stupidity filter
+        sqlCMD = paste0("SELECT ID FROM MATRIX WHERE BASE_ID='", baseID, "'")
+        ans_ids = c(ans_ids, dbGetQuery(con, sqlCMD)[["ID"]])
+      }
+    }else{
+      for(id in opts[["ID"]]){
+        baseID = strsplit(id, "\\.")[[1]][1]
+        version = strsplit(ID, "\\.")[[1]][2]
+        if(is.na(version))
+          version = as.character(.get_latest_version(con, baseID))
+        if(length(version) == 0) # no match
+          return(NA)
+        int_id = as.character(.get_internal_id(con, baseID, version))
+        ans_ids = c(ans_ids, int_id)
+      }
+    }
+    return(ans_ids)
+  }
+  
+  # Then the complicated combinations...
+  sqlTables = "MATRIX M"
+  sqlAnds = c()
+  # in matrix table: collection
+  if(!is.null(opts[["collection"]])){
+    sqlCMD = paste0("COLLECTION='", opts[["collection"]], "'", collapse=" or ")
+    sqlCMD = paste0("(", sqlCMD, ")")
+    sqlAnds = c(sqlAnds, sqlCMD)
+  }
+  # in matrix table: names.
+  if(!is.null(opts[["name"]])){
+    sqlCMD = paste0("NAME='", opts[["name"]], "'", collapse=" or ")
+    sqlCMD = paste0("(", sqlCMD, ")")
+    sqlAnds = c(sqlAnds, sqlCMD)
+  }
+  # in species table: tax.id: possibly many species with OR in between
+  if(!is.null(opts[["species"]])){
+    sqlTables = c(sqlTables, "MATRIX_SPECIES S")
+    sqlCMD = paste0("TAX_ID='", opts[["species"]], "'", collapse=" or ")
+    sqlCMD = paste0(" M.ID=S.ID and (", sqlCMD, ")")
+    sqlAnds = c(sqlAnds, sqlCMD)
+  }
+  # At this stage, let's fetch the ID first.
+  sqlCMD = paste0("SELECT distinct (M.ID) from ", paste0(sqlTables, collapse=","), 
+                  " where ", paste0(sqlAnds, collapse=" AND "))
+  ids = dbGetQuery(con, sqlCMD)[["ID"]]
+  
+  # Then deal with TAG_BASED, includes  "class", "type", "comment", "family", "medline", "tax_group"
+  for(tag in c("class", "type", "comment", "family", "medline", "tax_group")){
+    if(!is.null(opts[[tag]])){
+      sqlCMD = paste0("SELECT distinct ID from MATRIX_ANNOTATION where ", "TAG='", tag, "'", " AND (", paste0("VAL='", opts[[tag]], "'", collapse=" or "), ")")
+      ids = intersect(ids, dbGetQuery(con, sqlCMD)[["ID"]])
     }
   }
+  ans_ids = c()
+  if(opts[["all_versions"]])
+    ans_ids = ids
+  else{
+    for(id in ids){
+      if(.is_latest_version(con, id))
+        ans_ids = c(ans_ids, id)
+    }
+  }
+  if(length(ans_ids) == 0)
+    warning("Warning: Zero matrices returned with current critera")
+  return(ans_ids)
 }
 
 
@@ -46,6 +150,7 @@
 .get_Matrix_by_int_id = function(con, int_id, type){
   # Get the pfm matrix
   # bases orders in ("A", "C", "G", "T")
+  type = match.arg(type, c("PFM", "PWM", "ICM"))
   sqlCMD = paste0("SELECT val FROM MATRIX_DATA WHERE ID='", int_id, "' ORDER BY col, row")
   matrixVector = dbGetQuery(con, sqlCMD)[["val"]]
   if(length(matrixVector) %% 4 != 0)
@@ -75,7 +180,7 @@
   if(length(accs) == 0)
     accs = ""
 
-  # get remaining annotation as tags, form ANNOTATION table
+  # get remaining annotation as tags, from ANNOTATION table
   sqlCMD = paste0("SELECT TAG,VAL FROM MATRIX_ANNOTATION WHERE ID='", int_id, "'")
   tempTable = dbGetQuery(con, sqlCMD)
   tags = list()
@@ -106,6 +211,22 @@
 # Returns : a XMatrix object; the exact type of the object depending on the second argument (allowed values are 'PFM', 'ICM', and 'PWM'); returns NA if matrix with the given ID is not found.
 # Args: 
     #ID: is a string which refers to the stable JASPAR ID (usually something like "MA0001") with or without version numbers. "MA0001" will give the latest version on MA0001, while "MA0001.2" will give the second version, if existing. Warnings will be given for non-existing matrices.
+setMethod("get_Matrix_by_ID", "SQLiteConnection",
+          function(x, ID, type="PFM"){
+            # separate stable ID and version number
+            baseID = strsplit(ID, "\\.")[[1]][1]
+            version = strsplit(ID, "\\.")[[1]][2]
+            if(is.na(version))
+              version = as.character(.get_latest_version(con, baseID))
+            if(length(version) == 0) # no match
+              return(NA)
+            # get internal ID - also a check for validity
+            int_id = as.character(.get_internal_id(con, baseID, version))
+            # get matrix using internal ID
+            ans = .get_Matrix_by_int_id(con, int_id, type)
+            return(ans)
+          }
+          )
 setMethod("get_Matrix_by_ID", "character",
           function(x, ID, type="PFM"){
             # here x is the path of SQLite db file.
@@ -114,18 +235,7 @@ setMethod("get_Matrix_by_ID", "character",
               stop("ID needs to be specified!")
             con = dbConnect(SQLite(), x)
             on.exit(dbDisconnect(con))
-            # separate stable ID and version number
-            baseID = strsplit(ID, "\\.")[[1]][1]
-            version = strsplit(ID, "\\.")[[1]][2]
-            if(is.na(version))
-              version = as.character(.get_latest_version(con, baseID))
-            if(length(version) == 0)
-              return(NA)
-            # get internal ID - also a check for validity
-            int_id = as.character(.get_internal_id(con, baseID, version))
-            # get matrix using internal ID
-            ans = .get_Matrix_by_int_id(con, int_id, type)
-            return(ans)
+            get_Matrix_by_ID(con, ID, type)
           }
           )
 
@@ -176,13 +286,49 @@ setMethod("get_Matrix_by_name", "character",
     # gives a set of TFBS::Matrix::PFM objects (given that the matrix models are stored as such) whose (structural clas is 'TRP_CLUSTER' OR'FORKHEAD') AND (the species they are derived from is 'Homo sapiens'OR 'Mus musculus').
   # As above, unless IDs with version numbers are used, only one matrix per stable ID wil be returned: the matrix with the highest version number
   #The -min_ic filter is applied after the query in the sense that the matrices profiles with total information content less than specified are not included in the set.
-setMethod("get_MatrixSet", "character",
+setMethod("get_MatrixSet", "SQLiteConnection",
          function(x, opts){
            opts = .fillDBOptsWithDefaults(opts)
-           con = dbConnect(SQLite(), x)
-           on.exit(dbDisconnect(con))
-
+           IDlist = .get_IDlist_by_query(con, opts)
+           matrixSet = switch(opts[["matrixtype"]],
+                              "PFM"=PFMatrixList(),
+                              "PWM"=PWMatrixList(),
+                              "ICM"=ICMatrixList()
+                              )
+           for(id in IDlist){
+             xmatrix = .get_Matrix_by_int_id(con, id, type="PFM")
+             if(!is.null(opts[["min_ic"]])){
+               # we assume the matrix IS a PFM, o something in normal space at least
+               if(total_ic(toICM(xmatrix)) < opts[["min_ic"]])
+                 next
+             }
+             if(!is.null(opts[["length"]])){
+               if(length(xmatrix) < opts[["length"]])
+                 next
+             }
+             if(!is.null(opts[["sites"]])){
+               avg_sites = sum(Matrix(xmatrix)) / length(xmatrix)
+               if(avg_sites < opts[["sites"]])
+                 next
+             }
+             if(opts[["matrixtype"]] == "PFM"){
+               matrixSet = c(matrixSet, list(xmatrix))
+             }else if(opts[["matrixtype"]] == "PWM"){
+               matrixSet = c(matrixSet, list(toPWM(xmatrix)))
+             }else if(opts[["matrixtype"]] == "ICM"){
+               matrixSet = c(matrixSet, list(toICM(xmatrix)))
+             }
+           }
+           return(matrixSet)
          }
          )
 
+setMethod("get_MatrixSet", "character",
+          function(x, opts){
+            opts = .fillDBOptsWithDefaults(opts)
+            con = dbConnect(SQLite(), x)
+            on.exit(dbDisconnect(con))
+            get_MatrixSet(x, opts)
+          }
+          )
 
