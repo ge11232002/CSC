@@ -1,4 +1,8 @@
 .fillDBOptsWithDefaults = function(opts=list()){
+  if(!"all" %in% names(opt))
+    opts[["all"]] = FALSE
+  if(!"ID" %in% names(opt))
+    opts[["ID"]] = NULL
   if(!"collection" %in% names(opts))
     opts[["collection"]] = "CORE"
   if(!"all_versions" %in% names(opts))
@@ -6,6 +10,20 @@
   if(!"matrixtype" %in% names(opts))
     opts[["matrixtype"]] = "PFM"
   return(opts)
+}
+
+.get_IDlist_by_query = function(con, opts){
+  # returns a set of internal IDs with whicj to get the actual matrices
+  if(opts[["all"]]){
+  # special case 1: get ALL matrices. Higher priority than all
+    sqlCMD = paste0("SELECT ID FROM MATRIX")
+    ids = dbGetQuery(con, sqlCMD)[["ID"]]
+  }
+  if(!is.null(opts[["ID"]])){
+    if(opt[["all_versions"]]){
+      
+    }
+  }
 }
 
 
@@ -161,7 +179,9 @@ setMethod("get_Matrix_by_name", "character",
 setMethod("get_MatrixSet", "character",
          function(x, opts){
            opts = .fillDBOptsWithDefaults(opts)
-           
+           con = dbConnect(SQLite(), x)
+           on.exit(dbDisconnect(con))
+
          }
          )
 
