@@ -122,7 +122,7 @@ setMethod("searchAln", signature(pwm="PWMatrixList", aln1="DNAStringSet", aln2="
             return(ans)
           }
           )
-setMethod("searchAln", signature(pwm="PWMatrixList", aln1="DNAString", aln2="DNASrting"),
+setMethod("searchAln", signature(pwm="PWMatrixList", aln1="DNAString", aln2="DNAString"),
           function(pwm, aln1, aln2, min.score="80%", windowSize=51L, cutoff=0.7,
                    conservation=NULL){
             #ans = lapply(x, doSiteSearch, subject, min.score=min.score, windowSize=windowSize, cutoff=cutoff, conservation=conservation)
