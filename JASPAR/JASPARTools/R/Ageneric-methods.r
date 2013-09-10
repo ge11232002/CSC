@@ -15,6 +15,8 @@ setGeneric("plotLogo", signature="x",
            function(x, ic.scale = TRUE, xaxis = TRUE, yaxis = TRUE,
                     xfontsize = 15, yfontsize = 15) standardGeneric("plotLogo")
            )
+setGeneric("total_ic", signature="x",
+           function(x) standardGeneric("total_ic"))
 
 setGeneric("searchSeq", signature="x",
            function(x, subject, seqname="Unknown", strand="*", min.score="80%")
@@ -44,7 +46,7 @@ setGeneric("relScore", signature="x", function(x) standardGeneric("relScore"))
 
 setGeneric("get_Matrix_by_ID", signature="x", function(x, ID, type="PFM") standardGeneric("get_Matrix_by_ID"))
 setGeneric("get_Matrix_by_name", signature="x", function(x, name, type="PFM") standardGeneric("get_Matrix_by_name"))
-setGeneric("get_MatrixSet", signature="x", function(x, opts) standardGeneric("get_MatrixSet")
+setGeneric("get_MatrixSet", signature="x", function(x, opts) standardGeneric("get_MatrixSet"))
 
 ## Accessors
 setGeneric("ID", signature="x", function(x) standardGeneric("ID"))
