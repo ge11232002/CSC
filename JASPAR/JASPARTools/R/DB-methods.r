@@ -400,6 +400,69 @@ setMethod("delete_Matrix_having_ID", "character",
   return(int_id)
 }
 
+.store_matrix_data = function(con, pfm, int_id){
+  pfm_matrix = Matrix(pfm)
+  i = rownames(pfm_matrix)[1]
+  j = 1
+  for(i in rownames(pfm_matrix)){
+    for(j in seq_len(ncol(pfm_matrix))){
+      sqlCMD = paste0("INSERT INTO MATRIX_DATA VALUES(", int_id, ",'",
+                      i, "',", j, ",", pfm_matrix[i,j], ")")
+      sqlRun = dbGetQuery(con, sqlCMD)
+    }
+  }
+  return("Success")
+}
+
+.store_matrix_annotation = function(con, pfm, int_id){
+  tags = tags(pfm)
+  if(length(matrixClass(pfm)) != 0)
+    tags[["class"]] = matrixClass(pfm)
+  # but skip out collection or version as we already have those in the MATRIX table
+  tag = names(tags)[1]
+  for(tag in names(tags)){
+    if(tag %in% c("collection", "version", "species", "acc"))
+      next
+    sqlCMD = paste0("INSERT INTO MATRIX_ANNOTATION (ID, tag, val) VALUES(",
+                    int_id, ",'", tag, "','", 
+                    ifelse(is.na(tags[[tag]]), "", tags[[tag]]), "')")
+    sqlRun = dbGetQuery(con, sqlCMD)
+  }
+}
+
+.store_matrix_species = function(con, pfm, int_id){
+  # these are for species IDs - can be several
+  # these are taken from the tag "species"
+  # the tag should be a vector of characters.
+  
+  # sanity check: are there any species? It's ok not to have it.
+  if(is.na(tags(pfm)[["species"]])){ ## should change other tag check with is.na
+    warning("The ", name(pfm), " has no species tag")
+    return("Failure")
+  }
+  for(specie in tags(pfm)[["species"]]){
+    sqlCMD = paste0("INSERT INTO MATRIX_SPECIES VALUES(",
+                    int_id, ",'", specie, "')")
+    sqlRun = dbGetQuery(con, sqlCMD)
+  }
+  return("Success")
+}
+
+.store_matrix_acc = function(con, pfm, int_id){
+  # these are for protein accession numbers - can be several
+  # these are taken from the tag "acc"
+  # the tag should be a vector of characters.
+  if(is.na(tags(pfm)[["acc"]])){
+    warning("The ", name(pfm), " has no acc tag")
+    return("Failure")
+  }
+  for(acc in tags(pfm)[["acc"]]){
+    sqlCMD = paste0("INSERT INTO MATRIX_PROTEIN VALUES(", int_id,
+                    ",'", acc, "')")
+    sqlRun = dbGetQuery(con, sqlCMD)
+  }
+  return("Success")
+}
 
 ### ----------------------------------------------------------------
 ### Stores the contents of a PFMatrixList object in the database
@@ -407,12 +470,35 @@ setMethod("delete_Matrix_having_ID", "character",
 # Returns : 0 on success; $@ contents on failure
 # Args    : (PFMatrixList)
 
-setMethod("store_Matrix", "SQLiteConnection",
+setMethod("store_Matrix", signature(x="SQLiteConnection", pfmList="PFMatrixList"),
           function(x, pfmList){
             for(pfm in pfmList){
-              int_id =  .store_matrix(con, pfm)
-
+              int_id =  .store_matrix(x, pfm)
+              .store_matrix_data(x, pfm, int_id)
+              .store_matrix_annotation(x, pfm, int_id)
+              .store_matrix_species(x, pfm, int_id)
+              .store_matrix_acc(x, pfm, int_id)
             }
           }
+          return("Success")
           )
+setMethod("store_Matrix", signature(x="character", pfmList="PFMatrixList"),
+          function(x, pfmList){
+            con = dbConnect(SQLite(), x)
+            on.exit(dbDisconnect(con))
+            store_Matrix(con, pfmList)
+          }
+          )
+setMethod("store_Matrix", signature(x="character", pfmList="PFMatrix"),
+          function(x, pfmList){
+            store_Matrix(x, PFMatrixList(pfmList))
+          }
+          )
+setMethod("store_Matrix", signature(x="SQLiteConnection", pfmList="PFMatrix"),
+          function(x, pfmList){
+            store_Matrix(x, PFMatrixList(pfmList))
+          }
+          )
+
+
 
