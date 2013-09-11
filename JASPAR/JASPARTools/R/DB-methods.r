@@ -70,7 +70,7 @@
     }else{
       for(id in opts[["ID"]]){
         baseID = strsplit(id, "\\.")[[1]][1]
-        version = strsplit(ID, "\\.")[[1]][2]
+        version = strsplit(id, "\\.")[[1]][2]
         if(is.na(version))
           version = as.character(.get_latest_version(con, baseID))
         if(length(version) == 0) # no match
@@ -362,6 +362,57 @@ setMethod("delete_Matrix_having_ID", "character",
           }
           )
 
+### ------------------------------------------------------------
+### utilities functions for store_Matrix
+###
+.store_matrix = function(con, pfm){
+  # creation of the matrix will also give an internal unique ID (incremental int)
+  # which will be returned to use for the other tables
+
+  # Get version from the matrix ID
+  version = strsplit(ID(pfm), "\\.")[[1]][2]
+  if(is.na(version)){
+    warning("Lacking  version number for ", ID(pfm), ". Setting version=1")
+    version = 1
+  }
+  collection = tags(pfm)[["collection"]]
+  if(is.null(collection)){
+    warning("Lacking  collection name for ", ID(pfm), ". Setting collection to an empty string. You probably do not want this")
+    collection = ""
+  }
+  # sanity check: do we already have this combination of base ID and version? If we do, die
+  baseID = strsplit(ID(pfm), "\\.")[[1]][1]
+  sqlCMD = paste0("select count(*) from MATRIX where VERSION='", version, 
+                  "' and BASE_ID='", baseID, "' and collection='", collection, "'")
+  sanity_count = dbGetQuery(con, sqlCMD)[["count(*)"]]
+  if(sanity_count > 0)
+    stop("Database input inconsistency: You have already have ", sanity_count, 
+         " ", baseID, " matrices of version ", version, 
+         " in collection ", collection, ". Terminating program")
+
+  ## insert data
+  #  Here the ID is the primary integer id.
+  sqlCMD = paste0("INSERT INTO MATRIX VALUES (NULL,'", collection, "','",
+                  ID(pfm), "',", version, ",'", name(pfm), "')")
+  sqlRun = dbGetQuery(con, sqlCMD)
+  sqlCMD = paste0("SELECT last_insert_rowid()")
+  int_id = dbGetQuery(con, sqlCMD)[["last_insert_rowid()"]]
+  return(int_id)
+}
 
 
+### ----------------------------------------------------------------
+### Stores the contents of a PFMatrixList object in the database
+###
+# Returns : 0 on success; $@ contents on failure
+# Args    : (PFMatrixList)
+
+setMethod("store_Matrix", "SQLiteConnection",
+          function(x, pfmList){
+            for(pfm in pfmList){
+              int_id =  .store_matrix(con, pfm)
+
+            }
+          }
+          )
 
