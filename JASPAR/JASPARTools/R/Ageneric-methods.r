@@ -44,9 +44,15 @@ setGeneric("writeGFF3", signature="x", function(x) standardGeneric("writeGFF3"))
 setGeneric("writeGFF2", signature="x", function(x) standardGeneric("writeGFF2"))
 setGeneric("relScore", signature="x", function(x) standardGeneric("relScore"))
 
+## DB
 setGeneric("get_Matrix_by_ID", signature="x", function(x, ID, type="PFM") standardGeneric("get_Matrix_by_ID"))
 setGeneric("get_Matrix_by_name", signature="x", function(x, name, type="PFM") standardGeneric("get_Matrix_by_name"))
 setGeneric("get_MatrixSet", signature="x", function(x, opts) standardGeneric("get_MatrixSet"))
+setGeneric("store_Matrix",
+           function(x, pfm) standardGeneric("store_Matrix")
+           )
+setGeneric("initializeJASPARDB", signature="x",
+           function(x) standardGeneric("initializeJASPARDB"))
 
 ## Accessors
 setGeneric("ID", signature="x", function(x) standardGeneric("ID"))
@@ -81,5 +87,4 @@ setGeneric("XMatrixList", signature="x",
            function(x, use.names=TRUE, ...)
              standardGeneric("XMatrixList")
            )
-
 

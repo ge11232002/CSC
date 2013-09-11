@@ -500,5 +500,56 @@ setMethod("store_Matrix", signature(x="SQLiteConnection", pfmList="PFMatrix"),
           }
           )
 
+### -----------------------------------------------------------------
+### initialize the jaspar db. create empty tables.
+###
+.create_tables = function(con){
+  # utility function
+  # If you want to change the databse schema,
+  # this is the right place to do it
+  sqlCMD = c("CREATE TABLE MATRIX(
+             ID INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
+             COLLECTION VARCHAR(16) DEFAULT '',
+             BASE_ID VARCHAR(16) DEFAULT '' NOT NULL,
+             VERSION TINYINT DEFAULT 1  NOT NULL,
+             NAME VARCHAR(255) DEFAULT '' NOT NULL
+             )",
+             "CREATE TABLE MATRIX_DATA(
+             ID INTEGER NOT NULL,
+             row VARCHAR(1) NOT NULL,
+             col UNSIGNED TINYINT(3)  NOT NULL,
+             val float(10,3),
+             unique (ID, row, col))",
+             "CREATE TABLE MATRIX_ANNOTATION(
+             ID INTEGER NOT NULL,
+             TAG VARCHAR(255) DEFAULT '' NOT NULL,
+             VAL VARCHAR(255) DEFAULT '',
+             unique (ID, TAG))",
+             "CREATE TABLE MATRIX_SPECIES(
+             ID INTEGER NOT NULL,
+             TAX_ID VARCHAR(255) DEFAULT '' NOT NULL)",
+             "CREATE TABLE MATRIX_PROTEIN(
+             ID INTEGER NOT NULL,
+             ACC VARCHAR(255) DEFAULT '' NOT NULL)"
+             )
+  for(cmd in sqlCMD){
+    dbGetQuery(con, cmd)
+  }
+}
+
+setMethod("initializeJASPARDB", "SQLiteConnection",
+          function(x){
+            .create_tables(x)
+            return("Success")
+          }
+          )
+setMethod("initializeJASPARDB", "character",
+          function(x){
+            con = dbConnect(SQLite(), x)
+            on.exit(dbDisconnect(con))
+            initializeJASPARDB(con)
+          }
+          )
+
 
 
