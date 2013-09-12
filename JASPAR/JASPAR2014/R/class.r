@@ -8,8 +8,9 @@ setClass("JASPARDb",
                         release_name="character",
                         source_url="character",
                         #sites_seqs="character",
-                        db_dirpath="character",
-                        conn="SQLiteConnection")
+                        db_dirpath="character")
+                        #conn="SQLiteConnection")
+                        
 ## perhaps should put a metadata table in JASPAR.sqlite and fill this object dynamically
          )
 
@@ -44,8 +45,8 @@ JASPARDb = function(provider=character(), provider_version=character(),
   new("JASPARDb", provider=provider, provider_version=provider_version,
       release_date=release_date, release_name=release_name,
       source_url=source_url, #sites_seqs=sites_seqs, 
-      db_dirpath=db_dirpath, 
-      conn=dbConnect(SQLite(), db_dirpath))
+      db_dirpath=db_dirpath)
+      #conn=dbConnect(SQLite(), db_dirpath))
 }
 
 JASPAR = function(ID=character(), collection=Rle(), version=Rle(),
@@ -81,8 +82,8 @@ setMethod("clone", "ANY",  # not exported
 ## Slot getters and setters.
 setGeneric("sqliteDir", function(x) standardGeneric("sqliteDir"))
 setMethod("sqliteDir", "JASPARDb", function(x) x@db_dirpath)
-setGeneric("conn", function(x) standardGeneric("conn"))
-setMethod("conn", "JASPARDb", function(x) x@conn)
+#setGeneric("conn", function(x) standardGeneric("conn"))
+#setMethod("conn", "JASPARDb", function(x) x@conn)
 setGeneric("ID", function(x) standardGeneric("ID"))
 setMethod("ID", "JASPAR", function(x) x@ID)
 setGeneric("collection", function(x) standardGeneric("collection"))
@@ -106,7 +107,7 @@ setMethod("seqs", "JASPAR", function(x) x@seqs)
 #### setMethods
 setGeneric("openDb", function(x) standardGeneric("openDb"))
 setMethod("openDb", "JASPARDb", function(x) {
-          conn(x)=dbConnect(SQLite(), qliteDir(x))
+          conn(x)=dbConnect(SQLite(), sqliteDir(x))
           return(x)})
 setGeneric("closeDb", function(x) standardGeneric("closeDb"))
 setMethod("closeDb", "JASPARDb", function(x) dbDisconnect(conn(x)))
@@ -117,8 +118,10 @@ setMethod("length", "JASPAR", function(x) length(x@ID))
 setGeneric("searchDb", function(x, ID=NULL, name=NULL, species=NULL, class=NULL, type=NULL) standardGeneric("searchDb"))
 setMethod("searchDb", "JASPARDb", function(x, ID=NULL, name=NULL, species=NULL, 
                                          class=NULL, type=NULL){
-      conn = conn(x)
-      dbListTables(conn)
+  conn = dbConnect(SQLite(), sqliteDir(x))
+  on.exit(dbDisconnect(conn))
+      #conn = conn(x)
+      #dbListTables(conn)
       callName = c("ID", "name", "species", "class", "type")
       dbField = c("BASE_ID", "NAME", "SPECIES", "TAG", "TAG")
       sqlCMD = paste("select ID from MATRIX")
@@ -187,7 +190,7 @@ setMethod("searchDb", "JASPARDb", function(x, ID=NULL, name=NULL, species=NULL,
       }
       # collect DNA Seq from sites.rda 
       res$seqs = switch(x@release_name,
-                        "JASPAR_2010"=JASPAR_2010_SitesSeqs[paste(res$ID, res$version, sep=".")]
+                        "JASPAR2014"=JASPAR2014SitesSeqs[paste(res$ID, res$version, sep=".")]
                         )
       #if(!exists(x@sites_seqs)){
       #  data(x@sites_seqs)
