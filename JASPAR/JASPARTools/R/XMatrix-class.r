@@ -1,9 +1,3 @@
-library(Biostrings) ##consensusMatrix, matchPWM
-library(seqLogo)  ## plot SeqLogo
-library(caTools)  ## runmean
-library(RSQLite)
-library(GRanges) ## Motif
-
 ### ------------------------------------------------------------------------
 ### The generic position matrix objects.
 #setClass("XMatrix", contains=c("matrix"),
