@@ -49,10 +49,15 @@ setGeneric("get_Matrix_by_ID", signature="x", function(x, ID, type="PFM") standa
 setGeneric("get_Matrix_by_name", signature="x", function(x, name, type="PFM") standardGeneric("get_Matrix_by_name"))
 setGeneric("get_MatrixSet", signature="x", function(x, opts) standardGeneric("get_MatrixSet"))
 setGeneric("store_Matrix",
-           function(x, pfm) standardGeneric("store_Matrix")
+           function(x, pfmList) standardGeneric("store_Matrix")
            )
 setGeneric("initializeJASPARDB", signature="x",
            function(x) standardGeneric("initializeJASPARDB"))
+setGeneric("delete_Matrix_having_ID", signature="x",
+           function(x, IDs) standardGeneric("delete_Matrix_having_ID"))
+
+## wrappers
+setGeneric("MEME", signature="x", function(x,binary="meme", arguments="", tmpdir=tempdir()) standardGeneric("MEME"))
 
 ## Accessors
 setGeneric("ID", signature="x", function(x) standardGeneric("ID"))

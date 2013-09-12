@@ -479,8 +479,8 @@ setMethod("store_Matrix", signature(x="SQLiteConnection", pfmList="PFMatrixList"
               .store_matrix_species(x, pfm, int_id)
               .store_matrix_acc(x, pfm, int_id)
             }
+            return("Success")
           }
-          return("Success")
           )
 setMethod("store_Matrix", signature(x="character", pfmList="PFMatrixList"),
           function(x, pfmList){
