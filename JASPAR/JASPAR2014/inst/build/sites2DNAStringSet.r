@@ -1,7 +1,7 @@
 
 
 
-# filepath = "~/work/projects/JASPAR/dataPackage/sites"
+# filepath = "~/work/projects/JASPAR/data/sites2014"
 sites2DNAStringSet = function(filepath){
   require(Biostrings)
   files = list.files(path=filepath, pattern="*\\.sites$", full.names=TRUE)
@@ -14,3 +14,10 @@ sites2DNAStringSet = function(filepath){
   names(GRL) = sub("\\.sites$", "", basename(files))
   return(GRL)
 }
+
+
+JASPAR2014SitesSeqs = sites2DNAStringSet(filepath)
+save(JASPAR2014SitesSeqs, file="/mnt/biggley/home/gtan/work/projects/JASPAR/JASPAR2014/data/JASPAR2014SitesSeqs.rda")
+
+
+
