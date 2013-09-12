@@ -1,7 +1,7 @@
 
 
 
-# filepath = "~/work/projects/JASPAR/data/sites2014"
+filepath = "~/work/projects/JASPAR/data/sites2014"
 sites2DNAStringSet = function(filepath){
   require(Biostrings)
   files = list.files(path=filepath, pattern="*\\.sites$", full.names=TRUE)
