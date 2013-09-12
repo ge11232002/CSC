@@ -93,7 +93,7 @@ JASPAR(ID=character(), collection=Rle(), version=Rle(),
 %%  ~~put references to the literature/web site here~~
 }
 \author{
-%%  ~~who you are~~
+  Ge Tan
 }
 \note{
 %%  ~~further notes~~
@@ -107,9 +107,10 @@ JASPAR(ID=character(), collection=Rle(), version=Rle(),
 %%  ~~or \code{\linkS4class{CLASSNAME}} for links to other classes ~~~
 }
 \examples{
-  FMatrix(JASPAR_2010)
-  TFBSinfo(JASPAR_2010)
-  seqs(JASPAR_2010)
-  JASPAR_2010[1:5]
+  ans = searchDb(JASPAR2014, class="Zipper-Type", type="SELEX")
+  FMatrix(ans)
+  TFBSinfo(ans)
+  seqs(ans)
+  ans[1:5]
 }
 \keyword{classes}

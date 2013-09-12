@@ -46,14 +46,14 @@ Objects can be created by calls of the form \code{new("JASPARDb", ...)}.
       \code{searchDb(x, ID=NULL, name=NULL, species=NULL, class=NULL, type=NULL}:
       Search the JASPAR database based on the criteria of ID, name, species, class, type. These criterias have the "ALL" relationship. If none of them is set, all records will be returned.
     }
-    \item{}{
-      \code{openDb(x)}:
-      Open the SQLite connection of the object \code{JASPARDb}.
-    }
-    \item{}{
-      \code{closeDb(x)}:
-      Close the SQLite connection of the object \code{JASPARDb}.
-    }
+%%    \item{}{
+%%      \code{openDb(x)}:
+%%      Open the SQLite connection of the object \code{JASPARDb}.
+%%    }
+%%    \item{}{
+%%      \code{closeDb(x)}:
+%%      Close the SQLite connection of the object \code{JASPARDb}.
+%%    }
 	 }
 }
 \references{
@@ -61,6 +61,7 @@ Objects can be created by calls of the form \code{new("JASPARDb", ...)}.
 }
 \author{
 %%  ~~who you are~~
+Ge Tan
 }
 \note{
 %%  ~~further notes~~
@@ -74,8 +75,6 @@ Objects can be created by calls of the form \code{new("JASPARDb", ...)}.
 %%  ~~or \code{\linkS4class{CLASSNAME}} for links to other classes ~~~
 }
 \examples{
-  searchDb(JASPAR_2010, class="Zipper-Type", type="SELEX")
-  openDb(JASPAR_2010)
-  closeDb(JASPAR_2010)
+  searchDb(JASPAR2014, class="Zipper-Type", type="SELEX")
 }
 \keyword{classes}
