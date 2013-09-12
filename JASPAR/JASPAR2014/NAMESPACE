@@ -1,4 +1,3 @@
-import(IRanges)
 import(Biostrings)
 import(RSQLite)
 

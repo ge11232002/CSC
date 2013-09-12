@@ -10,5 +10,6 @@ Suggests:
 License: GPL (>= 2)
 URL: http://jaspar.binf.ku.dk/
 Type: Package
+biocViews: ExperimentData
 NeedsCompilation: no
 LazyData: TRUE
