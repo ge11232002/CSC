@@ -2,6 +2,7 @@
 \Rdversion{1.1}
 \docType{class}
 \alias{JASPAR-class}
+\alias{JASPAR}
 \alias{[,JASPAR-method}
 \alias{FMatrix,JASPAR-method}
 \alias{TFBSinfo,JASPAR-method}
