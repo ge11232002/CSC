@@ -26,7 +26,7 @@ Index:
 \preformatted{
   JASPAR-class            JASPAR object
   JASPAR2014-package      Data package for JASPAR 2014
-%  JASPARDb-class          JASPARDb object
+  searchDb-method                  searchDb method
 }
 
 Overview:
