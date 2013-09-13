@@ -8,7 +8,9 @@ sites2DNAStringSet = function(filepath){
   GRL = list()
   oneFile = files[1]
   for(oneFile in files){
-    sites = readDNAStringSet(filepath=oneFile, format="fasta")
+    #sites = readDNAStringSet(filepath=oneFile, format="fasta")
+    # Since there are "X" code in sites sequences, it conflicts with DNA_ALPAHBET in Biostrings. Just use BString here.
+    sites = readBStringSet(filepath=oneFile, format="fasta")
     GRL = c(GRL, sites)
   }
   names(GRL) = sub("\\.sites$", "", basename(files))
