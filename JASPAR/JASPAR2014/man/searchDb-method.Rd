@@ -1,60 +1,35 @@
-\name{JASPARDb-class}
-\Rdversion{1.1}
-\docType{class}
-\alias{JASPARDb-class}
-\alias{searchDb,JASPARDb-method}
-
-\title{JASPARDb object}
+\name{searchDb}
+\title{searchDb method}
 \description{
-  The JASPARDb object class is a container for the information about one JASPAR database.
+  The searchDb method is the major function to query the JASPAR SQLite database.
 }
 \usage{
-## Constructor
-  JASPARDb(provider=character(), provider_version=character(),
-           release_date=character(), release_name=character(),
-           source_url=character(), db_dirpath=character())
+  searchDb(x, ID=NULL, name=NULL, species=NULL, class=NULL, type=NULL)
 }
-\section{Objects from the Class}{
-Objects can be created by calls of the form \code{new("JASPARDb", ...)}.
-%%  ~~ describe objects here ~~ 
-}
+
 \arguments{
-  \item{provider}{
-    A character vector: the provider of JASPAR database (e.g. SQLite).
+  \item{x}{
+    A character vector of length 1: The path of SQLite database.
   }
-  \item{provider_version}{
-    A character vector: the version of provider.
+  \item{ID}{
+    A character vector: the TFBS IDs, e.g. "MA0004"
   }
-  \item{release_date}{
-    A character vector: the release date of the database.
+  \item{name}{
+    A character vector: the TFBS names, e.g. "Arnt"
   }
-  \item{release_name}{
-    A character vector: the release name of the database.
+  \item{species}{
+    A character vector: the species, e.g. "Mus musculus"
   }
-  \item{source_url}{
-    A character vector: the url of origin.
+  \item{class}{
+    A character vector: the classes, e.g. "Zipper-Type"
   }
-  \item{db_dirpath}{
-    A character vector: the path of the database file.
+  \item{type}{
+    A character vector: the types, e.g. "SELEX"
   }
 }
 
 \section{Methods}{
-  In the code snippets below, \code{x} is an JASPARDb object.
-  \describe{
-    \item{}{
-      \code{searchDb(x, ID=NULL, name=NULL, species=NULL, class=NULL, type=NULL}:
-      Search the JASPAR database based on the criteria of ID, name, species, class, type. These criterias have the "ALL" relationship. If none of them is set, all records will be returned.
-    }
-%%    \item{}{
-%%      \code{openDb(x)}:
-%%      Open the SQLite connection of the object \code{JASPARDb}.
-%%    }
-%%    \item{}{
-%%      \code{closeDb(x)}:
-%%      Close the SQLite connection of the object \code{JASPARDb}.
-%%    }
-	 }
+  Search the JASPAR database based on the criteria of ID, name, species, class, type. All the arguments can be NULL except the x. If so, all the records will be retrieved. All the criterias have the "AND" relationship and inside each criteria, all the elements have the "OR" relationship.
 }
 \references{
 %%  ~~put references to the literature/web site here~~
