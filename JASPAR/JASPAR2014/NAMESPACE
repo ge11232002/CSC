@@ -2,13 +2,13 @@ import(Biostrings)
 import(RSQLite)
 
 exportClasses(
-  JASPARDb, JASPAR
+  JASPAR
   )
 
 export(
-  JASPARDb, JASPAR
+  JASPAR, searchDb
   )
 
 exportMethods(
-  "[", "show", "searchDb", "TFBSinfo", "FMatrix", "seqs", "names"
+  "[", "show", "TFBSinfo", "FMatrix", "seqs", "names"
   )

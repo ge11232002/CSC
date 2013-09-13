@@ -11,7 +11,7 @@ Data package for JASPAR 2014.
 \details{
 \tabular{ll}{
 Package: \tab JASPAR2014\cr
-Version: \tab 0.0.1\cr
+Version: \tab 0.99.0\cr
 Date: \tab 2013-09-12\cr
 Depends: \tab R (>= 2.9.0), Biostrings(>= 2.26.3), RSQLite(>= 0.11.4)\cr
 Suggests: \tab \cr
@@ -26,7 +26,7 @@ Index:
 \preformatted{
   JASPAR-class            JASPAR object
   JASPAR2014-package      Data package for JASPAR 2014
-  JASPARDb-class          JASPARDb object
+%  JASPARDb-class          JASPARDb object
 }
 
 Overview:

@@ -14,10 +14,10 @@
 }
 \usage{
 ## Constructors:
-JASPAR(ID=character(), collection=Rle(), version=Rle(),
-       name=character(), species=Rle(), TF_class=Rle(),
-       medline=character(), family=Rle(), tax_group=Rle(),
-       acc=character(), type=Rle(), pazar_tf_id=character(),
+JASPAR(ID=character(), collection=character(), version=character(),
+       name=character(), species=character(), TF_class=character(),
+       medline=character(), family=character(), tax_group=character(),
+       acc=character(), type=character(), pazar_tf_id=character(),
        comment=character(), FMatrix=list(), seqs=list())
 }
 \arguments{
@@ -25,34 +25,34 @@ JASPAR(ID=character(), collection=Rle(), version=Rle(),
     A character vector: a identifier for each model, without version postfix.
   }
   \item{collection}{
-    A Rle object: the name of collection.
+    A character object: the name of collection.
   }
   \item{version}{
-    A Rle object: version information.
+    A character object: version information.
   }
   \item{name}{
     A character vector: the name of model.
   }
   \item{species}{
-    A Rle object: the species source for the sequences, in Latin. NA is allowed.
+    A character object: the species source for the sequences, in Latin. NA is allowed.
   }
   \item{TF_class}{
-    A Rle object: structural class of the transcription factor, based on the TFCaT system.
+    A character object: structural class of the transcription factor, based on the TFCaT system.
   }
   \item{medline}{
     A character vector: A link to the relevant publication reporting the sites used in the mode building.
   }
   \item{family}{
-    A Rle object: structural sub-class of the transcription factor, based on the TFCaT system.
+    A character object: structural sub-class of the transcription factor, based on the TFCaT system.
   }
   \item{tax_group}{
-    A Rle object: group of species, currently consisting of 4 larger groups: vertebrate, insect, plant, chordate.
+    A character object: group of species, currently consisting of 4 larger groups: vertebrate, insect, plant, chordate.
   }
   \item{acc}{
     A character vector: a representative protein accession number in Genbank for the transcription factor. Human takes precedence if several exists. 
   }
   \item{type}{
-    A Rle object: methodology used for matrix construction.
+    A character object: methodology used for matrix construction.
   }
   \item{pazar_tf_id}{
     A character vector: a link to the PAZAR database.
@@ -64,7 +64,7 @@ JASPAR(ID=character(), collection=Rle(), version=Rle(),
     A list of matrix: count matrices.
   }
   \item{seqs}{
-    A list of DNAStringSet: the binding sites sequences.
+    A list of BStringSet: the binding sites sequences.
   }
 
 }
@@ -102,7 +102,7 @@ JASPAR(ID=character(), collection=Rle(), version=Rle(),
 %% ~Make other sections like Warning with \section{Warning }{....} ~
 
 \seealso{
-  \link{JASPARDb},
+  \link{JASPAR2014},
 %%  ~~objects to See Also as \code{\link{~~fun~~}}, ~~~
 %%  ~~or \code{\linkS4class{CLASSNAME}} for links to other classes ~~~
 }

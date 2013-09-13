@@ -1,32 +1,33 @@
 
 
-setClass("JASPARDb",
-         representation(
-                        provider="character",
-                        provider_version="character",
-                        release_date="character",
-                        release_name="character",
-                        source_url="character",
-                        #sites_seqs="character",
-                        db_dirpath="character")
-                        #conn="SQLiteConnection")
+#setClass("JASPARDb",
+#         representation(
+#                        provider="character",
+#                        provider_version="character",
+#                        release_date="character",
+#                        release_name="character",
+#                        source_url="character",
+#                        #sites_seqs="character",
+#                        db_dirpath="character")
+#                        #conn="SQLiteConnection")
                         
 ## perhaps should put a metadata table in JASPAR.sqlite and fill this object dynamically
-         )
+#         )
+# Currently, for simplicity, let's just use a "chracter" to store the path of sqlite file
 
 setClass("JASPAR",
          representation(
                         ID="character",
-                        collection="Rle",
-                        version="Rle",
+                        collection="character",
+                        version="character",
                         name="character",
-                        species="Rle",
-                        TF_class="Rle",
+                        species="character",
+                        TF_class="character",
                         medline="character",
-                        family="Rle",
-                        tax_group="Rle",
+                        family="character",
+                        tax_group="character",
                         acc="character",
-                        type="Rle",
+                        type="character",
                         pazar_tf_id="character",
                         comment="character",
                         FMatrix="list",
@@ -38,21 +39,21 @@ setClass("JASPAR",
 
 
 ## Constructor
-JASPARDb = function(provider=character(), provider_version=character(), 
-                  release_date=character(), release_name=character(), 
-                  source_url=character(), #sites_seqs=character(), 
-                  db_dirpath=character()){
-  new("JASPARDb", provider=provider, provider_version=provider_version,
-      release_date=release_date, release_name=release_name,
-      source_url=source_url, #sites_seqs=sites_seqs, 
-      db_dirpath=db_dirpath)
-      #conn=dbConnect(SQLite(), db_dirpath))
-}
+#JASPARDb = function(provider=character(), provider_version=character(), 
+#                  release_date=character(), release_name=character(), 
+#                  source_url=character(), #sites_seqs=character(), 
+#                  db_dirpath=character()){
+#  new("JASPARDb", provider=provider, provider_version=provider_version,
+#      release_date=release_date, release_name=release_name,
+#      source_url=source_url, #sites_seqs=sites_seqs, 
+#      db_dirpath=db_dirpath)
+#      #conn=dbConnect(SQLite(), db_dirpath))
+#}
 
-JASPAR = function(ID=character(), collection=Rle(), version=Rle(),
-                  name=character(), species=Rle(), TF_class=Rle(),
-                  medline=character(), family=Rle(), tax_group=Rle(),
-                  acc=character(), type=Rle(), pazar_tf_id=character(),
+JASPAR = function(ID=character(), collection=character(), version=character(),
+                  name=character(), species=character(), TF_class=character(),
+                  medline=character(), family=character(), tax_group=character(),
+                  acc=character(), type=character(), pazar_tf_id=character(),
                   comment=character(), FMatrix=list(), seqs=list()){
   new("JASPAR", ID=ID, collection=collection, version=version, name=name, species=species,
       TF_class=TF_class, medline=medline, family=family, tax_group=tax_group,
@@ -80,10 +81,6 @@ setMethod("clone", "ANY",  # not exported
 
 
 ## Slot getters and setters.
-setGeneric("sqliteDir", function(x) standardGeneric("sqliteDir"))
-setMethod("sqliteDir", "JASPARDb", function(x) x@db_dirpath)
-#setGeneric("conn", function(x) standardGeneric("conn"))
-#setMethod("conn", "JASPARDb", function(x) x@conn)
 setGeneric("ID", function(x) standardGeneric("ID"))
 setMethod("ID", "JASPAR", function(x) x@ID)
 setGeneric("collection", function(x) standardGeneric("collection"))
@@ -91,7 +88,10 @@ setMethod("collection", "JASPAR", function(x) unique(x@collection))
 setMethod("names", "JASPAR", function(x) x@name)
 setGeneric("TFBSinfo", function(x) standardGeneric("TFBSinfo"))
 setMethod("TFBSinfo", "JASPAR", function(x){
-                                res = cbind(x@ID, x@name, as.vector(x@species), as.vector(x@TF_class), as.vector(x@family), as.vector(x@tax_group), x@acc, as.vector(x@type), x@medline, x@pazar_tf_id, x@comment)
+                                res = cbind(x@ID, x@name, x@species, x@TF_class, 
+                                            x@family, x@tax_group, x@acc, 
+                                            x@type, x@medline, x@pazar_tf_id, 
+                                            x@comment)
                                 colnames(res) = c("ID", "name", "species", "class", "family", "tax_group", "acc", "type", "medline", " Pazar ID", "comment")
                                 rownames(res) = paste(x@ID, x@version, sep=".")
                                 return(res)
@@ -104,24 +104,16 @@ setMethod("FMatrix", "JASPAR", function(x){
 setGeneric("seqs", function(x) standardGeneric("seqs"))
 setMethod("seqs", "JASPAR", function(x) x@seqs)
 
-#### setMethods
-setGeneric("openDb", function(x) standardGeneric("openDb"))
-setMethod("openDb", "JASPARDb", function(x) {
-          conn(x)=dbConnect(SQLite(), sqliteDir(x))
-          return(x)})
-setGeneric("closeDb", function(x) standardGeneric("closeDb"))
-setMethod("closeDb", "JASPARDb", function(x) dbDisconnect(conn(x)))
 setMethod("length", "JASPAR", function(x) length(x@ID))
 
 
-# The main searchDb method
-setGeneric("searchDb", function(x, ID=NULL, name=NULL, species=NULL, class=NULL, type=NULL) standardGeneric("searchDb"))
-setMethod("searchDb", "JASPARDb", function(x, ID=NULL, name=NULL, species=NULL, 
-                                         class=NULL, type=NULL){
-  conn = dbConnect(SQLite(), sqliteDir(x))
+# The main searchDb method, not necessary to make it a setMethod so far.
+#setGeneric("searchDb", function(x, ID=NULL, name=NULL, species=NULL, class=NULL, type=NULL) standardGeneric("searchDb"))
+#setMethod("searchDb", "JASPARDb", function(x, ID=NULL, name=NULL, species=NULL, 
+#                                         class=NULL, type=NULL){
+searchDb = function(x, ID=NULL, name=NULL, species=NULL,class=NULL, type=NULL){
+  conn = dbConnect(SQLite(), x)
   on.exit(dbDisconnect(conn))
-      #conn = conn(x)
-      #dbListTables(conn)
       callName = c("ID", "name", "species", "class", "type")
       dbField = c("BASE_ID", "NAME", "SPECIES", "TAG", "TAG")
       sqlCMD = paste("select ID from MATRIX")
@@ -182,28 +174,21 @@ setMethod("searchDb", "JASPARDb", function(x, ID=NULL, name=NULL, species=NULL,
       tax_table = dbGetQuery(conn, sqlCMD)
       res$species = tax_table[match(matrix_species_table[match(dbIDs, matrix_species_table$ID), "TAX_ID"], tax_table$TAX_ID), "SPECIES"]
       # collect from MATRIX_DATA table
-      sqlCMD = paste("select * from MATRIX_DATA where ID IN ", "(", paste(dbIDs, collapse=","), ")", sep="")
+      sqlCMD = paste("select * from MATRIX_DATA where ID IN ", "(", paste(dbIDs, collapse=","), ") ORDER BY col, row", sep="")
       matrix_data_table = dbGetQuery(conn, sqlCMD)
       res$FMatrix = list()
       for(dbID in dbIDs){
         res$FMatrix[[as.character(dbID)]] = matrix(matrix_data_table[matrix_data_table$ID == dbID, "val"], nrow=4, byrow=TRUE, dimnames=list(c("A", "C", "G", "T")))
       }
       # collect DNA Seq from sites.rda 
-      res$seqs = switch(x@release_name,
-                        "JASPAR2014"=JASPAR2014SitesSeqs[paste(res$ID, res$version, sep=".")]
-                        )
-      #if(!exists(x@sites_seqs)){
-      #  data(x@sites_seqs)
-      #}
-      #res$seqs = sitesSeqs[paste(res$ID, res$version, sep=".")]
+      res$seqs = JASPAR2014SitesSeqs[paste(res$ID, res$version, sep=".")]
       names(res$seqs) = paste(res$ID, res$version, sep=".")
-      return(JASPAR(ID=res$ID, collection=Rle(res$collection), version=Rle(res$version),
-             name=res$name, species=Rle(res$species), TF_class=Rle(res$class),
-             medline=res$medline, family=Rle(res$family), tax_group=Rle(res$tax_group),
-             acc=res$acc, type=Rle(res$type), pazar_tf_id=res$pazar_tf_id, 
+      return(JASPAR(ID=res$ID, collection=res$collection, version=as.character(res$version),
+             name=res$name, species=res$species, TF_class=res$class,
+             medline=as.character(res$medline), family=res$family, tax_group=res$tax_group,
+             acc=res$acc, type=res$type, pazar_tf_id=res$pazar_tf_id, 
              comment=res$comment, FMatrix=res$FMatrix, seqs=res$seqs))
-      }
-)
+}
 
 ### - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 ### Subsetting and combining.
@@ -242,18 +227,19 @@ setMethod("[", "JASPAR",
 ### - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 ### "show" method.
 ###
-showJASPAR = function(x, half_nrow=5L){
-  lx = length(x)
-  if(is.null((head_nrow = getOption("showHeadLines"))))
-    head_nrow = half_nrow
-  if(is.null((tail_nrow = getOption("showTailLines"))))
-    tail_nrow = half_nrow
-  iW = nchar(as.character(lx))
-  if(lx < (2*half_nrow+1L) | (lx < (head_nrow+tail_nrow+1L))){
-    IDW = max(nchar(ID(x)))
-    collectionW = max(nchar(collection(x)))
-  }
-}
+# perhaps make a better show method
+#showJASPAR = function(x, half_nrow=5L){
+#  lx = length(x)
+#  if(is.null((head_nrow = getOption("showHeadLines"))))
+#    head_nrow = half_nrow
+#  if(is.null((tail_nrow = getOption("showTailLines"))))
+#    tail_nrow = half_nrow
+#  iW = nchar(as.character(lx))
+#  if(lx < (2*half_nrow+1L) | (lx < (head_nrow+tail_nrow+1L))){
+#    IDW = max(nchar(ID(x)))
+#    collectionW = max(nchar(collection(x)))
+#  }
+#}
 
 setMethod("show", "JASPAR",
           function(object){
