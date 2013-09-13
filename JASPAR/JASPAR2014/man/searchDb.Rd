@@ -1,4 +1,5 @@
 \name{searchDb}
+\alias{searchDb}
 \title{searchDb method}
 \description{
   The searchDb method is the major function to query the JASPAR SQLite database.

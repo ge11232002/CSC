@@ -118,8 +118,9 @@ searchDb = function(x, ID=NULL, name=NULL, species=NULL,class=NULL, type=NULL){
       dbField = c("BASE_ID", "NAME", "SPECIES", "TAG", "TAG")
       sqlCMD = paste("select ID from MATRIX")
       dbIDs = dbGetQuery(conn, sqlCMD)[[1]]
-      # ID = c("MA0001", "MA0002")
+      # ID = c("MA0001.1", "MA0002.1")
       if(!is.null(ID)){
+        ID = sapply(strsplit(ID, "\\."), "[", 1)
         sqlCMD = paste("select ID from MATRIX where BASE_ID IN ", "(\"", paste(ID, collapse="\",\""), "\")", sep="")
         dbIDs = intersect(dbIDs, dbGetQuery(conn, sqlCMD)[[1]])
       }
@@ -178,7 +179,7 @@ searchDb = function(x, ID=NULL, name=NULL, species=NULL,class=NULL, type=NULL){
       matrix_data_table = dbGetQuery(conn, sqlCMD)
       res$FMatrix = list()
       for(dbID in dbIDs){
-        res$FMatrix[[as.character(dbID)]] = matrix(matrix_data_table[matrix_data_table$ID == dbID, "val"], nrow=4, byrow=TRUE, dimnames=list(c("A", "C", "G", "T")))
+        res$FMatrix[[as.character(dbID)]] = matrix(matrix_data_table[matrix_data_table$ID == dbID, "val"], nrow=4, dimnames=list(c("A", "C", "G", "T")))
       }
       # collect DNA Seq from sites.rda 
       res$seqs = JASPAR2014SitesSeqs[paste(res$ID, res$version, sep=".")]
