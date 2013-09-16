@@ -3,25 +3,7 @@
 ### ---------------------------------------------------------------
 ### The real wrapper function for MEME
 ###
-.read_version = function(memeOutput, fromLine){
-  for(i in fromLine:length(memeOutput)){
-    if(grepl("^MEME version", memeOutput[i]))
-      break
-  }
-  memeVersion = strsplit(memeOutput[i], " ")[[1]][3]
-  return(list(memeVersion, i+1))
-}
-.read_command = function(memeOutput, fromLine){
-  for(i in fromLine:length(memeOutput)){
-    if(grepl("^command: ", memeOutput[i]))
-      break
-  }
-  memeCommand = gsub("^command: ", "", memeOutput[i])
-  return(list(memeCommand, i +1))
-}
-
 # inputFastaFn = "/Users/gtan/src/meme_4.9.1/tests/crp0.s"
-
 run_MEME = function(inputFastaFn, binary="meme", seqtype="DNA", arguments=""){
   cmd = paste(binary, inputFastaFn, "-text", ifelse(seqtype=="DNA", "-dna", "-protein"), arguments, "2>/dev/null")
   memeOutput = my.system(cmd, intern=TRUE)
