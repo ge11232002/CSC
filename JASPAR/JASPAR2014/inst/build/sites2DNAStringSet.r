@@ -12,6 +12,7 @@ sites2DNAStringSet = function(filepath){
     #sites = readDNAStringSet(filepath=oneFile, format="fasta")
     # Since there are "X" code in sites sequences, it conflicts with DNA_ALPAHBET in Biostrings. Just use BString here.
     sites = readBStringSet(filepath=oneFile, format="fasta")
+    # in the original sites sequences, some of them use Xx to represent A,C,G or T, rather than Nn. Xx is not valid in DNAStringSet, so translate it first.
     sites = chartr("Xx", "Nn", sites)
     sites = DNAStringSet(sites)
     GRL = c(GRL, sites)
