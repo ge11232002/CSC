@@ -63,6 +63,8 @@ setGeneric("delete_Matrix_having_ID", signature="x",
 
 ## wrappers
 setGeneric("runMEME", signature="x", function(x, binary="meme", seqtype="DNA", arguments="", tmpdir=tempdir()) standardGeneric("runMEME"))
+setGeneric("sitesSeq", signature="x", function(x, n=10) standardGeneric("sitesSeq"))
+
 
 ## Accessors
 setGeneric("ID", signature="x", function(x) standardGeneric("ID"))
