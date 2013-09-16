@@ -5,9 +5,8 @@
 setClass("MEME", 
          slots=c(
                  version="character",
-                 alphabet="character",
                  command="character",
-                 motifs="Motifs"
+                 motifs="MotifSet"
                  )
          )
 
