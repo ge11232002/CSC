@@ -40,11 +40,13 @@ run_MEME = function(inputFastaFn, binary="meme", seqtype="DNA", arguments=""){
     splittedLines = strsplit(oneLines, "[[:blank:]]+")
     oneRange = GRanges(seqnames=sapply(splittedLines, "[", 1), 
                        ranges=IRanges(start=as.integer(sapply(splittedLines, "[", ifelse(revcomp, 3, 2))), width=motifWidths[i]),
-                       strand=ifelse(revcomp, sapply(splittedLines, "[", 2), "+")
+                       strand=ifelse(revcomp, sapply(splittedLines, "[", 2), "+"),
+                       score=as.numeric(sapply(splittedLines, "[", ifelse(revcomp, 4, 3)))
                        )
     motifList = c(motifList, oneRange)
   }
   motifList = GRangesList(motifList)
+  names(motifList) = motifNames
   ans = list(motifList=motifList, motifEvalues=motifEvalues) 
   return(ans)
 }
