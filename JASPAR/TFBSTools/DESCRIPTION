@@ -1,0 +1,15 @@
+Package: TFBSTools
+Version: 0.99.0
+Date: 2013-09-17
+Title: Software package for TFBS
+Description: Software package for TFBS.
+Author: Ge Tan <gtan@me.com> 
+Maintainer: Ge Tan <gtan@me.com>
+Depends: R (>= 2.15.2), Biostrings(>= 2.26.3), RSQLite(>= 0.11.4), caTools(>= 1.14), GenomicRanges(>= 1.12.5)
+Suggests:
+License: GPL (>= 2)
+URL: http://jaspar.binf.ku.dk/
+Type: Package
+biocViews: 
+NeedsCompilation: no
+LazyData: TRUE

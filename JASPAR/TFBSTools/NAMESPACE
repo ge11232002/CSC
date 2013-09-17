@@ -1,4 +1,9 @@
 
 import(Biostrings)
+import(seqLogo)
+import(RSQLite)
+import(GenomicRanges)
+
+importFrom(caTools, runmean)
 
 
