@@ -1,16 +1,6 @@
 ### ------------------------------------------------------------------------
 ### The generic position matrix objects.
-#setClass("XMatrix", contains=c("matrix"),
-#         slots=c(ID="character",
-#                 name="character",
-#                 matrixClass="character",
-#                 strand="character",
-#                 bg="numeric"
-#                 ))
-#
-### -----------------------------------------------------------------------
-### XMatrix subclasses without additional slots
-###
+### 
 setClass("PFMatrix", 
          slots=c(ID="character",
                  name="character",
@@ -28,40 +18,7 @@ setClass("ICMatrix", contains="PWMatrix",
                  schneider="logical"
                  )
          )
-#setClass("ICMatrix", contains="matrix",
-#         slots=c(ID="character",
-#                 name="character",
-#                 matrixClass="character",
-#                 strand="character",
-#                 pseudocounts="numeric",
-#                 schneider="logical",
-#                 bg="numeric"
-#                 ))
-#setClass("PWMatrix", contains="matrix",
-#         slots=c(ID="character",
-#                 name="character",
-#                 matrixClass="character",
-#                 strand="character",
-#                 pseudocounts="numeric",
-#                 bg="numeric"
-#                 )
-#         )
 setClassUnion("XMatrix", c("PFMatrix", "ICMatrix", "PWMatrix"))
-
-### ------------------------------------------------------------------------
-### The generic position matrix objects.
-### 
-setClass("JASPAR", contains=c("XMatrix"),
-         slots=c(ID="character",
-                 collection="character",
-                 version="character",
-                 name="character",
-                 species="Rle",
-                 TFClass="character",
-                 medline="character",
-                 family="character"
-                 )
-         )
 
 ### ----------------------------------------------------------------------
 ### The accessor-like method
@@ -73,7 +30,6 @@ setMethod("matrixClass", "XMatrix", function(x) x@matrixClass)
 
 setMethod("Matrix", "XMatrix", function(x) x@matrix)
 
-#setGeneric("strand<-", signature="x", function(x, value) standardGeneric("strand<-"))
 setMethod("strand", "XMatrix", function(x) x@strand)
 
 setMethod("bg", "XMatrix", function(x) x@bg)
