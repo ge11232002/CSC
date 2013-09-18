@@ -3,30 +3,30 @@
 ### The "PWM" generic and methods. This is a bit different from the implementation of Biostrings.
 setMethod("toPWM", "character",
           function(x, pseudocounts=0.8, 
-                   bg_probabilities=c(A=0.25, C=0.25, G=0.25, T=0.25)){
+                   bg=c(A=0.25, C=0.25, G=0.25, T=0.25)){
             dnaset = DNAStringSet(x)
             toPWM(dnaset, pseudocounts=pseudocounts,
-                  bg_probabilities=bg_probabilities)
+                  bg=bg)
           }
           )
 setMethod("toPWM", "DNAStringSet",
           function(x, pseudocounts=0.8,
-                   bg_probabilities=c(A=0.25, C=0.25, G=0.25, T=0.25)){
+                   bg=c(A=0.25, C=0.25, G=0.25, T=0.25)){
             if(!isConstant(width(x)))
               stop("'x' must be rectangular (i.e. have a constant width)")
             pfm = consensusMatrix(x)
             toPWM(pfm, pseudocounts=pseudocounts,
-                  bg_probabilities=bg_probabilities)
+                  bg=bg)
           }
           )
 setMethod("toPWM", "PFMatrix",
-          function(x, pseudocounts=0.8, bg_probabilities=NULL){
-            if(is.null(bg_probabilities))
-              bg_probabilities = bg(x)
+          function(x, pseudocounts=0.8, bg=NULL){
+            if(is.null(bg))
+              bg = bg(x)
             pwmMatrix = toPWM(Matrix(x), pseudocounts=pseudocounts,
-                              bg_probabilities=bg_probabilities)
+                              bg=bg)
             pwm = PWMatrix(ID=ID(x), name=name(x), matrixClass=matrixClass(x),
-                           strand=strand(x), bg=bg_probabilities, 
+                           strand=strand(x), bg=bg, 
                            tags=tags(x), matrix=pwmMatrix,
                            pseudocounts=pseudocounts)
           }
@@ -37,18 +37,18 @@ setMethod("toPWM", "PFMatrix",
 setMethod("toPWM", "matrix",
     ## This is validated by the TFBS perl module version.
           function(x, pseudocounts=0.8,
-                   bg_probabilities=c(A=0.25, C=0.25, G=0.25, T=0.25)){
+                   bg=c(A=0.25, C=0.25, G=0.25, T=0.25)){
             x = Biostrings:::.normargPfm(x)
-            bg_probabilities = Biostrings:::.normargPriorParams(bg_probabilities)
+            bg = Biostrings:::.normargPriorParams(bg)
             nseq = colSums(x)
-            priorN = sum(bg_probabilities)
+            priorN = sum(bg)
             if(length(pseudocounts) == 1)
-              p = sweep(x + bg_probabilities*pseudocounts, MARGIN=2, nseq + pseudocounts, "/")
+              p = sweep(x + bg*pseudocounts, MARGIN=2, nseq + pseudocounts, "/")
               #p = (x + bg_probabilities*pseudocounts) / (nseq + pseudocounts)
             else
               #p = (x + bg_probabilities %*% t(pseudocounts)) / (nseq + pseudocounts)
-              p = sweep(x + bg_probabilities %*% t(pseudocounts), MARGIN=2, nseq + pseudocounts, "/")
-            prior.probs = bg_probabilities / priorN
+              p = sweep(x + bg %*% t(pseudocounts), MARGIN=2, nseq + pseudocounts, "/")
+            prior.probs = bg / priorN
             #ans = log2(p / prior.probs)
             #Here ans's colSums is 1s. Need to be adapted for seq logo maybe later.
             ans = log2(sweep(p, MARGIN=1, prior.probs, "/"))

@@ -12,7 +12,7 @@ setGeneric("toICM", signature="x",
 
 setGeneric("toPWM", signature="x",
            function(x, pseudocounts=NULL,
-                    bg_probabilities=c(A=0.25, C=0.25, G=0.25, T=0.25))
+                    bg=c(A=0.25, C=0.25, G=0.25, T=0.25))
              standardGeneric("toPWM")
            )
 
