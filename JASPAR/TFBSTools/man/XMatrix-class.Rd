@@ -20,7 +20,7 @@
 \alias{tags,XMatrix-method}
 \alias{update,XMatrix-method}
 
-\title{Class \code{"XMatrix"}}
+\title{\code{"XMatrix"} objects}
 \description{
 %%  ~~ A concise (1-5 lines) description of what the class is. ~~
 XMatrix is a virtual class. No objects can be created from it directly. Three classes are derived from this class: PFMatrix, PWMatrix and ICMatrix.
