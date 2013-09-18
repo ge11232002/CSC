@@ -92,7 +92,15 @@ setReplaceMethod("schneider", "ICMatrix",
                  }
                  )
 
-### --------------------------------------------------------------------
+### -----------------------------------------------------------------
+### Coercion
+###
+
+setAs("XMatrix", "matrix", function(from) Matrix(from))
+setAs("matrix", "PFMatrix", function(from) PFMatrix(matrix=from))
+
+
+### -----------------------------------------------------------------
 ### Updating and cloing
 ###
 ### An object is either 'update'd in place (usually with a replacement
@@ -133,28 +141,27 @@ setMethod("revcom", "XMatrix",
 ### ----------------------------------------------------------------------
 ### The constructor
 ###  
-ICMatrix = function(ID=character(), name=character(), matrixClass=character(),
+ICMatrix = function(ID="Unknown", name="Unknown", matrixClass="Unknown",
                     strand="*", bg=c(A=0.25, C=0.25, G=0.25, T=0.25), tags=list(), matrix=matrix(),
                     pseudocounts=numeric(), schneider=logical()){
   new("ICMatrix", ID=ID, name=name, matrixClass=matrixClass, strand=strand, bg=bg,
       tags=tags,
       matrix=matrix, pseudocounts=pseudocounts, schneider=schneider)
 }
-PFMatrix = function(ID=character(), name=character(), matrixClass=character(),
+PFMatrix = function(ID="Unknown", name="Unknown", matrixClass="Unknown",
                     strand="*", bg=c(A=0.25, C=0.25, G=0.25, T=0.25), tags=list(), matrix=matrix()){
   new("PFMatrix", ID=ID, name=name, matrixClass=matrixClass, strand=strand, bg=bg,
       tags=tags,
       matrix=matrix)
 }
-PWMatrix = function(ID=character(), name=character(), matrixClass=character(),
+PWMatrix = function(ID="Unknown", name="Unknown", matrixClass="Unknown",
                     strand="*", bg=c(A=0.25, C=0.25, G=0.25, T=0.25), tags=list(), matrix=matrix(),
                     pseudocounts=numeric()){
   new("PWMatrix", ID=ID, name=name, matrixClass=matrixClass, strand=strand, bg=bg,
       tags=tags,
       matrix=matrix, pseudocounts=pseudocounts)
 }
-# 
-# pfm = PFMatrix(ID="M0001", name="MyProfile", bg=c(A=0.25, C=0.25, G=0.25, T=0.25), matrix=matrix(as.integer(c(12, 3, 0, 0, 4, 0, 0, 0, 0, 11, 7, 0, 0, 9, 12, 0, 0, 0, 0, 0, 0, 1, 1, 12)), byrow=TRUE, nrow=4, dimnames=list(c("A", "C", "G", "T"))))
+
 
 ### -----------------------------------------------------------------------
 ### The "show" method.
