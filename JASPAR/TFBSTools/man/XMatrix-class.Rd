@@ -19,6 +19,7 @@
 \alias{strand<-,XMatrix-method}
 \alias{tags,XMatrix-method}
 \alias{update,XMatrix-method}
+\alias{total_ic, ICMatrix-method}
 
 \title{\code{"XMatrix"} objects}
 \description{
