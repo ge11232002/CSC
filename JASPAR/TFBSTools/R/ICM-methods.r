@@ -8,31 +8,31 @@ library(seqLogo)  ## plot SeqLogo
 ### The "ICM" generic and methods
 setMethod("toICM", "character",
           function(x, pseudocounts=0.8, schneider=FALSE,
-                   bg_probabilities=c(A=0.25, C=0.25, G=0.25, T=0.25)){
+                   bg=c(A=0.25, C=0.25, G=0.25, T=0.25)){
             dnaset = DNAStringSet(x)
             toICM(dnaset, schneider=schneider,
                   pseudocounts=pseudocounts,
-                  bg_probabilities=bg_probabilities)
+                  bg=bg)
           }
           )
 setMethod("toICM", "DNAStringSet",
           function(x, pseudocounts=0.8, schneider=FALSE,
-                   bg_probabilities=c(A=0.25, C=0.25, G=0.25, T=0.25)){
+                   bg=c(A=0.25, C=0.25, G=0.25, T=0.25)){
             if(!isConstant(width(x)))
               stop("'x' must be rectangular (i.e. have a constant width)")
             pfm = consensusMatrix(x)
             toICM(pfm, schneider=schneider, pseudocounts=pseudocounts,
-                  bg_probabilities=bg_probabilities)
+                  bg=bg)
           }
           )
 setMethod("toICM", "PFMatrix",
-          function(x, pseudocounts=0.8, schneider=FALSE, bg_probabilities=NULL){
-            if(is.null(bg_probabilities))
-              bg_probabilities = bg(x)
+          function(x, pseudocounts=0.8, schneider=FALSE, bg=NULL){
+            if(is.null(bg))
+              bg = bg(x)
             icmMatrix = toICM(Matrix(x), pseudocounts=pseudocounts,
-                              schneider=schneider, bg_probabilities=bg_probabilities)
+                              schneider=schneider, bg=bg)
             icm = ICMatrix(ID=ID(x), name=name(x), matrixClass=matrixClass(x),
-                           strand=strand(x), bg=bg_probabilities, 
+                           strand=strand(x), bg=bg, 
                            tags=tags(x), matrix=icmMatrix,
                            pseudocounts=pseudocounts, schneider=schneider)
             return(icm)
@@ -134,25 +134,27 @@ setMethod("toICM", "matrix",
     ## This is validated by the TFBS perl module implemenation.
           function(x, pseudocounts=0.8, ## This is the recommended value from http://nar.oxfordjournals.org/content/37/3/939.long.
                    schneider=FALSE,
-                   bg_probabilities=c(A=0.25, C=0.25, G=0.25, T=0.25)){
+                   bg=c(A=0.25, C=0.25, G=0.25, T=0.25)){
             x = Biostrings:::.normargPfm(x)
             ## From here 'x' is guaranteed to have at least 1 column and to have
             ## all its columns sum to the same value.
-            bg_probabilities = Biostrings:::.normargPriorParams(bg_probabilities)
+            bg= Biostrings:::.normargPriorParams(bg)
             #nseq = sum(x[ ,1L])
             nseq = colSums(x)
-            if(length(pseudocounts) == 1)
+            priorN = sum(bg)
+            pseudocounts = rep(0, ncol(x)) + pseudocounts
+            #if(length(pseudocounts) == 1)
               #p = (x + bg_probabilities*pseudocounts) / (nseq + pseudocounts)
-              p = sweep(x + bg_probabilities*pseudocounts, MARGIN=2, nseq + pseudocounts, "/")
-            else
+            #  p = sweep(x + bg_probabilities*pseudocounts, MARGIN=2, nseq + pseudocounts, "/")
+            #else
               #p = (x + bg_probabilities %*% t(pseudocounts)) / (nseq + pseudocounts)
-              p = sweep(x + bg_probabilities %*% t(pseudocounts), MARGIN=2, nseq + pseudocounts, "/")
+              p = sweep(x + bg %*% t(pseudocounts), MARGIN=2, nseq + priorN * pseudocounts, "/")
             D = log2(nrow(x)) + colSums(p * log2(p), na.rm=TRUE)
             #ICMMatrix = t(t(p) * D)
             ICMMatrix = sweep(p, MARGIN=2, D, "*") ## This core function might be better than the operation above
             
             if(schneider){
-              correntedColSums = colSums(ICMMatrix) + schneider_correction(x, bg_probabilities)
+              correntedColSums = colSums(ICMMatrix) + schneider_correction(x, bg)
               ICMMatrix = sweep(ICMMatrix, MARGIN=2, correntedColSums/colSums(ICMMatrix), "*")
             }
             return(ICMMatrix)
@@ -177,5 +179,5 @@ setMethod("plotLogo", "ICMatrix",
 ### Utilities methods
 ###
 setMethod("total_ic", "ICMatrix",
-          function(x) sum(Matrix(x))
+          function(x) colSums(Matrix(x))
           )
