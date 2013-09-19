@@ -112,6 +112,9 @@ ICMatrix(ID="Unknown", name="Unknown", matrixClass="Unknown",
     \item{as.matrix}{
       \code{signature(x = "XMatrix")}: Returns the matrix in the XMatrix class.
     }
+    \item{total_ic}{
+      \code{signature(x = "ICMatrix")}: Returns the information content vector.
+    }
 %    \item{Matrix}{\code{signature(x = "XMatrix")}: ... }
 %    \item{Matrix<-}{\code{signature(x = "XMatrix")}: ... }
 %    \item{matrixClass}{\code{signature(x = "XMatrix")}: ... }
@@ -169,6 +172,8 @@ Ge Tan
   ## Methods
   revcom(pfm)
   length(pfm)
+  icm = toICM(pfm, pseudocounts=0.8, schneider=TRUE)
+  total_ic(icm)
 
 }
 \keyword{classes}
