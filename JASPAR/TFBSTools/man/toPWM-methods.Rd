@@ -7,8 +7,8 @@
 \alias{toPWM,PFMatrix-method}
 \title{toPWM method}
 \description{
-  Converts a raw frequency matrix (PFMatrix) to position weight matrix (PWMatrix).
-  It takes the background frequencies, pseudocounts as parameters.
+  Converts a raw frequency matrix (PFMatrix) to a position weight matrix (PWMatrix).
+  It takes the type, bases background frequencies, pseudocounts as parameters.
 }
 
 \usage{
@@ -28,7 +28,7 @@ toPWM(x, type="log2probratio", pseudocounts=0.8, bg=c(A=0.25, C=0.25, G=0.25, T=
   \item{pseudocounts}{
     pseudocounts is a numeric non-negative vector, which means you can specify different pseudocounts for each site. 
     The values will be recycled if shorter than the length of sites. 
-    See below in details.
+    0.8 is recommended. See the reference below for more details.
   }
   \item{bg}{
     bg is a vector of background frequencies of four bases with names containing A, C, G, T. When toPWM is applied to a \code{PFMatrix}, if bg is not specified, it will use the bg information contained in \code{PFMatrix}. 
