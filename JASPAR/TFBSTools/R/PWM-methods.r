@@ -2,7 +2,7 @@
 ### ------------------------------------------------------------------------
 ### The "PWM" generic and methods. This is a bit different from the implementation of Biostrings.
 setMethod("toPWM", "character",
-          function(x, pseudocounts=0.8, 
+          function(x, type="log2probratio", pseudocounts=0.8, 
                    bg=c(A=0.25, C=0.25, G=0.25, T=0.25)){
             dnaset = DNAStringSet(x)
             toPWM(dnaset, pseudocounts=pseudocounts,
@@ -10,7 +10,7 @@ setMethod("toPWM", "character",
           }
           )
 setMethod("toPWM", "DNAStringSet",
-          function(x, pseudocounts=0.8,
+          function(x, type="log2probratio", pseudocounts=0.8,
                    bg=c(A=0.25, C=0.25, G=0.25, T=0.25)){
             if(!isConstant(width(x)))
               stop("'x' must be rectangular (i.e. have a constant width)")
@@ -20,7 +20,7 @@ setMethod("toPWM", "DNAStringSet",
           }
           )
 setMethod("toPWM", "PFMatrix",
-          function(x, pseudocounts=0.8, bg=NULL){
+          function(x, type="log2probratio", pseudocounts=0.8, bg=NULL){
             if(is.null(bg))
               bg = bg(x)
             pwmMatrix = toPWM(Matrix(x), pseudocounts=pseudocounts,
@@ -36,18 +36,22 @@ setMethod("toPWM", "PFMatrix",
 ### corresponding Position *Weight* Matrix (PWM).
 setMethod("toPWM", "matrix",
     ## This is validated by the TFBS perl module version.
-          function(x, pseudocounts=0.8,
+          function(x, type="log2probratio", pseudocounts=0.8,
                    bg=c(A=0.25, C=0.25, G=0.25, T=0.25)){
             x = Biostrings:::.normargPfm(x)
             bg = Biostrings:::.normargPriorParams(bg)
+            type = match.arg(type, c("log2probratio", "prob"))
             nseq = colSums(x)
             priorN = sum(bg)
-            if(length(pseudocounts) == 1)
-              p = sweep(x + bg*pseudocounts, MARGIN=2, nseq + pseudocounts, "/")
+            pseudocounts = rep(0, ncol(x)) + pseudocounts
+            #if(length(pseudocounts) == 1)
+            #  p = sweep(x + bg*pseudocounts, MARGIN=2, nseq + pseudocounts, "/")
               #p = (x + bg_probabilities*pseudocounts) / (nseq + pseudocounts)
-            else
+            #else
               #p = (x + bg_probabilities %*% t(pseudocounts)) / (nseq + pseudocounts)
-              p = sweep(x + bg %*% t(pseudocounts), MARGIN=2, nseq + pseudocounts, "/")
+              p = sweep(x + bg %*% t(pseudocounts), MARGIN=2, nseq + priorN * pseudocounts, "/")
+            if(type == "prob")
+              return(p)
             prior.probs = bg / priorN
             #ans = log2(p / prior.probs)
             #Here ans's colSums is 1s. Need to be adapted for seq logo maybe later.
