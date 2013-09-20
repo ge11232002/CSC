@@ -6,4 +6,4 @@ import(GenomicRanges)
 
 importFrom(caTools, runmean)
 
-
+exportPattern("^[^\\.]")

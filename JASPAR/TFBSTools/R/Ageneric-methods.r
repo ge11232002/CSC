@@ -1,8 +1,3 @@
-library(Biostrings) ##consensusMatrix, matchPWM
-library(seqLogo)  ## plot SeqLogo
-library(caTools)  ## runmean
-library(RSQLite)
-library(GenomicRanges) ## Motif
 
 setGeneric("toICM", signature="x",
            function(x, pseudocounts=NULL, schneider=FALSE,
