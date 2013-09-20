@@ -121,9 +121,10 @@ setMethod("show", "Site",
                 length(object), "site", 
                 ifelse(length(object)==1, "sequence", "sequences"))
             cat("\n")
+            if(length(object) > 10000)
+              object = object[1:10000]
             gff = writeGFF3(object)
             print(gff)
-            
           }
           )
 
