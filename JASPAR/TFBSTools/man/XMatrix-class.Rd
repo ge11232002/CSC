@@ -34,7 +34,6 @@ ICMatrix is a class whose instances are objects representing information content
 }
 
 \usage{
-%  A virtual Class: No objects may be created from it.
 ## Constructors:
 PFMatrix(ID="Unknown", name="Unknown", matrixClass="Unknown", 
          strand="*", bg=c(A=0.25, C=0.25, G=0.25, T=0.25), 
