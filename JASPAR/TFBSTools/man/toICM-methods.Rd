@@ -1,6 +1,6 @@
-\name{toICM-methods}
+\name{toICM}
 \docType{methods}
-\alias{toICM-methods}
+\alias{toICM}
 \alias{toICM,character-method}
 \alias{toICM,DNAStringSet-method}
 \alias{toICM,matrix-method}

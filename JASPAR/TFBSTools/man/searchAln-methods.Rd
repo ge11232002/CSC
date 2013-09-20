@@ -1,6 +1,6 @@
-\name{searchAln-methods}
+\name{searchAln}
 \docType{methods}
-\alias{searchAln-methods}
+\alias{searchAln}
 \alias{searchAln,PWMatrix,character,character-method}
 \alias{searchAln,PWMatrix,character,missing-method}
 \alias{searchAln,PWMatrix,DNAString,DNAString-method}

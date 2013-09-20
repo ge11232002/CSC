@@ -1,7 +1,7 @@
-\name{XMatrixList-class}
+\name{XMatrixList}
 \Rdversion{1.1}
 \docType{class}
-\alias{XMatrixList-class}
+\alias{XMatrixList}
 \alias{bg,XMatrixList-method}
 \alias{ID,XMatrixList-method}
 \alias{Matrix,XMatrixList-method}

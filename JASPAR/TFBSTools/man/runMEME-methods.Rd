@@ -50,7 +50,7 @@ Bailey, T. L., Boden, M., Buske, F. A., Frith, M., Grant, C. E., Clementi, L., e
 
 \examples{
   \dontrun{
-    motif = runMEME("/Users/gtan/src/meme_4.9.1/tests/crp0.s", 
+    motifSet = runMEME("/Users/gtan/src/meme_4.9.1/tests/crp0.s", 
                     binary="/usr/local/Cellar/meme/4.9.0-p4/bin/meme", 
                     arguments="-nmotifs 3")
   }

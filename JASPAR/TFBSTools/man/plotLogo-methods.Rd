@@ -1,6 +1,6 @@
-\name{plotLogo-methods}
+\name{plotLogo}
 \docType{methods}
-\alias{plotLogo-methods}
+\alias{plotLogo}
 \alias{plotLogo,ICMatrix-method}
 \title{Plot a sequence logo for a ICMatrix object }
 \description{

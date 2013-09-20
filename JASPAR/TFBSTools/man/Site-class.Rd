@@ -1,7 +1,7 @@
-\name{Site-class}
+\name{Site}
 \Rdversion{1.1}
 \docType{class}
-\alias{Site-class}
+\alias{Site}
 \alias{[,Site-method}
 \alias{length,Site-method}
 \alias{pattern,Site-method}

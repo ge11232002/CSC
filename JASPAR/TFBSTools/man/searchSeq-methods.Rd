@@ -1,6 +1,6 @@
-\name{searchSeq-methods}
+\name{searchSeq}
 \docType{methods}
-\alias{searchSeq-methods}
+\alias{searchSeq}
 \alias{searchSeq,PWMatrix-method}
 \alias{searchSeq,PWMatrixList-method}
 \title{searchSeq method}

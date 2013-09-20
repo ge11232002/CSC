@@ -1,7 +1,7 @@
-\name{XMatrix-class}
+\name{XMatrix}
 \Rdversion{1.1}
 \docType{class}
-\alias{XMatrix-class}
+\alias{XMatrix}
 \alias{bg,XMatrix-method}
 \alias{bg<-,XMatrix-method}
 \alias{ID,XMatrix-method}

@@ -1,6 +1,6 @@
 \name{get_MatrixSet}
 \docType{methods}
-\alias{get_MatrixSet-methods}
+\alias{get_MatrixSet}
 \alias{get_MatrixSet,character-method}
 \alias{get_MatrixSet,SQLiteConnection-method}
 \title{Advanced JASPAR database search functions \code{get_MatrixSet}}
