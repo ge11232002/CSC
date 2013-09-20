@@ -70,7 +70,7 @@ Ge Tan
 }
 
 \examples{
-  ## Constructor a PFMatrix
+  ## Constructe a PFMatrix
   pfm = PFMatrix(ID="MA0004.1", name="Arnt", matrixClass="Zipper-Type", strand="+",
         bg=c(A=0.25, C=0.25, G=0.25, T=0.25), 
         tags=list(family="Helix-Loop-Helix", species="10090", tax_group="vertebrates",
