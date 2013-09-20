@@ -2,10 +2,10 @@
 \docType{methods}
 \alias{get_Matrix_by_ID}
 \alias{get_Matrix_by_name}
-\alias{get_Matrix_by_ID,character-method}
-\alias{get_Matrix_by_name,character-method}
-\alias{get_Matrix_by_ID,SQLiteConnection-method}
-\alias{get_Matrix_by_name,SQLiteConnection-method}
+%\alias{get_Matrix_by_ID,character-method}
+%\alias{get_Matrix_by_name,character-method}
+%\alias{get_Matrix_by_ID,SQLiteConnection-method}
+%\alias{get_Matrix_by_name,SQLiteConnection-method}
 
 \title{Basic JASPAR database search functionis \code{get_Matrix_by_ID}, 
   \code{get_Matrix_by_name}}

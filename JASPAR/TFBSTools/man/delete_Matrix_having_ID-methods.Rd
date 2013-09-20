@@ -3,12 +3,12 @@
 \alias{delete_Matrix_having_ID}
 \alias{store_Matrix}
 \alias{initializeJASPARDB}
-\alias{delete_Matrix_having_ID,character-method}
-\alias{store_Matrix,character-method}
-\alias{initializeJASPARDB, character-method}
-\alias{delete_Matrix_having_ID,SQLiteConnection-method}
-\alias{store_Matrix, SQLiteConnection-method}
-\alias{initializeJASPARDB, SQLiteConnection-method}
+%\alias{delete_Matrix_having_ID,character-method}
+%\alias{store_Matrix,character-method}
+%\alias{initializeJASPARDB, character-method}
+%\alias{delete_Matrix_having_ID,SQLiteConnection-method}
+%\alias{store_Matrix, SQLiteConnection-method}
+%\alias{initializeJASPARDB, SQLiteConnection-method}
 
 \title{JASPAR database operations}
 \description{
