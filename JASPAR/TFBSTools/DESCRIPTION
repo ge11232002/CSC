@@ -15,5 +15,5 @@ NeedsCompilation: no
 LazyData: TRUE
 Collate: Ageneric-methods.r Motif-class.r PairwiseAlignment-class.r Site-class.r
          SiteList-class.r SitePair-class.r SitePairList-class.r XMatrix-class.r
-         XMatrixList-class.r DB-methods.r ICM-methods.r MEME-methods.r
+         XMatrixList-class.r MEME-class.r DB-methods.r ICM-methods.r MEME-methods.r
          PWM-methods.r PairwiseAlignment-methods.r util.r
