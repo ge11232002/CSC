@@ -71,6 +71,11 @@
 
 \examples{
   \dontrun{
+    ## two character objects
+    aln1 = "ACTTCACCAGCTCCCTGGCGGTAAGTTGATC---AAAGG---AAACGCAAAGTTTTCAAG"
+    aln2 = "GTTTCACTACTTCCTTTCGGGTAAGTAAATATATAAATATATAAAAATATAATTTTCATC"
+    site = searchAln(pwm, aln1, aln2, min.score="50%", cutoff=0.5)
+    ## one PairwiseAlignmentTFBS object
     aln = PairwiseAlignmentTFBS(
             pattern="ACTTCACCAGCTCCCTGGCGGTAAGTTGATC---AAAGG---AAACGCAAAGTTTTCAAG", 
             subject="GTTTCACTACTTCCTTTCGGGTAAGTAAATATATAAATATATAAAAATATAATTTTCATC",            windowSize=13L)
