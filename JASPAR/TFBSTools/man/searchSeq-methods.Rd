@@ -1,8 +1,8 @@
 \name{searchSeq}
 \docType{methods}
 \alias{searchSeq}
-\alias{searchSeq,PWMatrix-method}
-\alias{searchSeq,PWMatrixList-method}
+%\alias{searchSeq,PWMatrix-method}
+%\alias{searchSeq,PWMatrixList-method}
 \title{searchSeq method}
 \description{
   It scans a nucleotide sequence with the pattern represented by a PWMatrix

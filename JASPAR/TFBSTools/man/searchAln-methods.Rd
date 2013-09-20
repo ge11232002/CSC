@@ -1,16 +1,16 @@
 \name{searchAln}
 \docType{methods}
 \alias{searchAln}
-\alias{searchAln,PWMatrix,character,character-method}
-\alias{searchAln,PWMatrix,character,missing-method}
-\alias{searchAln,PWMatrix,DNAString,DNAString-method}
-\alias{searchAln,PWMatrix,DNAStringSet,missing-method}
-\alias{searchAln,PWMatrix,PairwiseAlignmentTFBS,missing-method}
-\alias{searchAln,PWMatrixList,character,character-method}
-\alias{searchAln,PWMatrixList,character,missing-method}
-\alias{searchAln,PWMatrixList,DNAString,DNAString-method}
-\alias{searchAln,PWMatrixList,DNAStringSet,missing-method}
-\alias{searchAln,PWMatrixList,PairwiseAlignmentTFBS,missing-method}
+%\alias{searchAln,PWMatrix,character,character-method}
+%\alias{searchAln,PWMatrix,character,missing-method}
+%\alias{searchAln,PWMatrix,DNAString,DNAString-method}
+%\alias{searchAln,PWMatrix,DNAStringSet,missing-method}
+%\alias{searchAln,PWMatrix,PairwiseAlignmentTFBS,missing-method}
+%\alias{searchAln,PWMatrixList,character,character-method}
+%\alias{searchAln,PWMatrixList,character,missing-method}
+%\alias{searchAln,PWMatrixList,DNAString,DNAString-method}
+%\alias{searchAln,PWMatrixList,DNAStringSet,missing-method}
+%\alias{searchAln,PWMatrixList,PairwiseAlignmentTFBS,missing-method}
 \title{searchAln method}
 \description{
   Scans a pairwise alignment of nucleotide sequences 

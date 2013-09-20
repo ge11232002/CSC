@@ -1,10 +1,10 @@
 \name{toPWM}
 \docType{methods}
 \alias{toPWM}
-\alias{toPWM,character-method}
-\alias{toPWM,DNAStringSet-method}
-\alias{toPWM,matrix-method}
-\alias{toPWM,PFMatrix-method}
+%\alias{toPWM,character-method}
+%\alias{toPWM,DNAStringSet-method}
+%\alias{toPWM,matrix-method}
+%\alias{toPWM,PFMatrix-method}
 
 \title{toPWM method}
 \description{

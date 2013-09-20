@@ -5,8 +5,8 @@
 \alias{alignments,PairwiseAlignmentTFBS-method}
 \alias{alnlength,PairwiseAlignmentTFBS-method}
 \alias{conservation1,PairwiseAlignmentTFBS-method}
-\alias{searchAln,PWMatrix,PairwiseAlignmentTFBS,missing-method}
-\alias{searchAln,PWMatrixList,PairwiseAlignmentTFBS,missing-method}
+%\alias{searchAln,PWMatrix,PairwiseAlignmentTFBS,missing-method}
+%\alias{searchAln,PWMatrixList,PairwiseAlignmentTFBS,missing-method}
 \alias{seqlength,PairwiseAlignmentTFBS-method}
 \alias{seqname,PairwiseAlignmentTFBS-method}
 
