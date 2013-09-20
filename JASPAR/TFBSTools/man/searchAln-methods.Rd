@@ -79,7 +79,7 @@
     aln = PairwiseAlignmentTFBS(
             pattern="ACTTCACCAGCTCCCTGGCGGTAAGTTGATC---AAAGG---AAACGCAAAGTTTTCAAG", 
             subject="GTTTCACTACTTCCTTTCGGGTAAGTAAATATATAAATATATAAAAATATAATTTTCATC",            windowSize=13L)
-    site = searchAln(pwm, aln, min.score="50%", cutoff=0.5)
+    sitePair = searchAln(pwm, aln, min.score="50%", cutoff=0.5)
   }
 }
 
