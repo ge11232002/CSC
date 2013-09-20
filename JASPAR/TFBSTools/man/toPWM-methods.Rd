@@ -1,10 +1,11 @@
-\name{toPWM-methods}
+\name{toPWM}
 \docType{methods}
-\alias{toPWM-methods}
+\alias{toPWM}
 \alias{toPWM,character-method}
 \alias{toPWM,DNAStringSet-method}
 \alias{toPWM,matrix-method}
 \alias{toPWM,PFMatrix-method}
+
 \title{toPWM method}
 \description{
   Converts a raw frequency matrix (PFMatrix) to a position weight matrix (PWMatrix).
