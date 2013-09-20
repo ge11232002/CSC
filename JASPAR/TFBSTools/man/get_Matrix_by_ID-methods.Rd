@@ -22,7 +22,7 @@
 
 \arguments{
   \item{x}{
-    a character vector of length 1 or a \code{SQLiteConnection} object.
+    a character vector of length 1 for the path of JASPAR SQLite file, or a \code{SQLiteConnection} object.
   }
   \item{ID}{
     a character vector of length 1 for the JASPAR stable ID. 
@@ -63,6 +63,10 @@
 
 \author{
   Ge Tan
+}
+
+\seealso{
+  \code{\link{get_MatrixSet}}
 }
 
 \examples{
