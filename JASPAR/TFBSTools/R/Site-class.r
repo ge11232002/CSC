@@ -34,7 +34,7 @@ setMethod("length", "Site", function(x) length(views(x)))
 ### -------------------------------------------------------------------
 ### The constructor
 ###
-newSite = function(views, score, strand="*",
+Site = function(views, score, strand="*",
                 seqname="Unknown",
                 sitesource="TFBS", primary="TF binding site",
                 pattern){

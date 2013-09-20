@@ -6,7 +6,7 @@ library(GenomicRanges) ## Motif
 
 setGeneric("toICM", signature="x",
            function(x, pseudocounts=NULL, schneider=FALSE,
-                    bg_probabilities=c(A=0.25, C=0.25, G=0.25, T=0.25))
+                    bg=c(A=0.25, C=0.25, G=0.25, T=0.25))
              standardGeneric("toICM")
            )
 
