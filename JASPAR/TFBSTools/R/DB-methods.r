@@ -4,18 +4,32 @@
   ## DB used criteria
   if(!"all" %in% names(opts))
     opts[["all"]] = FALSE
+  else
+    stopifnot(is.logical(opts[["all"]]))
+
   if(!"ID" %in% names(opts))
     opts[["ID"]] = NULL
   if(!"name" %in% names(opts))
     opt[["name"]] = NULL
+  
   if(!"collection" %in% names(opts))
     opts[["collection"]] = "CORE"
+  else
+    opts[["collection"]] = match.arg(opts[["collection"]], c("CORE", "CNE", "PHYLOFACTS", "SPLICE", "POLII", "FAM", "PBM", "PBM_HOMEO", "PBM_HLH"))
+
   if(!"all_versions" %in% names(opts))
     opts[["all_versions"]] = FALSE
+  else
+    stopifnot(is.logical(opts[["all_versions"]]))
+
   if(!"species" %in% names(opts))
     opts[["species"]] = NULL
+  
   if(!"matrixtype" %in% names(opts))
     opts[["matrixtype"]] = "PFM"
+  else
+    opts[["matrixtype"]] = match.arg(opts[["matrixtype"]], c("PFM", "PWM", "ICM"))
+
   ## DB used TAGs
   if(!"class" %in% names(opts))
     opts[["class"]] = NULL
@@ -217,13 +231,13 @@ setMethod("get_Matrix_by_ID", "SQLiteConnection",
             baseID = strsplit(ID, "\\.")[[1]][1]
             version = strsplit(ID, "\\.")[[1]][2]
             if(is.na(version))
-              version = as.character(.get_latest_version(con, baseID))
+              version = as.character(.get_latest_version(x, baseID))
             if(length(version) == 0) # no match
               return(NA)
             # get internal ID - also a check for validity
-            int_id = as.character(.get_internal_id(con, baseID, version))
+            int_id = as.character(.get_internal_id(x, baseID, version))
             # get matrix using internal ID
-            ans = .get_Matrix_by_int_id(con, int_id, type)
+            ans = .get_Matrix_by_int_id(x, int_id, type)
             return(ans)
           }
           )
@@ -242,22 +256,28 @@ setMethod("get_Matrix_by_ID", "character",
 ### get_Matrix_by_name fetches matrix data under the given name from the database and returns a XMatrix object.
 # Returns : a XMatrix object; the exact type of the object depending on the second argument (allowed values are 'PFM', 'ICM', and 'PWM'); returns NA if matrix with the given name is not found.
 # Notes: According to the current JASPAR5 data model, name is not necessarily a unique identifier. Also, names change over time. In the case where there are several matrices with the same name in the database, the function fetches the first one and prints a warning on STDERR. You've been warned. Some matrices have multiple versions. The function will return the latest version. For specific versions, use get_Matrix_by_ID($ID.$version)
-setMethod("get_Matrix_by_name", "character",
+setMethod("get_Matrix_by_name", "SQLiteConnection",
           function(x, name, type="PFM"){
             # here x is the path of SQLite db file
             type = match.arg(type, c("PWM", "PFM", "ICM"))
             if(missing(name))
               stop("name needs to be specified!")
-            con = dbConnect(SQLite(), x)
-            on.exit(dbDisconnect(con))
             sqlCMD = paste0("SELECT distinct BASE_ID  FROM MATRIX WHERE NAME='", name, "'")
-            tempTable = dbGetQuery(con, sqlCMD)
+            tempTable = dbGetQuery(x, sqlCMD)
             baseID = tempTable[["BASE_ID"]]
             if(length(baseID) == 0)
               return(NA)
             if(length(baseID) > 1)
               warning("There are ", length(baseID), " distinct stable IDs with name ", name, ": ", baseID)
             get_Matrix_by_ID(x, baseID[1], type=type)
+          }
+          )
+
+setMethod("get_Matrix_by_name", "character",
+          function(x, name, type="PFM"){
+            con = dbConnect(SQLite(), x)
+            on.exit(dbDisconnect(con))
+            get_Matrix_by_name(con, name, type=type)
           }
           )
 
@@ -289,17 +309,17 @@ setMethod("get_Matrix_by_name", "character",
 setMethod("get_MatrixSet", "SQLiteConnection",
          function(x, opts){
            opts = .fillDBOptsWithDefaults(opts)
-           IDlist = .get_IDlist_by_query(con, opts)
+           IDlist = .get_IDlist_by_query(x, opts)
            matrixSet = switch(opts[["matrixtype"]],
                               "PFM"=PFMatrixList(),
                               "PWM"=PWMatrixList(),
                               "ICM"=ICMatrixList()
                               )
            for(id in IDlist){
-             xmatrix = .get_Matrix_by_int_id(con, id, type="PFM")
+             xmatrix = .get_Matrix_by_int_id(x, id, type="PFM")
              if(!is.null(opts[["min_ic"]])){
                # we assume the matrix IS a PFM, o something in normal space at least
-               if(total_ic(toICM(xmatrix)) < opts[["min_ic"]])
+               if(sum(total_ic(toICM(xmatrix))) < opts[["min_ic"]])
                  next
              }
              if(!is.null(opts[["length"]])){
@@ -328,7 +348,7 @@ setMethod("get_MatrixSet", "character",
             opts = .fillDBOptsWithDefaults(opts)
             con = dbConnect(SQLite(), x)
             on.exit(dbDisconnect(con))
-            get_MatrixSet(x, opts)
+            get_MatrixSet(con, opts)
           }
           )
 
