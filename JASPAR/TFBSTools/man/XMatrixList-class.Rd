@@ -27,6 +27,7 @@ ICMatrixList(..., use.names=TRUE)
 ## Accessor-like methods:
 \S4method{ID}{XMatrixList}(x)
 \S4method{name}{XMatrixList}(x)
+
 }
 
 \arguments{
