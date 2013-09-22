@@ -1,0 +1,7 @@
+
+import(Biostrings)
+import(RSQLite)
+import(GenomicRanges)
+
+exportPattern("^[^\\.]")
+
