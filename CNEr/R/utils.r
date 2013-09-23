@@ -24,7 +24,7 @@ seqToAlignment = function(DNAStringSet){
 }
 
 ### rever the cigar string. i.e. 20M15I10D will be reversed to 10D15I20M.
-reverseCigar = function(cigar){
+reverseCigar = function(cigar, ops=CIGAR_OPS){
   #cigar = sapply(splitCigar(cigar), function(x){
   #               paste0(rev(x[[2]]), rev(rawToChar(x[[1]], multiple=TRUE)), 
   #                      collapse="")
@@ -32,8 +32,8 @@ reverseCigar = function(cigar){
   # splitCigar is deprecated...Before I am in the Bioconductor..
   # some new cigar utilities functions.
   #)
-  cigarOps = rev(explodeCigarOps(cigar, ops=CIGAR_OPS))
-  cigarOpsLengths = rev(explodeCigarOpLengths(cigar, ops=CIGAR_OPS))
+  cigarOps = rev(explodeCigarOps(cigar, ops=ops))
+  cigarOpsLengths = rev(explodeCigarOpLengths(cigar, ops=ops))
   cigar = mapply(paste0, cigarOpsLengths, cigarOps, collapse="")
   return(cigar)
 }
