@@ -45,9 +45,9 @@ my.system = function(cmd, echo=TRUE, intern=FALSE, ...){
   return(res)
 }
 
-isSingleString = function(x){
-  is.character(x) && length(x) == 1L && !is.na(x)
-}
+#isSingleString = function(x){
+#  is.character(x) && length(x) == 1L && !is.na(x)
+#}
 
 binFromCoordRange = function(starts, ends){
   #dyn.load("~/Repos/CSC/CNEr/src/CNEr.so")
