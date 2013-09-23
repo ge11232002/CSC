@@ -1,7 +1,3 @@
-library(Biostrings)
-library(GenomicRanges)
-library(rtracklayer)
-
 setClass(Class="axt",
          representation(targetRanges="GRanges",
                         targetSeqs="DNAStringSet",
@@ -219,9 +215,10 @@ showAxt = function(x, margin="", half_nrow=5L){
     qStartW = max(nchar(as.character(start(queryRanges(x)[c(1:head_nrow, (lx-tail_nrow+1L):lx)]))))
     qEndW = max(nchar(as.character(end(queryRanges(x)[c(1:head_nrow, (lx-tail_nrow+1L):lx)]))))
     scoreW = max(nchar(as.character(score(x)[c(1:head_nrow, (lx-tail_nrow+1L):lx)])))
-    if(head_nrow > 0)
+    if(head_nrow > 0){
       for(i in 1:head_nrow)
         .axt.show_frame_line(x, i, iW, tNameW, tStartW, tEndW, qNameW, qStartW, qEndW, scoreW)
+    }
     cat(format("...", width=iW, justify="right"),
         format("...", width=tNameW, justify="right"),
         format("...", width=tStartW, justify="right"),
@@ -232,9 +229,10 @@ showAxt = function(x, margin="", half_nrow=5L){
         format("...", width=scoreW, justify="right")
         )
     cat("\n")
-    if(tail_nrow > 0)
+    if(tail_nrow > 0){
       for(i in (lx-tail_nrow+1L):lx)
         .axt.show_frame_line(x, i, iW, tNameW, tStartW, tEndW, qNameW, qStartW, qEndW, scoreW)
+    }
   }
 }
     #out = makePrettyMatrixForCompactPrintingAxt(x, .makeNakedMatFromAxt)
