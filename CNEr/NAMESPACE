@@ -1,4 +1,5 @@
 useDynLib(CNEr, .registration=TRUE)
+import(BiocGenerics)
 import(Biostrings)
 import(RSQLite)
 import(GenomicRanges)
