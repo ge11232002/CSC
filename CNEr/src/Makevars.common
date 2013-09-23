@@ -1,5 +1,5 @@
 PKG_OBJECTS = \
-  IRanges_stubs.o utils.o io.o ceScanBranch3.o
+  IRanges_stubs.o XVector_stubs.o utils.o io.o ceScanBranch3.o
 
 UCSC_OBJECTS = \
   axt.o base64.o binRange.o bits.o chain.o cheapcgi.o cirTree.o common.o \

@@ -11,6 +11,8 @@
 #include <string.h>
 #include "IRanges_interface.h"
 #include "ucsc/binRange.h"
+#include "XVector_interface.h"
+
 
 /* Data structures to represent start and end coordinate pairs.
  *  * Used to store filters in memory. */
