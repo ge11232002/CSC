@@ -1,15 +1,16 @@
 #include "R.h"
 #include  <ctype.h>  //for the tolower()
-#include "common.h"
-#include "linefile.h"
-#include "hash.h"
-#include "obscure.h"
-#include "options.h"
-#include "axt.h"
+#include "ucsc/common.h"
+#include "ucsc/linefile.h"
+#include "ucsc/hash.h"
+#include "ucsc/obscure.h"
+#include "ucsc/options.h"
+#include "ucsc/axt.h"
 #include "Rdefines.h"
+#include "Rinternals.h"
 #include <string.h>
 #include "IRanges_interface.h"
-#include "binRange.h"
+#include "ucsc/binRange.h"
 
 /* Data structures to represent start and end coordinate pairs.
  *  * Used to store filters in memory. */
