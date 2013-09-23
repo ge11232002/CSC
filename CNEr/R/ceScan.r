@@ -4,7 +4,7 @@
 # qFilter = bedZebrafish
 ceScan = function(axts, tFilter=NULL, qFilter=NULL, qSizes=NULL, thresholds=c("49,50")){
   ## Here the returned tStart and qStart are 1-based coordinates. Of course ends are also 1-based.
-  dyn.load("~/Repos/CSC/CNEr/src/CNEr.so")
+  #dyn.load("~/Repos/CSC/CNEr/src/CNEr.so")
   if(!is.null(qFilter))
     if(is.null(qSizes) || !is(qSizes, "Seqinfo"))
       stop("qSizes must exist and be a Seqinfo object when qFilter exists")
@@ -12,13 +12,13 @@ ceScan = function(axts, tFilter=NULL, qFilter=NULL, qSizes=NULL, thresholds=c("4
   winSize = as.integer(sapply(strsplit(thresholds, ","), "[", 2))
   minScore = as.integer(sapply(strsplit(thresholds, ","), "[", 1))
   resFiles = tempfile(pattern = paste(minScore, winSize, "ceScan", sep="-"), tmpdir = tempdir(), fileext = "")
-  .Call("myCeScan", as.vector(seqnames(tFilter)), start(tFilter), end(tFilter),
+  .Call2("myCeScan", as.vector(seqnames(tFilter)), start(tFilter), end(tFilter),
               as.vector(seqnames(qFilter)), start(qFilter), end(qFilter),
               as.vector(seqnames(qSizes)), as.vector(seqlengths(qSizes)), 
               as.vector(seqnames(targetRanges(axts))), start(targetRanges(axts)), end(targetRanges(axts)), as.vector(strand(targetRanges(axts))), as.vector(targetSeqs(axts)),
               as.vector(seqnames(queryRanges(axts))), start(queryRanges(axts)), end(queryRanges(axts)), as.vector(strand(queryRanges(axts))), as.vector(querySeqs(axts)),
-              score(axts), symCount(axts), winSize, minScore, as.vector(resFiles)
-              )
+              score(axts), symCount(axts), winSize, minScore, as.vector(resFiles),
+              PACKAGE="CNEr")
   CNE = lapply(resFiles, 
                function(x){res=read.table(x, header=FALSE, sep="\t", as.is=TRUE)
                colnames(res)=c("tName", "tStart", "tEnd", "qName", "qStart", "qEnd", "strand", "score", "cigar")
@@ -31,17 +31,17 @@ ceScan = function(axts, tFilter=NULL, qFilter=NULL, qSizes=NULL, thresholds=c("4
 ceScanFile = function(axtFiles, tFilterFile=NULL, qFilterFile=NULL, qSizes=NULL,
                       thresholds=c("49,50")){
   ## Here the returned tStart and qStart are 1-based coordinates. Of course ends are also 1-based.
-  dyn.load("~/Repos/CSC/CNEr/src/CNEr.so")
+  #dyn.load("~/Repos/CSC/CNEr/src/CNEr.so")
   if(!is.null(qFilterFile))
     if(is.null(qSizes) || !is(qSizes, "Seqinfo"))
       stop("qSizes must exist and be a Seqinfo object when qFilter exists")
   winSize = as.integer(sapply(strsplit(thresholds, ","), "[", 2))
   minScore = as.integer(sapply(strsplit(thresholds, ","), "[", 1))
   resFiles = tempfile(pattern = paste(minScore, winSize, "ceScan", sep="-"), tmpdir = tempdir(), fileext = "")
-  .Call("ceScanFile", axtFiles, tFilterFile, qFilterFile, 
+  .Call2("ceScanFile", axtFiles, tFilterFile, qFilterFile, 
         as.vector(seqnames(qSizes)), as.vector(seqlengths(qSizes)),
         winSize, minScore,
-        resFiles)
+        resFiles, PACKAGE="CNEr")
   CNE = lapply(resFiles,
                function(x){res=read.table(x, header=FALSE, sep="\t", as.is=TRUE)
                colnames(res)=c("tName", "tStart", "tEnd", "qName", "qStart", "qEnd", "strand", "score", "cigar")

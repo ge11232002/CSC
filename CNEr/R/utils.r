@@ -50,14 +50,14 @@ isSingleString = function(x){
 }
 
 binFromCoordRange = function(starts, ends){
-  dyn.load("~/Repos/CSC/CNEr/src/CNEr.so")
-  bins = .Call("bin_from_coord_range", as.integer(starts), as.integer(ends))
+  #dyn.load("~/Repos/CSC/CNEr/src/CNEr.so")
+  bins = .Call2("bin_from_coord_range", as.integer(starts), as.integer(ends), PACKAGE="CNEr")
   return(bins)
 }
 
 binRangesFromCoordRange = function(start, end){
-  dyn.load("~/Repos/CSC/CNEr/src/CNEr.so")
-  binRanges = .Call("bin_ranges_from_coord_range", as.integer(start), as.integer(end))
+  #dyn.load("~/Repos/CSC/CNEr/src/CNEr.so")
+  binRanges = .Call2("bin_ranges_from_coord_range", as.integer(start), as.integer(end), PACKAGE="CNEr")
   return(binRanges)
 }
 

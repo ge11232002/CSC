@@ -21,8 +21,8 @@ readBedToGRanges = function(bedFile=NULL){
   if(!file.exists(bedFile)){
     stop("No such file ", bedFile) 
   }
-  dyn.load("~/Repos/CSC/CNEr/src/CNEr.so")
-  bed = .Call("myReadBed", bedFile)
+  #dyn.load("~/Repos/CSC/CNEr/src/CNEr.so")
+  bed = .Call2("myReadBed", bedFile, PACKAGE="CNEr")
   bed = GRanges(seqnames=Rle(bed[[1]]),
                 ranges=IRanges(start=bed[[2]], end=bed[[3]]),
                 strand=factor("+"))
@@ -43,8 +43,8 @@ readAxt = function(axtFiles){
   }
   require(GenomicRanges)
   require(Biostrings)
-  dyn.load("~/Repos/CSC/CNEr/src/CNEr.so")
-  myAxt = .Call("readAxt", axtFiles)
+  #dyn.load("~/Repos/CSC/CNEr/src/CNEr.so")
+  myAxt = .Call2("readAxt", axtFiles, PACKAGE="CNEr")
   #myAxtInfo = .Call("axt_info", axtFiles)
   axts = axt(targetRanges=GRanges(seqnames=Rle(myAxt[[1]]),
                                  ranges=IRanges(start=myAxt[[2]],
@@ -63,8 +63,8 @@ readAxt = function(axtFiles){
 }
 
 axt.info = function(axtFiles){
-  dyn.load("~/Repos/CSC/CNEr/src/CNEr.so")
-  ans = .Call2("axt_info", axtFiles)
+  #dyn.load("~/Repos/CSC/CNEr/src/CNEr.so")
+  ans = .Call2("axt_info", axtFiles, PACKAGE="CNEr")
   return(ans)
 }
 
