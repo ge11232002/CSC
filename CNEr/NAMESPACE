@@ -4,5 +4,33 @@ import(Biostrings)
 import(RSQLite)
 import(GenomicRanges)
 
-exportPattern("^[^\\.]")
+##exportPattern("^[^\\.]")
 
+### -----------------------------------------------------------------
+### Export S4 classes defined in CNEr
+###
+exportClasses(axt)
+
+### -----------------------------------------------------------------
+### Export S4 methods for generics not defined in CNEr
+###
+exportMethods(
+  "[", 
+  c
+)
+
+### -----------------------------------------------------------------
+### Export non-generic functions
+###
+
+export(
+  reverseCigar
+)
+
+### -----------------------------------------------------------------
+### Export S4 generics defined in CNEr + export corresponding methods
+###
+
+export(
+
+)
