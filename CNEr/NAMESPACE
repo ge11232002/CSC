@@ -32,6 +32,7 @@ export(
   binFromCoordRange,
   binRangesFromCoordRange,
   binRestrictionString,
+  readCNERangesFromSQLite,
 
   ## class.r
   axt,
@@ -45,7 +46,10 @@ export(
   ## makeGeneDbFromUCSC.r
   supportedUCSCtables,
   queryrefGene, queryknownGene, queryensGene,
-  makeGeneDbFromUCSC
+  makeGeneDbFromUCSC,
+
+  ## plot.r
+  CNEAnnotate
 )
 
 ### -----------------------------------------------------------------
