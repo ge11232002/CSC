@@ -54,18 +54,34 @@ my.system = function(cmd, echo=TRUE, intern=FALSE, ...){
 #  is.character(x) && length(x) == 1L && !is.na(x)
 #}
 
+## Return the bin number that should be assigned to a feature spanning the given range. * USE THIS WHEN CREATING A DB *
+## EXPORTED!
 binFromCoordRange = function(starts, ends){
   #dyn.load("~/Repos/CSC/CNEr/src/CNEr.so")
+  if(any(ends <= 0 | starts <= 0)){
+    stop("starts and ends must be positive integers!")
+  }
+  if(any(ends >= 2^30 | starts >= 2^30)){
+    stop("starts and ends out of range (max is 2Gb)")
+  }
+  if(any(starts > ends)){
+    stop("starts must be equal or smaller than ends!")
+  }
   bins = .Call2("bin_from_coord_range", as.integer(starts), as.integer(ends), PACKAGE="CNEr")
   return(bins)
 }
 
+## Return the set of bin ranges that overlap a given coordinate range. It is usually more convenient to use bin_restriction string than to use this method directly.
+## EXPORTED!
 binRangesFromCoordRange = function(start, end){
   #dyn.load("~/Repos/CSC/CNEr/src/CNEr.so")
+  stopifnot(length(start)==1 && length(end)==1)
   binRanges = .Call2("bin_ranges_from_coord_range", as.integer(start), as.integer(end), PACKAGE="CNEr")
   return(binRanges)
 }
 
+## Given a coordinate range, return a string to be used in the WHERE section of a SQL SELECT statement that is to select features overlapping a certain range. * USE THIS WHEN QUERYING A DB *
+## EXPORTED!
 binRestrictionString = function(start, end, field="bin"){
   binRanges = binRangesFromCoordRange(start, end)
   cmdString = mapply(function(x,y, field){
