@@ -2,7 +2,7 @@ useDynLib(CNEr, .registration=TRUE)
 import(BiocGenerics)
 import(Biostrings)
 import(RSQLite)
-import(RMySQL)
+#import(RMySQL)
 import(GenomicRanges)
 
 ##exportPattern("^[^\\.]")
@@ -34,6 +34,7 @@ export(
   binRangesFromCoordRange,
   binRestrictionString,
   readCNERangesFromSQLite,
+  queryAnnotationSQLite,
 
   ## class.r
   axt,
