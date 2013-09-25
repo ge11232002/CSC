@@ -35,6 +35,17 @@ export(
 
   ## class.r
   axt
+
+  ## ceScan.r
+  ceScan, ceScanFile
+  ceMerge,
+  blatCNE,
+  detectCNEs
+
+  ## makeGeneDbFromUCSC.r
+  supportedUCSCtables,
+  queryrefGene, queryknownGene, queryensGene,
+  makeGeneDbFromUCSC
 )
 
 ### -----------------------------------------------------------------
