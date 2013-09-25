@@ -24,7 +24,11 @@ exportMethods(
 ###
 
 export(
-  reverseCigar
+  ## utils.r
+  reverseCigar,
+  binFromCoordRange,
+  binRangesFromCoordRange,
+  binRestrictionString
 )
 
 ### -----------------------------------------------------------------
@@ -32,5 +36,6 @@ export(
 ###
 
 export(
-
+  ## io.r
+  readAxt
 )
