@@ -1,14 +1,21 @@
 setClass(Class="axt",
-         representation(targetRanges="GRanges",
-                        targetSeqs="DNAStringSet",
-                        queryRanges="GRanges",
-                        querySeqs="DNAStringSet",
-                        score="integer",
-                        symCount="integer"
-                        )
+         slots=c(targetRanges="GRanges",
+                 targetSeqs="DNAStringSet",
+                 queryRanges="GRanges",
+                 querySeqs="DNAStringSet",
+                 score="integer",
+                 symCount="integer"
+                 )
          )
 
-
+setValidity("axt",
+            function(object){
+              length(unique(length(object@targetRanges), length(object@targetSeqs),
+              length(object@queryRanges), length(object@querySeqs),
+              length(score), length(symCount))) == 1 && all(score >= 0) && 
+              all(symCount) >= 0
+            }
+            )
 
 ### - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 ### Slot getters and setters.
