@@ -31,16 +31,16 @@ export(
   reverseCigar,
   binFromCoordRange,
   binRangesFromCoordRange,
-  binRestrictionString
+  binRestrictionString,
 
   ## class.r
-  axt
+  axt,
 
   ## ceScan.r
-  ceScan, ceScanFile
+  ceScan, ceScanFile,
   ceMerge,
   blatCNE,
-  detectCNEs
+  detectCNEs,
 
   ## makeGeneDbFromUCSC.r
   supportedUCSCtables,
@@ -54,10 +54,10 @@ export(
 
 export(
   ## class.r
-  targetRanges, queryRanges
-  targetSeqs, querySeqs
-  symCount
-  subAxt
+  targetRanges, queryRanges,
+  targetSeqs, querySeqs,
+  symCount,
+  subAxt,
 
   ## io.r
   readAxt,
