@@ -1,7 +1,5 @@
 
 
-# tFilter = bedHuman
-# qFilter = bedZebrafish
 ceScan = function(axts, tFilter=NULL, qFilter=NULL, qSizes=NULL, thresholds=c("49,50")){
   ## Here the returned tStart and qStart are 1-based coordinates. Of course ends are also 1-based.
   #dyn.load("~/Repos/CSC/CNEr/src/CNEr.so")
