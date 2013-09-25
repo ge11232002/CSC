@@ -54,10 +54,7 @@ my.system = function(cmd, echo=TRUE, intern=FALSE, ...){
 #  is.character(x) && length(x) == 1L && !is.na(x)
 #}
 
-## Return the bin number that should be assigned to a feature spanning the given range. * USE THIS WHEN CREATING A DB *
-## EXPORTED!
-binFromCoordRange = function(starts, ends){
-  #dyn.load("~/Repos/CSC/CNEr/src/CNEr.so")
+.validateBinRanges = function(starts, ends){
   if(any(ends <= 0 | starts <= 0)){
     stop("starts and ends must be positive integers!")
   }
@@ -67,6 +64,13 @@ binFromCoordRange = function(starts, ends){
   if(any(starts > ends)){
     stop("starts must be equal or smaller than ends!")
   }
+  return(TRUE) 
+}
+## Return the bin number that should be assigned to a feature spanning the given range. * USE THIS WHEN CREATING A DB *
+## EXPORTED!
+binFromCoordRange = function(starts, ends){
+  #dyn.load("~/Repos/CSC/CNEr/src/CNEr.so")
+  .validateBinRanges(starts, ends)
   bins = .Call2("bin_from_coord_range", as.integer(starts), as.integer(ends), PACKAGE="CNEr")
   return(bins)
 }
@@ -76,6 +80,7 @@ binFromCoordRange = function(starts, ends){
 binRangesFromCoordRange = function(start, end){
   #dyn.load("~/Repos/CSC/CNEr/src/CNEr.so")
   stopifnot(length(start)==1 && length(end)==1)
+  .validateBinRanges(start, end)
   binRanges = .Call2("bin_ranges_from_coord_range", as.integer(start), as.integer(end), PACKAGE="CNEr")
   return(binRanges)
 }
