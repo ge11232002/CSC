@@ -12,8 +12,8 @@ setValidity("axt",
             function(object){
               length(unique(length(object@targetRanges), length(object@targetSeqs),
               length(object@queryRanges), length(object@querySeqs),
-              length(score), length(symCount))) == 1 && all(score >= 0) && 
-              all(symCount) >= 0
+              length(object@score), length(object@symCount))) == 1 && all(object@score >= 0) && 
+              all(object@symCount >= 0)
             }
             )
 
