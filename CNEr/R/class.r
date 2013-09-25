@@ -12,7 +12,7 @@ setValidity("axt",
             function(object){
               length(unique(length(object@targetRanges), length(object@targetSeqs),
               length(object@queryRanges), length(object@querySeqs),
-              length(object@score), length(object@symCount))) == 1 && all(object@score >= 0) && 
+              length(object@score), length(object@symCount))) == 1 && 
               all(object@symCount >= 0)
             }
             )
