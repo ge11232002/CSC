@@ -7,14 +7,10 @@ readBed = function(bedFile){
   strand(bed) = "+"
   bed = reduce(bed)
 }
-# system.time(foo<-readBed(bedFile))
-#    user  system elapsed
-#    51.890   0.757  52.659
 
 #############################C version######################################
 readBedToGRanges = function(bedFile=NULL){
 ## This GRanges have the different coordinates system with the original bed file. i.e. with 1-based start end coordinates.
-  require(GenomicRanges)
   if(is.null(bedFile)){
     return(NULL)
   }
@@ -28,11 +24,6 @@ readBedToGRanges = function(bedFile=NULL){
                 strand=factor("+"))
   return(bed)
 }
-# bedHuman = readBedToGRanges("/export/data/CNEs/hg19/filters/filter_regions.hg19.bed")
-# bedZebrafish = readBedToGRanges("/export/data/CNEs/danRer7/filters/filter_regions.danRer7.bed")
-# system.time(foo<-readBedToGRanges(bedFile))
-#    user  system elapsed
-#    2.272   0.133   2.414
 
 readAxt = function(axtFiles){
   # Read axt files into R axt object.
@@ -62,7 +53,7 @@ readAxt = function(axtFiles){
   return(axts)
 }
 
-axt.info = function(axtFiles){
+axtInfo = function(axtFiles){
   #dyn.load("~/Repos/CSC/CNEr/src/CNEr.so")
   ans = .Call2("axt_info", axtFiles, PACKAGE="CNEr")
   return(ans)
