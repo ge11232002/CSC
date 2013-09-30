@@ -1,4 +1,4 @@
-useDynLib(CNEr, .registration=TRUE)
+useDynLib(CNEr)
 import(BiocGenerics)
 import(Biostrings)
 import(RSQLite)
