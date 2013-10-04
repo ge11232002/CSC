@@ -1,5 +1,5 @@
 import(methods)
-importFrom(Biostrings, DNAStringSet)
+import(Biostrings)
 
 exportClasses(
   JASPAR2014
