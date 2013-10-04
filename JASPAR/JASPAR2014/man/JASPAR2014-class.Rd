@@ -15,25 +15,17 @@
   }
 }
 
-\references{
-%%  ~~put references to the literature/web site here~~
-}
 \author{
   Ge Tan
 }
-\note{
-%%  ~~further notes~~
-}
-
-%% ~Make other sections like Warning with \section{Warning }{....} ~
 
 \seealso{
-  \link{JASPAR2014SiteSeqs},
-%%  ~~objects to See Also as \code{\link{~~fun~~}}, ~~~
-%%  ~~or \code{\linkS4class{CLASSNAME}} for links to other classes ~~~
+  \link{JASPAR2014SitesSeqs},
 }
 \examples{
-  library(JASPAR2014)
-  JASPAR2014
+  \dontrun{
+    library(JASPAR2014)
+    JASPAR2014
+  }
 }
 \keyword{classes}
