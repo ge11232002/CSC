@@ -1,7 +1,7 @@
 
 
 setClass("JASPAR2014",
-         slots=(
+         slots=c(
                 db="character"
                 )
          )
