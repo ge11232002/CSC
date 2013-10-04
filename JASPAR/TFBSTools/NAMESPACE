@@ -1,6 +1,6 @@
-
+import(methods)
 import(RSQLite)
-
+import(IRanges)
 ### -----------------------------------------------------------------
 ### Export S4 classes defined in TFBSTools
 ###
