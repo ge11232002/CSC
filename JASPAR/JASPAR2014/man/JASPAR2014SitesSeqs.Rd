@@ -5,8 +5,8 @@
   Sites sequences
 }
 \description{
-  A list of DNAStringSet storing transcription factor binding sites sequences from
-  JASPAR 2014 release.
+  A list of DNAStringSet storing transcription factor binding sites sequences 
+  from JASPAR 2014 release with JASPAR IDs as names
 }
 \details{
 %%  ~~ If necessary, more details than the __description__ above ~~
