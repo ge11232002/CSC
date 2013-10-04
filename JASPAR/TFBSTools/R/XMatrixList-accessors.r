@@ -10,5 +10,5 @@ setMethod("bg", "XMatrixList", function(x) lapply(x, bg))
 setMethod("matrixType", "XMatrixList", function(x) sapply(x, matrixType))
 setMethod("pseudocounts", "PWMatrixList", function(x) sapply(x, pseudocounts))
 setMethod("schneider", "ICMatrixList", function(x) sapply(x, schneider))
-
+setMethod("tags", "XMatrixList", function(x) lapply(x, tags))
 

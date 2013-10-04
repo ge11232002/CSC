@@ -2,24 +2,16 @@
 ### Getters
 ###
 setMethod("ID", "XMatrix", function(x) x@ID)
-
 setMethod("name", "XMatrix", function(x) x@name)
-
 setMethod("matrixClass", "XMatrix", function(x) x@matrixClass)
-
 setMethod("Matrix", "XMatrix", function(x) x@matrix)
-
 setMethod("strand", "XMatrix", function(x) x@strand)
-
 setMethod("bg", "XMatrix", function(x) x@bg)
 setMethod("tags", "XMatrix", function(x) x@tags)
-
 setMethod("matrixType", "PFMatrix", function(x) "PFM")
 setMethod("matrixType", "ICMatrix", function(x) "ICM")
 setMethod("matrixType", "PWMatrix", function(x) "PWM")
-
 setMethod("pseudocounts", "PWMatrix", function(x) x@pseudocounts)
-
 setMethod("schneider", "ICMatrix", function(x) x@schneider)
 
 ### -----------------------------------------------------------------
