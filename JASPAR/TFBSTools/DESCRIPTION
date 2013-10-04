@@ -1,0 +1,15 @@
+Package: TFBSTools
+Version: 0.99.0
+Date: 2013-10-04
+Title: Software package for TFBS
+Description: Software package for TFBS.
+Author: Ge Tan <ge.tan09@imperial.ac.uk> 
+Maintainer: Ge Tan <ge.tan09@imperial.ac.uk>
+Depends: R (>= 3.0.1), RSQLite(>= 0.11.4) 
+License: GPL-2
+URL: http://jaspardev.genereg.net/
+Type: Package
+biocViews: 
+NeedsCompilation: no
+LazyData: yes 
+Collate: AllGenerics.r AllClasses.r
