@@ -1,27 +1,24 @@
-\name{JASPAR2014}
-\alias{JASPAR2014}
+\name{JASPAR2014SitesSeqs}
+\alias{JASPAR2014SitesSeqs}
 \docType{data}
 \title{
-  The path of sqlite file which contains information for JASPAR 2014
+  Sites sequences
 }
 \description{
-%%  The JASPARDb object for JASPAR 2014
+  A list of DNAStringSet storing transcription factor binding sites sequences from
+  JASPAR 2014 release.
 }
 \details{
 %%  ~~ If necessary, more details than the __description__ above ~~
-%%  This JASAPRDb obejct contains information about the JASPAR 2014 database, such as provider, provider_version,
-%%  release_date, path of sqlite file etc.
 }
 \source{
-%%  ~~ reference to a publication or URL from which the data were obtained ~~
+  \url{http://jaspar.binf.ku.dk/html/DOWNLOAD/sites/}
 }
 \references{
-%%  ~~ possibly secondary sources and usages ~~
+
 }
 \examples{
-## load the library
-library(JASPAR2014)
-## show the db object that is loaded by calling its name
-JASPAR2014
+  library(JASPAR2014)
+  JASPAR2014SitesSeqs
 }
 \keyword{datasets}
