@@ -1,6 +1,9 @@
 import(methods)
 import(RSQLite)
 import(IRanges)
+
+importClassesFrom(JASPAR2014, JASPAR2014)
+
 ### -----------------------------------------------------------------
 ### Export S4 classes defined in TFBSTools
 ###
@@ -15,4 +18,13 @@ export(
   PFMatrixList
 )
 
-
+### -----------------------------------------------------------------
+### Export S4 generics defined in TFBSTools + export corresponding methods
+###
+export(
+  ## DB-methods.r
+  storeMatrix,
+  getMatrixSet,
+  getMatrixByID, getMatrixByName,
+  initializeJASPARDB
+)

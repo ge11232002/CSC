@@ -244,12 +244,11 @@ setMethod("getMatrixByID", "SQLiteConnection",
 setMethod("getMatrixByID", "character",
           function(x, ID){
             # here x is the path of SQLite db file.
-            type = match.arg(type, c("PWM", "PFM", "ICM"))
             if(missing(ID))
               stop("ID needs to be specified!")
             con = dbConnect(SQLite(), x)
             on.exit(dbDisconnect(con))
-            get_Matrix_by_ID(con, ID)
+            getMatrixByID(con, ID)
           }
           )
 setMethod("getMatrixByID", "JASPAR2014",
@@ -544,7 +543,7 @@ setMethod("storeMatrix", signature(x="JASPAR2014", pfmList="PFMatrix"),
             storeMatrix(x@db, pfmList)
           }
           )
-setMethod("storeMatrix", signature(x="JASPAR2015", pfmList="PFMatrixList"),
+setMethod("storeMatrix", signature(x="JASPAR2014", pfmList="PFMatrixList"),
           function(x, pfmList){
             storeMatrix(x@db, pfmList)
           }
