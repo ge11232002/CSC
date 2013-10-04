@@ -5,8 +5,8 @@ Title: Data package for JASPAR
 Description: Data package for JASPAR 2014.
 Author: Ge Tan <ge.tan09@imperial.ac.uk> 
 Maintainer: Ge Tan <ge.tan09@imperial.ac.uk>
-Depends: R (>= 2.9.0), Biostrings (>= 2.26.3)
-Suggests: TFBSTools
+Imports: methods, Biostrings (>= 2.26.3)
+Depends: R (>= 2.9.0)
 License: GPL-2
 URL: http://jaspardev.genereg.net/
 Type: Package

@@ -1,3 +1,4 @@
+import(methods)
 importFrom(Biostrings, DNAStringSet)
 
 exportClasses(
