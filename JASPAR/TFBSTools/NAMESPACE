@@ -1,3 +1,18 @@
 
 import(RSQLite)
 
+### -----------------------------------------------------------------
+### Export S4 classes defined in TFBSTools
+###
+exportClasses(PFMatrix, PFMatrixList)
+
+### -----------------------------------------------------------------
+### Export non-generic functions
+###
+export(
+  ## AllClasses.r
+  PFMatrix,
+  PFMatrixList
+)
+
+
