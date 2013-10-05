@@ -19,6 +19,15 @@ export(
 )
 
 ### -----------------------------------------------------------------
+### Export S4 methods for generics not defined in CNEr
+###
+exportMethods(
+  ## XMatrix-methods.r
+  length,
+  reverseComplement
+)
+
+### -----------------------------------------------------------------
 ### Export S4 generics defined in TFBSTools + export corresponding methods
 ###
 export(

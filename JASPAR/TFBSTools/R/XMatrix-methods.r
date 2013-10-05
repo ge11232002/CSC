@@ -66,3 +66,24 @@ setReplaceMethod("schneider", "ICMatrix",
                  }
                  )
 
+### ---------------------------------------------------------
+### Some utilities functions for XMatrix object
+###
+setMethod("length", "XMatrix",
+# gets the pattern length in nucleotides (i.e. number of columns in the matrix)
+          function(x){
+            ncol(Matrix(x))
+          }
+          )
+
+setMethod("reverseComplement", "XMatrix",
+          function(x){
+            ans = x
+            Matrix(ans) = reverseComplement(Matrix(x))
+            if(length(strand(x)) != 0)
+              strand(ans) = ifelse(strand(x) == "+", "-", "+")
+            return(ans)
+          }
+          )
+
+
