@@ -39,5 +39,16 @@ export(
   storeMatrix,
   getMatrixSet,
   getMatrixByID, getMatrixByName,
-  initializeJASPARDB
+  deleteMatrixHavingID,
+  initializeJASPARDB,
+
+  ## AllGenerics.r
+  ID, "ID<-",
+  name, "name<-",
+  matrixClass, "matrixClass<-",
+  Matrix, "Matrix<-",
+  bg, "bg<-",
+  tags,
+  matrixType,
+  XMatrixList
 )
