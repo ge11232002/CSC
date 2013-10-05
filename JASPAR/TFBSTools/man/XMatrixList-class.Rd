@@ -12,7 +12,6 @@
 
 \title{Class \code{"XMatrixList"}}
 \description{
-%%  ~~ A concise (1-5 lines) description of what the class is. ~~
   The XMatrixList virtual class is a container for storing a collection of XMatrix objects.
   No object can be constructed directly from this virtual and it has three subclasses: PFMatrixList, PWMatrixList and ICMatrixList.
   Basically it is a SimpleList and is designed for manipulating the set of XMatrix objects as a whole.
@@ -21,8 +20,6 @@
 \usage{
 ## Constructors:
 PFMatrixList(..., use.names=TRUE)
-PWMatrixList(..., use.names=TRUE)
-ICMatrixList(..., use.names=TRUE)
 
 ## Accessor-like methods:
 \S4method{ID}{XMatrixList}(x)
@@ -39,25 +36,13 @@ ICMatrixList(..., use.names=TRUE)
   }
 }
 
-\references{
-%%  ~~put references to the literature/web site here~~
-}
 \author{
-%%  ~~who you are~~
 Ge Tan
 }
-\note{
-%%  ~~further notes~~
-}
 
-%% ~Make other sections like Warning with \section{Warning }{....} ~
 
 \seealso{
   \code{\link{XMatrix}},
-  \code{\link{searchSeq}},
-  \code{\link{searchAln}}
-%%  ~~objects to See Also as \code{\link{~~fun~~}}, ~~~
-%%  ~~or \code{\linkS4class{CLASSNAME}} for links to other classes ~~~
 }
 
 \examples{
