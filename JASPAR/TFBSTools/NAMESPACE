@@ -1,8 +1,12 @@
 import(methods)
 import(RSQLite)
+
 import(IRanges)
 
 importClassesFrom(JASPAR2014, JASPAR2014)
+
+importMethodsFrom(Biostrings, reverseComplement)
+importMethodsFrom(RSQLite, dbGetQuery, dbConnect, dbDisconnect)
 
 ### -----------------------------------------------------------------
 ### Export S4 classes defined in TFBSTools
