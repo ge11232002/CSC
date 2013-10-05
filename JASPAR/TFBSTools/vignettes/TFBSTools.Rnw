@@ -61,7 +61,7 @@ The section will explain all the S4 classes defined in \textbf{TFBSTools}.
 for one raw position frequency matrix (PFM).
 This object is compatible with one record from JASPAR database.
 For more details about this object, please consult the help page of this class.
-<<rtl-init, results = hide>>=
+<<rtl-PFMatrix, results = hide>>=
 library(TFBSTools)
 pfm = PFMatrix(ID="MA0004.1", name="Arnt", matrixClass="Zipper-Type", strand="+",
         bg=c(A=0.25, C=0.25, G=0.25, T=0.25),
@@ -78,27 +78,64 @@ pfm = PFMatrix(ID="MA0004.1", name="Arnt", matrixClass="Zipper-Type", strand="+"
 as.matrix(pfm)
 ## get the reverse complment matrix with all the same information except the strand.
 reverseComplement(pfm)
+## access the slots of pfm
+ID(pfm)
+name(pfm)
+Matrix(pfm)
 @
 
 \subsection{PFMatrixList}
 \Rclass{PFMatrixList} is used to store a set of \Rclass{PFMatrix} objects.
 Basically it is a SimpleList for easy manipulation the whole set of
 \Rclass{PFMatrix}.
+<<rtl-PFMatrixList, eval=FALSE, results = hide>>=
+pfm2 = pfm
+PFMatrixList(pfm1=pfm, pfm2=pfm2, use.names=TRUE)
+@
+
+\subsection{Site, SiteList and SitePair}
 
 \section{Database interfaces for JASPAR2014 database}
 This section will demonstrate how to operate on the JASPAR 2014 database.
 JASPAR is a collection of transcription factor DNA-binding preferences, modeled as matrices. These can be converted into Position Weight Matrices (PWMs or PSSMs), used for scanning genomic sequences.
 JASPAR is the only database with this scope where the data can be used with no restrictions (open-source).
 \subsection{Search JASPAR2014 database}
-
-<<rtl-init, results = hide>>=
+This search function fetches matrix data for all matrices in the database
+matching criteria defined by the named arguments
+and returns a PFMatrixList object.
+For more search criterias, please see the help page for \Rfunction(getMatrixSet).
+<<rtl-searchDB, results = hide>>=
 library(JASPAR2014)
+opts = list()
+opts[["species"]] = 9606
+opts[["name"]] = "RUNX1"
+#opts[["class"]] = "Ig-fold"
+opts[["type"]] = "SELEX"
+opts[["all_versions"]] = TRUE
+siteList = getMatrixSet(JASPAR2014, opts)
 
+opts2 = list()
+opts2[["type"]] = "SELEX"
+siteList2 = getMatrixSet(JASPAR2014, opts2)
 @
 
 \subsection{Store, delete and initialize JASPAR2014 database}
+We also provide some functions to initialize an empty JASPAR2014 
+style database, 
+store new \Rclass{PFMatrix} or \Rclass{PFMatrixList} into it,
+or delete some records based on ID.
+<<rtl-operateDb, eval=FALSE, results = hide>>=
+db = "jaspar.sqlite"
+initializeJASPARDB(db)
+storeMatrix(db, pfm)
+deleteMatrixHavingID(db, "MA0003")
+@
 
 \section{PFM, PWM and ICM methods}
+
+\section{Scan sequence and alignments with PWM pattern}
+
+\section{Use external pattern generators}
 
 \section{Conclusion}
 The following is the session info that generated this vignette:

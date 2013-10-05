@@ -6,7 +6,7 @@
 \description{
   This function fetches matrix data for all matrices in the database 
   matching criteria defined by the named arguments 
-  and returns a XMatrixList object
+  and returns a PFMatrixList object
 }
 
 \usage{

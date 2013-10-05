@@ -12,10 +12,10 @@
 \usage{
   \S4method{getMatrixByID}{character}(x, ID)
   \S4method{getMatrixByID}{SQLiteConnection}(x, ID)
+  \S4method{getMatrixByID}{JASPAR2014}(x, ID)
   \S4method{getMatrixByName}{character}(x, name)
   \S4method{getMatrixByName}{SQLiteConnection}(x, name)
-  \S4method{getMatrixByID}(JASPAR2014, ID)
-  \S4method{getMatrixByName}(JASPAR2014, name)
+  \S4method{getMatrixByName}{JASPAR2014}(x, name)
 }
 
 \arguments{

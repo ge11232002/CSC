@@ -18,7 +18,7 @@
   \S4method{storeMatrix}{JASPAR2014, PFMatrixList}(x, pfmList)
   \S4method{storeMatrix}{character, PFMatrix}(x, pfmList)
   \S4method{storeMatrix}{SQLiteConnection, PFMatrix}(x, pfmList)
-  \S4method{storeMatrix}(JASPAR2014, PFMatrix}(x, pfmList)
+  \S4method{storeMatrix}{JASPAR2014, PFMatrix}(x, pfmList)
   \S4method{initializeJASPARDB}{SQLiteConnection}(x)
   \S4method{initializeJASPARDB}{character}(x)
   \S4method{initializeJASPARDB}{JASPAR2014}(x)

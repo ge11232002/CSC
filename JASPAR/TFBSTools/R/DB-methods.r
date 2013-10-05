@@ -10,7 +10,7 @@
   if(!"ID" %in% names(opts))
     opts[["ID"]] = NULL
   if(!"name" %in% names(opts))
-    opt[["name"]] = NULL
+    opts[["name"]] = NULL
   
   if(!"collection" %in% names(opts))
     opts[["collection"]] = "CORE"
