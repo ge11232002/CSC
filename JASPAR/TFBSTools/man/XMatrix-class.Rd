@@ -13,13 +13,11 @@
 \alias{matrixClass<-,XMatrix-method}
 \alias{name,XMatrix-method}
 \alias{name<-,XMatrix-method}
-\alias{revcom,XMatrix-method}
+\alias{reverseComplement,XMatrix-method}
 \alias{show,XMatrix-method}
 \alias{strand,XMatrix-method}
 \alias{strand<-,XMatrix-method}
 \alias{tags,XMatrix-method}
-\alias{update,XMatrix-method}
-\alias{total_ic, ICMatrix-method}
 
 \title{\code{"XMatrix"} objects}
 \description{
@@ -27,10 +25,6 @@
 XMatrix is a virtual class. No objects can be created from it directly. Three classes are derived from this class: PFMatrix, PWMatrix and ICMatrix.
 
 PFMatrix is a class whose instances are objects representing raw position frequency matrices (PFMs).
-
-PWMatrix is a class whose instances are objects representing position weight matrices (PWMs). Compared with PFMatrix, it has extra slot \code{pseudocounts}.
-
-ICMatrix is a class whose instances are objects representing information content matrices (ICMs). Compared with PWMatrix, it has extra slot \code{schneider}.
 }
 
 \usage{
@@ -38,14 +32,6 @@ ICMatrix is a class whose instances are objects representing information content
 PFMatrix(ID="Unknown", name="Unknown", matrixClass="Unknown", 
          strand="*", bg=c(A=0.25, C=0.25, G=0.25, T=0.25), 
          tags=list(), matrix=matrix())
-PWMatrix(ID="Unknown", name="Unknown", matrixClass="Unknown", 
-         strand="*", bg=c(A=0.25, C=0.25, G=0.25, T=0.25), 
-         tags=list(), matrix=matrix(), pseudocounts=numeric())
-ICMatrix(ID="Unknown", name="Unknown", matrixClass="Unknown",
-         strand="*", bg=c(A=0.25, C=0.25, G=0.25, T=0.25), 
-         tags=list(), matrix=matrix(), pseudocounts=numeric(), 
-         schneider=logical())
-
 ## Accessor-like methods:
 \S4method{ID}{XMatrix}(x)
 \S4method{bg}{XMatrix}(x)
@@ -106,15 +92,15 @@ ICMatrix(ID="Unknown", name="Unknown", matrixClass="Unknown",
     \item{length}{
       \code{signature(x = "XMatrix")}: Gets the pattern length in nucleotides (i.e. number of columns in the matrix).
     }
-    \item{revcom}{
+    \item{reverseComplement}{
       \code{signature(x = "XMatrix")}: Generates the reverse complement matrix object. Note than the strand is XMatrix will also be changed to the opossite strand.
     }
     \item{as.matrix}{
       \code{signature(x = "XMatrix")}: Returns the matrix in the XMatrix class.
     }
-    \item{total_ic}{
-      \code{signature(x = "ICMatrix")}: Returns the information content vector.
-    }
+%    \item{total_ic}{
+%      \code{signature(x = "ICMatrix")}: Returns the information content vector.
+%    }
 %    \item{Matrix}{\code{signature(x = "XMatrix")}: ... }
 %    \item{Matrix<-}{\code{signature(x = "XMatrix")}: ... }
 %    \item{matrixClass}{\code{signature(x = "XMatrix")}: ... }
@@ -129,25 +115,10 @@ ICMatrix(ID="Unknown", name="Unknown", matrixClass="Unknown",
 %    \item{update}{\code{signature(object = "XMatrix")}: ... }
 	 }
 }
-\references{
-%%  ~~put references to the literature/web site here~~
-}
 \author{
-%%  ~~who you are~~
 Ge Tan
 }
-\note{
-%%  ~~further notes~~
-}
 
-%% ~Make other sections like Warning with \section{Warning }{....} ~
-
-\seealso{
-%%  ~~objects to See Also as \code{\link{~~fun~~}}, ~~~
-%%  ~~or \code{\linkS4class{CLASSNAME}} for links to other classes ~~~
-\code{\link{toPWM}},
-\code{\link{toICM}}
-}
 \examples{
   ## ----------------------------------------------------------------
   ## Constructor
@@ -170,10 +141,7 @@ Ge Tan
   as(pfm, "matrix")
 
   ## Methods
-  revcom(pfm)
+  reverseComplement(pfm)
   length(pfm)
-  icm = toICM(pfm, pseudocounts=0.8, schneider=TRUE)
-  total_ic(icm)
-
 }
 \keyword{classes}
