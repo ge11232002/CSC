@@ -1,14 +1,8 @@
-\name{delete_Matrix_having_ID}
+\name{deleteMatrixHavingID}
 \docType{methods}
-\alias{delete_Matrix_having_ID}
-\alias{store_Matrix}
+\alias{deleteMatrixHavingID}
+\alias{storeMatrix}
 \alias{initializeJASPARDB}
-%\alias{delete_Matrix_having_ID,character-method}
-%\alias{store_Matrix,character-method}
-%\alias{initializeJASPARDB, character-method}
-%\alias{delete_Matrix_having_ID,SQLiteConnection-method}
-%\alias{store_Matrix, SQLiteConnection-method}
-%\alias{initializeJASPARDB, SQLiteConnection-method}
 
 \title{JASPAR database operations}
 \description{
@@ -16,14 +10,18 @@
 }
 
 \usage{
-  \S4method{delete_Matrix_having_ID}{character}(x, IDs)
-  \S4method{delete_Matrix_having_ID}{SQLiteConnection}(x, IDs)
-  \S4method{store_Matrix}{character, PFMatrixList}(x, pfmList)
-  \S4method{store_Matrix}{SQLiteConnection, PFMatrixList}(x, pfmList)
-  \S4method{store_Matrix}{character, PFMatrix}(x, pfmList)
-  \S4method{store_Matrix}{SQLiteConnection, PFMatrix}(x, pfmList)
+  \S4method{deleteMatrixHavingID}{character}(x, IDs)
+  \S4method{deleteMatrixHavingID}{SQLiteConnection}(x, IDs)
+  \S4method{deleteMatrixHavingID}{JASPAR2014}(x, IDs)
+  \S4method{storeMatrix}{character, PFMatrixList}(x, pfmList)
+  \S4method{storeMatrix}{SQLiteConnection, PFMatrixList}(x, pfmList)
+  \S4method{storeMatrix}{JASPAR2014, PFMatrixList}(x, pfmList)
+  \S4method{storeMatrix}{character, PFMatrix}(x, pfmList)
+  \S4method{storeMatrix}{SQLiteConnection, PFMatrix}(x, pfmList)
+  \S4method{storeMatrix}(JASPAR2014, PFMatrix}(x, pfmList)
   \S4method{initializeJASPARDB}{SQLiteConnection}(x)
   \S4method{initializeJASPARDB}{character}(x)
+  \S4method{initializeJASPARDB}{JASPAR2014}(x)
 }
 
 \arguments{
@@ -34,10 +32,18 @@
     JASPAR stable IDs.
   }
   \item{pfmList}{
-    The PFMatrixList object.
+    The PFMatrixList object, or pfm object.
   }
 }
 
+\examples{
+  \dontrun{
+    library(JASPAR2014)
+    deleteMatrixHavingID(JASPAR2014, "MA0003")
+    storeMatrix(JASPAR2014, pfm)
+    initializeJASPARDB("jaspar.sqlite")
+  }
+}
 
 \keyword{methods}
 \keyword{ ~~ other possible keyword(s) ~~ }
