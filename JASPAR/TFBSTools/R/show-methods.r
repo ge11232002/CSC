@@ -25,3 +25,35 @@ setMethod("show", "XMatrix",
           }
           )
 
+### -----------------------------------------------------------------
+### The "show" method
+### Perhaps it is not a bad idea to show them in gff format.
+setMethod("show", "Site",
+          function(object){
+            cat("An object of class", class(object), "with",
+                length(object), "site",
+                ifelse(length(object)==1, "sequence", "sequences"))
+            cat("\n")
+            if(length(object) > 10000)
+              object = object[1:10000]
+            gff = writeGFF3(object)
+            print(gff)
+          }
+          )
+
+
+### -----------------------------------------------------------------
+### The "show" method
+### put them in a extended gff. any good idea?
+setMethod("show", "SitePair",
+          function(object){
+            gff1 = writeGFF3(site1(object))
+            gff2 = writeGFF3(site2(object))
+            ans = cbind(gff1, gff2)
+            cat("An object of class", class(object), "with",
+                length(object), "site pair",
+                ifelse(length(object)==1, "sequence", "sequences"))
+            cat("\n")
+            print(ans)
+          }
+          )

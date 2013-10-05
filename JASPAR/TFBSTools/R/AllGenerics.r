@@ -16,6 +16,17 @@ setGeneric("pseudocounts", signature="x", function(x) standardGeneric("pseudocou
 setGeneric("pseudocounts<-", signature="x", function(x, value) standardGeneric("pseudocounts<-"))
 setGeneric("schneider", signature="x", function(x) standardGeneric("schneider"))
 setGeneric("schneider<-", signature="x", function(x, value) standardGeneric("schneider<-"))
+setGeneric("views", signature="x", function(x) standardGeneric("views"))
+setGeneric("seqname", signature="x", function(x) standardGeneric("seqname"))
+setGeneric("sitesource", signature="x", function(x) standardGeneric("sitesource"))
+setGeneric("primary", signature="x", function(x) standardGeneric("primary"))
+setGeneric("site1", signature="x", function(x) standardGeneric("site1"))
+setGeneric("site2", signature="x", function(x) standardGeneric("site2"))
+setGeneric("alignments", signature="x", function(x) standardGeneric("alignments"))
+setGeneric("conservation1", signature="x", function(x) standardGeneric("conservation1"))
+setGeneric("seqlength", signature="x", function(x) standardGeneric("seqlength"))
+setGeneric("alnlength", signature="x", function(x) standardGeneric("alnlength"))
+
 
 ## Constructors
 setGeneric("XMatrixList", signature="x",
@@ -36,4 +47,44 @@ setGeneric("initializeJASPARDB", signature="x",
 setGeneric("deleteMatrixHavingID", signature="x",
            function(x, IDs) standardGeneric("deleteMatrixHavingID"))
 
+setGeneric("toICM", signature="x",
+           function(x, pseudocounts=NULL, schneider=FALSE,
+                    bg=c(A=0.25, C=0.25, G=0.25, T=0.25))
+             standardGeneric("toICM")
+           )
 
+setGeneric("toPWM", signature="x",
+           function(x, type="log2probratio", pseudocounts=NULL,
+                    bg=c(A=0.25, C=0.25, G=0.25, T=0.25))
+             standardGeneric("toPWM")
+           )
+
+setGeneric("plotLogo", signature="x",
+           function(x, ic.scale = TRUE, xaxis = TRUE, yaxis = TRUE,
+                    xfontsize = 15, yfontsize = 15) standardGeneric("plotLogo")
+           )
+setGeneric("total_ic", signature="x",
+           function(x) standardGeneric("total_ic"))
+
+setGeneric("searchSeq", signature="x",
+           function(x, subject, seqname="Unknown", strand="*", min.score="80%")
+             standardGeneric("searchSeq"))
+
+setGeneric("searchAln",
+           function(pwm, aln1, aln2, min.score="80%", windowSize=51L, cutoff=0.7,
+                    conservation=NULL)
+             standardGeneric("searchAln")
+           )
+setGeneric("doSiteSearch",
+           function(pwm, aln1, aln2, min.score="80%", windowSize=51L, cutoff=0.7,
+                    conservation=NULL)
+             standardGeneric("doSiteSearch")
+           )
+
+setGeneric("calConservation",
+           function(aln1, aln2, windowSize=51L, which="1")
+             standardGeneric("calConservation")
+           )
+setGeneric("writeGFF3", signature="x", function(x) standardGeneric("writeGFF3"))
+setGeneric("writeGFF2", signature="x", function(x) standardGeneric("writeGFF2"))
+setGeneric("relScore", signature="x", function(x) standardGeneric("relScore"))

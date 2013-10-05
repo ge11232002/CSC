@@ -2,6 +2,7 @@
 \Rdversion{1.1}
 \docType{class}
 \alias{XMatrix}
+\alias{PFMatrix}
 \alias{bg,XMatrix-method}
 \alias{bg<-,XMatrix-method}
 \alias{ID,XMatrix-method}
@@ -14,7 +15,6 @@
 \alias{name,XMatrix-method}
 \alias{name<-,XMatrix-method}
 \alias{reverseComplement,XMatrix-method}
-\alias{show,XMatrix-method}
 \alias{strand,XMatrix-method}
 \alias{strand<-,XMatrix-method}
 \alias{tags,XMatrix-method}

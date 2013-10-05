@@ -2,13 +2,14 @@
 \Rdversion{1.1}
 \docType{class}
 \alias{XMatrixList}
-\alias{bg,XMatrixList-method}
-\alias{ID,XMatrixList-method}
-\alias{Matrix,XMatrixList-method}
-\alias{matrixClass,XMatrixList-method}
-\alias{matrixType,XMatrixList-method}
-\alias{name,XMatrixList-method}
-\alias{strand,XMatrixList-method}
+\alias{PFMatrixList}
+\alias{bg}
+\alias{ID}
+\alias{Matrix}
+\alias{matrixClass}
+\alias{matrixType}
+\alias{name}
+\alias{strand}
 
 \title{Class \code{"XMatrixList"}}
 \description{

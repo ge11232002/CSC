@@ -4,9 +4,13 @@ import(RSQLite)
 import(IRanges)
 
 importClassesFrom(JASPAR2014, JASPAR2014)
+importClassesFrom(Biostrings, DNAStringSet)
 
-importMethodsFrom(Biostrings, reverseComplement)
+importMethodsFrom(Biostrings, reverseComplement, matchPWM, maxScore, minScore, consensusMatrix, pattern)
 importMethodsFrom(RSQLite, dbGetQuery, dbConnect, dbDisconnect)
+
+importFrom(seqLogo, seqLogo, makePWM)
+importFrom(Biostrings, unitScale, PWMscoreStartingAt, DNAStringSet)
 
 ### -----------------------------------------------------------------
 ### Export S4 classes defined in TFBSTools

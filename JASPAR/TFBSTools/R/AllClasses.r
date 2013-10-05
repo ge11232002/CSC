@@ -109,3 +109,119 @@ ICMatrixList = function(..., use.names=TRUE){
   XMatrixList(listData, use.names=use.names, type="ICMatrixList")
 }
 
+### ---------------------------------------------------------------------
+### Site object: a nucleotide sequence feature object representing (possibly putative) transcription factor binding site. Different from TFBS perl module, here one Site object contains multiple sites.
+###
+
+setClass("Site",
+         slots=c(views="XStringViews",
+                 score="numeric",    # vector
+                 strand="character",  ## make it Rle() later.
+                 seqname="character", # length 1
+                 sitesource="character", # length 1
+                 primary="character",  # length 1
+                 pattern="PWMatrix"   # length 1
+                 )
+         )
+
+### -------------------------------------------------------------------
+### The Site constructor
+###
+Site = function(views, score, strand="*",
+                seqname="Unknown",
+                sitesource="TFBS", primary="TF binding site",
+                pattern){
+  new("Site", views=views, seqname=seqname, score=score, strand=strand,
+      sitesource=sitesource, primary=primary, pattern=pattern)
+}
+
+
+### --------------------------------------------------------------
+### SiteList objects
+###
+
+setClass("SiteList",
+         contains="SimpleList",
+         representation(
+                        ),
+         prototype(
+                   elementType="Site"
+                   )
+         )
+### -------------------------------------------------------------
+### SiteList() constructor
+###
+SiteList = function(..., use.names=TRUE){
+  listData = list(...)
+  if(is(listData[[1]], "list"))
+    listData = listData[[1]]
+  ok = sapply(listData, is, "Site")
+  if(!all(ok))
+    stop("SiteList() only accepts Site objects!")
+  if(!use.names)
+    names(listData) = NULL
+  IRanges:::newList("SiteList", listData)
+}
+
+### ----------------------------------------------------------------
+### Methods
+###
+setMethod("writeGFF3", "SiteList",
+          function(x){
+            ans = do.call(rbind, lapply(x, writeGFF3))
+            return(ans)
+          }
+          )
+setMethod("writeGFF2", "SiteList",
+           function(x){
+             ans = do.call(rbind, lapply(x, writeGFF2))
+             return(ans)
+           }
+           )
+
+
+### -------------------------------------------------------------------
+### SitePair object: a nucleotide sequence feature object representing (possibly putative) transcription factor binding site from A alignment
+
+setClass("SitePair",
+         slots=c(site1="Site",
+                 site2="Site"
+                 )
+         )
+
+### -----------------------------------------------------------------
+### The SitePair constructor
+###
+SitePair = function(site1, site2){
+  new("SitePair", site1=site1, site2=site2)
+}
+
+
+### ----------------------------------------------------------------
+### SitePairList obejct: holds the list of SitePair.
+###
+
+setClass("SitePairList",
+         contains="SimpleList",
+         representation(
+                        ),
+         prototype(
+                   elementType="SitePair"
+                   )
+         )
+
+### ------------------------------------------------------------
+### SitePairList constructor
+###
+SitePairList = function(..., use.names=TRUE){
+  listData = list(...)
+  if(is(listData[[1]], "list")) # This is pretty ugly. better solution?
+    listData = listData[[1]]
+  ok = sapply(listData, is, "SitePair")
+  if(!all(ok))
+    stop("SitePairList() only accepts SitePair objects!")
+  if(!use.names)
+    names(listData) = NULL
+  IRanges:::newList("SitePairList", listData)
+}
+
