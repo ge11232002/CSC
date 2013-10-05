@@ -75,7 +75,7 @@
   # if just stable ID and if all_versions==1, take all versions, otherwise the latest
   if(!is.null(opts[["ID"]])){
     ans_ids = c()
-    if(opt[["all_versions"]]){
+    if(opts[["all_versions"]]){
       for(id in opts[["ID"]]){
         baseID = strsplit(id, "\\.")[[1]][1] # ignore vesion here, this is a stupidity filter
         sqlCMD = paste0("SELECT ID FROM MATRIX WHERE BASE_ID='", baseID, "'")
@@ -211,14 +211,14 @@
                      tags=tags,
                      matrix=FMatrix
                      )
-  if(type == "PFM")
+  #if(type == "PFM")
     return(ans_pfm)
-  else if(type == "PWM")
-    return(toPWM(ans_pfm))
-  else if(type == "ICM")
-    return(toICM(ans_pfm))
-  else
-    stop("This should never happen")
+  #else if(type == "PWM")
+  #  return(toPWM(ans_pfm))
+  #else if(type == "ICM")
+  #  return(toICM(ans_pfm))
+  #else
+  #  stop("This should never happen")
 }
 
 ### get_Matrix_by_ID fetches matrix data under the given ID from the database and returns a XMatrix object.
@@ -382,7 +382,7 @@ setMethod("deleteMatrixHavingID", "SQLiteConnection",
               int_id = .get_internal_id(baseID, version)
               for(dbTable in c("MATRIX_DATA", "MATRIX", "MATRIX_SPECIES", "MATRIX_PROTEIN", "MATRIX_ANNOTATION")){
                 sqlCMD = paste0("DELETE from ", dbTable, " where ID='", int_id, "'")
-                ans = dbGetQuery(con, sqlCMD)
+                ans = dbGetQuery(x, sqlCMD)
               }
             }
           }
