@@ -2,18 +2,18 @@
 \alias{TFBSTools}
 \docType{package}
 \title{
-  TFBS package.
+  TFBS software package.
 }
 
 \description{
-  Tools for transcription factor binding site detection and analysis.
+  TFBS includes a set of tools for transcription factor binding site detection and analysis as well as database interface functions for JASPAR, etc.
 }
 
 \author{
 Ge Tan
 }
 
-\keyword{ package }
+\keyword{package}
 
 \seealso{
  \code{\link[<pkg>:<pkg>-package]{<pkg>}}
