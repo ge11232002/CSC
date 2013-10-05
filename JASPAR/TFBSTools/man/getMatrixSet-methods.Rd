@@ -1,8 +1,7 @@
-\name{get_MatrixSet}
+\name{getMatrixSet}
 \docType{methods}
-\alias{get_MatrixSet}
-\alias{get_MatrixSet,character-method}
-\alias{get_MatrixSet,SQLiteConnection-method}
+\alias{getMatrixSet}
+
 \title{Advanced JASPAR database search functions \code{get_MatrixSet}}
 \description{
   This function fetches matrix data for all matrices in the database 
@@ -11,13 +10,14 @@
 }
 
 \usage{
-  \S4method{get_MatrixSet}{character}(x, opts)
-  \S4method{get_MatrixSet}{SQLiteConnection}(x, opts)
+  \S4method{getMatrixSet}{character}(x, opts)
+  \S4method{getMatrixSet}{SQLiteConnection}(x, opts)
+  \S4method{getMatrixSet}{JASPAR2014}(x, opts)
 }
 
 \arguments{
   \item{x}{
-    a character vector of length 1 for the path of JASPAR SQLite file, or a \code{SQLiteConnection} object.
+    a character vector of length 1 for the path of JASPAR SQLite file, a \code{SQLiteConnection} object, or a \code{JASPAR2014} object.
   }
   \item{opts}{
     a search options list. See more details below.
@@ -66,8 +66,8 @@
 }
 
 \seealso{
-  \code{\link{get_Matrix_by_ID}},
-  \code{\link{get_Matrix_by_name}}
+  \code{\link{getMatrixByID}},
+  \code{\link{getMatrixByName}}
 }
 
 \examples{
@@ -79,7 +79,10 @@
     #opts[["class"]] = "Ig-fold"
     opts[["type"]] = "SELEX"
     opts[["all_versions"]] = TRUE
-    siteList = get_MatrixSet(db, opts)
+    siteList = getMatrixSet(db, opts)
+
+    library(JASPAR2014)
+    siteList2 = getMatrixSet(JASPAR2014, opts)
   }
 
 }
