@@ -4,12 +4,19 @@
 \alias{XMatrixList}
 \alias{PFMatrixList}
 \alias{bg}
+\alias{bg,XMatrixList-method}
 \alias{ID}
+\alias{ID,XMatrixList-method}
 \alias{Matrix}
+\alias{Matrix,XMatrixList-method}
 \alias{matrixClass}
+\alias{matrixClass,XMatrixList-method}
 \alias{matrixType}
+\alias{matrixType,XMatrixList-method}
 \alias{name}
+\alias{name,XMatrixList-method}
 \alias{strand}
+\alias{strand,XMatrixList-method}
 
 \title{Class \code{"XMatrixList"}}
 \description{

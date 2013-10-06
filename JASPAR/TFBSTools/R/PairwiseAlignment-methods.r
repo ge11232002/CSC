@@ -1,4 +1,16 @@
-
+### ---------------------------------------------------------------
+### The PairwiseAlignmentTFBS accessor-like methods
+###
+setMethod("alignments", "PairwiseAlignmentTFBS",
+          function(x) x@alignments)
+setMethod("seqname", "PairwiseAlignmentTFBS",
+          function(x) c(x@seqname1, x@seqname2))
+setMethod("conservation1", "PairwiseAlignmentTFBS",
+          function(x) x@conservation1)
+setMethod("seqlength", "PairwiseAlignmentTFBS",
+          function(x) c(x@seq1length, x@seq2length))
+setMethod("alnlength", "PairwiseAlignmentTFBS",
+          function(x) nchar(alignments(x)))
 
 
 calculate_conservation = function(aln1, aln2, windowSize, which="1"){

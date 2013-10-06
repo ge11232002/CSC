@@ -3,10 +3,10 @@ import(RSQLite)
 
 import(IRanges)
 
-importClassesFrom(JASPAR2014, JASPAR2014)
-importClassesFrom(Biostrings, DNAStringSet)
+#importClassesFrom(JASPAR2014, JASPAR2014)
+importClassesFrom(Biostrings, DNAStringSet, PairwiseAlignments)
 
-importMethodsFrom(Biostrings, reverseComplement, matchPWM, maxScore, minScore, consensusMatrix, pattern)
+importMethodsFrom(Biostrings, reverseComplement, matchPWM, maxScore, minScore, consensusMatrix, pattern, PairwiseAlignments)
 importMethodsFrom(RSQLite, dbGetQuery, dbConnect, dbDisconnect)
 
 importFrom(seqLogo, seqLogo, makePWM)

@@ -1,7 +1,13 @@
 \name{getMatrixByID}
 \docType{methods}
 \alias{getMatrixByID}
+\alias{getMatrixByID,character-method}
+\alias{getMatrixByID,JASPAR2014-method}
+\alias{getMatrixByID,SQLiteConnection-method}
 \alias{getMatrixByName}
+\alias{getMatrixByName,character-method}
+\alias{getMatrixByName,JASPAR2014-method}
+\alias{getMatrixByName,SQLiteConnection-method}
 
 \title{Basic JASPAR database search functionis \code{getMatrixByID}, 
   \code{getMatrixByName}}

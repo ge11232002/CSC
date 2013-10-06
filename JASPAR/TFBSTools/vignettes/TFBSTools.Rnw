@@ -105,7 +105,7 @@ This search function fetches matrix data for all matrices in the database
 matching criteria defined by the named arguments
 and returns a PFMatrixList object.
 For more search criterias, please see the help page for \Rfunction(getMatrixSet).
-<<rtl-searchDB, results = hide>>=
+<<rtl-searchDB, eval=FALSE, results = hide>>=
 library(JASPAR2014)
 opts = list()
 opts[["species"]] = 9606
@@ -113,11 +113,11 @@ opts[["name"]] = "RUNX1"
 #opts[["class"]] = "Ig-fold"
 opts[["type"]] = "SELEX"
 opts[["all_versions"]] = TRUE
-siteList = getMatrixSet(JASPAR2014, opts)
+PFMatrixList = getMatrixSet(JASPAR2014, opts)
 
 opts2 = list()
 opts2[["type"]] = "SELEX"
-siteList2 = getMatrixSet(JASPAR2014, opts2)
+PFMatrixList2 = getMatrixSet(JASPAR2014, opts2)
 @
 
 \subsection{Store, delete and initialize JASPAR2014 database}

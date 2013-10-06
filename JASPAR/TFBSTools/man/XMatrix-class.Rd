@@ -21,7 +21,6 @@
 
 \title{\code{"XMatrix"} objects}
 \description{
-%%  ~~ A concise (1-5 lines) description of what the class is. ~~
 XMatrix is a virtual class. No objects can be created from it directly. Three classes are derived from this class: PFMatrix, PWMatrix and ICMatrix.
 
 PFMatrix is a class whose instances are objects representing raw position frequency matrices (PFMs).
