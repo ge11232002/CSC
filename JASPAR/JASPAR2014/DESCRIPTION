@@ -1,8 +1,8 @@
 Package: JASPAR2014
 Version: 0.99.1
-Date: 2013-10-04
+Date: 2013-10-06
 Title: Data package for JASPAR
-Description: Data package for JASPAR 2014.
+Description: Data package for JASPAR 2014. To search this databases, please use the package TFBSTools.
 Author: Ge Tan <ge.tan09@imperial.ac.uk> 
 Maintainer: Ge Tan <ge.tan09@imperial.ac.uk>
 Depends: R (>= 3.0.1), methods, Biostrings (>= 2.29.19)

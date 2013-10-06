@@ -5,15 +5,15 @@
 Data package for JASPAR 2014
 }
 \description{
-Data package for JASPAR 2014.
+Data package for JASPAR 2014. To search this databases, please use th
+e package TFBSTools.
 }
 \details{
 \tabular{ll}{
 Package: \tab JASPAR2014\cr
 Version: \tab 0.99.1\cr
-Date: \tab 2013-10-04\cr
-Imports: \tab Biostrings(>= 2.26.3)\cr
-Depends: \tab R (>= 2.9.0)\cr
+Date: \tab 2013-10-06\cr
+Depends: \tab R (>= 3.0.1), methods, Biostrings (>= 2.29.19)\cr
 License: \tab GPL-2 \cr
 URL: \tab http://jaspardev.genereg.net/\cr
 Type: \tab Package\cr
