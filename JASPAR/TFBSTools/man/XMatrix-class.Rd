@@ -2,7 +2,9 @@
 \Rdversion{1.1}
 \docType{class}
 \alias{XMatrix}
+\alias{XMatrix-class}
 \alias{PFMatrix}
+\alias{PFMatrix-class}
 \alias{bg,XMatrix-method}
 \alias{bg<-,XMatrix-method}
 \alias{ID,XMatrix-method}
@@ -17,7 +19,17 @@
 \alias{reverseComplement,XMatrix-method}
 \alias{strand,XMatrix-method}
 \alias{strand<-,XMatrix-method}
+\alias{tags}
 \alias{tags,XMatrix-method}
+\alias{matrixType-methods}
+\alias{matrixType,ICMatrix-method}
+\alias{matrixType,PFMatrix-method}
+\alias{matrixType,PWMatrix-method}
+\alias{[-methods}
+\alias{[,Site-method}
+\alias{length-methods}
+\alias{length,Site-method}
+\alias{length,SitePair-method}
 
 \title{\code{"XMatrix"} objects}
 \description{

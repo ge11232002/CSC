@@ -3,7 +3,7 @@ import(RSQLite)
 
 import(IRanges)
 
-importClassesFrom(JASPAR2014, JASPAR2014)
+#importClassesFrom(JASPAR2014, JASPAR2014)
 importClassesFrom(Biostrings, DNAStringSet, PairwiseAlignments)
 
 importMethodsFrom(Biostrings, reverseComplement, matchPWM, maxScore, minScore, consensusMatrix, pattern, PairwiseAlignments)
@@ -47,11 +47,11 @@ export(
   initializeJASPARDB,
 
   ## AllGenerics.r
-  ID, "ID<-",
-  name, "name<-",
-  matrixClass, "matrixClass<-",
-  Matrix, "Matrix<-",
-  bg, "bg<-",
+  ID, 
+  name, 
+  matrixClass, 
+  Matrix,
+  bg, 
   tags,
   matrixType,
   XMatrixList

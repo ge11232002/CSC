@@ -2,7 +2,9 @@
 \Rdversion{1.1}
 \docType{class}
 \alias{XMatrixList}
+\alias{XMatrixList,list-method}
 \alias{PFMatrixList}
+\alias{PFMatrixList-class}
 \alias{bg}
 \alias{bg,XMatrixList-method}
 \alias{ID}
@@ -17,6 +19,7 @@
 \alias{name,XMatrixList-method}
 \alias{strand}
 \alias{strand,XMatrixList-method}
+\alias{tags,XMatrixList-method}
 
 \title{Class \code{"XMatrixList"}}
 \description{
