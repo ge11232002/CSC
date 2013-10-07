@@ -40,11 +40,14 @@ PFMatrixList(..., use.names=TRUE)
 
 \arguments{
   \item{...}{
-    The XMatrix objects are supplied in ....
+    The \code{XMatrix} objects are supplied in ....
   }
   \item{use.names}{
-    A logical value. When TRUE, the names of the XMatrix will be kept.
+    A logical value. When TRUE, the names of the \code{XMatrix} will be kept.
   }
+  \item{x}(
+    A \code{XMatrixList} object.
+  )
 }
 
 \author{
