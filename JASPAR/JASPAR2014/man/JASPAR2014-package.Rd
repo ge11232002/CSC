@@ -11,8 +11,8 @@ e package TFBSTools.
 \details{
 \tabular{ll}{
 Package: \tab JASPAR2014\cr
-Version: \tab 0.99.1\cr
-Date: \tab 2013-10-06\cr
+Version: \tab 0.99.2\cr
+Date: \tab 2013-10-07\cr
 Depends: \tab R (>= 3.0.1), methods, Biostrings (>= 2.29.19)\cr
 License: \tab GPL-2 \cr
 URL: \tab http://jaspardev.genereg.net/\cr
