@@ -49,19 +49,17 @@ PFMatrix(ID="Unknown", name="Unknown", matrixClass="Unknown",
 
 ## ... and more (see Methods)
 }
-
-\section{Slots}{
-  \describe{
-    \item{\code{ID}:}{Object of class \code{"character"}: a unique identifier for each matrix.}
-    \item{\code{name}:}{Object of class \code{"character"}: The name of the transcription factor. 
+\arguments{
+    \item{ID}{Object of class \code{"character"}: a unique identifier for each matrix.}
+    \item{name}{Object of class \code{"character"}: The name of the transcription factor. 
       In JASPAR, as far as possible, the name is based on the standardized Entrez gene symbols. 
       In the case the model describes a transcription factor hetero-dimer, two names are concatenated, such as RXR-VDR. 
       In a few cases, different splice forms of the same gene have different binding specificity: 
       in this case the splice form information is added to the name, based on the relevant literature.}
-    \item{\code{matrixClass}:}{Object of class \code{"character"}: Structural class of the transcription factor, based on the TFCaT system}
-    \item{\code{strand}:}{Object of class \code{"character"}: which strand is the binding sites sequences from.}
-    \item{\code{bg}:}{Object of class \code{"numeric"}: Background frequencies of the four bases. By default, it is equally 0.25.}
-    \item{\code{tags}:}{Object of class \code{"list"}: Some tags information about this model. 
+    \item{matrixClass}{Object of class \code{"character"}: Structural class of the transcription factor, based on the TFCaT system}
+    \item{strand}{Object of class \code{"character"}: which strand is the binding sites sequences from.}
+    \item{bg}{Object of class \code{"numeric"}: Background frequencies of the four bases. By default, it is equally 0.25.}
+    \item{tags}{Object of class \code{"list"}: Some tags information about this model. 
       Tags include:
       
       (1) "family": Structural sub-class of the transcription factor, based on the TFCaT system.
@@ -85,11 +83,11 @@ PFMatrix(ID="Unknown", name="Unknown", matrixClass="Unknown",
      
       (9) "comment": For some matrices, a curator comment is added.
     }
-    \item{\code{matrix}:}{Object of class \code{"matrix"}: This is the matrix information.}
-    \item{\code{pseudocounts}:}{Object of class \code{"numeric"}: This is the pseudocounts used when computing ICM or PWM from PFM. 
-      By default, a threshold of 0.8 is used based on the previous research (doi:10.1093/nar/gkn1019).}
-    \item{\code{schneider}:}{Obejct of class \code{"logical"}: this logical value indicates whether the schneider correction is used during the conversion from PFM to ICM.}
-  }
+    \item{matrix}{Object of class \code{"matrix"}: This is the matrix information.}
+    \item{x}{Object of class \code{XMatrix}.}
+ %   \item{pseudocounts}{Object of class \code{"numeric"}: This is the pseudocounts used when computing ICM or PWM from PFM. 
+ %     By default, a threshold of 0.8 is used based on the previous research (doi:10.1093/nar/gkn1019).}
+ %   \item{schneider}{Obejct of class \code{"logical"}: this logical value indicates whether the schneider correction is used during the conversion from PFM to ICM.}
 }
 
 \section{Methods}{

@@ -45,9 +45,9 @@ PFMatrixList(..., use.names=TRUE)
   \item{use.names}{
     A logical value. When TRUE, the names of the \code{XMatrix} will be kept.
   }
-  \item{x}(
+  \item{x}{
     A \code{XMatrixList} object.
-  )
+  }
 }
 
 \author{
