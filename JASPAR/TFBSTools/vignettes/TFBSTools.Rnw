@@ -94,7 +94,7 @@ pfm2 = pfm
 PFMatrixList(pfm1=pfm, pfm2=pfm2, use.names=TRUE)
 @
 
-\subsection{Site, SiteList and SitePair}
+%\subsection{Site, SiteList and SitePair}
 
 \section{Database interfaces for JASPAR2014 database}
 This section will demonstrate how to operate on the JASPAR 2014 database.
@@ -132,11 +132,11 @@ storeMatrix(db, pfm)
 deleteMatrixHavingID(db, "MA0003")
 @
 
-\section{PFM, PWM and ICM methods}
+%\section{PFM, PWM and ICM methods}
 
-\section{Scan sequence and alignments with PWM pattern}
+%\section{Scan sequence and alignments with PWM pattern}
 
-\section{Use external pattern generators}
+%\section{Use external pattern generators}
 
 \section{Conclusion}
 The following is the session info that generated this vignette:
