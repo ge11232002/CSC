@@ -1,38 +1,4 @@
 
-### ---------------------------------------------------------
-### Motif and MotifSet class
-### 
-setClass("Motif",
-         slot=c(
-                motif="GRanges",
-                motifEvalue="numeric",
-                subjectSeqs="DNAStringSet"
-                )
-         )
-
-setClass("MotifSet",
-         slots=c(
-                 motifList="GRangesList",
-                 motifEvalues="numeric",
-                 subjectSeqs="DNAStringSet"
-                 )
-         )
-
-### ---------------------------------------------------------
-### The constructor function
-###
-Motif = function(motif=GRanges(), motifEvalue=numeric(), subjectSeqs=DNAStringSet()){
-  new("Motif", motif=motif, motifEvalue=motifEvalue, subjectSeqs=subjectSeqs)
-}
-
-
-MotifSet = function(motifList=GRangesList(), motifEvalues=numeric(), subjectSeqs=DNAStringSet()){
-  new("MotifSet", motifList=motifList, motifEvalues=motifEvalues, 
-      subjectSeqs=subjectSeqs)
-}
-
-
-
 ### -------------------------------------------------------
 ### Methods
 ###
