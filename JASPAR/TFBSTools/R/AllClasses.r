@@ -275,6 +275,40 @@ PairwiseAlignmentTFBS = function(pattern, subject, type="global",
 ### The "show" method
 ### Add later... what is the pretty way?
 
+### ---------------------------------------------------------
+### Motif and MotifSet class
+###
+setClass("Motif",
+         slot=c(
+                motif="GRanges",
+                motifEvalue="numeric",
+                subjectSeqs="DNAStringSet"
+                )
+         )
+
+setClass("MotifSet",
+         slots=c(
+                 motifList="GRangesList",
+                 motifEvalues="numeric",
+                 subjectSeqs="DNAStringSet"
+                 )
+         )
+
+### ---------------------------------------------------------
+### The constructor function
+###
+Motif = function(motif=GRanges(), motifEvalue=numeric(), subjectSeqs=DNAStringSet()){
+  new("Motif", motif=motif, motifEvalue=motifEvalue, subjectSeqs=subjectSeqs)
+}
+
+
+MotifSet = function(motifList=GRangesList(), motifEvalues=numeric(), subjectSeqs=DNAStringSet()){
+  new("MotifSet", motifList=motifList, motifEvalues=motifEvalues,
+      subjectSeqs=subjectSeqs)
+}
+
+
+
 
 ### ----------------------------------------------------------------
 ### The MEME object which holds the result of a MEME run
