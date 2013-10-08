@@ -328,7 +328,7 @@ setMethod("getMatrixSet", "SQLiteConnection",
              xmatrix = .get_Matrix_by_int_id(x, id, type="PFM")
              if(!is.null(opts[["min_ic"]])){
                # we assume the matrix IS a PFM, o something in normal space at least
-               if(sum(total_ic(toICM(xmatrix))) < opts[["min_ic"]])
+               if(sum(totalIC(toICM(xmatrix))) < opts[["min_ic"]])
                  next
              }
              if(!is.null(opts[["length"]])){

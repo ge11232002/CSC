@@ -173,6 +173,6 @@ setMethod("plotLogo", "ICMatrix",
 ### ----------------------------------------------------------------------
 ### Utilities methods
 ###
-setMethod("total_ic", "ICMatrix",
+setMethod("totalIC", "ICMatrix",
           function(x) colSums(Matrix(x))
           )

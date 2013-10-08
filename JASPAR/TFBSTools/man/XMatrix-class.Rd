@@ -107,7 +107,7 @@ PFMatrix(ID="Unknown", name="Unknown", matrixClass="Unknown",
     \item{as.matrix}{
       \code{signature(x = "XMatrix")}: Returns the matrix in the XMatrix class.
     }
-%    \item{total_ic}{
+%    \item{totalIC}{
 %      \code{signature(x = "ICMatrix")}: Returns the information content vector.
 %    }
 %    \item{Matrix}{\code{signature(x = "XMatrix")}: ... }
