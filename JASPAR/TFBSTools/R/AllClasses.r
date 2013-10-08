@@ -274,3 +274,26 @@ PairwiseAlignmentTFBS = function(pattern, subject, type="global",
 ### ---------------------------------------------------------------
 ### The "show" method
 ### Add later... what is the pretty way?
+
+
+### ----------------------------------------------------------------
+### The MEME object which holds the result of a MEME run
+###
+setClass("MEME",
+         slots=c(
+                 version="character",
+                 command="character",
+                 motifs="MotifSet"
+                 )
+         )
+
+### -----------------------------------------------------------------
+### The MEME object constructor
+###
+MEME = function(version=character(), alphabet=c("A", "C", "G", "T"),
+                command=character(), motifs){
+  new("MEME", version=version, alphabet=alphabet, command=command, motifs=motifs)
+}
+
+
+
