@@ -66,6 +66,25 @@ setReplaceMethod("schneider", "ICMatrix",
                  }
                  )
 
+### -----------------------------------------------------------------
+### Updating and cloing
+###
+### An object is either 'update'd in place (usually with a replacement
+### method) or 'clone'd (copied), with specified slots/fields overridden.
+setMethod("update", "XMatrix",
+          function(object, ..., check=TRUE){
+            initialize(object, ...)
+          }
+          )
+setMethod("clone", "ANY",
+          function(x, ...){
+            if(nargs() > 1L)
+              initialize(x, ...)
+            else
+              x
+          }
+          )
+
 ### ---------------------------------------------------------
 ### Some utilities functions for XMatrix object
 ###

@@ -31,7 +31,7 @@ setClassUnion("XMatrix", c("PFMatrix", "ICMatrix", "PWMatrix"))
 
 
 ### ----------------------------------------------------------------------
-### The PFMatrix constructor
+### The XMatrix constructor
 ###
 PFMatrix = function(ID="Unknown", name="Unknown", matrixClass="Unknown",
                     strand="*", bg=c(A=0.25, C=0.25, G=0.25, T=0.25), tags=list(), matrix=matrix()){
