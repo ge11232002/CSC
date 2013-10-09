@@ -275,6 +275,8 @@ PairwiseAlignmentTFBS = function(pattern, subject, type="global",
 ### The "show" method
 ### Add later... what is the pretty way?
 
+
+
 ### ---------------------------------------------------------
 ### Motif and MotifSet class
 ###
