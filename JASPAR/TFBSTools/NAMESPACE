@@ -11,7 +11,7 @@ importMethodsFrom(Biostrings, reverseComplement, matchPWM, maxScore, minScore, c
 importMethodsFrom(RSQLite, dbGetQuery, dbConnect, dbDisconnect)
 
 importFrom(seqLogo, seqLogo, makePWM)
-importFrom(Biostrings, unitScale, PWMscoreStartingAt, DNAStringSet)
+importFrom(Biostrings, unitScale, PWMscoreStartingAt, DNAStringSet, DNA_BASES)
 
 ### -----------------------------------------------------------------
 ### Export S4 classes defined in TFBSTools
