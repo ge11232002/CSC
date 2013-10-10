@@ -272,7 +272,7 @@ setMethod("getMatrixByName", "SQLiteConnection",
             if(length(baseID) == 0)
               return(NA)
             if(length(baseID) > 1)
-              warning("There are ", length(baseID), " distinct stable IDs with name ", name, ": ", baseID)
+              warning("There are ", length(baseID), " distinct stable IDs with name ", name, ": ", paste(baseID, collapse=", "))
             getMatrixByID(x, baseID[1])
           }
           )
