@@ -130,9 +130,10 @@ setMethod("toICM", "matrix",
           function(x, pseudocounts=0.8, ## This is the recommended value from http://nar.oxfordjournals.org/content/37/3/939.long.
                    schneider=FALSE,
                    bg=c(A=0.25, C=0.25, G=0.25, T=0.25)){
-            x = Biostrings:::.normargPfm(x)
+            x = normargPfm(x)
             ## From here 'x' is guaranteed to have at least 1 column and to have
             ## all its columns sum to the same value.
+            ## In fact, these columns sum could be different... Modify the .normargPfm a little bit.
             bg= Biostrings:::.normargPriorParams(bg)
             #nseq = sum(x[ ,1L])
             nseq = colSums(x)
