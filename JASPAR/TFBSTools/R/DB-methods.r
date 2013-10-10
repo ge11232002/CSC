@@ -263,7 +263,7 @@ setMethod("getMatrixByID", "JASPAR2014",
 setMethod("getMatrixByName", "SQLiteConnection",
           function(x, name){
             # here x is the path of SQLite db file
-            type = match.arg(type, c("PWM", "PFM", "ICM"))
+            #type = match.arg(type, c("PWM", "PFM", "ICM"))
             if(missing(name))
               stop("name needs to be specified!")
             sqlCMD = paste0("SELECT distinct BASE_ID  FROM MATRIX WHERE NAME='", name, "'")
