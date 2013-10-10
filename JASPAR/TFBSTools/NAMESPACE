@@ -12,11 +12,12 @@ importMethodsFrom(RSQLite, dbGetQuery, dbConnect, dbDisconnect)
 
 importFrom(seqLogo, seqLogo, makePWM)
 importFrom(Biostrings, unitScale, PWMscoreStartingAt, DNAStringSet, DNA_BASES)
+importFrom(caTools, runmean)
 
 ### -----------------------------------------------------------------
 ### Export S4 classes defined in TFBSTools
 ###
-exportClasses(PFMatrix, PFMatrixList)
+exportClasses(PFMatrix, PFMatrixList, PairwiseAlignmentTFBS)
 
 ### -----------------------------------------------------------------
 ### Export non-generic functions
@@ -24,7 +25,8 @@ exportClasses(PFMatrix, PFMatrixList)
 export(
   ## AllClasses.r
   PFMatrix,
-  PFMatrixList
+  PFMatrixList,
+  PairwiseAlignmentTFBS
 )
 
 ### -----------------------------------------------------------------
