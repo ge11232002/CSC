@@ -5,6 +5,7 @@ import(IRanges)
 
 #importClassesFrom(JASPAR2014, JASPAR2014)
 importClassesFrom(Biostrings, DNAStringSet, PairwiseAlignments)
+importClassesFrom(GenomicRanges, GRanges)
 
 importMethodsFrom(Biostrings, reverseComplement, matchPWM, maxScore, minScore, consensusMatrix, pattern, PairwiseAlignments)
 importMethodsFrom(RSQLite, dbGetQuery, dbConnect, dbDisconnect)
@@ -54,5 +55,17 @@ export(
   bg, 
   tags,
   matrixType,
-  XMatrixList
+  XMatrixList,
+
+  ## PWM-methods.r
+  toPWM,
+  searchSeq,
+  searchAln,
+
+  ## ICM-methods.r
+  toICM,
+  plotLogo,
+  totalIC
 )
+
+
