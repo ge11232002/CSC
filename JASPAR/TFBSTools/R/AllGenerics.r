@@ -60,9 +60,13 @@ setGeneric("toPWM", signature="x",
              standardGeneric("toPWM")
            )
 
-setGeneric("plotLogo", signature="x",
+#setGeneric("plotLogo", signature="x",
+#           function(x, ic.scale = TRUE, xaxis = TRUE, yaxis = TRUE,
+#                    xfontsize = 15, yfontsize = 15) standardGeneric("plotLogo")
+#           )
+setGeneric("seqLogo", signature="x",
            function(x, ic.scale = TRUE, xaxis = TRUE, yaxis = TRUE,
-                    xfontsize = 15, yfontsize = 15) standardGeneric("plotLogo")
+                    xfontsize = 15, yfontsize = 15) standardGeneric("seqLogo")
            )
 setGeneric("totalIC", signature="x",
            function(x) standardGeneric("totalIC"))

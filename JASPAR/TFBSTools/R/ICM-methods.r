@@ -159,13 +159,23 @@ setMethod("toICM", "matrix",
 ### --------------------------------------------------------------------
 ### Plot the seqlogo
 ###
-setMethod("plotLogo", "ICMatrix",
+#setMethod("plotLogo", "ICMatrix",
+#          function(x, ic.scale = TRUE, xaxis = TRUE, yaxis = TRUE,
+#                   xfontsize = 15, yfontsize = 15){
+#            m = Matrix(x)
+#            m = sweep(m, MARGIN=2, colSums(m), "/")
+#            m = makePWM(m)
+#            seqLogo(m, ic.scale = ic.scale, xaxis = xaxis, yaxis = yaxis,
+#                             xfontsize = xfontsize, yfontsize = yfontsize)
+#          }
+#          )
+setMethod("seqLogo", "ICMatrix",
           function(x, ic.scale = TRUE, xaxis = TRUE, yaxis = TRUE,
                    xfontsize = 15, yfontsize = 15){
             m = Matrix(x)
             m = sweep(m, MARGIN=2, colSums(m), "/")
             m = makePWM(m)
-            seqLogo(m, ic.scale = ic.scale, xaxis = xaxis, yaxis = yaxis,
+            seqLogo::seqLogo(m, ic.scale = ic.scale, xaxis = xaxis, yaxis = yaxis,
                              xfontsize = xfontsize, yfontsize = yfontsize)
           }
           )
