@@ -12,7 +12,7 @@ importMethodsFrom(Biostrings, reverseComplement, matchPWM, maxScore, minScore, c
 importMethodsFrom(RSQLite, dbGetQuery, dbConnect, dbDisconnect)
 
 importFrom(seqLogo, seqLogo, makePWM)
-importFrom(Biostrings, unitScale, PWMscoreStartingAt, DNAStringSet, DNA_BASES)
+importFrom(Biostrings, unitScale, PWMscoreStartingAt, DNAStringSet, DNA_BASES, DNA_ALPHABET)
 importFrom(caTools, runmean)
 
 ### -----------------------------------------------------------------
@@ -78,7 +78,10 @@ export(
 
   ## Site-methods.r
   writeGFF3, writeGFF2,
-  relScore
+  relScore,
+
+  ## PairwiseAlignment-methods.r
+  doSiteSearch
 )
 
 
