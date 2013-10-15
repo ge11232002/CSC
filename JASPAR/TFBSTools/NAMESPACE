@@ -80,8 +80,10 @@ export(
   ## Site-methods.r
   writeGFF3, writeGFF2,
   relScore,
+  views,
 
   ## PairwiseAlignment-methods.r
+  calConservation,
   doSiteSearch
 )
 
