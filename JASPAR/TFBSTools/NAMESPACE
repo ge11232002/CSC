@@ -18,7 +18,10 @@ importFrom(caTools, runmean)
 ### -----------------------------------------------------------------
 ### Export S4 classes defined in TFBSTools
 ###
-exportClasses(PFMatrix, PFMatrixList, PairwiseAlignmentTFBS)
+exportClasses(PFMatrix, PWMatrix, ICMatrix,
+  PFMatrixList, PWMatrixList, ICMatrixList,
+  Site, SiteList,
+  PairwiseAlignmentTFBS)
 
 ### -----------------------------------------------------------------
 ### Export non-generic functions
@@ -27,7 +30,10 @@ export(
   ## AllClasses.r
   PFMatrix,
   PFMatrixList,
-  PairwiseAlignmentTFBS
+  PairwiseAlignmentTFBS,
+  ICMatrixList,
+  PWMatrixList,
+  Site, SiteList
 )
 
 ### -----------------------------------------------------------------
@@ -68,7 +74,11 @@ export(
   ## ICM-methods.r
   toICM,
   seqLogo,
-  totalIC
+  totalIC,
+
+  ## Site-methods.r
+  writeGFF3, writeGFF2,
+  relScore
 )
 
 
