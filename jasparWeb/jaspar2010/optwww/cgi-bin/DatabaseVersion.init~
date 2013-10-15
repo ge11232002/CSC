@@ -1,0 +1,22 @@
+#INIT FILE FOR version info (which also will say what database server we are at), and links to the dev server and stable server
+ 
+
+# version number is X.X [stable, unstable], where the stable server only has stable versions
+
+
+
+# JASPAR DEV version (comment if on stable server)
+
+VERSION	3.0_STABLE
+OTHER_SERVER_MESSAGE	Visit the stable JASPAR server:  <a href=http://jaspar.genereg.net> jaspar.genereg.net </a>
+THIS_SERVER_MESSAGE	You are using the  JASPAR development server: <a href=http://jaspardev.genereg.net> jaspardev.genereg.net </a>.
+
+
+# JASPAR STABLE version (uncomment if on stable server)
+
+#VERSION	3.0 STABLE
+#OTHER_SERVER_MESSAGE	Visit the developmental JASPAR server: <a href=http://jaspardev.genereg.net> jaspardev.genereg.net </a>
+
+#OTHER_SERVER_MESSAGE	Visit the developmental JASPAR server: <a href=http://jaspar.binf.ku.dk> jaspar.binf.ku.dk </a>
+
+#THIS_SERVER_MESSAGE	You are using the JASPAR stable server: <a href=http://jaspar.genereg.net> jaspar.genereg.net </a>

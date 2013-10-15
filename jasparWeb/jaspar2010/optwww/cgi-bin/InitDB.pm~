@@ -1,0 +1,58 @@
+package InitDB;
+use strict;
+
+use JasparSubDB;
+use WEBSERVER_OPT;
+
+# this will read in the actual sub-databases used, their settings etc AND what filelds thwy will be using in browinsg and popups
+# it will read a pre-defined file called SubDataBases.init, and give back an array of JasparSubDB objects
+my @sub_dbs;
+my %data;
+
+
+# This is a temporary hack. Use WEBSERVER_OPT
+use constant BASE_DIR =>  "/home/albin/public_html/jaspar_2010/";
+use constant CGI_BASE_DIR => BASE_DIR."cgi-bin/";
+
+my $dir = CGI_BASE_DIR;
+
+sub init{
+    open (INIT_FILE, $dir."SubDataBases.init")|| die "Cannot open ".$dir."SubDataBases.init";
+    while (<INIT_FILE>){ # parse out the values to variosu dbs and make 
+	next if /^#/; 
+	chomp;
+	
+	next unless $_;
+	if ($_ eq "START_ENTRY"){ # make a new entry
+	    undef %data;
+	    next;
+	}
+	if ($_ eq "END_ENTRY"){ # finish entry
+	    my $db= JasparSubDB->new(%data);
+	    push (@sub_dbs,$db); 
+	    
+	    next;
+	}
+	
+	
+	my ($key, $val)= split(/\t/, $_);
+	if ( $key eq "BROWSE_KEYS"){
+	    $data{$key}= [split(",", $val)];
+	}
+	elsif ( $key eq "POP_UP_KEYS"){
+	    $data{$key}= [split(",", $val)];
+	}
+	else{
+	    $data{$key}=$val;	
+	}
+       
+	
+	
+    }
+# return the array
+    return \@sub_dbs;
+}
+
+
+
+1;

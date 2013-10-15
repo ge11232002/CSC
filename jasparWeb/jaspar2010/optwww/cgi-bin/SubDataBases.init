@@ -1,0 +1,97 @@
+#INIT FILE FOR ANY SUB-DATABASES USED WITHIN JASPAR
+#ROWS STARTING WITH "#" ARE IGNIRE USE THIS FOR DOCUMENTATION 
+# LOOK AT EXAMPLES FIRST AND TRY OUT LOCALLLY BEFORE GOING LIVE
+
+#
+#GLOBAL CONNECTIONS
+DB_NAME	JASPAR_2010
+#MYSQL_SERVER	mysql-cbu
+MYSQL_SERVER	localhost
+#MYSQL_USER	supat
+MYSQL_USER	borisl
+#MYSQL_PASSWD	thongjuasu81
+MYSQL_PASSWD	chongabrdja
+
+# start
+START_ENTRY
+# The database name as in the mysql database
+COLLECTION	CORE
+# the name of the database as shown in the web interface
+BROWSE_KEYS	name,species,class,family
+#keys in pop up window. logi and matric will always be shown . Id will alsways be the first 
+# check up the keys...there is a db probelm etc wit different dbs: just use entrez
+POP_UP_KEYS	name,class,family,species,tax_group,acc,type,medline,pazar_tf_id,comment
+# possibly have and alias line also - what the keys will hae for legend in teh window. Skip for now 
+# otional descriptor line
+DESCRIPTION	 The JASPAR CORE database contains a curated, non-redundant set of profiles,  derived from published collections of experimentally defined transcription factor binding sites for eukaryotes. The prime difference to similar resources (TRANSFAC, etc) consist of the open data acess, non-redundancy and quality. <br><B>When should it be used?</b> When seeking models for specific factors or structural classes, or if experimental evidence is paramount 
+END_ENTRY
+
+
+###PHYLOFACTS
+START_ENTRY
+COLLECTION	PHYLOFACTS
+BROWSE_KEYS	name,jaspar,transfac
+POP_UP_KEYS	name,jaspar,transfac,sysgroup,MCS,type,medline
+DESCRIPTION	The JASPAR PHYLOFACTS database consists of 174 profiles that were extracted from phylogenetically conserved gene upstream elements.See Xie et al., Systematic discovery of regulatory motifs in human promoters and 3' UTRs by comparison of several mammals., Nature 434, 338-345 (2005) and supplementary material for details. <br><B>When should it be used?</b>The JASPAR PHYLOFACTS matrices are a mix of known and as of yet undefined motifs. They are useful when one expects that other factors might determine promoter characteristics, such as structural aspects and tissue specificity. They are highly complementary to the JASPAR CORE matrices, so are best used in combination with this matrix set.
+END_ENTRY
+
+###FAMILIAL
+START_ENTRY
+COLLECTION	FAM
+BROWSE_KEYS	name,included_models,class
+POP_UP_KEYS	name,type,medline
+DESCRIPTION	The JASPAR FAM database consist of models describing shared binding properties of structural classes of transcription factors. These types of models can be called familial profiles, consensus matrices or metamodels. The models have two prime benefits: 1) Since many factors have similar tagrget sequences, we often experience multiple predictions at the same locations that correspond to the same site. This type of models reduce the complexity of the results. 2) The models can be used to classify newly derived profiles (or project what type of structural class its cognate transcription factor belongs to). <br><B>When should it be used?</b>When searching large genomic sequences with no prior knowledge. For classification of new user-supplied profiles.
+END_ENTRY
+
+
+
+###POLII
+START_ENTRY
+COLLECTION	POLII
+BROWSE_KEYS	name,included_models,class
+POP_UP_KEYS	name,type,medline
+BROWSE_KEYS	name,species,class,family
+POP_UP_KEYS	name,class,family,species,tax_group,acc,type,medline,comment
+DESCRIPTION	The JASPAR POLII database consist of models describing patterns found in RNA Polymerase II (Pol II) promoters. Some of these correposnd to a known protein (like the TATA box), while some has no specific interactor (like DPE). Models are taken from published literature or public databases. <br><B>When should it be used?</b> When investigating core promoters from multicellular eukaryotes
+END_ENTRY
+
+###CNE
+START_ENTRY
+COLLECTION	CNE
+BROWSE_KEYS	name,consensus
+POP_UP_KEYS	name,consensus
+DESCRIPTION	JASPAR CNE is a collection of 233 matrix profiles derived by Xie et al. (PNAS 2007) by clustering of overrepresented motifs from human conserved non-coding elements. While the biochemical and biological role of most of these patterns is still unknown, Xie et al. have shown that the most abundant ones correspond to known DNA-binding proteins, among them is the insulator-binding protein CTCF. <br><B>When should it be used?</b> When characterizing of regulatory inputs in long-range developmental gene regulation in vertebrates.
+END_ENTRY
+
+###PBE
+START_ENTRY
+COLLECTION	PBM_HLH
+BROWSE_KEYS	name,species,class,family
+POP_UP_KEYS	name,class,family,species,tax_group,acc,type,medline,comment
+DESCRIPTION	All the PBM collections are built by using  new in-vitro techniques, based on k-mer microarrays. PBM matrix models have their own database which is specialized for the data: UniPROBE. The PBM HLH, collection is the set derived by Grove et al (Cell 2008). It holds 19 C. elegans bHLH transcription factor models<br><B>When should it be used?</b> Where it is important that each matrix was derived using the same protocol, focusing on bHLH factors
+END_ENTRY
+
+###PBE
+START_ENTRY
+COLLECTION	PBM_HOMEO
+BROWSE_KEYS	name,species,class,family
+POP_UP_KEYS	name,class,family,species,tax_group,acc,type,medline,comment
+DESCRIPTION	All the PBM collections are built by using  new in-vitro techniques, based on k-mer microarrays. PBM matrix models have their own database which is specialized for the data: UniPROBE.The PBM, collection is the set derived by Berger et al (Cell 2008) including 176 profiles from mouse homeodomain<br><B>When should it be used?</b>Where it is important that each matrix was derived using the same protocol, focused on homeobox factors
+END_ENTRY
+
+###PBE
+START_ENTRY
+COLLECTION	PBM
+BROWSE_KEYS	name,species,class,family
+POP_UP_KEYS	name,class,family,species,tax_group,acc,type,medline,comment
+DESCRIPTION	All the PBM collections are built by using  new in-vitro techniques, based on k-mer microarrays. PBM matrix models have their own database which is specialized for the data: UniPROBE. The PBM collection is the set derived by Badis et al (Science 2009) from binding preferences of 104 mouse transcription factors. <B>When should it be used?</b> When characterizing of regulatory inputs in long-range developmental gene regulation in vertebrates.
+END_ENTRY
+
+###PBE
+START_ENTRY
+COLLECTION	SPLICE
+BROWSE_KEYS	name,consensus
+POP_UP_KEYS	name,consensus
+DESCRIPTION	JASPAR CNE is a collection of 233 matrix profiles derived by Xie et al. (PNAS 2007) by clustering of overrepresented motifs from human conserved non-coding elements. While the biochemical and biological role of most of these patterns is still unknown, Xie et al. have shown that the most abundant ones correspond to known DNA-binding proteins, among them is the insulator-binding protein CTCF. <br><B>When should it be used?</b> When characterizing of regulatory inputs in long-range developmental gene regulation in vertebrates.
+END_ENTRY
+

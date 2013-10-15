@@ -1,0 +1,91 @@
+#INIT FILE FOR ANY SUB-DATABASES USED WITHIN JASPAR
+#ROWS STARTING WITH "#" ARE IGNIRE USE THIS FOR DOCUMENTATION 
+# LOOK AT EXAMPLES FIRST AND TRY OUT LOCALLLY BEFORE GOING LIVE
+
+# start
+START_ENTRY
+# The database name as in the mysql database
+DB_NAME	JASPAR_CORE_2008
+# the name of the database as shown in the web interface
+DB_SHOW_NAME	JASPAR_CORE
+# the mysql server settings
+MYSQL_SERVER	localhost
+MYSQL_USER	borisl
+MYSQL_PASSWD	chongabrdja
+#browse keys: these values will show as as columnswhen browsing. ID(first)  and Logo(last) will always show uo
+BROWSE_KEYS	name,species,class
+#keys in pop up window. logi and matric will always be shown . Id will alsways be the first 
+# check up the keys...there is a db probelm etc wit different dbs: just use entrez
+POP_UP_KEYS	name,class,species,total_ic,sysgroup,acc,type,medline,comment
+# possibly have and alias line also - what the keys will hae for legend in teh window. Skip for now 
+# otional descriptor line
+DESCRIPTION	 The JASPAR CORE database contains a curated, non-redundant set of 123 profiles,  derived from published collections of experimentally defined transcription factor binding sites for multicellular eukaryotes. The prime difference to similar resources (TRANSFAC, TESS etc) consist of the open data acess, non-redundancy and quality: JASPAR CORE is a smaller set that is non-redundant and curated. <br><B>When should it be used?</b> When seeking models for specific factors or structural classes, or if experimental evidence is paramount 
+END_ENTRY
+
+###PHYLOFACTS
+START_ENTRY
+DB_NAME	JASPAR_PHYLOFACTS_2008
+DB_SHOW_NAME	JASPAR_PHYLOFACTS
+MYSQL_SERVER	localhost
+MYSQL_USER	borisl
+MYSQL_PASSWD	chongabrdja
+BROWSE_KEYS	name,jaspar,transfac
+POP_UP_KEYS	name,jaspar,transfac,sysgroup,MCS,type,medline
+DESCRIPTION	The JASPAR PHYLOFACTS database consists of 174 profiles that were extracted from phylogenetically conserved gene upstream elements.See Xie et al., Systematic discovery of regulatory motifs in human promoters and 3' UTRs by comparison of several mammals., Nature 434, 338-345 (2005) and supplementary material for details. <br><B>When should it be used?</b>The JASPAR PHYLOFACTS matrices are a mix of known and as of yet undefined motifs. They are useful when one expects that other factors might determine promoter characteristics, such as structural aspects and tissue specificity. They are highly complementary to the JASPAR CORE matrices, so are best used in combination with this matrix set.
+END_ENTRY
+
+###FAMILIAL
+START_ENTRY
+DB_NAME	JASPAR_FAM_2005
+DB_SHOW_NAME	JASPAR_FAM
+MYSQL_SERVER	localhost
+MYSQL_USER	borisl
+MYSQL_PASSWD	chongabrdja
+BROWSE_KEYS	name,included_models,class
+POP_UP_KEYS	name,type,medline
+DESCRIPTION	The JASPAR FAM database consist of models describing shared binding properties of structural classes of transcription factors. These types of models can be called familial profiles, consensus matrices or metamodels. The models have two prime benefits: 1) Since many factors have similar tagrget sequences, we often experience multiple predictions at the same locations that correspond to the same site. This type of models reduce the complexity of the results. 2) The models can be used to classify newly derived profiles (or project what type of structural class its cognate transcription factor belongs to). <br><B>When should it be used?</b>When searching large genomic sequences with no prior knowledge. For classification of new user-supplied profiles.
+END_ENTRY
+
+
+
+###POLII
+START_ENTRY
+DB_NAME	JASPAR_POLII_2008
+DB_SHOW_NAME	JASPAR_POLII
+MYSQL_SERVER	localhost
+MYSQL_USER	borisl
+MYSQL_PASSWD	chongabrdja
+BROWSE_KEYS	name,Description,species
+POP_UP_KEYS	name,Description,Start relative to TSS,End relative to TSS,species,total_ic,medline
+DESCRIPTION	The JASPAR POLII database consist of models describing patterns found in RNA Polymerase II (Pol II) promoters. Some of these correposnd to a known protein (like the TATA box), while some has no specific interactor (like DPE). Models are taken from published literature or public databases. <br><B>When should it be used?</b> When investigating core promoters from multicellular eukaryotes
+END_ENTRY
+
+
+
+###CNE
+START_ENTRY
+DB_NAME	JASPAR_CNE_2008
+DB_SHOW_NAME	JASPAR_CNE
+MYSQL_SERVER	localhost
+MYSQL_USER	borisl
+MYSQL_PASSWD	chongabrdja
+BROWSE_KEYS	name,consensus
+POP_UP_KEYS	name,consensus,medline
+DESCRIPTION	The JASPAR CNE database is a collection of 233 matrix profiles  derived by clustering of overrepresented motifs from human conserved non-coding elements. While the biochemical and biological role of most of these patterns is still unknown, Xie et al. have shown that the most abundant ones correspond to known DNA-binding proteins, most notably insulator-binding protein CTCF. <br><B>When should it be used?</b>Characterization of regulatory inputs in long-range developmental gene regulation in vertebrates
+
+
+database .... <br><B>When should it be used?</b> When investigating ...
+END_ENTRY
+
+###SPLICE
+START_ENTRY
+DB_NAME	JASPAR_SPLICE_2008
+DB_SHOW_NAME	JASPAR_SPLICE
+MYSQL_SERVER	localhost
+MYSQL_USER	borisl
+MYSQL_PASSWD	chongabrdja
+BROWSE_KEYS	name,description
+POP_UP_KEYS	name,description,medline
+DESCRIPTION	The JASPAR SPLICE database contains matrix profiles of human canonical and non-canonical splice sites, as matching donor:acceptor pairs. It currently contains only 6 highly reliable profiles obtained from human genome.  <br><B>When should it be used?</b> When investigating  splice sites
+END_ENTRY
+
