@@ -1,8 +1,9 @@
 import(methods)
 import(RSQLite)
 
-import(IRanges)
+#import(IRanges)
 
+importClassesFrom(IRanges, SimpleList)
 #importClassesFrom(JASPAR2014, JASPAR2014)
 importClassesFrom(Biostrings, DNAStringSet, PairwiseAlignments)
 importClassesFrom(GenomicRanges, GRanges)
