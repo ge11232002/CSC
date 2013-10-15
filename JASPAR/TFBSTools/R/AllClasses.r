@@ -171,22 +171,6 @@ SiteList = function(..., use.names=TRUE){
   IRanges:::newList("SiteList", listData)
 }
 
-### ----------------------------------------------------------------
-### Methods
-###
-setMethod("writeGFF3", "SiteList",
-          function(x){
-            ans = do.call(rbind, lapply(x, writeGFF3))
-            return(ans)
-          }
-          )
-setMethod("writeGFF2", "SiteList",
-           function(x){
-             ans = do.call(rbind, lapply(x, writeGFF2))
-             return(ans)
-           }
-           )
-
 
 ### -------------------------------------------------------------------
 ### SitePair object: a nucleotide sequence feature object representing (possibly putative) transcription factor binding site from A alignment
