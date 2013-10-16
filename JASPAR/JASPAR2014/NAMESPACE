@@ -1,14 +1,7 @@
+import(methods)
 import(Biostrings)
-import(RSQLite)
 
 exportClasses(
-  JASPAR
+  JASPAR2014
   )
 
-export(
-  JASPAR, searchDb
-  )
-
-exportMethods(
-  "[", "show", "TFBSinfo", "FMatrix", "seqs", "names"
-  )

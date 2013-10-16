@@ -1,0 +1,80 @@
+$VAR1 = bless( {
+                 'sub_dbs' => {
+                                'POLII' => bless( {
+                                                    'POP_UP_KEYS' => [
+                                                                       'name',
+                                                                       'type',
+                                                                       'medline'
+                                                                     ],
+                                                    'BROWSE_KEYS' => [
+                                                                       'name',
+                                                                       'included_models',
+                                                                       'class'
+                                                                     ],
+                                                    'COLLECTION' => 'POLII'
+                                                  }, 'JasparSubDB' ),
+                                'PHYLOFACTS' => bless( {
+                                                         'POP_UP_KEYS' => [
+                                                                            'name',
+                                                                            'jaspar',
+                                                                            'transfac',
+                                                                            'sysgroup',
+                                                                            'MCS',
+                                                                            'type',
+                                                                            'medline'
+                                                                          ],
+                                                         'BROWSE_KEYS' => [
+                                                                            'name',
+                                                                            'jaspar',
+                                                                            'transfac'
+                                                                          ],
+                                                         'COLLECTION' => 'PHYLOFACTS'
+                                                       }, 'JasparSubDB' ),
+                                'FAM' => bless( {
+                                                  'POP_UP_KEYS' => [
+                                                                     'name',
+                                                                     'type',
+                                                                     'medline'
+                                                                   ],
+                                                  'BROWSE_KEYS' => [
+                                                                     'name',
+                                                                     'included_models',
+                                                                     'class'
+                                                                   ],
+                                                  'COLLECTION' => 'FAM'
+                                                }, 'JasparSubDB' ),
+                                'CNE' => bless( {
+                                                  'POP_UP_KEYS' => [
+                                                                     'name',
+                                                                     'consensus'
+                                                                   ],
+                                                  'BROWSE_KEYS' => [
+                                                                     'name',
+                                                                     'consensus'
+                                                                   ],
+                                                  'COLLECTION' => 'CNE'
+                                                }, 'JasparSubDB' ),
+                                'CORE' => bless( {
+                                                   'POP_UP_KEYS' => [
+                                                                      'name',
+                                                                      'class',
+                                                                      'species',
+                                                                      'total_ic',
+                                                                      'tax_group',
+                                                                      'acc',
+                                                                      'type',
+                                                                      'medline',
+                                                                      'comment'
+                                                                    ],
+                                                   'BROWSE_KEYS' => [
+                                                                      'name',
+                                                                      'species',
+                                                                      'class'
+                                                                    ],
+                                                   'COLLECTION' => 'CORE'
+                                                 }, 'JasparSubDB' )
+                              },
+                 'dbh' => bless( {
+                                   'dbh' => bless( {}, 'DBI::db' )
+                                 }, 'TFBS::DB::JASPAR5' )
+               }, 'InitDB' );

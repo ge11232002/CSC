@@ -2,6 +2,9 @@
 \Rdversion{1.1}
 \docType{class}
 \alias{XMatrix}
+\alias{XMatrix-class}
+\alias{PFMatrix}
+\alias{PFMatrix-class}
 \alias{bg,XMatrix-method}
 \alias{bg<-,XMatrix-method}
 \alias{ID,XMatrix-method}
@@ -13,24 +16,26 @@
 \alias{matrixClass<-,XMatrix-method}
 \alias{name,XMatrix-method}
 \alias{name<-,XMatrix-method}
-\alias{revcom,XMatrix-method}
-\alias{show,XMatrix-method}
+\alias{reverseComplement,XMatrix-method}
 \alias{strand,XMatrix-method}
 \alias{strand<-,XMatrix-method}
+\alias{tags}
 \alias{tags,XMatrix-method}
-\alias{update,XMatrix-method}
-\alias{total_ic, ICMatrix-method}
+\alias{matrixType-methods}
+\alias{matrixType,ICMatrix-method}
+\alias{matrixType,PFMatrix-method}
+\alias{matrixType,PWMatrix-method}
+\alias{[-methods}
+\alias{[,Site-method}
+\alias{length-methods}
+\alias{length,Site-method}
+\alias{length,SitePair-method}
 
 \title{\code{"XMatrix"} objects}
 \description{
-%%  ~~ A concise (1-5 lines) description of what the class is. ~~
 XMatrix is a virtual class. No objects can be created from it directly. Three classes are derived from this class: PFMatrix, PWMatrix and ICMatrix.
 
 PFMatrix is a class whose instances are objects representing raw position frequency matrices (PFMs).
-
-PWMatrix is a class whose instances are objects representing position weight matrices (PWMs). Compared with PFMatrix, it has extra slot \code{pseudocounts}.
-
-ICMatrix is a class whose instances are objects representing information content matrices (ICMs). Compared with PWMatrix, it has extra slot \code{schneider}.
 }
 
 \usage{
@@ -38,33 +43,23 @@ ICMatrix is a class whose instances are objects representing information content
 PFMatrix(ID="Unknown", name="Unknown", matrixClass="Unknown", 
          strand="*", bg=c(A=0.25, C=0.25, G=0.25, T=0.25), 
          tags=list(), matrix=matrix())
-PWMatrix(ID="Unknown", name="Unknown", matrixClass="Unknown", 
-         strand="*", bg=c(A=0.25, C=0.25, G=0.25, T=0.25), 
-         tags=list(), matrix=matrix(), pseudocounts=numeric())
-ICMatrix(ID="Unknown", name="Unknown", matrixClass="Unknown",
-         strand="*", bg=c(A=0.25, C=0.25, G=0.25, T=0.25), 
-         tags=list(), matrix=matrix(), pseudocounts=numeric(), 
-         schneider=logical())
-
 ## Accessor-like methods:
 \S4method{ID}{XMatrix}(x)
 \S4method{bg}{XMatrix}(x)
 
 ## ... and more (see Methods)
 }
-
-\section{Slots}{
-  \describe{
-    \item{\code{ID}:}{Object of class \code{"character"}: a unique identifier for each matrix.}
-    \item{\code{name}:}{Object of class \code{"character"}: The name of the transcription factor. 
+\arguments{
+    \item{ID}{Object of class \code{"character"}: a unique identifier for each matrix.}
+    \item{name}{Object of class \code{"character"}: The name of the transcription factor. 
       In JASPAR, as far as possible, the name is based on the standardized Entrez gene symbols. 
       In the case the model describes a transcription factor hetero-dimer, two names are concatenated, such as RXR-VDR. 
       In a few cases, different splice forms of the same gene have different binding specificity: 
       in this case the splice form information is added to the name, based on the relevant literature.}
-    \item{\code{matrixClass}:}{Object of class \code{"character"}: Structural class of the transcription factor, based on the TFCaT system}
-    \item{\code{strand}:}{Object of class \code{"character"}: which strand is the binding sites sequences from.}
-    \item{\code{bg}:}{Object of class \code{"numeric"}: Background frequencies of the four bases. By default, it is equally 0.25.}
-    \item{\code{tags}:}{Object of class \code{"list"}: Some tags information about this model. 
+    \item{matrixClass}{Object of class \code{"character"}: Structural class of the transcription factor, based on the TFCaT system}
+    \item{strand}{Object of class \code{"character"}: which strand is the binding sites sequences from.}
+    \item{bg}{Object of class \code{"numeric"}: Background frequencies of the four bases. By default, it is equally 0.25.}
+    \item{tags}{Object of class \code{"list"}: Some tags information about this model. 
       Tags include:
       
       (1) "family": Structural sub-class of the transcription factor, based on the TFCaT system.
@@ -88,11 +83,11 @@ ICMatrix(ID="Unknown", name="Unknown", matrixClass="Unknown",
      
       (9) "comment": For some matrices, a curator comment is added.
     }
-    \item{\code{matrix}:}{Object of class \code{"matrix"}: This is the matrix information.}
-    \item{\code{pseudocounts}:}{Object of class \code{"numeric"}: This is the pseudocounts used when computing ICM or PWM from PFM. 
-      By default, a threshold of 0.8 is used based on the previous research (doi:10.1093/nar/gkn1019).}
-    \item{\code{schneider}:}{Obejct of class \code{"logical"}: this logical value indicates whether the schneider correction is used during the conversion from PFM to ICM.}
-  }
+    \item{matrix}{Object of class \code{"matrix"}: This is the matrix information.}
+    \item{x}{Object of class \code{XMatrix}.}
+ %   \item{pseudocounts}{Object of class \code{"numeric"}: This is the pseudocounts used when computing ICM or PWM from PFM. 
+ %     By default, a threshold of 0.8 is used based on the previous research (doi:10.1093/nar/gkn1019).}
+ %   \item{schneider}{Obejct of class \code{"logical"}: this logical value indicates whether the schneider correction is used during the conversion from PFM to ICM.}
 }
 
 \section{Methods}{
@@ -106,15 +101,15 @@ ICMatrix(ID="Unknown", name="Unknown", matrixClass="Unknown",
     \item{length}{
       \code{signature(x = "XMatrix")}: Gets the pattern length in nucleotides (i.e. number of columns in the matrix).
     }
-    \item{revcom}{
+    \item{reverseComplement}{
       \code{signature(x = "XMatrix")}: Generates the reverse complement matrix object. Note than the strand is XMatrix will also be changed to the opossite strand.
     }
     \item{as.matrix}{
       \code{signature(x = "XMatrix")}: Returns the matrix in the XMatrix class.
     }
-    \item{total_ic}{
-      \code{signature(x = "ICMatrix")}: Returns the information content vector.
-    }
+%    \item{totalIC}{
+%      \code{signature(x = "ICMatrix")}: Returns the information content vector.
+%    }
 %    \item{Matrix}{\code{signature(x = "XMatrix")}: ... }
 %    \item{Matrix<-}{\code{signature(x = "XMatrix")}: ... }
 %    \item{matrixClass}{\code{signature(x = "XMatrix")}: ... }
@@ -129,25 +124,10 @@ ICMatrix(ID="Unknown", name="Unknown", matrixClass="Unknown",
 %    \item{update}{\code{signature(object = "XMatrix")}: ... }
 	 }
 }
-\references{
-%%  ~~put references to the literature/web site here~~
-}
 \author{
-%%  ~~who you are~~
 Ge Tan
 }
-\note{
-%%  ~~further notes~~
-}
 
-%% ~Make other sections like Warning with \section{Warning }{....} ~
-
-\seealso{
-%%  ~~objects to See Also as \code{\link{~~fun~~}}, ~~~
-%%  ~~or \code{\linkS4class{CLASSNAME}} for links to other classes ~~~
-\code{\link{toPWM}},
-\code{\link{toICM}}
-}
 \examples{
   ## ----------------------------------------------------------------
   ## Constructor
@@ -170,10 +150,7 @@ Ge Tan
   as(pfm, "matrix")
 
   ## Methods
-  revcom(pfm)
+  reverseComplement(pfm)
   length(pfm)
-  icm = toICM(pfm, pseudocounts=0.8, schneider=TRUE)
-  total_ic(icm)
-
 }
 \keyword{classes}

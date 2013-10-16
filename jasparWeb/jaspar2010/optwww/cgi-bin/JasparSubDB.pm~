@@ -1,0 +1,51 @@
+package JasparSubDB;
+use strict;
+use DBI;
+use TFBS::DB::JASPAR5;
+# this is a class describing a sub-database, inclusing sconnection settings and what filelds to show in browsing ans popup window. Mostly for holding data, but should also have a connect statement, which gives back a database handler object as usual
+
+
+sub new {
+ 	my ($class, %args) = @_; 
+    my $self =bless {
+	    %args}, $class;
+ 	return $self;
+
+}
+
+sub connect{ 
+    my $self=shift;
+    my $string= "dbi:mysql:".$self->DB_NAME. ":".$self->MYSQL_SERVER;
+    my $dbh=    TFBS::DB::JASPAR5->connect( $string, 
+					   $self->MYSQL_USER, 
+					   $self->MYSQL_PASSWD,
+					   die_on_bad_params=>0
+					);
+    return $dbh;
+
+
+
+}
+
+
+# accessor functions
+sub DB_NAME{ return $_[0]->{"DB_NAME"};  }
+sub DB_SHOW_NAME{ return $_[0]->{"DB_SHOW_NAME"};  }
+
+sub MYSQL_SERVER{ return $_[0]->{"MYSQL_SERVER"}; }  
+sub MYSQL_USER{ return $_[0]->{"MYSQL_USER"};   }
+sub MYSQL_PASSWD{ return $_[0]->{"MYSQL_PASSWD"}; }  
+sub BROWSE_KEYS{ return $_[0]->{"BROWSE_KEYS"};}  
+sub POP_UP_KEYS{ return $_[0]->{"POP_UP_KEYS"};}  
+sub DESCRIPTION{ return $_[0]->{"DESCRIPTION"};}  
+
+ sub _show{
+    #sanity check: shows all information the object holds
+    my $self=shift;
+    require Data::Dumper;
+    return Data::Dumper->Dump([$self]);
+
+
+}
+
+1;

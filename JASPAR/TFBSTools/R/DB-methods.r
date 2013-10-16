@@ -10,7 +10,7 @@
   if(!"ID" %in% names(opts))
     opts[["ID"]] = NULL
   if(!"name" %in% names(opts))
-    opt[["name"]] = NULL
+    opts[["name"]] = NULL
   
   if(!"collection" %in% names(opts))
     opts[["collection"]] = "CORE"
@@ -75,7 +75,7 @@
   # if just stable ID and if all_versions==1, take all versions, otherwise the latest
   if(!is.null(opts[["ID"]])){
     ans_ids = c()
-    if(opt[["all_versions"]]){
+    if(opts[["all_versions"]]){
       for(id in opts[["ID"]]){
         baseID = strsplit(id, "\\.")[[1]][1] # ignore vesion here, this is a stupidity filter
         sqlCMD = paste0("SELECT ID FROM MATRIX WHERE BASE_ID='", baseID, "'")
@@ -211,22 +211,22 @@
                      tags=tags,
                      matrix=FMatrix
                      )
-  if(type == "PFM")
+  #if(type == "PFM")
     return(ans_pfm)
-  else if(type == "PWM")
-    return(toPWM(ans_pfm))
-  else if(type == "ICM")
-    return(toICM(ans_pfm))
-  else
-    stop("This should never happen")
+  #else if(type == "PWM")
+  #  return(toPWM(ans_pfm))
+  #else if(type == "ICM")
+  #  return(toICM(ans_pfm))
+  #else
+  #  stop("This should never happen")
 }
 
 ### get_Matrix_by_ID fetches matrix data under the given ID from the database and returns a XMatrix object.
 # Returns : a XMatrix object; the exact type of the object depending on the second argument (allowed values are 'PFM', 'ICM', and 'PWM'); returns NA if matrix with the given ID is not found.
 # Args: 
     #ID: is a string which refers to the stable JASPAR ID (usually something like "MA0001") with or without version numbers. "MA0001" will give the latest version on MA0001, while "MA0001.2" will give the second version, if existing. Warnings will be given for non-existing matrices.
-setMethod("get_Matrix_by_ID", "SQLiteConnection",
-          function(x, ID, type="PFM"){
+setMethod("getMatrixByID", "SQLiteConnection",
+          function(x, ID){
             # separate stable ID and version number
             baseID = strsplit(ID, "\\.")[[1]][1]
             version = strsplit(ID, "\\.")[[1]][2]
@@ -237,29 +237,33 @@ setMethod("get_Matrix_by_ID", "SQLiteConnection",
             # get internal ID - also a check for validity
             int_id = as.character(.get_internal_id(x, baseID, version))
             # get matrix using internal ID
-            ans = .get_Matrix_by_int_id(x, int_id, type)
+            ans = .get_Matrix_by_int_id(x, int_id, type="PFM")
             return(ans)
           }
           )
-setMethod("get_Matrix_by_ID", "character",
-          function(x, ID, type="PFM"){
+setMethod("getMatrixByID", "character",
+          function(x, ID){
             # here x is the path of SQLite db file.
-            type = match.arg(type, c("PWM", "PFM", "ICM"))
             if(missing(ID))
               stop("ID needs to be specified!")
             con = dbConnect(SQLite(), x)
             on.exit(dbDisconnect(con))
-            get_Matrix_by_ID(con, ID, type)
+            getMatrixByID(con, ID)
+          }
+          )
+setMethod("getMatrixByID", "JASPAR2014",
+          function(x, ID){
+            getMatrixByID(x@db, ID)
           }
           )
 
 ### get_Matrix_by_name fetches matrix data under the given name from the database and returns a XMatrix object.
 # Returns : a XMatrix object; the exact type of the object depending on the second argument (allowed values are 'PFM', 'ICM', and 'PWM'); returns NA if matrix with the given name is not found.
 # Notes: According to the current JASPAR5 data model, name is not necessarily a unique identifier. Also, names change over time. In the case where there are several matrices with the same name in the database, the function fetches the first one and prints a warning on STDERR. You've been warned. Some matrices have multiple versions. The function will return the latest version. For specific versions, use get_Matrix_by_ID($ID.$version)
-setMethod("get_Matrix_by_name", "SQLiteConnection",
-          function(x, name, type="PFM"){
+setMethod("getMatrixByName", "SQLiteConnection",
+          function(x, name){
             # here x is the path of SQLite db file
-            type = match.arg(type, c("PWM", "PFM", "ICM"))
+            #type = match.arg(type, c("PWM", "PFM", "ICM"))
             if(missing(name))
               stop("name needs to be specified!")
             sqlCMD = paste0("SELECT distinct BASE_ID  FROM MATRIX WHERE NAME='", name, "'")
@@ -268,19 +272,24 @@ setMethod("get_Matrix_by_name", "SQLiteConnection",
             if(length(baseID) == 0)
               return(NA)
             if(length(baseID) > 1)
-              warning("There are ", length(baseID), " distinct stable IDs with name ", name, ": ", baseID)
-            get_Matrix_by_ID(x, baseID[1], type=type)
+              warning("There are ", length(baseID), " distinct stable IDs with name ", name, ": ", paste(baseID, collapse=", "))
+            getMatrixByID(x, baseID[1])
           }
           )
 
-setMethod("get_Matrix_by_name", "character",
-          function(x, name, type="PFM"){
+setMethod("getMatrixByName", "character",
+          function(x, name){
             con = dbConnect(SQLite(), x)
             on.exit(dbDisconnect(con))
-            get_Matrix_by_name(con, name, type=type)
+            getMatrixByName(con, name)
           }
           )
 
+setMethod("getMatrixByName", "JASPAR2014",
+          function(x, name){
+            getMatrixByName(x@db, name)
+          }
+          )
 
 ### get_MatrixSet fetches matrix data under for all matrices in the database matching criteria defined by the named arguments and returns a XMatrixList object
 # Returns : a XMatrixList object
@@ -306,7 +315,7 @@ setMethod("get_Matrix_by_name", "character",
     # gives a set of TFBS::Matrix::PFM objects (given that the matrix models are stored as such) whose (structural clas is 'TRP_CLUSTER' OR'FORKHEAD') AND (the species they are derived from is 'Homo sapiens'OR 'Mus musculus').
   # As above, unless IDs with version numbers are used, only one matrix per stable ID wil be returned: the matrix with the highest version number
   #The -min_ic filter is applied after the query in the sense that the matrices profiles with total information content less than specified are not included in the set.
-setMethod("get_MatrixSet", "SQLiteConnection",
+setMethod("getMatrixSet", "SQLiteConnection",
          function(x, opts){
            opts = .fillDBOptsWithDefaults(opts)
            IDlist = .get_IDlist_by_query(x, opts)
@@ -319,7 +328,7 @@ setMethod("get_MatrixSet", "SQLiteConnection",
              xmatrix = .get_Matrix_by_int_id(x, id, type="PFM")
              if(!is.null(opts[["min_ic"]])){
                # we assume the matrix IS a PFM, o something in normal space at least
-               if(sum(total_ic(toICM(xmatrix))) < opts[["min_ic"]])
+               if(sum(totalIC(toICM(xmatrix))) < opts[["min_ic"]])
                  next
              }
              if(!is.null(opts[["length"]])){
@@ -343,17 +352,22 @@ setMethod("get_MatrixSet", "SQLiteConnection",
          }
          )
 
-setMethod("get_MatrixSet", "character",
+setMethod("getMatrixSet", "character",
           function(x, opts){
             opts = .fillDBOptsWithDefaults(opts)
             con = dbConnect(SQLite(), x)
             on.exit(dbDisconnect(con))
-            get_MatrixSet(con, opts)
+            getMatrixSet(con, opts)
           }
           )
 
+setMethod("getMatrixSet", "JASPAR2014",
+          function(x, opts){
+            getMatrixSet(x@db, opts)
+          }
+          )
 
-setMethod("delete_Matrix_having_ID", "SQLiteConnection",
+setMethod("deleteMatrixHavingID", "SQLiteConnection",
 # Deletes the matrix having the given ID from the database
 # Args    : (ID)
 #               A string. Has to be a matrix ID with version suffix in JASPAR5.
@@ -368,17 +382,22 @@ setMethod("delete_Matrix_having_ID", "SQLiteConnection",
               int_id = .get_internal_id(baseID, version)
               for(dbTable in c("MATRIX_DATA", "MATRIX", "MATRIX_SPECIES", "MATRIX_PROTEIN", "MATRIX_ANNOTATION")){
                 sqlCMD = paste0("DELETE from ", dbTable, " where ID='", int_id, "'")
-                ans = dbGetQuery(con, sqlCMD)
+                ans = dbGetQuery(x, sqlCMD)
               }
             }
           }
           )
 
-setMethod("delete_Matrix_having_ID", "character",
+setMethod("deleteMatrixHavingID", "character",
           function(x, IDs){
             con = dbConnect(SQLite(), x)
             on.exit(dbDisconnect(con))
-            delete_Matrix_having_ID(con, IDs)
+            deleteMatrixHavingID(con, IDs)
+          }
+          )
+setMethod("deleteMatrixHavingID", "JASPAR2014",
+          function(x, IDs){
+            deleteMatrixHavingID(x@db, IDs)
           }
           )
 
@@ -490,7 +509,7 @@ setMethod("delete_Matrix_having_ID", "character",
 # Returns : 0 on success; $@ contents on failure
 # Args    : (PFMatrixList)
 
-setMethod("store_Matrix", signature(x="SQLiteConnection", pfmList="PFMatrixList"),
+setMethod("storeMatrix", signature(x="SQLiteConnection", pfmList="PFMatrixList"),
           function(x, pfmList){
             for(pfm in pfmList){
               int_id =  .store_matrix(x, pfm)
@@ -502,26 +521,36 @@ setMethod("store_Matrix", signature(x="SQLiteConnection", pfmList="PFMatrixList"
             return("Success")
           }
           )
-setMethod("store_Matrix", signature(x="character", pfmList="PFMatrixList"),
+setMethod("storeMatrix", signature(x="character", pfmList="PFMatrixList"),
           function(x, pfmList){
             con = dbConnect(SQLite(), x)
             on.exit(dbDisconnect(con))
-            store_Matrix(con, pfmList)
+            storeMatrix(con, pfmList)
           }
           )
-setMethod("store_Matrix", signature(x="character", pfmList="PFMatrix"),
+setMethod("storeMatrix", signature(x="character", pfmList="PFMatrix"),
           function(x, pfmList){
-            store_Matrix(x, PFMatrixList(pfmList))
+            storeMatrix(x, PFMatrixList(pfmList))
           }
           )
-setMethod("store_Matrix", signature(x="SQLiteConnection", pfmList="PFMatrix"),
+setMethod("storeMatrix", signature(x="SQLiteConnection", pfmList="PFMatrix"),
           function(x, pfmList){
-            store_Matrix(x, PFMatrixList(pfmList))
+            storeMatrix(x, PFMatrixList(pfmList))
+          }
+          )
+setMethod("storeMatrix", signature(x="JASPAR2014", pfmList="PFMatrix"),
+          function(x, pfmList){
+            storeMatrix(x@db, pfmList)
+          }
+          )
+setMethod("storeMatrix", signature(x="JASPAR2014", pfmList="PFMatrixList"),
+          function(x, pfmList){
+            storeMatrix(x@db, pfmList)
           }
           )
 
 ### -----------------------------------------------------------------
-### initialize the jaspar db. create empty tables.
+### initialize the jaspar 2014 stype db. create empty tables.
 ###
 .create_tables = function(con){
   # utility function
@@ -563,6 +592,7 @@ setMethod("initializeJASPARDB", "SQLiteConnection",
             return("Success")
           }
           )
+
 setMethod("initializeJASPARDB", "character",
           function(x){
             con = dbConnect(SQLite(), x)
@@ -570,6 +600,10 @@ setMethod("initializeJASPARDB", "character",
             initializeJASPARDB(con)
           }
           )
-
+setMethod("initializeJASPARDB", "JASPAR2014",
+          function(x){
+            initializeJASPARDB(x@db)
+          }
+          )
 
 

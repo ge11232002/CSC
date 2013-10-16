@@ -1,0 +1,2 @@
+use InitDB;
+my ($db_indo)=InitDB->init;

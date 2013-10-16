@@ -1,20 +1,23 @@
 Package: TFBSTools
-Version: 0.99.0
-Date: 2013-09-17
+Version: 0.99.3
+Date: 2013-10-09
 Title: Software package for TFBS
 Description: Software package for TFBS.
-Author: Ge Tan <gtan@me.com> 
-Maintainer: Ge Tan <gtan@me.com>
-Depends: R (>= 2.15.2), Biostrings(>= 2.26.3), RSQLite(>= 0.11.4), caTools(>= 1.14), GenomicRanges(>= 1.12.5)
-Suggests:
-License: GPL (>= 2)
-URL: http://jaspar.binf.ku.dk/
+Author: Ge Tan <ge.tan09@imperial.ac.uk> 
+Maintainer: Ge Tan <ge.tan09@imperial.ac.uk>
+Imports: Biostrings(>= 2.29.19), RSQLite(>= 0.11.4), seqLogo, GenomicRanges(>= 1.13.50), caTools(>= 1.14)
+Depends: R (>= 3.0.1), methods, IRanges(>= 1.19.38)
+License: GPL-2
+URL: http://jaspardev.genereg.net/
 Type: Package
-biocViews: 
+biocViews: MotifAnnotation, GeneRegulation, MotifDiscovery
 NeedsCompilation: no
-LazyData: TRUE
-Collate: Ageneric-methods.r XMatrix-class.r Motif-class.r 
-         PairwiseAlignment-class.r Site-class.r
-         SiteList-class.r SitePair-class.r SitePairList-class.r
-         XMatrixList-class.r MEME-class.r DB-methods.r ICM-methods.r MEME-methods.r
-         PWM-methods.r PairwiseAlignment-methods.r util.r
+LazyData: yes 
+Collate: AllGenerics.r AllClasses.r show-methods.r util-methods.r
+         XMatrix-methods.r XMatrixList-methods.r
+         Site-methods.r
+         coercion-methods.r DB-methods.r 
+         PairwiseAlignment-methods.r
+         ICM-methods.r PWM-methods.r 
+         Motif-methods.r
+         Wrappers-methods.r

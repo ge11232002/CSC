@@ -1,6 +1,28 @@
+## Our own normargPfm. The only difference from Biostrings version is we do not require the column sums are identical.
+normargPfm = function(x){
+    if (!is.matrix(x) || !is.integer(x))
+        stop("invalid PFM 'x': not an integer matrix")
+    if (is.null(rownames(x)))
+        stop("invalid PFM 'x': no row names")
+    if (!all(rownames(x) %in% DNA_ALPHABET))
+        stop("invalid PFM 'x': row names must be in 'DNA_ALPHABET'")
+    if (!all(DNA_BASES %in% rownames(x)))
+        stop("invalid PFM 'x': row names must contain A, C, G and T")
+    if (any(duplicated(rownames(x))))
+        stop("invalid PFM 'x': duplicated row names")
+    if (ncol(x) == 0L)
+        stop("invalid PFM 'x': no columns")
+    if (any(is.na(x)) || any(x < 0L))
+        stop("invalid PFM 'x': values cannot be NA or negative")
+    if (any(x[!(rownames(x) %in% DNA_BASES), ] != 0L))
+        stop("invalid PFM 'x': IUPAC ambiguity letters are represented")
+    x <- x[DNA_BASES, , drop = FALSE]  
+    x
+}
 
 ### ------------------------------------------------------------------------
 ### The "PWM" generic and methods. This is a bit different from the implementation of Biostrings.
+###
 setMethod("toPWM", "character",
           function(x, type="log2probratio", pseudocounts=0.8, 
                    bg=c(A=0.25, C=0.25, G=0.25, T=0.25)){
@@ -38,7 +60,7 @@ setMethod("toPWM", "matrix",
     ## This is validated by the TFBS perl module version.
           function(x, type="log2probratio", pseudocounts=0.8,
                    bg=c(A=0.25, C=0.25, G=0.25, T=0.25)){
-            #x = Biostrings:::.normargPfm(x)
+            x = normargPfm(x)
             bg = Biostrings:::.normargPriorParams(bg)
             type = match.arg(type, c("log2probratio", "prob"))
             nseq = colSums(x)
