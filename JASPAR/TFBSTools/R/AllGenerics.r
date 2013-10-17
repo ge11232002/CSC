@@ -77,12 +77,12 @@ setGeneric("searchSeq", signature="x",
 
 setGeneric("searchAln",
            function(pwm, aln1, aln2, min.score="80%", windowSize=51L, cutoff=0.7,
-                    conservation=NULL)
+                    strand="*", type="any", conservation=NULL)
              standardGeneric("searchAln")
            )
 setGeneric("doSiteSearch",
            function(pwm, aln1, aln2, min.score="80%", windowSize=51L, cutoff=0.7,
-                    conservation=NULL)
+                    strand="*", conservation=NULL)
              standardGeneric("doSiteSearch")
            )
 

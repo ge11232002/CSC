@@ -93,12 +93,14 @@ setMethod("searchSeq", "PWMatrix",
             ans_strand = c()
             ans_viewsPos = NULL
             ans_viewsNeg = NULL
+            if(strand(x)=="+"){
+              xPos = x
+              xNeg = reverseComplement(x)
+            }else{
+              xNeg = x
+              xPos = reverseComplement(x)
+            }
             if(strand %in% c("+", "*")){
-              if(strand(x)=="+"){
-                xPos = x
-              }else{
-                xPos = reverseComplement(x)
-              }
               ans_viewsPos = matchPWM(unitScale(Matrix(xPos)), subject, min.score=min.score)
               scorePos = PWMscoreStartingAt(unitScale(Matrix(xPos)), subject(ans_viewsPos),
                                             start(ans_viewsPos))
@@ -109,11 +111,6 @@ setMethod("searchSeq", "PWMatrix",
               ans_strand = c(ans_strand, rep("+", length(ans_viewsPos)))
             }
             if(strand %in% c("-", "*")){
-              if(strand(x) == "-"){
-                xNeg = x
-              }else{
-                xNeg = reverseComplement(x)
-              }
               ans_viewsNeg = matchPWM(unitScale(Matrix(xNeg)), subject, min.score=min.score)
               scoreNeg = PWMscoreStartingAt(unitScale(Matrix(xNeg)), subject(ans_viewsNeg),
                                             start(ans_viewsNeg))
@@ -138,7 +135,7 @@ setMethod("searchSeq", "PWMatrix",
             ans_site = Site(views=ans_views, seqname=seqname,
                             score=ans_score, strand=ans_strand, 
                             sitesource="TFBS", primary="TF binding site",
-                            pattern=x
+                            pattern=xPos
                             )
           }
           )
@@ -161,45 +158,60 @@ setMethod("searchSeq", "PWMatrixList",
 
 setMethod("searchAln", signature(pwm="PWMatrixList", aln1="character", aln2="character"),
           function(pwm, aln1, aln2, min.score="80%", windowSize=51L, cutoff=0.7,
-                   conservation=NULL){
+                   strand="*", type="any", conservation=NULL){
             #ans = lapply(x, doSiteSearch, subject, min.score=min.score, windowSize=windowSize, cutoff=cutoff, conservation=conservation)
-            ans_list = lapply(pwm, searchAln, aln1, aln2, min.score=min.score, windowSize=windowSize, cutoff=cutoff, conservation=conservation)
+            ans_list = lapply(pwm, searchAln, aln1, aln2, min.score=min.score, 
+                              windowSize=windowSize, cutoff=cutoff, 
+                              strand=strand, type=type,
+                              conservation=conservation)
             ans = SitePairList(ans_list)
             return(ans)
           }
           )
 setMethod("searchAln", signature(pwm="PWMatrixList", aln1="character", aln2="missing"),
           function(pwm, aln1, aln2, min.score="80%", windowSize=51L, cutoff=0.7,
-                   conservation=NULL){
+                   strand="*", type="any", conservation=NULL){
             #ans = lapply(x, doSiteSearch, subject, min.score=min.score, windowSize=windowSize, cutoff=cutoff, conservation=conservation)
-            ans_list = lapply(pwm, searchAln, aln1, min.score=min.score, windowSize=windowSize, cutoff=cutoff, conservation=conservation)
+            ans_list = lapply(pwm, searchAln, aln1, min.score=min.score, 
+                              windowSize=windowSize, cutoff=cutoff, 
+                              strand=strand, type=type, 
+                              conservation=conservation)
             ans = SitePairList(ans_list)
             return(ans)
           }
           )
 setMethod("searchAln", signature(pwm="PWMatrixList", aln1="DNAStringSet", aln2="missing"),
           function(pwm, aln1, aln2, min.score="80%", windowSize=51L, cutoff=0.7,
-                   conservation=NULL){
+                   strand="*", type="any", conservation=NULL){
             #ans = lapply(x, doSiteSearch, subject, min.score=min.score, windowSize=windowSize, cutoff=cutoff, conservation=conservation)
-            ans_list = lapply(pwm, searchAln, aln1, min.score=min.score, windowSize=windowSize, cutoff=cutoff, conservation=conservation)
+            ans_list = lapply(pwm, searchAln, aln1, min.score=min.score, 
+                              windowSize=windowSize, cutoff=cutoff, 
+                              strand=strand, type=type,
+                              conservation=conservation)
             ans = SitePairList(ans_list)
             return(ans)
           }
           )
 setMethod("searchAln", signature(pwm="PWMatrixList", aln1="DNAString", aln2="DNAString"),
           function(pwm, aln1, aln2, min.score="80%", windowSize=51L, cutoff=0.7,
-                   conservation=NULL){
+                   strand="*", type="any", conservation=NULL){
             #ans = lapply(x, doSiteSearch, subject, min.score=min.score, windowSize=windowSize, cutoff=cutoff, conservation=conservation)
-            ans_list = lapply(pwm, searchAln, aln1, aln2, min.score=min.score, windowSize=windowSize, cutoff=cutoff, conservation=conservation)
+            ans_list = lapply(pwm, searchAln, aln1, aln2, min.score=min.score, 
+                              windowSize=windowSize, cutoff=cutoff, 
+                              strand=strand, type=type, 
+                              conservation=conservation)
             ans = SitePairList(ans_list)
             return(ans)
           }
           )
 setMethod("searchAln", signature(pwm="PWMatrixList", aln1="PairwiseAlignmentTFBS", aln2="missing"),
           function(pwm, aln1, aln2, min.score="80%", windowSize=51L, cutoff=0.7,
-                   conservation=NULL){
+                   strand="*", type="any", conservation=NULL){
             #ans = lapply(x, doSiteSearch, subject, min.score=min.score, windowSize=windowSize, cutoff=cutoff, conservation=conservation)
-            ans_list = lapply(pwm, searchAln, aln1, min.score=min.score, windowSize=windowSize, cutoff=cutoff, conservation=conservation)
+            ans_list = lapply(pwm, searchAln, aln1, min.score=min.score, 
+                              windowSize=windowSize, cutoff=cutoff, 
+                              strand=strand, type=type,
+                              conservation=conservation)
             ans = SitePairList(ans_list)
             return(ans)
           }
@@ -207,47 +219,52 @@ setMethod("searchAln", signature(pwm="PWMatrixList", aln1="PairwiseAlignmentTFBS
 
 setMethod("searchAln", signature(pwm="PWMatrix", aln1="character", aln2="character"),
           function(pwm, aln1, aln2, min.score="80%", windowSize=51L, cutoff=0.7,
-                   conservation=NULL){
+                   strand="*", type="any", conservation=NULL){
             do_sitesearch(pwm, aln1, aln2, min.score=min.score,
                           windowSize=windowSize, cutoff=cutoff,
+                          strand=strand, type=type,
                           conservation=conservation)
           }
           )
 setMethod("searchAln", signature(pwm="PWMatrix", aln1="character", aln2="missing"),
           function(pwm, aln1, aln2, min.score="80%", windowSize=51L, cutoff=0.7,
-                   conservation=NULL){
+                   strand="*", type="any", conservation=NULL){
             if(length(aln1) != 2)
               stop("'aln1' must be of length 2 when 'aln2' is missing")
             do_sitesearch(pwm, aln1[1], aln1[2], min.score=min.score,
                           windowSize=windowSize, cutoff=cutoff,
+                          strand=strand, type=type,
                           conservation=conservation)
           }
           )
 setMethod("searchAln", signature(pwm="PWMatrix", aln1="DNAStringSet", aln2="missing"),
           function(pwm, aln1, aln2, min.score="80%", windowSize=51L, cutoff=0.7,
-                   conservation=NULL){
+                   strand="*", type="any", conservation=NULL){
             if(length(aln1) != 2)
               stop("'aln1' must be of length 2 when 'aln2' is missing")
             do_sitesearch(pwm, as.character(aln1[1]), as.character(aln1[2]),
                           min.score=min.score, windowSize=windowSize,
-                          cutoff=cutoff, conservation=conservation)
+                          cutoff=cutoff, strand=strand,
+                          type=type, conservation=conservation)
           }
           )
 setMethod("searchAln", signature(pwm="PWMatrix", aln1="DNAString", aln2="DNAString"),
           function(pwm, aln1, aln2, min.score="80%", windowSize=51L, cutoff=0.7,
-                   conservation=NULL){
+                   strand="*", type="any", conservation=NULL){
             do_sitesearch(pwm, as.character(aln1), as.character(aln2),
                              min.score=min.score, windowSize=windowSize,
-                             cutoff=cutoff, conservation=conservation)
+                             cutoff=cutoff, strand=strand, 
+                             type=type, conservation=conservation)
           }
           )
 setMethod("searchAln", signature(pwm="PWMatrix", aln1="PairwiseAlignmentTFBS", aln2="missing"),
           function(pwm, aln1, aln2, min.score="80%", windowSize=51L, cutoff=0.7,
-                   conservation=NULL){
+                   strand="*", type="any", conservation=NULL){
             do_sitesearch(pwm, as.character(pattern(alignments(aln1))),
                           as.character(subject(alignments(aln1))),
                           min.score=min.score, windowSize=windowSize(aln1),
-                          cutoff=cutoff, conservation=conservation1(aln1))
+                          cutoff=cutoff, strand=strand, 
+                          type=type, conservation=conservation1(aln1))
           }
           )
 
