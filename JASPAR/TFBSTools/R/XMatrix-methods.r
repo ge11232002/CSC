@@ -71,7 +71,7 @@ setReplaceMethod("schneider", "ICMatrix",
 ###
 ### An object is either 'update'd in place (usually with a replacement
 ### method) or 'clone'd (copied), with specified slots/fields overridden.
-setMethod("update", "XMatrix",
+setMethod("update", "ANY",
           function(object, ..., check=TRUE){
             initialize(object, ...)
           }
