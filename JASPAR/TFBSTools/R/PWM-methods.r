@@ -87,18 +87,56 @@ setMethod("toPWM", "matrix",
 setMethod("searchSeq", "PWMatrix",
 # scans a nucleotide sequence with the pattern represented by the PWM.
           function(x, subject, seqname="Unknown", strand="*", min.score="80%"){
-            ans_views = matchPWM(unitScale(Matrix(x)), subject, min.score=min.score)
-            #score = rep(0, length(ans_views)) # fix the score issue....
-            score = PWMscoreStartingAt(unitScale(Matrix(x)), subject(ans_views),
-                                       start(ans_views))
-            # The score here from PWMscoreStartingAt is the unitscaled score. Let's make it into original one, synced with TFBS module. This is validated!
-            score = score * (maxScore(Matrix(x)) - minScore(Matrix(x))) + minScore(Matrix(x))
-            stopifnot(strand %in% c("+", "-", "*")) # need to ask Boris strand.
-            if(length(strand) == 1)
-              strand = rep(strand, length(ans_views))
-            stopifnot(length(strand) == length(ans_views))
+            strand = match.arg(strand, c("+", "-", "*"))
+            ans_ranges = IRanges()
+            ans_score = c()
+            ans_strand = c()
+            ans_viewsPos = NULL
+            ans_viewsNeg = NULL
+            if(strand %in% c("+", "*")){
+              if(strand(x)=="+"){
+                xPos = x
+              }else{
+                xPos = reverseComplement(x)
+              }
+              ans_viewsPos = matchPWM(unitScale(Matrix(xPos)), subject, min.score=min.score)
+              scorePos = PWMscoreStartingAt(unitScale(Matrix(xPos)), subject(ans_viewsPos),
+                                            start(ans_viewsPos))
+              # The score here from PWMscoreStartingAt is the unitscaled score. Let's make it into original one, synced with TFBS module. This is validated!
+              scorePos = scorePos * (maxScore(Matrix(xPos)) - minScore(Matrix(xPos))) + minScore(Matrix(xPos))
+              ans_ranges = c(ans_ranges, ranges(ans_viewsPos))
+              ans_score = c(ans_score, scorePos)
+              ans_strand = c(ans_strand, rep("+", length(ans_viewsPos)))
+            }
+            if(strand %in% c("-", "*")){
+              if(strand(x) == "-"){
+                xNeg = x
+              }else{
+                xNeg = reverseComplement(x)
+              }
+              ans_viewsNeg = matchPWM(unitScale(Matrix(xNeg)), subject, min.score=min.score)
+              scoreNeg = PWMscoreStartingAt(unitScale(Matrix(xNeg)), subject(ans_viewsNeg),
+                                            start(ans_viewsNeg))
+              scoreNeg = scoreNeg * (maxScore(Matrix(xNeg)) - minScore(Matrix(xNeg))) + minScore(Matrix(xNeg))
+              ans_ranges = c(ans_ranges, ranges(ans_viewsNeg))
+              ans_score = c(ans_score, scoreNeg)
+              ans_strand = c(ans_strand, rep("-", length(ans_viewsNeg)))
+            }
+            if(!is.null(ans_viewsPos)){
+              ans_views = Views(subject=subject(ans_viewsPos), 
+                                start=start(ans_ranges),
+                                end=end(ans_ranges)
+                                )
+            }else{
+              ans_views = Views(subject=subject(ans_viewsNeg),
+                                start=start(ans_ranges),
+                                end=end(ans_ranges)
+                                )
+            }
+            stopifnot(isConstant(c(length(ans_strand), length(ans_score),
+                                 length(ans_views))))
             ans_site = Site(views=ans_views, seqname=seqname,
-                            score=score, strand=strand, 
+                            score=ans_score, strand=ans_strand, 
                             sitesource="TFBS", primary="TF binding site",
                             pattern=x
                             )
