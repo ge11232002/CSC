@@ -3,6 +3,7 @@
 \usepackage[usenames,dvipsnames]{color}
 \usepackage[colorlinks=true, linkcolor=Blue, urlcolor=Blue,
    citecolor=Blue]{hyperref}
+\usepackage[round]{natbib}
 
 \newcommand{\Rfunction}[1]{{\texttt{#1}}}
 \newcommand{\Robject}[1]{{\texttt{#1}}}
@@ -37,7 +38,9 @@ with various degree of degeneracy.
 
 This \textbf{TFBSTools} package is designed to be a compuational framework
 for transcription factor binding site analysis. 
-It contains a set of integrated R S4 style classes, 
+Based on the famous perl module TFBS \cite{Lenhard:2002up},
+we extended the class definitions and enhanced implementations in an interactive environment.
+So far this package contains a set of integrated R S4 style classes,
 tools , JASPAR database interface functions.
 Most approaches can be described in three sequential phases.
 First, a pattern is generated for a set of target sequences 
@@ -49,13 +52,15 @@ regions are constructed based on  mutiple occurrences of the detected
 patterns. 
 
 \textbf{TFBSTools} aims to support all these functionalities
-in the environment \textbf{R}. 
-However, only the JASPAR database interface functions are exported
-in this release to accompany \Rpackage{JASPAR2014}. 
-More functions will be included in future release after well tested.
+in the environment \textbf{R}, except the external motif finding softwares,
+such as MEME \cite{Bailey:1994wq}. 
+%However, only the JASPAR database interface functions are exported
+%in this release to accompany \Rpackage{JASPAR2014}. 
+%More functions will be included in future release after well tested.
 
 \section{S4 classes in TFBSTools}
-The section will explain all the S4 classes defined in \textbf{TFBSTools}.
+The section will briefly explain all the S4 classes defined in \textbf{TFBSTools}.
+These classes were designed to store necessary information relevant to 
 
 \subsection{PFMatrix}
 \Rclass{PFMatrix} is designed to store all the relevant information
@@ -94,7 +99,7 @@ pfm2 = pfm
 PFMatrixList(pfm1=pfm, pfm2=pfm2, use.names=TRUE)
 @
 
-%\subsection{Site, SiteList and SitePair}
+\subsection{Site, SiteList and SitePair}
 
 \section{Database interfaces for JASPAR2014 database}
 This section will demonstrate how to operate on the JASPAR 2014 database.
@@ -143,5 +148,9 @@ The following is the session info that generated this vignette:
 <<session-info>>=
   sessionInfo()
 @
+
+\newpage
+\bibliographystyle{jss}
+\bibliography{TFBSTools}
 
 \end{document}
