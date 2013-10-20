@@ -22,7 +22,6 @@
 \alias{name<-,XMatrix-method}
 \alias{reverseComplement,XMatrix-method}
 \alias{strand,XMatrix-method}
-\alias{strand<-,XMatrix-method}
 \alias{tags}
 \alias{tags,XMatrix-method}
 \alias{matrixType-methods}
@@ -128,6 +127,7 @@ ICMatrix(ID="Unknown", name="Unknown", matrixClass="Unknown",
     \item{Matrix}{\code{signature(x = "XMatrix")}: Gets the matrix stored in \code{XMatrix} object.}
     \item{Matrix<-}{\code{signature(x = "XMatrix")}: Sets the matrix stored in \code{XMatrix} object.}
     \item{matrixClass}{\code{signature(x = "XMatrix")}: Gets the matrix type of a \code{XMatrix} object.}
+    \item{matrixClass<-}{\code{signature(x = "XMatrix")}: Sets the matrix type of a \code{XMatrix} object.}
     \item{name}{\code{signature(x = "XMatrix")}: Gets the name information.}
     \item{name<-}{\code{signature(x = "XMatrix")}: Sets the name information.}
     \item{reverseComplement}{\code{signature(x = "PWMatrix")}: Reverts the column order in matrix of \code{PWMatrix} object and assigns each row to its complemntaory base.}
