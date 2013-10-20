@@ -29,18 +29,18 @@ setReplaceMethod("name", "XMatrix",
                    return(x)
                  }
                  )
-setReplaceMethod("matrixClass", "XMatrix",
-                 function(x, value){
-                   x@matrixClass = value
-                   return(x)
-                 }
-                 )
-setReplaceMethod("strand", "XMatrix",
-                 function(x, value){
-                   x@strand = value
-                   return(x)
-                 }
-                 )
+#setReplaceMethod("matrixClass", "XMatrix",
+#                 function(x, value){
+#                   x@matrixClass = value
+#                   return(x)
+#                 }
+#                 )
+#setReplaceMethod("strand", "XMatrix",
+#                 function(x, value){
+#                   x@strand = value
+#                   return(x)
+#                 }
+#                 )
 setReplaceMethod("bg", "XMatrix",
                  function(x, value){
                    x@bg = value
@@ -95,7 +95,7 @@ setMethod("length", "XMatrix",
           }
           )
 
-setMethod("reverseComplement", "XMatrix",
+setMethod("reverseComplement", "PWMatrix",
           function(x){
             ans = x
             Matrix(ans) = reverseComplement(Matrix(x))
