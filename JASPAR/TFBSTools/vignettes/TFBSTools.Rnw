@@ -59,15 +59,17 @@ such as MEME \cite{Bailey:1994wq}.
 %More functions will be included in future release after well tested.
 
 \section{S4 classes in TFBSTools}
-The section will briefly explain all the S4 classes defined in \textbf{TFBSTools}.
-These classes were designed to store necessary information relevant to 
+The package is built around a number of S4 class of which the \Rclass{XMatrix}, 
+\Rclass{Site} classes are the most important.
+The section will briefly explain most of them defined in \textbf{TFBSTools}.
+%These classes were designed to store necessary information relevant to 
 
-\subsection{PFMatrix}
+\subsection{XMatrix and its subclasses}
 \Rclass{PFMatrix} is designed to store all the relevant information
 for one raw position frequency matrix (PFM).
 This object is compatible with one record from JASPAR database.
 For more details about this object, please consult the help page of this class.
-<<rtl-PFMatrix, results = hide>>=
+<<rtl-PFMatrix, eval=FALSE, results = hide>>=
 library(TFBSTools)
 pfm = PFMatrix(ID="MA0004.1", name="Arnt", matrixClass="Zipper-Type", strand="+",
         bg=c(A=0.25, C=0.25, G=0.25, T=0.25),
