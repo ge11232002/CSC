@@ -135,8 +135,16 @@ ICMatrix(ID="Unknown", name="Unknown", matrixClass="Unknown",
     \item{tags}{\code{signature(x = "XMatrix")}: Gets a \code{list} object of tags information. }
 	 }
 }
+
 \author{
 Ge Tan
+}
+
+\seealso{
+%%  ~~objects to See Also as \code{\link{~~fun~~}}, ~~~
+%%  ~~or \code{\linkS4class{CLASSNAME}} for links to other classes ~~~
+\code{\link{toPWM}},
+\code{\link{toICM}}
 }
 
 \examples{
