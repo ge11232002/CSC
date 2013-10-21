@@ -113,7 +113,7 @@ ICMatrix(ID="Unknown", name="Unknown", matrixClass="Unknown",
       \code{signature(x = "XMatrix")}: Gets the pattern length in nucleotides (i.e. number of columns in the matrix).
     }
     \item{reverseComplement}{
-      \code{signature(x = "XMatrix")}: Generates the reverse complement matrix object. Note than the strand is XMatrix will also be changed to the opossite strand.
+      \code{signature(x = "PWMatrix")}: Generates the reverse complement matrix object. Note than the strand is XMatrix will also be changed to the opossite strand.
     }
     \item{as.matrix}{
       \code{signature(x = "XMatrix")}: Returns the matrix in the XMatrix class.
@@ -166,7 +166,8 @@ Ge Tan
   as(pfm, "matrix")
 
   ## Methods
-  reverseComplement(pfm)
+  pwm = toPWM(pfm)
+  reverseComplement(pwm)
   length(pfm)
 }
 \keyword{classes}
