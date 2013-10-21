@@ -27,6 +27,7 @@
 \alias{name<-,XMatrix-method}
 \alias{reverseComplement,PWMatrix-method}
 \alias{strand,XMatrix-method}
+\alias{strand<-,XMatrix-method}
 \alias{tags}
 \alias{tags,XMatrix-method}
 \alias{matrixType}
@@ -36,8 +37,9 @@
 \alias{matrixType,PWMatrix-method}
 \alias{[-methods}
 \alias{length-methods}
+\alias{totalIC}
 \alias{totalIC-methods}
-\alias{totalIC, ICMatrix-method}
+\alias{totalIC,ICMatrix-method}
 
 \title{\code{"XMatrix"} objects}
 \description{
