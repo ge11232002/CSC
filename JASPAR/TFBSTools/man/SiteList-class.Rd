@@ -30,18 +30,9 @@
     \item{writeGFF3}{\code{signature(x = "SiteList")}: Returns a standard GFF3 format data frame.}
 	 }
 }
-\references{
-%%  ~~put references to the literature/web site here~~
-}
 \author{
-%%  ~~who you are~~
   Ge Tan
 }
-\note{
-%%  ~~further notes~~
-}
-
-%% ~Make other sections like Warning with \section{Warning }{....} ~
 
 \seealso{
 %%  ~~objects to See Also as \code{\link{~~fun~~}}, ~~~

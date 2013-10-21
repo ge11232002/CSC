@@ -29,10 +29,7 @@
 \alias{matrixType,PFMatrix-method}
 \alias{matrixType,PWMatrix-method}
 \alias{[-methods}
-\alias{[,Site-method}
 \alias{length-methods}
-\alias{length,Site-method}
-\alias{length,SitePair-method}
 
 \title{\code{"XMatrix"} objects}
 \description{

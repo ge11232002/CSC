@@ -49,7 +49,7 @@ toICM(x, pseudocounts=0.8, schneider=FALSE, bg=c(A=0.25, C=0.25, G=0.25, T=0.25)
 }
 
 \references{
-Schneider, T. D., Stormo, G. D., Gold, L., & Ehrenfeucht, A. (1986). Information content of binding sites on nucleotide sequences. Journal of molecular biology, 188(3), 415–431.
+Schneider, T. D., Stormo, G. D., Gold, L., & Ehrenfeucht, A. (1986). Information content of binding sites on nucleotide sequences. Journal of molecular biology, 188(3), 415-431.
 }
 
 \author{
