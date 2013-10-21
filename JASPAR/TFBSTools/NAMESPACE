@@ -31,8 +31,9 @@ importFrom(GenomicRanges, GRanges, GRangesList)
 ###
 exportClasses(PFMatrix, PWMatrix, ICMatrix,
   PFMatrixList, PWMatrixList, ICMatrixList,
-  Site, SiteList,
-  PairwiseAlignmentTFBS)
+  Site, SiteList
+  #PairwiseAlignmentTFBS
+  )
 
 ### -----------------------------------------------------------------
 ### Export non-generic functions
@@ -41,7 +42,7 @@ export(
   ## AllClasses.r
   PFMatrix,
   PFMatrixList,
-  PairwiseAlignmentTFBS,
+  #PairwiseAlignmentTFBS,
   ICMatrixList,
   PWMatrixList,
   Site, SiteList

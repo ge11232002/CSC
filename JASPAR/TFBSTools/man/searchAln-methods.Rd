@@ -5,12 +5,12 @@
 \alias{searchAln,PWMatrix,character,missing-method}
 \alias{searchAln,PWMatrix,DNAString,DNAString-method}
 \alias{searchAln,PWMatrix,DNAStringSet,missing-method}
-\alias{searchAln,PWMatrix,PairwiseAlignmentTFBS,missing-method}
+%\alias{searchAln,PWMatrix,PairwiseAlignmentTFBS,missing-method}
 \alias{searchAln,PWMatrixList,character,character-method}
 \alias{searchAln,PWMatrixList,character,missing-method}
 \alias{searchAln,PWMatrixList,DNAString,DNAString-method}
 \alias{searchAln,PWMatrixList,DNAStringSet,missing-method}
-\alias{searchAln,PWMatrixList,PairwiseAlignmentTFBS,missing-method}
+%\alias{searchAln,PWMatrixList,PairwiseAlignmentTFBS,missing-method}
 \title{searchAln method}
 \description{
   Scans a pairwise alignment of nucleotide sequences 
@@ -32,8 +32,9 @@
   }
   \item{aln1}{
     A \code{DNAString}, \code{character}, \code{DNAStringSet} or 
-    \link{PairwiseAlignmentTFBS} object can be used to represent the pairwise alignment.
-    When the last three objects are used and have a length of 2, the argument \code{aln2}
+    %\link{PairwiseAlignmentTFBS} 
+    object can be used to represent the pairwise alignment.
+    When the last two objects are used and have a length of 2, the argument \code{aln2}
     can be missing.
   }
   \item{aln2}{
@@ -84,12 +85,7 @@
     ## two character objects
     aln1 = "ACTTCACCAGCTCCCTGGCGGTAAGTTGATC---AAAGG---AAACGCAAAGTTTTCAAG"
     aln2 = "GTTTCACTACTTCCTTTCGGGTAAGTAAATATATAAATATATAAAAATATAATTTTCATC"
-    site = searchAln(pwm, aln1, aln2, min.score="50%", cutoff=0.5)
-    ## one PairwiseAlignmentTFBS object
-    aln = PairwiseAlignmentTFBS(
-            pattern="ACTTCACCAGCTCCCTGGCGGTAAGTTGATC---AAAGG---AAACGCAAAGTTTTCAAG", 
-            subject="GTTTCACTACTTCCTTTCGGGTAAGTAAATATATAAATATATAAAAATATAATTTTCATC",            windowSize=13L)
-    sitePair = searchAln(pwm, aln, min.score="50%", cutoff=0.5, strand="*", type="any")
+    sitePair = searchAln(pwm, aln1, aln2, min.score="50%", cutoff=0.5, strand="*", type="any")
   }
 }
 
