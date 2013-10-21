@@ -246,6 +246,8 @@ and returns a \Rclass{MotifSet} object.
 motifSet = runMEME("/Users/gtan/src/meme_4.9.1/tests/crp0.s",
                    binary="/usr/local/Cellar/meme/4.9.0-p4/bin/meme",
                    arguments="-nmotifs 3")
+sitesSeq(motifSet, type="all")
+sitesSeq(motifSet, type="none")
 @
 
 \section{Conclusion}
