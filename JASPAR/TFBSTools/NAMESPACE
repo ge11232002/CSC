@@ -77,7 +77,7 @@ export(
   tags,
   matrixType,
   XMatrixList,
-  alignments,
+  #alignments,
 
   ## PWM-methods.r
   toPWM,
