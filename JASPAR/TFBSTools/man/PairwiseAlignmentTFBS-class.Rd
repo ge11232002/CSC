@@ -2,6 +2,7 @@
 \Rdversion{1.1}
 \docType{class}
 \alias{PairwiseAlignmentTFBS}
+\alias{alignments}
 \alias{alignments,PairwiseAlignmentTFBS-method}
 \alias{alnlength,PairwiseAlignmentTFBS-method}
 \alias{conservation1,PairwiseAlignmentTFBS-method}

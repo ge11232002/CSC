@@ -9,27 +9,34 @@
 \alias{PWMatrix-class}
 \alias{ICMatrix}
 \alias{ICMatrix-class}
+\alias{bg}
 \alias{bg,XMatrix-method}
 \alias{bg<-,XMatrix-method}
+\alias{ID}
 \alias{ID,XMatrix-method}
 \alias{ID<-,XMatrix-method}
 \alias{length,XMatrix-method}
+\alias{Matrix}
 \alias{Matrix,XMatrix-method}
 \alias{Matrix<-,XMatrix-method}
+\alias{matrixClass}
 \alias{matrixClass,XMatrix-method}
 \alias{matrixClass<-,XMatrix-method}
+\alias{name}
 \alias{name,XMatrix-method}
 \alias{name<-,XMatrix-method}
 \alias{reverseComplement,XMatrix-method}
 \alias{strand,XMatrix-method}
 \alias{tags}
 \alias{tags,XMatrix-method}
+\alias{matrixType}
 \alias{matrixType-methods}
 \alias{matrixType,ICMatrix-method}
 \alias{matrixType,PFMatrix-method}
 \alias{matrixType,PWMatrix-method}
 \alias{[-methods}
 \alias{length-methods}
+\alias{totalIC}
 
 \title{\code{"XMatrix"} objects}
 \description{

@@ -7,14 +7,18 @@
 \alias{length,Site-method}
 \alias{pattern,Site-method}
 \alias{primary,Site-method}
+\alias{relScore}
 \alias{relScore,Site-method}
 \alias{score,Site-method}
 \alias{seqname,Site-method}
 \alias{show,Site-method}
 \alias{sitesource,Site-method}
 \alias{strand,Site-method}
+\alias{views}
 \alias{views,Site-method}
+\alias{writeGFF2}
 \alias{writeGFF2,Site-method}
+\alias{writeGFF3}
 \alias{writeGFF3,Site-method}
 
 \title{Class \code{"Site"}}
