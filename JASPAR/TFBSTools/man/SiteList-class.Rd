@@ -2,6 +2,7 @@
 \Rdversion{1.1}
 \docType{class}
 \alias{SiteList}
+\alias{SiteList-class}
 \alias{writeGFF2,SiteList-method}
 \alias{writeGFF3,SiteList-method}
 

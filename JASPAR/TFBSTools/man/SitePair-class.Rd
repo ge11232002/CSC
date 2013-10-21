@@ -2,6 +2,7 @@
 \Rdversion{1.1}
 \docType{class}
 \alias{SitePair}
+\alias{SitePair-class}
 \alias{length,SitePair-method}
 \alias{site1,SitePair-method}
 \alias{site2,SitePair-method}
@@ -35,9 +36,6 @@
 	 }
 }
 
-\references{
-%%  ~~put references to the literature/web site here~~
-}
 \author{
 %%  ~~who you are~~
   Ge Tan

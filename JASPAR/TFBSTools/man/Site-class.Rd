@@ -2,6 +2,7 @@
 \Rdversion{1.1}
 \docType{class}
 \alias{Site}
+\alias{Site-class}
 \alias{[,Site-method}
 \alias{length,Site-method}
 \alias{pattern,Site-method}

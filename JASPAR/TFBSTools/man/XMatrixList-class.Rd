@@ -5,6 +5,10 @@
 \alias{XMatrixList,list-method}
 \alias{PFMatrixList}
 \alias{PFMatrixList-class}
+\alias{PWMatrixList}
+\alias{PWMatrixList-class}
+\alias{ICMatrixList}
+\alias{ICMatrixList-class}
 \alias{bg,XMatrixList-method}
 \alias{ID,XMatrixList-method}
 \alias{Matrix,XMatrixList-method}
