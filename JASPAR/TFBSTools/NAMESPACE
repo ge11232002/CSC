@@ -94,8 +94,8 @@ export(
   views,
 
   ## PairwiseAlignment-methods.r
-  calConservation,
-  doSiteSearch
+  calConservation
+  #doSiteSearch
 )
 
 
