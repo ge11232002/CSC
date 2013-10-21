@@ -4,6 +4,7 @@
 \alias{Site}
 \alias{Site-class}
 \alias{[,Site-method}
+\alias{c, Site-method}
 \alias{length,Site-method}
 \alias{pattern,Site-method}
 \alias{primary,Site-method}

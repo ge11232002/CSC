@@ -11,7 +11,7 @@
 }
 
 \usage{
-  searchSeq(x, subject, seqname="Unknown", strand="*", min.score="80\%", type="any")
+  searchSeq(x, subject, seqname="Unknown", strand="*", min.score="80\%")
 }
 
 \arguments{
