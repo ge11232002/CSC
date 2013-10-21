@@ -49,13 +49,13 @@ setGeneric("deleteMatrixHavingID", signature="x",
 
 ## PFM,PWM, ICM
 setGeneric("toICM", signature="x",
-           function(x, pseudocounts=NULL, schneider=FALSE,
+           function(x, pseudocounts=0.8, schneider=FALSE,
                     bg=c(A=0.25, C=0.25, G=0.25, T=0.25))
              standardGeneric("toICM")
            )
 
 setGeneric("toPWM", signature="x",
-           function(x, type="log2probratio", pseudocounts=NULL,
+           function(x, type="log2probratio", pseudocounts=0.8,
                     bg=c(A=0.25, C=0.25, G=0.25, T=0.25))
              standardGeneric("toPWM")
            )
