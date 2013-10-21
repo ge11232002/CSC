@@ -99,7 +99,8 @@ export(
   #doSiteSearch
 
   ## Wrappers-methods.r
-  runMEME
+  runMEME,
+  sitesSeq
 )
 
 

@@ -5,6 +5,7 @@
 \alias{MotifSet-class}
 \alias{[,MotifSet-method}
 \alias{length,MotifSet-method}
+\alias{sitesSeq}
 \alias{sitesSeq,MotifSet-method}
 
 \title{Class \code{"MotifSet"}}
