@@ -7,6 +7,8 @@ Author: Ge Tan <ge.tan09@imperial.ac.uk>
 Maintainer: Ge Tan <ge.tan09@imperial.ac.uk>
 Imports: Biostrings(>= 2.29.19), RSQLite(>= 0.11.4), seqLogo, GenomicRanges(>= 1.13.50), caTools(>= 1.14), XVector(>= 0.1.4)
 Depends: R (>= 3.0.1), methods, IRanges(>= 1.19.38)
+Suggests: JASPAR2014(>= 0.99.3)
+SystemRequirements: meme
 License: GPL-2
 URL: http://jaspardev.genereg.net/
 Type: Package

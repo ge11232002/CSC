@@ -243,7 +243,7 @@ So far, MEME is supported.
 and returns a \Rclass{MotifSet} object.
 
 <<rtl-wrappers, eval=FALSE, results = hide>>=
-motifSet = runMEME("/Users/gtan/src/meme_4.9.1/tests/crp0.s",
+motifSet = runMEME(file.path(system.file("extdata", package="TFBSTools"), "crp0.s"),
                    binary="/usr/local/Cellar/meme/4.9.0-p4/bin/meme",
                    arguments="-nmotifs 3")
 sitesSeq(motifSet, type="all")
