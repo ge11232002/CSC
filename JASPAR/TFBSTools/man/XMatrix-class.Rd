@@ -36,7 +36,7 @@
 \alias{matrixType,PWMatrix-method}
 \alias{[-methods}
 \alias{length-methods}
-\alias{totalIC}
+\alias{totalIC-methods}
 \alias{totalIC, ICMatrix-method}
 
 \title{\code{"XMatrix"} objects}
