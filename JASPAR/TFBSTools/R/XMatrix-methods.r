@@ -35,12 +35,12 @@ setReplaceMethod("matrixClass", "XMatrix",
                    return(x)
                  }
                  )
-#setReplaceMethod("strand", "XMatrix",
-#                 function(x, value){
-#                   x@strand = value
-#                   return(x)
-#                 }
-#                 )
+setReplaceMethod("strand", "XMatrix",
+                 function(x, value){
+                   x@strand = value
+                   return(x)
+                 }
+                 )
 setReplaceMethod("bg", "XMatrix",
                  function(x, value){
                    x@bg = value
