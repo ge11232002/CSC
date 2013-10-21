@@ -74,7 +74,7 @@ setMethod("runMEME", "DNAStringSet",
             tmpFile = tempfile(pattern="MEME_", tmpdir=tmpdir, fileext = ".fasta")
             writeXStringSet(x, filepath=tmpFile, format="fasta")
             on.exit(unlink(tmpFile))
-            ans = run_MEME(tmpFile, binary=binary, seqtype=seqtype, arguments=arguments, tmpdir=tmpdir)
+            ans = run_MEME(tmpFile, binary=binary, seqtype=seqtype, arguments=arguments)
             ans = MotifSet(motifList=ans[["motifList"]], motifEvalues=ans[["motifEvalues"]], subjectSeqs=x)
             return(ans)
           }
