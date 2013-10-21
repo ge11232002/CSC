@@ -23,7 +23,7 @@ toPWM(x, type="log2probratio", pseudocounts=0.8, bg=c(A=0.25, C=0.25, G=0.25, T=
     a rectangular \link{character} vector or 
     a \link{matrix} with rownames containing at least A, C, G and T.
   }
-  \item{typeA}{
+  \item{type}{
     The type of PWM generated, should be one of "log2probratio" or "prob".
   }
   \item{pseudocounts}{

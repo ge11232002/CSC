@@ -37,20 +37,19 @@ Site(views, score, strand="*", seqname="Unknown", sitesource="TFBS",
      primary="TF binding site", pattern)
 }
 
-\section{Slots}{
-  \describe{
-    \item{\code{views}:}{Object of class \code{"XStringViews"}: 
+\arguments{
+    \item{views}{Object of class \code{"XStringViews"}: 
       It holds the start, end and the nucleotide sequence information 
       of the transcription factor binding sites.}
-    \item{\code{score}:}{Object of class \code{"numeric"}: A vector of PWM score for each putative binding site.}
-    \item{\code{strand}:}{Object of class \code{"character"}: 
+    \item{score}{Object of class \code{"numeric"}: A vector of PWM score for each putative binding site.}
+    \item{strand}{Object of class \code{"character"}: 
       The binding site is from the positive ("+"), negative ("-") or unknown("*") strand.}
-    \item{\code{seqname}:}{Object of class \code{"character"}: the seqname of the sequence which contains these binding sites.}
-    \item{\code{sitesource}:}{Object of class \code{"character"}: Currently it is set to "TFBS"}
-    \item{\code{primary}:}{Object of class \code{"character"}: Currently it is set to "TF binding site"}
-    \item{\code{pattern}:}{Object of class \code{"PWMatrix"}: The PWMatrix object which is used to search the binding sites.}
-  }
+    \item{seqname}{Object of class \code{"character"}: the seqname of the sequence which contains these binding sites.}
+    \item{sitesource}{Object of class \code{"character"}: Currently it is set to "TFBS"}
+    \item{primary}{Object of class \code{"character"}: Currently it is set to "TF binding site"}
+    \item{pattern}{Object of class \code{"PWMatrix"}: The PWMatrix object which is used to search the binding sites.}
 }
+
 \section{Methods}{
   \describe{
     \item{[}{\code{signature(x = "Site")}: Getter function.}

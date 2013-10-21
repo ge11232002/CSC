@@ -10,7 +10,7 @@
 
 \usage{
   \S4method{runMEME}{character}(x, binary="meme", seqtype="DNA", arguments="", tmpdir=tempdir())
-  \S4method{runMEME}{XStringSet}(x, binary="meme", seqtype="DNA", arguments="", tmpdir=tempdir())
+  \S4method{runMEME}{DNAStringSet}(x, binary="meme", seqtype="DNA", arguments="", tmpdir=tempdir())
 }
 
 \arguments{

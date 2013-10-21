@@ -23,6 +23,9 @@
     The Site objects are supplied in .... 
     A list of Site objects is also acceptable.
   }
+  \item{use.names}{
+    A logical value. When TRUE, the names of the \code{Site} will be kept.
+  }
 }
 
 \section{Methods}{

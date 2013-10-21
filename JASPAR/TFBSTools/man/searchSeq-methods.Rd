@@ -34,11 +34,6 @@
     The minimum score for the hit. Can be given an character string in th format
     of "80%" or as a single absolute value.
   }
-  \item{type}{
-    This argument can be "any" or "all".
-    When it is "any", one motif will be kept if the maximal conservation value of  the motif is larger than the cutoff.
-    When it is "all", one motif will be kept if the minimal conservation value of the motif is larger than the cutoff.
-  }
 }
 
 \value{
