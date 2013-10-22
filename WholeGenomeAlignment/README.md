@@ -11,6 +11,8 @@ and
 This pipeline is implemented in R and 
 designed for CSC cluster "alpha" with a scheduler Sun Grid Engine (SGE).
 
+The parameters for lastz should refer to [ucsc](http://genomewiki.ucsc.edu/index.php/UCSC_Multiple_Alignments).
+
 ## Installation and Configuration
 List of softwares need to be installed:
 
