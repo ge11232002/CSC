@@ -17,7 +17,7 @@ NeedsCompilation: no
 LazyData: yes 
 Collate: AllGenerics.r AllClasses.r show-methods.r util-methods.r
          XMatrix-methods.r XMatrixList-methods.r
-         Site-methods.r
+         SiteSet-methods.r
          coercion-methods.r DB-methods.r 
          PairwiseAlignment-methods.r
          ICM-methods.r PWM-methods.r 
