@@ -132,7 +132,7 @@ setMethod("searchSeq", "PWMatrix",
             }
             stopifnot(isConstant(c(length(ans_strand), length(ans_score),
                                  length(ans_views))))
-            ans_site = Site(views=ans_views, seqname=seqname,
+            ans_site = SiteSet(views=ans_views, seqname=seqname,
                             score=ans_score, strand=ans_strand, 
                             sitesource="TFBS", primary="TF binding site",
                             pattern=xPos
@@ -147,7 +147,7 @@ setMethod("searchSeq", "PWMatrixList",
             #ans = lapply(pwms, matchPWM, subject, min.score)
             ans_list = lapply(x, searchSeq, subject=subject, seqname=seqname, 
                               strand=strand, min.score=min.score)
-            ans = SiteList(ans_list)
+            ans = SiteSetList(ans_list)
             return(ans)
           }
           )
@@ -164,7 +164,7 @@ setMethod("searchAln", signature(pwm="PWMatrixList", aln1="character", aln2="cha
                               windowSize=windowSize, cutoff=cutoff, 
                               strand=strand, type=type,
                               conservation=conservation)
-            ans = SitePairList(ans_list)
+            ans = SitePairSetList(ans_list)
             return(ans)
           }
           )
@@ -176,7 +176,7 @@ setMethod("searchAln", signature(pwm="PWMatrixList", aln1="character", aln2="mis
                               windowSize=windowSize, cutoff=cutoff, 
                               strand=strand, type=type, 
                               conservation=conservation)
-            ans = SitePairList(ans_list)
+            ans = SitePairSetList(ans_list)
             return(ans)
           }
           )
@@ -188,7 +188,7 @@ setMethod("searchAln", signature(pwm="PWMatrixList", aln1="DNAStringSet", aln2="
                               windowSize=windowSize, cutoff=cutoff, 
                               strand=strand, type=type,
                               conservation=conservation)
-            ans = SitePairList(ans_list)
+            ans = SitePairSetList(ans_list)
             return(ans)
           }
           )

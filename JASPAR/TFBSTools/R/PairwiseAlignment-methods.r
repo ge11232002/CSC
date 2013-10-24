@@ -126,7 +126,7 @@ do_sitesearch = function(pwm, aln1, aln2, min.score, windowSize, cutoff,
   }
   ans_siteset1 = c(sitesetPos$ans_siteset1, sitesetNeg$ans_siteset1)
   ans_siteset2 = c(sitesetPos$ans_siteset2, sitesetNeg$ans_siteset2)
-  return(SitePair(site1=ans_siteset1, site2=ans_siteset2))
+  return(SitePairSet(site1=ans_siteset1, site2=ans_siteset2))
 }
 
 setMethod("doSiteSearch", signature(aln1="character", aln2="character"),

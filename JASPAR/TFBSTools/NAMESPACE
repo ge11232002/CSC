@@ -31,7 +31,7 @@ importFrom(GenomicRanges, GRanges, GRangesList)
 ###
 exportClasses(PFMatrix, PWMatrix, ICMatrix,
   PFMatrixList, PWMatrixList, ICMatrixList,
-  Site, SiteList
+  SiteSet, SiteSetList, SitePairSet, SitePairSetList
   #PairwiseAlignmentTFBS
   )
 
@@ -45,7 +45,7 @@ export(
   #PairwiseAlignmentTFBS,
   ICMatrixList,
   PWMatrixList,
-  Site, SiteList
+  SiteSet, SiteSetList
 )
 
 ### -----------------------------------------------------------------
@@ -89,7 +89,7 @@ export(
   seqLogo,
   totalIC,
 
-  ## Site-methods.r
+  ## SiteSet-methods.r
   writeGFF3, writeGFF2,
   relScore,
   views,

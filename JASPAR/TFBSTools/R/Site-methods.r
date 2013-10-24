@@ -1,68 +1,68 @@
 
 ### -------------------------------------------------------------------
-### The Site accessor-like method
+### The SiteSet accessor-like method
 ###
-setMethod("views", "Site", function(x) x@views)
+setMethod("views", "SiteSet", function(x) x@views)
 
-setMethod("score", "Site", function(x) x@score)
-setMethod("strand", "Site", function(x) x@strand)
+setMethod("score", "SiteSet", function(x) x@score)
+setMethod("strand", "SiteSet", function(x) x@strand)
 
-setMethod("seqname", "Site", function(x) x@seqname)
+setMethod("seqname", "SiteSet", function(x) x@seqname)
 
-setMethod("sitesource", "Site", function(x) x@sitesource)
+setMethod("sitesource", "SiteSet", function(x) x@sitesource)
 
-setMethod("primary", "Site", function(x) x@primary)
+setMethod("primary", "SiteSet", function(x) x@primary)
 
-setMethod("pattern", "Site", function(x) x@pattern)
+setMethod("pattern", "SiteSet", function(x) x@pattern)
 
-setMethod("length", "Site", function(x) length(views(x)))
+setMethod("length", "SiteSet", function(x) length(views(x)))
 
 
 ### -------------------------------------------------------------------
-### The SitePair accessor-like method
+### The SitePairSet accessor-like method
 ###
-setMethod("site1", "SitePair", function(x) x@site1)
+setMethod("siteset1", "SitePairSet", function(x) x@siteset1)
 
-setMethod("site2", "SitePair", function(x) x@site2)
+setMethod("siteset2", "SitePairSet", function(x) x@siteset2)
 
-setMethod("length", "SitePair", function(x) length(site1(x)))
+setMethod("length", "SitePairSet", function(x) length(siteset1(x)))
 
 ### ------------------------------------------------------------------
-### SitePair Method
+### SitePairSet Method
 ###
-setMethod("writeGFF3", "SitePair",
+setMethod("writeGFF3", "SitePairSet",
           function(x){
             if(length(x) == 0)
               return(data.frame())
-            gff1 = writeGFF3(site1(x))
-            gff2 = writeGFF3(site2(x))
+            gff1 = writeGFF3(siteset1(x))
+            gff2 = writeGFF3(siteset2(x))
             ans = rbind(gff1, gff2)
             return(ans)
           }
           )
-setMethod("writeGFF2", "SitePair",
+setMethod("writeGFF2", "SitePairSet",
           function(x){
             if(length(x) == 0)
               return(data.frame())
-            gff1 = writeGFF2(site1(x))
-            gff2 = writeGFF2(site2(x))
+            gff1 = writeGFF2(siteset1(x))
+            gff2 = writeGFF2(siteset2(x))
             ans = rbind(gff1, gff2)
             return(ans)
           }
           )
 
 ### -----------------------------------------------------------
-### The SitePairList accessor-like methods
+### The SitePairSetList accessor-like methods
 ###
-setMethod("site1", "SitePairList",
+setMethod("siteset1", "SitePairSetList",
           function(x){
-            ans = SiteList(lapply(x, site1))
+            ans = SiteSetList(lapply(x, siteset1))
             return(ans)
           }
           )
-setMethod("site2", "SitePairList",
+setMethod("siteset2", "SitePairSetList",
           function(x){
-            ans = SiteList(lapply(x, site2))
+            ans = SiteSetList(lapply(x, siteset2))
             return(ans)
           }
           )
@@ -70,7 +70,7 @@ setMethod("site2", "SitePairList",
 ### ------------------------------------------------------------------
 ### The getters
 ###
-setMethod("[", "Site",
+setMethod("[", "SiteSet",
           function(x, i){
             if(missing(i))
               return(x)
@@ -83,7 +83,7 @@ setMethod("[", "Site",
 ### -----------------------------------------------------------------
 ### Combining
 ###
-setMethod("c", "Site",
+setMethod("c", "SiteSet",
           function(x, ...){
             if(missing(x)){
               args = unname(list(...))
@@ -126,7 +126,7 @@ setMethod("c", "Site",
 ### -----------------------------------------------------------------
 ### Methods
 ###
-setMethod("writeGFF3", "Site",
+setMethod("writeGFF3", "SiteSet",
           function(x){
             if(length(x) == 0)
               return(data.frame())
@@ -149,7 +149,7 @@ setMethod("writeGFF3", "Site",
           }
           )
 
-setMethod("writeGFF2", "Site",
+setMethod("writeGFF2", "SiteSet",
           function(x){
             if(length(x) == 0)
               return(data.frame())
@@ -172,7 +172,7 @@ setMethod("writeGFF2", "Site",
           }
           )
 
-setMethod("relScore", "Site",
+setMethod("relScore", "SiteSet",
           function(x){
           # Luckliy, the maxScore, minScore implementation is same with TFBS perl module. Validated!
             ans = (score(x) - minScore(Matrix(pattern(x)))) / (maxScore(Matrix(pattern(x))) - minScore(Matrix(pattern(x))))
@@ -181,15 +181,15 @@ setMethod("relScore", "Site",
           )
 
 ### ----------------------------------------------------------------
-### SiteList Methods
+### SiteSetList Methods
 ###
-setMethod("writeGFF3", "SiteList",
+setMethod("writeGFF3", "SiteSetList",
           function(x){
             ans = do.call(rbind, lapply(x, writeGFF3))
             return(ans)
           }
           )
-setMethod("writeGFF2", "SiteList",
+setMethod("writeGFF2", "SiteSetList",
            function(x){
              ans = do.call(rbind, lapply(x, writeGFF2))
              return(ans)
