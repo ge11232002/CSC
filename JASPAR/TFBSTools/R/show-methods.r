@@ -28,7 +28,7 @@ setMethod("show", "XMatrix",
 ### -----------------------------------------------------------------
 ### The "show" method
 ### Perhaps it is not a bad idea to show them in gff format.
-setMethod("show", "Site",
+setMethod("show", "SiteSet",
           function(object){
             cat("An object of class", class(object), "with",
                 length(object), "site",
@@ -45,7 +45,7 @@ setMethod("show", "Site",
 ### -----------------------------------------------------------------
 ### The "show" method
 ### put them in a extended gff. any good idea?
-setMethod("show", "SitePair",
+setMethod("show", "SitePairSet",
           function(object){
             gff1 = writeGFF3(site1(object))
             gff2 = writeGFF3(site2(object))
