@@ -47,11 +47,11 @@ setMethod("show", "SiteSet",
 ### put them in a extended gff. any good idea?
 setMethod("show", "SitePairSet",
           function(object){
-            gff1 = writeGFF3(site1(object))
-            gff2 = writeGFF3(site2(object))
+            gff1 = writeGFF3(siteset1(object))
+            gff2 = writeGFF3(siteset2(object))
             ans = cbind(gff1, gff2)
             cat("An object of class", class(object), "with",
-                length(object), "site pair",
+                length(object), "site pair set",
                 ifelse(length(object)==1, "sequence", "sequences"))
             cat("\n")
             print(ans)
