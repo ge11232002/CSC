@@ -1,50 +1,49 @@
-\name{SitePair}
+\name{SitePairSet}
 \Rdversion{1.1}
 \docType{class}
-\alias{SitePair}
-\alias{SitePair-class}
-\alias{length,SitePair-method}
-\alias{site1,SitePair-method}
-\alias{site2,SitePair-method}
-\alias{writeGFF2,SitePair-method}
-\alias{writeGFF3,SitePair-method}
+\alias{SitePairSet}
+\alias{SitePairSet-class}
+\alias{length,SitePairSet-method}
+\alias{site1,SitePairSet-method}
+\alias{site2,SitePairSet-method}
+\alias{writeGFF2,SitePairSet-method}
+\alias{writeGFF3,SitePairSet-method}
 
-\title{Class \code{"SitePair"}}
+\title{Class \code{"SitePairSet"}}
 \description{
 %%  ~~ A concise (1-5 lines) description of what the class is. ~~
-  The SitePair object is a container for storing two Site objects.
+  The SitePairSet object is a container for storing two SiteSet objects.
   Usually it is used to hold the results returned by \link{searchAln}.
 }
 
 \usage{
   ## Constructor
-  SitePair(site1, site2)
+  SitePairSet(siteset1, siteset2)
 }
 \arguments{
-  \item{site1, site2}{
-    Each Site object is from one sequence in the pairwise alignment.
+  \item{siteset1, siteset2}{
+    Each SiteSet object is from one sequence in the pairwise alignment.
   }
 }
 
 \section{Methods}{
   \describe{
 %    \item{length}{\code{signature(x = "SitePair")}: ... }
-    \item{site1}{\code{signature(x = "SitePair")}: Gets the first Site object.}
-    \item{site2}{\code{signature(x = "SitePair")}: Gets the second Site object.}
-    \item{writeGFF2}{\code{signature(x = "SitePair")}: Returns a standard GFF2 format data frame.}
-    \item{writeGFF3}{\code{signature(x = "SitePair")}: Returns a standard GFF3 format data frame.}
+    \item{siteset1}{\code{signature(x = "SitePairSet")}: Gets the first SiteSet object.}
+    \item{siteset2}{\code{signature(x = "SitePairSet")}: Gets the second SiteSet object.}
+    \item{writeGFF2}{\code{signature(x = "SitePairSet")}: Returns a standard GFF2 format data frame.}
+    \item{writeGFF3}{\code{signature(x = "SitePairSet")}: Returns a standard GFF3 format data frame.}
 	 }
 }
 
 \author{
-%%  ~~who you are~~
   Ge Tan
 }
 
 \seealso{
 %%  ~~objects to See Also as \code{\link{~~fun~~}}, ~~~
 %%  ~~or \code{\linkS4class{CLASSNAME}} for links to other classes ~~~
-  \code{\link{SitePair}},
+  \code{\link{SitePairSet}},
   \code{\link{searchAln}}
 }
 
