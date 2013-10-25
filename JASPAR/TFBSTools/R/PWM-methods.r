@@ -200,7 +200,7 @@ setMethod("searchAln", signature(pwm="PWMatrixList", aln1="DNAString", aln2="DNA
                               windowSize=windowSize, cutoff=cutoff, 
                               strand=strand, type=type, 
                               conservation=conservation)
-            ans = SitePairList(ans_list)
+            ans = SitePairSetList(ans_list)
             return(ans)
           }
           )
