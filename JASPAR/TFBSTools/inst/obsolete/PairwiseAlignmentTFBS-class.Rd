@@ -2,6 +2,7 @@
 \Rdversion{1.1}
 \docType{class}
 \alias{PairwiseAlignmentTFBS}
+\alias{alignments}
 \alias{alignments,PairwiseAlignmentTFBS-method}
 \alias{alnlength,PairwiseAlignmentTFBS-method}
 \alias{conservation1,PairwiseAlignmentTFBS-method}
@@ -12,7 +13,6 @@
 
 \title{Class \code{"PairwiseAlignmentTFBS"}}
 \description{
-%%  ~~ A concise (1-5 lines) description of what the class is. ~~
   The PairwiseAlignmentTFBS object is a container for pairwise alignment
   and its corresponding information.
 }
@@ -37,18 +37,9 @@
     \item{\code{seq2length}:}{Object of class \code{"integer"}: The second sequence's length}
   }
 }
-\references{
-%%  ~~put references to the literature/web site here~~
-}
 \author{
-%%  ~~who you are~~
   Ge Tan
 }
-\note{
-%%  ~~further notes~~
-}
-
-%% ~Make other sections like Warning with \section{Warning }{....} ~
 
 \seealso{
 %%  ~~objects to See Also as \code{\link{~~fun~~}}, ~~~

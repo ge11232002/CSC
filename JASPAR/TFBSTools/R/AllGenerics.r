@@ -20,8 +20,8 @@ setGeneric("views", signature="x", function(x) standardGeneric("views"))
 setGeneric("seqname", signature="x", function(x) standardGeneric("seqname"))
 setGeneric("sitesource", signature="x", function(x) standardGeneric("sitesource"))
 setGeneric("primary", signature="x", function(x) standardGeneric("primary"))
-setGeneric("site1", signature="x", function(x) standardGeneric("site1"))
-setGeneric("site2", signature="x", function(x) standardGeneric("site2"))
+setGeneric("siteset1", signature="x", function(x) standardGeneric("siteset1"))
+setGeneric("siteset2", signature="x", function(x) standardGeneric("siteset2"))
 setGeneric("alignments", signature="x", function(x) standardGeneric("alignments"))
 setGeneric("conservation1", signature="x", function(x) standardGeneric("conservation1"))
 setGeneric("seqlength", signature="x", function(x) standardGeneric("seqlength"))
@@ -49,13 +49,13 @@ setGeneric("deleteMatrixHavingID", signature="x",
 
 ## PFM,PWM, ICM
 setGeneric("toICM", signature="x",
-           function(x, pseudocounts=NULL, schneider=FALSE,
+           function(x, pseudocounts=0.8, schneider=FALSE,
                     bg=c(A=0.25, C=0.25, G=0.25, T=0.25))
              standardGeneric("toICM")
            )
 
 setGeneric("toPWM", signature="x",
-           function(x, type="log2probratio", pseudocounts=NULL,
+           function(x, type="log2probratio", pseudocounts=0.8,
                     bg=c(A=0.25, C=0.25, G=0.25, T=0.25))
              standardGeneric("toPWM")
            )
@@ -77,12 +77,12 @@ setGeneric("searchSeq", signature="x",
 
 setGeneric("searchAln",
            function(pwm, aln1, aln2, min.score="80%", windowSize=51L, cutoff=0.7,
-                    conservation=NULL)
+                    strand="*", type="any", conservation=NULL)
              standardGeneric("searchAln")
            )
 setGeneric("doSiteSearch",
            function(pwm, aln1, aln2, min.score="80%", windowSize=51L, cutoff=0.7,
-                    conservation=NULL)
+                    strand="*", conservation=NULL)
              standardGeneric("doSiteSearch")
            )
 

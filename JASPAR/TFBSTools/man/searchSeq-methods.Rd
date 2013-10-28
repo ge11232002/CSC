@@ -1,8 +1,9 @@
 \name{searchSeq}
 \docType{methods}
 \alias{searchSeq}
-%\alias{searchSeq,PWMatrix-method}
-%\alias{searchSeq,PWMatrixList-method}
+\alias{searchSeq-methods}
+\alias{searchSeq,PWMatrix-method}
+\alias{searchSeq,PWMatrixList-method}
 \title{searchSeq method}
 \description{
   It scans a nucleotide sequence with the pattern represented by a PWMatrix
@@ -24,7 +25,10 @@
     This is sequence name of the target sequence.
   }
   \item{strand}{
-    The strand information of the target sequence.
+    When searching the sequence, 
+    we can search the positive strand or negative strand.
+    While strand is "*", it will search both strands and
+    return the results based on the positvie strand coordinate.
   }
   \item{min.score}{
     The minimum score for the hit. Can be given an character string in th format
@@ -50,9 +54,8 @@
   \dontrun{
     site = searchSeq(pwm, "GAATTCTCTCTTGTTGTAGTCTCTTGACAAAATG", min.score="60%")
     siteList = searchSeq(pwmList, "GAATTCTCTCTTGTTGTAGTCTCTTGACAAAATG", 
-                         min.score="60%")
-  }  
+                         min.score="60%", strand="*", type="any")
+  }
 }
 
 \keyword{methods}
-\keyword{ ~~ other possible keyword(s) ~~ }

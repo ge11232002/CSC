@@ -2,8 +2,10 @@
 \Rdversion{1.1}
 \docType{class}
 \alias{MotifSet}
+\alias{MotifSet-class}
 \alias{[,MotifSet-method}
 \alias{length,MotifSet-method}
+\alias{sitesSeq}
 \alias{sitesSeq,MotifSet-method}
 
 \title{Class \code{"MotifSet"}}
@@ -40,18 +42,9 @@
       \code{type} controls "all", "left", "right" or "none" flanking sequences are included.}
 	 }
 }
-\references{
-%%  ~~put references to the literature/web site here~~
-}
 \author{
-%%  ~~who you are~~
   Ge Tan
 }
-\note{
-%%  ~~further notes~~
-}
-
-%% ~Make other sections like Warning with \section{Warning }{....} ~
 
 \seealso{
 %%  ~~objects to See Also as \code{\link{~~fun~~}}, ~~~

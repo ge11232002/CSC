@@ -46,7 +46,7 @@ setMethod("sitesSeq", "MotifSet",
               }
               #motifSeqs = DNAStringSet(paste0(leftSeqs, motifSeqs, rightSeqs))
               #names(motifSeqs) = seqnames(oneRange)
-              motifSeqs = data.frame(leftSeqs=leftSeqs, motifSeqs=motifSeqs, rightSeqs=rightSeqs, score=oneRange$score, strand=as.vector(strand(oneRange)))
+              motifSeqs = data.frame(leftSeqs=leftSeqs, motifSeqs=motifSeqs, rightSeqs=rightSeqs, score=oneRange$score, strand=as.character(strand(oneRange)))
               ans[[names(x@motifList)[i]]] = motifSeqs
             }
             #names(ans) = names(x@motifList)

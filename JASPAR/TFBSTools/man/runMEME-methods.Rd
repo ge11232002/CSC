@@ -10,7 +10,7 @@
 
 \usage{
   \S4method{runMEME}{character}(x, binary="meme", seqtype="DNA", arguments="", tmpdir=tempdir())
-  \S4method{runMEME}{XStringSet}(x, binary="meme", seqtype="DNA", arguments="", tmpdir=tempdir())
+  \S4method{runMEME}{DNAStringSet}(x, binary="meme", seqtype="DNA", arguments="", tmpdir=tempdir())
 }
 
 \arguments{
@@ -37,7 +37,7 @@
 
 
 \references{
-Bailey, T. L., Boden, M., Buske, F. A., Frith, M., Grant, C. E., Clementi, L., et al. (2009). MEME SUITE: tools for motif discovery and searching. Nucleic acids research, 37(Web Server issue), W202–8. doi:10.1093/nar/gkp335
+  Bailey, T. L., Boden, M., Buske, F. A., Frith, M., Grant, C. E., Clementi, L., et al. (2009). MEME SUITE: tools for motif discovery and searching. Nucleic acids research, 37(Web Server issue), W202-8. doi:10.1093/nar/gkp335
 }
 
 \author{
@@ -57,4 +57,3 @@ Bailey, T. L., Boden, M., Buske, F. A., Frith, M., Grant, C. E., Clementi, L., e
 }
 
 \keyword{methods}
-\keyword{ ~~ other possible keyword(s) ~~ }

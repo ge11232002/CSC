@@ -1,10 +1,10 @@
 \name{toPWM}
 \docType{methods}
 \alias{toPWM}
-%\alias{toPWM,character-method}
-%\alias{toPWM,DNAStringSet-method}
-%\alias{toPWM,matrix-method}
-%\alias{toPWM,PFMatrix-method}
+\alias{toPWM,character-method}
+\alias{toPWM,DNAStringSet-method}
+\alias{toPWM,matrix-method}
+\alias{toPWM,PFMatrix-method}
 
 \title{toPWM method}
 \description{
@@ -23,7 +23,7 @@ toPWM(x, type="log2probratio", pseudocounts=0.8, bg=c(A=0.25, C=0.25, G=0.25, T=
     a rectangular \link{character} vector or 
     a \link{matrix} with rownames containing at least A, C, G and T.
   }
-  \item{typeA}{
+  \item{type}{
     The type of PWM generated, should be one of "log2probratio" or "prob".
   }
   \item{pseudocounts}{
@@ -55,9 +55,9 @@ toPWM(x, type="log2probratio", pseudocounts=0.8, bg=c(A=0.25, C=0.25, G=0.25, T=
 }
 
 \references{
-Wasserman, W. W., & Sandelin, A. (2004). Applied bioinformatics for the identification of regulatory elements. Nature Publishing Group, 5(4), 276–287. doi:10.1038/nrg1315
+Wasserman, W. W., & Sandelin, A. (2004). Applied bioinformatics for the identification of regulatory elements. Nature Publishing Group, 5(4), 276-287. doi:10.1038/nrg1315
 
-Nishida, K., Frith, M. C., & Nakai, K. (2009). Pseudocounts for transcription factor binding sites. Nucleic acids research, 37(3), 939–944. doi:10.1093/nar/gkn1019
+Nishida, K., Frith, M. C., & Nakai, K. (2009). Pseudocounts for transcription factor binding sites. Nucleic acids research, 37(3), 939-944. doi:10.1093/nar/gkn1019
 }
 
 \author{
@@ -88,4 +88,3 @@ Ge Tan
 }
 
 \keyword{methods}
-\keyword{ ~~ other possible keyword(s) ~~ }

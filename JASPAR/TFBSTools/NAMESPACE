@@ -3,25 +3,37 @@ import(RSQLite)
 
 #import(IRanges)
 
+### -----------------------------------------------------------------
+### Import S4 classes defined in other packages
+###
 importClassesFrom(IRanges, SimpleList)
 #importClassesFrom(JASPAR2014, JASPAR2014)
 importClassesFrom(Biostrings, DNAStringSet, PairwiseAlignments)
 importClassesFrom(GenomicRanges, GRanges)
 
+### -----------------------------------------------------------------
+### Import S4 methods defined in other packages
+###
 importMethodsFrom(Biostrings, reverseComplement, matchPWM, maxScore, minScore, consensusMatrix, PairwiseAlignments, pattern)
 importMethodsFrom(RSQLite, dbGetQuery, dbConnect, dbDisconnect)
+importMethodsFrom(XVector, subseq)
+importMethodsFrom(GenomicRanges, seqnames)
 
+### -----------------------------------------------------------------
+### Import ordinary functions, variables in other packages
 importFrom(seqLogo, seqLogo, makePWM)
-importFrom(Biostrings, unitScale, PWMscoreStartingAt, DNAStringSet, DNA_BASES, DNA_ALPHABET)
+importFrom(Biostrings, unitScale, PWMscoreStartingAt, DNAStringSet, DNA_BASES, DNA_ALPHABET, readDNAStringSet, readAAStringSet, writeXStringSet)
 importFrom(caTools, runmean)
+importFrom(GenomicRanges, GRanges, GRangesList)
 
 ### -----------------------------------------------------------------
 ### Export S4 classes defined in TFBSTools
 ###
 exportClasses(PFMatrix, PWMatrix, ICMatrix,
   PFMatrixList, PWMatrixList, ICMatrixList,
-  Site, SiteList,
-  PairwiseAlignmentTFBS)
+  SiteSet, SiteSetList, SitePairSet, SitePairSetList
+  #PairwiseAlignmentTFBS
+  )
 
 ### -----------------------------------------------------------------
 ### Export non-generic functions
@@ -30,10 +42,10 @@ export(
   ## AllClasses.r
   PFMatrix,
   PFMatrixList,
-  PairwiseAlignmentTFBS,
+  #PairwiseAlignmentTFBS,
   ICMatrixList,
   PWMatrixList,
-  Site, SiteList
+  SiteSet, SiteSetList
 )
 
 ### -----------------------------------------------------------------
@@ -65,7 +77,7 @@ export(
   tags,
   matrixType,
   XMatrixList,
-  alignments,
+  #alignments,
 
   ## PWM-methods.r
   toPWM,
@@ -77,14 +89,18 @@ export(
   seqLogo,
   totalIC,
 
-  ## Site-methods.r
+  ## SiteSet-methods.r
   writeGFF3, writeGFF2,
   relScore,
   views,
 
   ## PairwiseAlignment-methods.r
   calConservation,
-  doSiteSearch
+  #doSiteSearch
+
+  ## Wrappers-methods.r
+  runMEME,
+  sitesSeq
 )
 
 

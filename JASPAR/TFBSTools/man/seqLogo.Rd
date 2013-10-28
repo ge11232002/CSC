@@ -1,14 +1,14 @@
-\name{plotLogo}
+\name{seqLogo}
 \docType{methods}
-\alias{plotLogo}
-\alias{plotLogo,ICMatrix-method}
+\alias{seqLogo}
+\alias{seqLogo,ICMatrix-method}
 \title{Plot a sequence logo for a ICMatrix object }
 \description{
   This function takes a ICMatrix object and plot the sequence logo.
 }
 
 \usage{
-  plotLogo(x, ic.scale = TRUE, xaxis = TRUE, yaxis = TRUE,
+  seqLogo(x, ic.scale = TRUE, xaxis = TRUE, yaxis = TRUE,
            xfontsize = 15, yfontsize = 15)
 }
 
@@ -65,7 +65,7 @@ T D Schneider, R. M. S. (1990). Sequence logos: a new way to display consensus s
 
 \examples{
   \dontrun{
-    plotLogo(icm, ic.scale = TRUE)
+    seqLogo(icm, ic.scale = TRUE)
   }  
 }
 
