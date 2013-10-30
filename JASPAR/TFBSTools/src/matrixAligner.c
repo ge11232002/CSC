@@ -76,9 +76,12 @@ SEXP matrixAligner(SEXP matrixQuery, SEXP matrixSubject, SEXP open_penalty, SEXP
     for(i=1; i<=vidd1; i++){
       matris1[i][j] = matris1[i][j] / position_weights[i];
     }
+    for(i=1; i<=vidd2; i++){
+      matris2[i][j] = matris2[i][j] / position_weights2[i];
+    }
   }
-  Rprintf("the position weight is %f\n", matris1[1][0]);
-  Rprintf("the position weight is %f\n", matris1[1][3]);  
+  Rprintf("the position weight is %f\n", matris2[1][0]);
+  Rprintf("the position weight is %f\n", matris2[1][2]);  
 
   return R_NilValue;
 
