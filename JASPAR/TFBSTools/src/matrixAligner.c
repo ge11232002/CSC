@@ -25,7 +25,32 @@ struct alignment
   int under_string[30]; // string matrix2 in alignment
 };
 
+void reverseMatrix(float matrix1[][4], float matrix2[][4], int width){
+// reverse the matrix1 and put the results in matrix2
+  int i,j;
+  for(i=1; i<=width; i++){
+    for(j=0; j<=3; j++){
+      matrix2[width-i+1][3-j] = matrix1[i][j];
+    }
+  }
+}
 
+void printMatrix(float matrix[][4], int width){
+// print a matrix to R console
+  int i, j;
+  for(i=0; i<=width; i++){
+    for(j=0; j<=3; j++){
+      Rprintf("%f\t", matrix[i][j]);
+    }
+    Rprintf("\n");
+  }
+}
+
+struct alignment *score(int width1, int width2, float matrix1[][4], float matrix2[][4], double open_penalty, double ext_penalty){
+// scoring function, the modified Needleman algorithm
+  struct entry
+
+}
 
 
 /* ----------------.Call() Entry points: the main matrixAligner function ------------- */
@@ -44,6 +69,8 @@ SEXP matrixAligner(SEXP matrixQuery, SEXP matrixSubject, SEXP open_penalty, SEXP
   // make another matrix of profile with additional column so make pos 1 is index 1 in the matrix.
   float matris1[vidd1+1][4];
   float matris2[vidd2+1][4];
+  float matris3[vidd2+1][4];
+
   float position_weights[vidd1+1]; // stores the number of sequences in each position
   float position_weights2[vidd2+1]; 
   
@@ -80,9 +107,14 @@ SEXP matrixAligner(SEXP matrixQuery, SEXP matrixSubject, SEXP open_penalty, SEXP
       matris2[i][j] = matris2[i][j] / position_weights2[i];
     }
   }
-  Rprintf("the position weight is %f\n", matris2[1][0]);
-  Rprintf("the position weight is %f\n", matris2[1][2]);  
-
+  reverseMatrix(matris2, matris3, vidd2);// reverse the second profile for +- scoring
+  //Rprintf("the position weight is %f\n", matris2[1][0]);
+  //Rprintf("the position weight is %f\n", matris2[1][2]);  
+  printMatrix(matris2, vidd2);
+  Rprintf("The matris3 is \n");
+  printMatrix(matris3, vidd2);
+  
+  
   return R_NilValue;
 
 }
