@@ -71,8 +71,6 @@ struct alignment *score(int width1, int width2, float matrix1[][4], float matrix
   int number_of_gaps=0; // number of gaps
   int nucleotide; // nucleotide, 0-3 =ACGT 
 
-  F[0][0].score=0;
-  //Rprintf("the score is %f\n", F[0][0].score);
   for(i=0; i<=width1; i++){
     for(j=0; j<=width2; j++){
       F[i][j].score = 0;
