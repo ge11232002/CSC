@@ -72,7 +72,7 @@ struct alignment *score(int width1, int width2, float matrix1[][4], float matrix
   int nucleotide; // nucleotide, 0-3 =ACGT 
 
   F[0][0].score=0;
-  Rprintf("the score is %f\n", F[0][0].score);
+  //Rprintf("the score is %f\n", F[0][0].score);
   for(i=0; i<=width1; i++){
     for(j=0; j<=width2; j++){
       F[i][j].score = 0;
@@ -279,6 +279,7 @@ SEXP matrixAligner(SEXP matrixQuery, SEXP matrixSubject, SEXP open_penalty, SEXP
   for(j=0; j<=3; j++){
     matris1[0][j] = 0;
     matris2[0][j] = 0;
+    matris3[0][j] = 0;
   }
   for(i=0; i<=vidd1+1; i++){
     position_weights[i] = 0;
@@ -308,12 +309,13 @@ SEXP matrixAligner(SEXP matrixQuery, SEXP matrixSubject, SEXP open_penalty, SEXP
       matris2[i][j] = matris2[i][j] / position_weights2[i];
     }
   }
+
   reverseMatrix(matris2, matris3, vidd2);// reverse the second profile for +- scoring
   //Rprintf("the position weight is %f\n", matris2[1][0]);
   //Rprintf("the position weight is %f\n", matris2[1][2]);  
-  //printMatrix(matris2, vidd2);
-  //Rprintf("The matris3 is \n");
-  //printMatrix(matris3, vidd2);
+  printMatrix(matris2, vidd2);
+  Rprintf("The matris3 is \n");
+  printMatrix(matris3, vidd2);
 
   struct alignment *score1, *score2;
   score1 = score(vidd1, vidd2, matris1, matris2, REAL(open_penalty)[0], REAL(ext_penalty)[0]);
@@ -325,7 +327,6 @@ SEXP matrixAligner(SEXP matrixQuery, SEXP matrixSubject, SEXP open_penalty, SEXP
   //}else{
     Rprintf("the best score2 is %f\n", score2->best_score);
   //}
-  
   return R_NilValue;
 
 }
