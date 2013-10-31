@@ -57,7 +57,7 @@ void printArray(float *array, int width){
   Rprintf("\n");
 }
 
-void score(int width1, int width2, float **matrix1, float **matrix2, double open_penalty, double ext_penalty, struct alignment *align){
+float score(int width1, int width2, float **matrix1, float **matrix2, double open_penalty, double ext_penalty){
 // scoring function, the modified Needleman algorithm
   int i,j; 
   struct entry **F, **I, **B, **E;
@@ -88,7 +88,7 @@ void score(int width1, int width2, float **matrix1, float **matrix2, double open
   int counter;   // another counter variable
   int number_of_gaps=0; // number of gaps
   int nucleotide; // nucleotide, 0-3 =ACGT
- 
+   
   for(i=0; i<=width1; i++){
     for(j=0; j<=width2; j++){
       F[i][j].score = 0;
@@ -133,7 +133,7 @@ void score(int width1, int width2, float **matrix1, float **matrix2, double open
     }
   }
   struct entry *best_pntr; // pointer to the best entry so far
-
+  
   /*------------scoring engine------------*/
   for(i=1; i<=width1; i++){ //go over all pos vs all pos
     for(j=1; j<=width2; j++){
@@ -235,10 +235,11 @@ void score(int width1, int width2, float **matrix1, float **matrix2, double open
       }
     }
   }
+  return max_score;
   /*-----------------function for walking through the alignment------------*/
   // starting with the best scoring cell, going back throgh the father-pointers
   //struct alignment *align;
-  align->best_score = max_score;
+  /*align->best_score = max_score;
   counter = 0;
   align_length = 0;
   struct entry *current_pntr = best_pntr; // for walking, start with the best score
@@ -250,7 +251,7 @@ void score(int width1, int width2, float **matrix1, float **matrix2, double open
     counter ++;
   }
   align->length= align_length;
-
+  */ 
   /*for(i=align_length-1; i>=0; --i){ // walk through alignment for printing, first profile
     align->over_string[i] = align_i[align_length-i-1]; // fill in alignment in alignment-object
     if(align_i[i] == 0){ // count the number of gaps
@@ -349,22 +350,21 @@ SEXP matrixAligner(SEXP matrixQuery, SEXP matrixSubject, SEXP open_penalty, SEXP
   //printArray(position_weights2, vidd2);
   //printMatrix(matris3, vidd2);
 
-  struct alignment *score1, *score2;
-  score(vidd1, vidd2, matris1, matris2, REAL(open_penalty)[0], REAL(ext_penalty)[0], score1);
-  score(vidd1, vidd2, matris1, matris3, REAL(open_penalty)[0], REAL(ext_penalty)[0], score2);
+  //struct alignment *score1, *score2;
+  //score1->best_score = 0;
+  //score1->length = 0;
+  //Rprintf("the score1 %f\n", score1->best_score);
+  float tempScore1 = score(vidd1, vidd2, matris1, matris2, REAL(open_penalty)[0], REAL(ext_penalty)[0]);
+  float tempScore2 = score(vidd1, vidd2, matris1, matris3, REAL(open_penalty)[0], REAL(ext_penalty)[0]);
   SEXP maxScore;
-  PROTECT(maxScore = NEW_INTEGER(1));
-  //double *p_maxScore;
-  //p_maxScore = NUMERIC_POINTER(maxScore);
-  if(score1->best_score > score2->best_score){  // what final score is highest?
-    Rprintf("The best score is %f\n", score1->best_score);
-    //p_maxScore[0] = 100;
+  PROTECT(maxScore = NEW_NUMERIC(1));
+  if(tempScore1 > tempScore2){  // what final score is highest?
+  //  Rprintf("The best score is %f\n", score1->best_score);
+    REAL(maxScore)[0] = (double) tempScore1;
   }else{
-    Rprintf("The best score2 is %f\n", score2->best_score);
-    //p_maxScore[0] = (double) score2->best_score;
-    //p_maxScore[0] = 200;
+  //  Rprintf("The best score2 is %f\n", score2->best_score);
+    REAL(maxScore)[0] = (double) tempScore2;
   }
-  INTEGER(maxScore)[0] = 100;
   UNPROTECT(1);
   return(maxScore);
   //return R_NilValue;
