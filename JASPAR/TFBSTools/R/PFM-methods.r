@@ -25,7 +25,7 @@ setMethod("searchMatrix", signature(pfmSubject="PFMatrix", pfmQuery="PFMatrix"),
                    max.results=10, min.percent_score=NULL, min.score=NULL){
             score = compareMatrix(Matrix(pfmSubject), Matrix(pfmQuery), 
                                   openPenalty=openPenalty, extPenalty=extPenalty)
-            relScore = 100 * score / max(ncol(pfmSubject), ncol(pfmQuery)) / 2
+            relScore = 100 * score / max(ncol(Matrix(pfmSubject)), ncol(Matrix(pfmQuery))) / 2
             return(c(score=score, relScore=relScore))
           }
           )
