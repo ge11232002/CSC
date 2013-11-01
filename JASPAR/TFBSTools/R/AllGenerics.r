@@ -95,6 +95,12 @@ setGeneric("writeGFF2", signature="x", function(x) standardGeneric("writeGFF2"))
 setGeneric("relScore", signature="x", function(x) standardGeneric("relScore"))
 setGeneric("clone", signature="x", function(x, ...) standardGeneric("clone"))
 
+## PFM methods
+setGeneric("searchMatrix", 
+           function(pfmSubject, pfmQuery, openPenalty=3, extPenalty=0.01, 
+                    max.results=10, min.percent_score=NULL, min.score=NULL) 
+             standardGeneric("searchMatrix"))
+
 ## wrappers
 setGeneric("runMEME", signature="x", function(x, binary="meme", seqtype="DNA", arguments="", tmpdir=tempdir()) standardGeneric("runMEME"))
 setGeneric("sitesSeq", signature="x", function(x, n=10, type="none") standardGeneric("sitesSeq"))
