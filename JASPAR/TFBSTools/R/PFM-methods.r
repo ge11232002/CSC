@@ -65,11 +65,11 @@ setMethod("searchMatrix", signature(pfmSubject="matrix", pfmQuery="character"),
             if(!all(pfmQuery %in% names(IUPAC_CODE_MAP))){
               stop("All characters must be in IUPAC_CODE_MAP!")
             }
-            pfmQueryMatrix = matrix(0, nrow=4, ncol=length(pfmQuery),
+            pfmQueryMatrix = matrix(0L, nrow=4, ncol=length(pfmQuery),
                                     dimnames=list(c("A", "C", "G", "T")))
             for(i in 1:length(pfmQuery)){
               dnaCharacters = strsplit(IUPAC_CODE_MAP[pfmQuery[i]], "")[[1]]
-              pfmQueryMatrix[dnaCharacters, i] = 1
+              pfmQueryMatrix[dnaCharacters, i] = 1L
             }
             searchMatrix(pfmSubject, pfmQueryMatrix,
                          openPenalty=openPenalty, extPenalty=extPenalty)
