@@ -229,11 +229,11 @@ and exceed a specified threshold score in both,
 AND are found in regions of the alignment above the specified.
 
 <<rtl-search, eval=FALSE, results = hide>>=
-aln1 = "ACTTCACCAGCTCCCTGGCGGTAAGTTGATC---AAAGG---AAACGCAAAGTTTTCAAG"
-aln2 = "GTTTCACTACTTCCTTTCGGGTAAGTAAATATATAAATATATAAAAATATAATTTTCATC"
+aln1 = DNAString("ACTTCACCAGCTCCCTGGCGGTAAGTTGATC---AAAGG---AAACGCAAAGTTTTCAAG")
+aln2 = DNAString("GTTTCACTACTTCCTTTCGGGTAAGTAAATATATAAATATATAAAAATATAATTTTCATC")
 sitePair = searchAln(pwm, aln1, aln2, min.score="50%", cutoff=0.5, 
                      strand="*", type="any")
-## generate gff stype output
+## generate gff style output
 writeGFF3(sitePair)
 writeGFF2(sitePair)
 @
