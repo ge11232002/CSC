@@ -97,8 +97,8 @@ setGeneric("clone", signature="x", function(x, ...) standardGeneric("clone"))
 
 ## PFM methods
 setGeneric("searchMatrix", 
-           function(pfmSubject, pfmQuery, openPenalty=3, extPenalty=0.01, 
-                    max.results=10, min.percent_score=NULL, min.score=NULL) 
+           function(pfmSubject, pfmQuery, openPenalty=3, extPenalty=0.01)
+                    #max.results=10, min.percent_score=NULL, min.score=NULL) 
              standardGeneric("searchMatrix"))
 
 ## wrappers
