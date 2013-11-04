@@ -24,7 +24,7 @@
     which is compared with query matrix.
   }
   \item{pfmQuery}{
-    A \code{matrix}, \code{PFMatrix} object.
+    A \code{matrix}, \code{PFMatrix} or IUPAC \code{character} object.
   }
   \item{openPenalty}{
     The gap open penalty used in the modified Needleman-Wunsch algorithm.
