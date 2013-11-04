@@ -212,10 +212,12 @@ The strand argument controls which strand of the sequence will be searched.
 When it is "*", both strands will be scanned.
 
 <<rtl-search, eval=FALSE, results = hide>>=
-siteset = searchSeq(pwm, "GAATTCTCTCTTGTTGTAGTCTCTTGACAAAATG", min.score="60%")
-siteList = searchSeq(pwmList, "GAATTCTCTCTTGTTGTAGTCTCTTGACAAAATG",
-                         min.score="60%", strand="*")
-## generate gff stype output
+subject = DNAString("GAATTCTCTCTTGTTGTAGTCTCTTGACAAAATG")
+siteset = searchSeq(pwm, subject, min.score="60%")
+siteList = searchSeq(pwmList, subject,
+                     min.score="60%", strand="*")
+
+## generate gff style output
 writeGFF3(site)
 writeGFF2(site)
 @
