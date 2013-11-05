@@ -204,6 +204,25 @@ icm = toICM(pfm, pseudocounts=0.8)
 seqLogo(icm)
 @
 
+\subsection{Align PFM to a custom matrix or IUPAC string}
+In some cases, it is beneficial to assess similarity to input data 
+(as with using BLAST for sequence data comparison when using Genbank).
+
+<<rtl-matrixMethods, eval=FALSE, results = hide>>=
+library(JASPAR2014)
+## one to one comparison
+pfmSubject = getMatrixByID(JASPAR2014, ID="MA0055")
+pfmQuery = getMatrixByID(JASPAR2014, ID="MA0048")
+score = searchMatrix(pfmSubject, pfmQuery)
+## one to several comparsion
+opts = list()
+opts[["class"]] = "Ig-fold"
+pfmList = getMatrixSet(JASPAR2014, opts)
+scores = searchMatrix(pfmList, pfmQuery)
+## align IUPAC string
+IUPACString = "ACGTMRWSYKVHDBN"
+searchMatrix(pfmList, IUPACString)
+@
 
 \section{Scan sequence and alignments with PWM pattern}
 \subsection{searchSeq}
@@ -212,10 +231,12 @@ The strand argument controls which strand of the sequence will be searched.
 When it is "*", both strands will be scanned.
 
 <<rtl-search, eval=FALSE, results = hide>>=
-siteset = searchSeq(pwm, "GAATTCTCTCTTGTTGTAGTCTCTTGACAAAATG", min.score="60%")
-siteList = searchSeq(pwmList, "GAATTCTCTCTTGTTGTAGTCTCTTGACAAAATG",
-                         min.score="60%", strand="*")
-## generate gff stype output
+subject = DNAString("GAATTCTCTCTTGTTGTAGTCTCTTGACAAAATG")
+siteset = searchSeq(pwm, subject, min.score="60%")
+siteList = searchSeq(pwmList, subject,
+                     min.score="60%", strand="*")
+
+## generate gff style output
 writeGFF3(site)
 writeGFF2(site)
 @
@@ -227,11 +248,11 @@ and exceed a specified threshold score in both,
 AND are found in regions of the alignment above the specified.
 
 <<rtl-search, eval=FALSE, results = hide>>=
-aln1 = "ACTTCACCAGCTCCCTGGCGGTAAGTTGATC---AAAGG---AAACGCAAAGTTTTCAAG"
-aln2 = "GTTTCACTACTTCCTTTCGGGTAAGTAAATATATAAATATATAAAAATATAATTTTCATC"
+aln1 = DNAString("ACTTCACCAGCTCCCTGGCGGTAAGTTGATC---AAAGG---AAACGCAAAGTTTTCAAG")
+aln2 = DNAString("GTTTCACTACTTCCTTTCGGGTAAGTAAATATATAAATATATAAAAATATAATTTTCATC")
 sitePair = searchAln(pwm, aln1, aln2, min.score="50%", cutoff=0.5, 
                      strand="*", type="any")
-## generate gff stype output
+## generate gff style output
 writeGFF3(sitePair)
 writeGFF2(sitePair)
 @
@@ -245,7 +266,7 @@ and returns a \Rclass{MotifSet} object.
 
 <<rtl-wrappers, eval=FALSE, results = hide>>=
 motifSet = runMEME(file.path(system.file("extdata", package="TFBSTools"), "crp0.s"),
-                   binary="/usr/local/Cellar/meme/4.9.0-p4/bin/meme",
+                   binary="meme",
                    arguments="-nmotifs 3")
 sitesSeq(motifSet, type="all")
 sitesSeq(motifSet, type="none")
