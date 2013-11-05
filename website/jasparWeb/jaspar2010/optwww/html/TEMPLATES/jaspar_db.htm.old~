@@ -1,0 +1,382 @@
+<html>
+<head>
+
+<title>The JASPAR database</title>
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+
+<script name="javascript">
+ function Help(anchor) {
+	help_page = "<TMPL_VAR NAME=HELP>#" + anchor;
+	OpenWin = this.open(help_page, "CtrlWindow1", "height=500,width=670,left=0,toolbar=no,menubar=no,location=no,scrollbars=yes,resizable=yes");
+  }
+
+  function goto(page) { window.location = page; }
+</script>
+
+
+<link rel="stylesheet" type="text/css" href="<TMPL_VAR NAME=STYLE>" media="screen" />
+<script language="JavaScript">
+
+function visaVal(val){
+	show_descriptions ( val.options[val.selectedIndex].value);
+}
+
+function show_descriptions(index){
+<!-- load an array of descriptions //--->
+	desc=new Array();
+	<TMPL_LOOP NAME=DB_DESCS>
+		desc[ <TMPL_VAR NAME = DB_INDEX> ] = <TMPL_VAR NAME = DESCRIPTION> 
+	</TMPL_LOOP >
+
+	db_value= index;
+	el = document.getElementById("cell_Header");
+	el.innerHTML = desc[db_value];
+
+
+}
+
+function matrix_fill() {
+	el = document.getElementById("alignment_input");
+	el.value= "A  [13 13  3  1 54  1  1  1  0  3  2  5 ]\nC  [13 39  5 53  0  1 50  1  0 37  0 17 ]\nG  [17  2 37  0  0 52  3  0 53  8 37 12 ]\nT  [11  0  9  0  0  0  0 52  1  6 15 20 ] ";
+}
+
+
+</script></head>
+<body onload="show_descriptions(0)" bgcolor="#ececec" text="#000000">
+
+<div align="center">
+
+ <form method="post" action=<TMPL_VAR NAME=ACTION > enctype="multipart/form-data">
+
+<table  bgcolor="#ffffff"  cellpadding="5" cellspacing="0" width="640">
+  <tbody><tr> 
+      <td  class="right_corner">
+      <div align="center"> 
+        <p><img src= "<TMPL_VAR NAME = IMAGE_DIR>/jasparlogo_beta.gif" height="173" width="254"></p>
+        <p>   <b><font face="Verdana, Arial, Helvetica, sans-serif" size="3">The high-quality transcription factor binding profile database</font>
+        </b></p><b>
+        <b>
+             
+        <b>
+        <input name="rm" value="Browse the JASPAR_CORE database right away!" type="submit" class="btn">
+          
+     
+</b></div>
+<b>    </b></td>
+  </tr>
+  
+</tbody></table>
+<br>
+<table class="alert" width="640" align=center>
+<tr bgcolor="white">
+  <td bgcolor="white" class="down_cell">&nbsp;</td>
+  <td bgcolor="white" class="down_cell"> 
+  
+  <input type=button value="DOCUMENTATION" onClick="Help('test')" class="btn">
+  </td>
+   <td bgcolor="white" class="down_cell">&nbsp; </td>
+    <td bgcolor="white" class="down_cell">
+    <input type=button value="DOWNLOAD" onClick=goto("<TMPL_VAR NAME=DOWNLOAD>") class="btn">
+    
+  </td>
+    <td bgcolor="white" class="down_cell"> &nbsp;</td>
+     <td bgcolor="white" class="down_cell">
+     
+     <input type=button value="CONTACT" onClick="Help('CONTACT')" class="btn">
+</td>
+      <td bgcolor="white" class="down_cell">&nbsp;</td>
+  <td bgcolor="white" class="right_corner"> &nbsp;</td>
+  <tr>
+
+</table>
+
+
+<table class="alert"  bgcolor="#ececec" border="0" width="640">
+
+ 
+<tbody><tr>
+
+<td colspan="1"> </td>	<td colspan="5"> <div align="right"> &nbsp </div></td>
+</tr>
+
+
+<tr>
+
+	<td width="12" bgcolor=white>&nbsp;  </td>  
+	<td width="220" class="right_cell" bgcolor="white" NOWRAP> <font color="green"><b>Select a JASPAR sub-database 
+	<input type=button value="?" onClick="Help('START_PAGE')" class="btn2">
+	 </td> 
+	<td width="12">&nbsp;  </td>  
+	<td width="350">&nbsp; </td> 	
+	
+	<td width="12">&nbsp; </td>
+
+</tr>
+<tr bgcolor="lightgreen">
+<td width="12" bgcolor="white">&nbsp;  </td>  
+	<td width="120" bgcolor="white">&nbsp;   </td> 
+	<td width="12" bgcolor="white">&nbsp;  </td>  
+	<td width="350" bgcolor="white">&nbsp; </td> 	
+	
+	<td width="12" bgcolor="white" class="right_cell">&nbsp; </td>
+</tr>
+
+
+<tr bgcolor="lightgreen">
+	<td width="12" bgcolor="white">&nbsp;  </td>  
+	<td bgcolor="white"><!-- height="160"-->
+ <div align="center"> 
+
+
+<select size=7 name="db_for_browse"    onChange="visaVal(this)"  id="browse_db_selector" >> 
+	<TMPL_LOOP NAME=BROWSE_DBS>  <!-- one per sub-database: value and showed name --->
+	<TMPL_IF NAME="DB_PRESELECT">
+	<option class=mar value=<TMPL_VAR NAME=DB_NR>  selected ><TMPL_VAR NAME=DB_SHOW_NAME> &nbsp;&nbsp; &nbsp; &nbsp; &nbsp;&nbsp; &nbsp;    </option>
+	
+
+	<optgroup Label="JASPAR Collections"  class=mas>
+	<TMPL_ELSE>
+		<option class=mar value=<TMPL_VAR NAME=DB_NR>   ><TMPL_VAR NAME=DB_SHOW_NAME> 
+	
+	
+	     </option>
+	</TMPL_IF>	
+	
+       
+  	</TMPL_LOOP>
+</select>
+
+</div>       </td>
+      
+       <td width="12" bgcolor="white">&nbsp;  </td>  
+
+       
+	<td bgcolor=white class="desc style4" id="cell_Header"> </td><td width="12" bgcolor="white" class="right_cell">&nbsp;  </td>  
+
+
+
+
+</tr>
+<tr bgcolor="lightgreen">
+<td width="12" bgcolor="white" class="down_cell">&nbsp;  </td>  
+	<td width="120" bgcolor="white" class="down_cell">&nbsp;   </td> 
+	<td width="12" bgcolor="white" class="down_cell">&nbsp;  </td>  
+	<td width="250" bgcolor="white" class="down_cell">&nbsp; </td> 	
+	<td width="12" bgcolor="white" class="right_corner">&nbsp; </td>
+</tr>
+</tbody></table>
+
+
+
+&nbsp; <br>
+<table width="640" border="0" class="alert">
+
+<tbody><tr bgcolor="lightblue">
+
+	<td width="2" bgcolor="white"></td> 
+	<td width="200" NOWRAP align="left" bgcolor="white" class="right_cell" ><div align=center ><font color="green"><b>Browse sorted by </b></font>	<input type=button value="?" onClick="Help('START_PAGE')" class="btn2"></div></td> 
+	<td width="200" align="left" bgcolor="#ececec" class="alert">&nbsp;</td>
+	<td width="1" bgcolor="#ececec">&nbsp; </td>
+
+	<td  bgcolor="#ececec">&nbsp;  </td>  
+	<td width="1" bgcolor="white">&nbsp;</td>
+	<td  NOWRAP bgcolor="white" class="right_cell"> <div align=center ><font color="green"><b>Search by </b>	<input type=button value="?" onClick="Help('START_PAGE')" class="btn2"></font></div> </td> 
+	<td bgcolor="#ececec">&nbsp;  </td>  
+	<td bgcolor="#ececec">&nbsp;  </td> 
+	<td bgcolor="#ececec">&nbsp; </td> 	
+	<td bgcolor="#ececec">&nbsp;  </td>  
+	<td bgcolor="#ececec">&nbsp; </td>
+</tr>
+
+<tr bgcolor="lightblue">
+
+	<td width="2" bgcolor="white">&nbsp;  </td>  
+	<td width="200" align="left" bgcolor="white">&nbsp;   </td>
+	<td width="200" align="left" bgcolor="white">&nbsp;</td>
+	<td bgcolor="white" class="right_cell">&nbsp; </td> 
+	<td bgcolor="#ececec">&nbsp; </td>
+
+	<td bgcolor="white">&nbsp;  </td>  
+	<td bgcolor="white">&nbsp;   </td> 
+	<td bgcolor="white">&nbsp;  </td>  
+	<td bgcolor="white">&nbsp;  </td> 
+	<td bgcolor="white">&nbsp; </td> 	
+	<td bgcolor="white">&nbsp;  </td>  
+	<td bgcolor="white" class="right_cell">&nbsp; </td>
+</tr>
+
+<tr bgcolor>
+
+	<td width="2" bgcolor="white">&nbsp;  </td>  
+	<td colspan="2" rowspan="3" align="center" bgcolor="white">
+	
+		<select  size="6" name="BROWSE_BY"> 
+	   <option class=mar selected="selected" value="ID"> ID  </option>
+	     <option class=mar value="Species">Species</option>
+ <option class=mar value="Class">Structural class</option>
+ <option class=mar value="Tax">Taxonomic group</option>
+		</select>	<input name="rm" value="Browse" type="submit" class="btn"></td> 
+    <td bgcolor="white" class="right_cell">&nbsp; </td>
+<td bgcolor="#ececec">&nbsp; </td>
+
+	<td bgcolor="white">&nbsp;  </td>  
+	<td bgcolor="white">  <select  class=mar name="select1">
+          <option class=mar>ID</option>
+          <option class=mar selected="selected">Name</option>
+          <option class=mar>Species</option>
+          <option class=mar>Class</option>
+          <option class=mar>Type</option>
+        </select> </td> 
+	<td bgcolor="white">&nbsp;  </td>  
+	<td bgcolor="white">   <input name="selectfield1" bgcolor="#CCCCCC" border="2" type="text">    </td> 
+	<td bgcolor="white">&nbsp; </td> 	
+	<td bgcolor="white"> <select name="boolean1" size="1">
+       <option class=mar selected="selected">AND</option>
+          <option class=mar>OR</option>
+ 			<option class=mar>NOT</option>
+        </select></td>  
+	<td bgcolor="white" class="right_cell">&nbsp; </td>
+</tr>
+<tr bgcolor="lightblue">
+
+	<td width="2" bgcolor="white">&nbsp;  </td>  
+	<td bgcolor="white" class="right_cell">&nbsp; </td>
+	<td bgcolor="#ececec">&nbsp; </td>
+
+	<td bgcolor="white">&nbsp;  </td>  
+	<td bgcolor="white"> <select name="select2">
+          <option>ID</option>
+          <option selected="selected">Name</option>
+          <option>Species</option>
+          <option>Class</option>
+          <option>Type</option>
+        </select> </td>   
+	<td bgcolor="white">&nbsp;  </td>  
+		<td bgcolor="white">  <input name="selectfield2" bgcolor="#CCCCCC" border="2" type="text">	</td> 	
+		<td bgcolor="white">&nbsp;  </td> 
+
+	<td bgcolor="white">  <select name="boolean1" size="1">
+       <option selected="selected">AND</option>
+          <option>OR</option>
+ 			<option>NOT</option>
+        </select></td>  
+	<td bgcolor="white" class="right_cell">&nbsp; </td>
+</tr>
+<tr bgcolor="lightblue">
+
+	<td width="2" bgcolor="white">&nbsp;  </td>  
+<td bgcolor="white" class="right_cell">&nbsp; </td>
+	<td bgcolor="#ececec">&nbsp;  </td>  
+	<td bgcolor="white">&nbsp; </td>
+
+	<td bgcolor="white"> <select name="select1">
+          <option>ID</option>
+          <option selected="selected">Name</option>
+          <option>Species</option>
+          <option>Class</option>
+          <option>Type</option>
+        </select> </td>   
+	<td bgcolor="white">&nbsp;  </td>  
+	<td bgcolor="white"> <input name="selectfield3" bgcolor="#CCCCCC" border="2" type="text"> </td> 	
+	<td bgcolor="white">&nbsp;  </td> 
+
+	<td bgcolor="white"><input name="rm" value="Search" type="submit" class="btn"> </td>  
+	<td bgcolor="white" class="right_cell">&nbsp; </td>
+
+</tr>
+<tr bgcolor="lightblue">
+<td width="2" bgcolor="white" class="down_cell">&nbsp; </td>
+	<td width="200" bgcolor="white" class="down_cell">&nbsp;  </td>  
+	<td width="200" bgcolor="white" class="down_cell">&nbsp;</td>
+	<td bgcolor="white" class="right_corner">&nbsp;  </td> 
+	<td bgcolor="#ececec">&nbsp; </td>
+ 
+	<td bgcolor="white" class="down_cell">&nbsp;  </td> 
+	<td bgcolor="white" class="down_cell">&nbsp;  </td>  
+	<td bgcolor="white" class="down_cell">&nbsp;  </td> 
+	<td bgcolor="white" class="down_cell">&nbsp; </td> 	
+	<td bgcolor="white" class="down_cell">&nbsp;  </td>  
+	<td bgcolor="white" class="down_cell">&nbsp; </td>
+<td bgcolor="white" class="right_corner">&nbsp; </td>
+</tr>
+
+
+
+
+
+
+
+
+</tbody></table>
+<br>
+<table class="alert" width=640  >
+<tbody><tr>
+	<td bgcolor="white" width="220" class="right_cell"> 
+	<div align=center><b><font color="green">Align to a custom matrix</font></b>	<input type=button value="?" onClick="Help('START_PAGE')" class="btn2"></div>
+ </td> 
+	<td >&nbsp; </td> 	
+	<td>&nbsp; </td>
+	<td width="200">&nbsp; </td>
+	<td width="200">&nbsp; </td>
+</tr>
+<tr bgcolor="white">
+	<td colspan="5" align="center" bgcolor="white"><br>	  
+	  <div align="center">  <textarea name="matrix_string" cols="70" rows="5" class="alert" id="alignment_input"></textarea> 
+	</div>  
+	  <br>
+  <input type="reset" class="btn">
+
+<input type=button value="Fill in an example matrix" onClick="matrix_fill()" class="btn">
+
+<input name="rm" type="submit"  value="Align" class="btn"> 
+</td> <td bgcolor="white" class="right_cell"></td>
+</tr>
+<tr bgcolor="white">
+  <td colspan="5" bgcolor="white" class="down_cell">&nbsp;</td>
+  <td bgcolor="white" class="right_corner"></td>
+</tr>
+
+
+
+
+
+</tbody></table>
+<br>
+<table class="alert" width="640" align=center>
+<tr bgcolor="white">
+  <td bgcolor="white" class="down_cell">&nbsp;</td>
+  <td bgcolor="white" class="down_cell">
+<input type=button value="DOCUMENTATION" onClick="Help('test')" class="btn">
+  </td>
+   <td bgcolor="white" class="down_cell">&nbsp; </td>
+    <td bgcolor="white" class="down_cell">
+    <input type=button value="DOWNLOAD" onClick=goto("<TMPL_VAR NAME=DOWNLOAD>") class="btn">
+    
+  </td>
+    <td bgcolor="white" class="down_cell"> &nbsp;</td>
+     <td bgcolor="white" class="down_cell">
+     
+     <input type=button value="CONTACT" onClick="Help('CONTACT')" class="btn">
+</td>
+      <td bgcolor="white" class="down_cell">&nbsp;</td>
+  <td bgcolor="white" class="right_corner"> &nbsp;</td>
+  <tr>
+
+
+</table>
+
+
+     <p>
+
+
+<p align="center"><a href="http://www.ku.dk/english/"><img src="<TMPL_VAR NAME = IMAGE_DIR>/ku_logo.gif" border="0"></a>&nbsp;&nbsp;&nbsp; 
+ </p>
+
+
+</p><table>
+
+
+
+
+
+</table></div></form></body></html>

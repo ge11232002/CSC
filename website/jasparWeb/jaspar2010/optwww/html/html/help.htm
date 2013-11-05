@@ -1,0 +1,266 @@
+<DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2//EN">
+<HTML>
+<HEAD>
+	<META HTTP-EQUIV="CONTENT-TYPE" CONTENT="text/html; charset=iso-8859-1">
+	<TITLE></TITLE>
+	</HEAD>
+<BODY LANG="en-GB">  
+
+<table width=600>
+   <tr><td>
+<P><font face="Verdana, Arial, Helvetica, sans-serif" size=3><b>JASPAR IN BRIEF</b></FONT></P>
+<P><font face="Verdana, Arial, Helvetica, sans-serif" size =2>JASPAR is a collection of transcription
+factor DNA-binding preferences, modelled as position-specific weight
+matrices (PSSMs). </FONT>
+</P>                     
+<p><font face="Verdana, Arial, Helvetica, sans-serif" size=2>The prime difference to similar resources (TRANSFAC, TESS etc) 
+consist of non-redundancy and quality: JASPAR is a smaller set that is non-redundant and curated</p></font>
+
+<P STYLE="margin-bottom: 0cm"><font face="Verdana, Arial, Helvetica, sans-serif"><FONT SIZE=2>All
+profiles are derived from published collections of experimentally
+defined transcription factor binding sites for multicellular
+eukaryotes. The database represents a curated collection of target
+sequences. The binding sites were determined either in SELEX
+experiments, or by the collection of data from the experimentally
+determined binding regions of actual regulatory regions; this
+distinction is clearly marked in the profiles' annotation. As far as
+possible, the collection is non-redundant (several models describing
+one transcription factor)</FONT></FONT></P>
+<P STYLE="margin-bottom: 0cm"><BR>
+</P>     
+<hr>
+<P><font face="Verdana, Arial, Helvetica, sans-serif" size=3> <b>PROFILE COLLECTION METHODOLOGY</b></FONT></P>
+<P><font face="Verdana, Arial, Helvetica, sans-serif" size =2>Profiles were collected using the
+following steps:</FONT></P>
+<P><font face="Verdana, Arial, Helvetica, sans-serif" size =2>1 Location of published work describing
+either a SELEX experiment or a collection of in-vivo binding
+sequences for a transcription factor. </FONT>
+</P>
+<P><font face="Verdana, Arial, Helvetica, sans-serif" size =2>2 Assessment of paper: Continue if</FONT></P>
+<P><font face="Verdana, Arial, Helvetica, sans-serif" size =2> The methodology is acceptable, the work
+is of high quality</FONT></P>
+<P><font face="Verdana, Arial, Helvetica, sans-serif" size =2> AND no filtering was used except possibly
+checks for site activity in vivo</FONT></P>
+<P><font face="Verdana, Arial, Helvetica, sans-serif" size =2> AND sites are available (with some
+exceptions)</FONT></P>
+<P><font face="Verdana, Arial, Helvetica, sans-serif" size =2> AND the transcription factor is from a
+multicellular organism</FONT></P>
+<P><font face="Verdana, Arial, Helvetica, sans-serif" size =2> AND the transcription factor is not
+already in the database</FONT></P>
+<P><font face="Verdana, Arial, Helvetica, sans-serif" size =2>3 Alignment of sites to produce profile</FONT></P>
+<P><font face="Verdana, Arial, Helvetica, sans-serif" size =2>Bound sites for the TF were extracted
+using OCR software. We used the ANN_SPEC motif finding program (1)
+to align the binding sites. As it uses a probabilistic algorithm, the
+results may vary slightly; also, the width of the pattern is a
+variable. Thus three seeds were used, 80.000 iterations performed
+using several different widths. A relevant width was then selected
+using biological knowledge and visual inspection.</FONT></P>       
+<HR>
+
+  <A name="start_page"></A> <IMG src="start_page.png" width=400 height=469 border=0>
+<P><font face="Verdana, Arial, Helvetica, sans-serif" size =3><B>START PAGE</B></FONT></P>
+<P STYLE="font-weight: medium"><font face="Verdana, Arial, Helvetica, sans-serif" size =2>The start page
+is a gateway for profile retrieval. Different search methods are
+accessible from here, as well as links to download and information
+pages</FONT></P>
+<P><font face="Verdana, Arial, Helvetica, sans-serif" size =3><i>SEARCH MODES</i></FONT></P>
+<P><font face="Verdana, Arial, Helvetica, sans-serif" size =2>Often a subset of profiles are of interest
+for the working researcher. We provide several different ways of
+retrieval:</FONT></P>
+<A name="browse">
+<P><font face="Verdana, Arial, Helvetica, sans-serif" size =2><i><b>Browse</i></b></FONT></P>
+<P><font face="Verdana, Arial, Helvetica, sans-serif" size =2>For browsing the entire collection of
+profiles, push any button in the browse field to view all profiles
+sorted by that attribute. </FONT>
+</P>    <A name="search_by">
+<P><font face="Verdana, Arial, Helvetica, sans-serif" size =2><b><i>Search by...</i></b><FONT SIZE=2></FONT></FONT></P>
+<P><font face="Verdana, Arial, Helvetica, sans-serif" size =2><FONT SIZE=2>For selection of subsets of
+profiles using user set criteria, use the search by fields. </FONT></FONT>
+</P>
+<P><font face="Verdana, Arial, Helvetica, sans-serif"><FONT SIZE=2>Multiple inputs are
+acceptable, if submitted with commas in between ',' (this will in
+effect be interpreted as an OR statement). </FONT></FONT>
+</P>
+<P><font face="Verdana, Arial, Helvetica, sans-serif"><FONT SIZE=2>The criteria will be
+interpreted from top to bottom by using the boolean statement at each
+row </FONT></FONT>
+</P>
+<P><FONT SIZE=2><font face="Verdana, Arial, Helvetica, sans-serif">an AND statement will perform
+an intersect between two quer</FONT></FONT>y results</P>
+<P><font face="Verdana, Arial, Helvetica, sans-serif"><FONT SIZE=2>an OR statement will perform
+a union of two query results</P>
+<P>an NOT statement will filterout results from the first query</P>
+<P>For example, a search using the following criteria</P>  
+
+<IMG src="select_by.png"  border=0>
+<P>will give all profiles that are of the selex type from human but not belonging to the bHLH or bZIP classes</P>
+</font>
+<A name="upload"><P><font face="Verdana, Arial, Helvetica, sans-serif"><FONT SIZE=2><b><i>UPLOAD set of profiles</i></b></FONT></FONT></P>
+<P><font face="Verdana, Arial, Helvetica, sans-serif"><FONT SIZE=2>If saved at an earlier
+session, a file with a list of profile IDs can be submitted for
+viewing </FONT></FONT>
+</P>                                                                                                                        
+<hr>
+<P><A name="compare"><font face="Verdana, Arial, Helvetica, sans-serif"><FONT SIZE=3><b><i>COMPARE custom profile to
+database profiles</i></b></FONT></FONT></P>
+<P><font face="Verdana, Arial, Helvetica, sans-serif"><FONT SIZE=2>In some cases, it is
+beneficial to assess similarity to input data (as with using BLAST
+for sequence data comparison when using Genbank).</FONT></FONT></P>
+<P><FONT SIZE=2>A user submitted profile can
+be submitted in the format</FONT></FONT></P>         <pre>
+<FONT SIZE=3>12 14  2  3  0</FONT></FONT>
+<FONT SIZE=3> 2  0 10  2  0</FONT></FONT>
+<FONT SIZE=3> 0  0  1  5  0</FONT></FONT>
+<FONT SIZE=3> 0  0  1  4 14 </FONT></FONT>
+ </pre>
+<P><font face="Verdana, Arial, Helvetica, sans-serif"><FONT SIZE=2>where rows corresponds to
+nucleotides and columns to positions.So, the above matrix is refering to <br>  <pre>
+<FONT SIZE=3><I>   1  2  3  4  5</I></FONT></FONT>
+<FONT SIZE=3><I>A</I> 12 14  2  3  0</FONT></FONT>
+<FONT SIZE=3<I>C</I>  2  0 10  2  0</FONT></FONT>
+<FONT SIZE=3><I>G</I>  0  0  1  5  0</FONT></FONT>
+<FONT SIZE=3><I>T</I>  0  0  1  4 14 </FONT></FONT>
+ </pre>
+
+<br>The input profile can consist
+of actual counts or be normalized (each column sum =1), but not in
+the form of a PWM.</FONT></FONT></P>
+<P><font face="Verdana, Arial, Helvetica, sans-serif"><FONT SIZE=2>All profiles in the database
+will be compared to the input profile, using a modified
+Needleman-Wunsch algorithm described in (2), and sorted by raw
+comparison score (for reference, the maximum score is 2*the width of
+the smallest matrix in the compared pair). Both the score and fraction of potential maximal score is reported.
+More detailed descriptions of the comparison algorithm can be found in refrences 2 and 3.</FONT></FONT></P>
+
+<P><BR><BR>
+</P>    
+<hr> <IMG src="list_page.png" border=0>
+<A name="listpage"></A><P><font face="Verdana, Arial, Helvetica, sans-serif"><FONT SIZE=2><B>LIST PAGE</B></FONT></FONT></P>
+<P><font face="Verdana, Arial, Helvetica, sans-serif" size=2>The list page presents a list
+of selected profiles. </FONT>
+</P>
+<P><font face="Verdana, Arial, Helvetica, sans-serif" size=2>For each retrieved profile,
+basic attributes are displayed (ID, Name, species, class) together
+with a sequence logo for visual inspection. For detailed information
+regarding any profile, press the view link.</FONT></P>
+<P><font face="Verdana, Arial, Helvetica, sans-serif" size=2>Export profiles</P>
+<P>Subsets of profiles can be exported, either as a simple list of
+IDs for simplified retrieval in subsequent database session or for
+usage in the <a href= http://www.phylofoot.org/consite/>CONSITE</a> system for phylogenetic footprinting, or as a
+compressed flatfile representation (readable with the
+<a href=http://forkhead.cgb.ki.se/TFBS/POD/DB/FlatFileDir.html >TFBS::DB::FlatFileDir</A> module)</P>
+<A name="analyze"><P>Analyze sequence</P>
+<P>Using a subset of profiles, a submitted sequence can be analyzed.
+Sensitivity and selectivity will be affected by the  relative score
+threshold, by default 80%. The analysis is simple: for high
+selectivity the consite system should be used (see above)</P>
+<P><BR><BR>
+</P>         
+<hr>     <IMG src="detail.png" width=449 height=550 border=0>
+<A name="details"><P><B>Detailed information page</B></P>
+<P><SPAN STYLE="font-weight: medium">This smaller window displays a
+sequence logo, the actual count profile and  detailed information
+about the selected profile, where the fields corresponds to</SPAN></P>
+<P STYLE="font-weight: medium">Logos are a visual representation
+representation of a profile, based on Shannon information content.
+For DNA profiles, maximal conservation amounts to a information
+content of 2 bits for a single position.</P>
+<P STYLE="font-weight: medium">Profiles are represented as a simple
+matrix where rows corresponds to nucleotide type and columns to
+positions</P>
+<P><b>ID</b> The ID used in the database</P>
+<P><b>NAME</b> Name of the transcription factor (this is somewhat arbitrary,
+as many factors have several names)</P>
+<P><b>SPECIES</b> The species of the transcription factor. In some cases,
+multiple species are used. It should also be noted that most binding
+interfaces are heavily conserved throughout evolution; thus usage of
+a chicken model when analyzing a human sequence is usually
+acceptable.</P>
+<P><b>INFORMATION CONTENT</b> The shannon information constent of the
+profile, measured in bits. Higher conservation at positions gives
+higher specificity and high information content.</P>
+<P><b>SUPERGROUP</b> simplified taxonomic groups, vertebrates, plants and
+insects</P>
+<P><b>PROTEIN SEQ</b> accession number and link to relevant protein sequence
+of the TF</P>
+<P><b>EXPERIMENT</b> Either a SELEX type or a compilation of in-vivo sites</P>
+<P><b>SOURCE PMID</b> PMID number and link to Pub med database for accessing
+the source publication</P>
+<P><b>SAVE MODEL</b> Save the model as a compressed flat file (readable with
+the <a href=http://forkhead.cgb.ki.se/TFBS/POD/DB/FlatFileDir.html >TFBS::DB::FlatFileDir</A> module)</P>
+<P><b>REVERSE COMPLEMENT</b> for convenience, profiles can be reverse
+complemented (the orientation of a matrix is arbitrary)</P>
+<P><BR><BR>
+</P>
+<hr>
+<P><b>Sequence analysis page</b></P>
+<P>This page presents the putative binding sites predicted using he
+selected profile on the submitted sequence, given the relative score
+threshold.The sequence analysis avaliable in the JASPAR interface is intended for spurios searches, and has few features. We recommend using the <a href = http://www.phylofoot.org/consite/>ConSite </a> interface for advanced searches (including cross-species comparison). ConSite uses the JASPAR database for profile selection.</P>
+<P>The same information will be displayed as
+</P>
+<P> - a simple image where flags corresponds to putative binding sites,
+</P>
+<P> - a more detailed table</P>
+<P> - a sequence view</P>
+<P><BR><BR>
+Graphics and tables are eqivalent to ConSite analysis output in  single sequence mode. Sites are linked to a pop-up windows showing profile logo, the site location in the sequence and score. 
+
+</P>       
+<hr>
+<P><b>DOWNLOAD</b></P>
+<P>NOTE: the JASPAR data collection is FREELY AVAILABLE.
+</P>
+
+
+<P>The JASPAR database can be downloaded as</P>
+<P> - a  <a href=http://jaspar.cgb.ki.se/DOWNLOAD/MatrixDir/>flat file directory </a>(readable with the TFBS::<A HREF="http://forkhead.cgb.ki.se/TFBS/POD/DB/FlatFileDir.html">DB::FlatFileDir</A> module)</P>
+<P> - a set of  <a href=http://jaspar.cgb.ki.se/DOWNLOAD/SQL/>sql create table statements</a> and corresponding tables dumps for 
+easy database setup</P>
+<P><BR><BR>
+</P> <hr>
+<P><B>CITING</b></P>
+<P>If using the JASPAR database, please cite us:</P>
+<P><b>JASPAR: an open access database for eukaryotic transcription factor binding profiles </b></P>
+<p><i>Nucleic Acids Res. 2004 Jan; 32(1) Database Issue</i></p>
+<P>Albin Sandelin, Wynand Alkema, Pär Engström, Wyeth Wasserman and Boris Lenhard
+<br><br></p>
+
+<p><b>TFBS: Computational framework for transcription factor binding site analysis</b>
+</P>
+<p><i>Bioinformatics. 2002 Aug;18(8):1135-6. </i>
+<p>Boris Lenhard and Wyeth Wasserman
+<P><BR><BR>
+</P>     <hr>
+<P><b>REFERENCES</b></P>
+<P><BR><BR> <b>1</b>	Workman CT, Stormo GD<p>
+
+
+ ANN-Spec: a method for discovering transcription factor binding sites with improved specificity.
+Pac Symp Biocomput. 2000;:467-78. 
+</P>
+<P><BR><BR>
+<b>2</b> Sandelin A, Hoglund A, Lenhard B, Wasserman WW.<p>
+Integrated analysis of yeast regulatory sequences for biologically linked clusters of genes.
+Funct Integr Genomics. 2003 Jul;3(3):125-34 
+</P>
+<P><BR><BR>
+<b>3</b> Sandelin A, Wasserman WW.<p>
+Constrained binding sequence diversity within families of transcription factors enhances pattern discovery bioinformatics J Mol Biol. 2004 Apr 23;338(2):207-15. 
+
+
+
+
+
+<P><BR><BR>
+</P>
+<P><BR><BR>
+</P>
+<P><BR><BR>
+</P>
+
+
+</P>  
+</table>
+</BODY>
+</HTML>

@@ -1,0 +1,231 @@
+<html>
+<head>
+<title>The JASPAR database</title>
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+</head>
+
+<body bgcolor="#ECECEC" text="#000000">
+<div align="center"></div>
+<table width="800" border="0" cellspacing="0" cellpadding="5" align="center" bgcolor="#FFFFFF">
+  <tr> 
+    <td colspan="4" nowrap>
+      <div align="center"> 
+        <p><img src="<TMPL_VAR NAME = IMAGE_DIR>jasparlogo.gif" width="400" height="281"></p>
+        <p><b><font face="Verdana, Arial, Helvetica, sans-serif" size="3">The 
+          high-quality transcription factor binding profile database</font></b></p><b><hr noshade>
+
+     
+</div>
+    </td>
+  </tr>
+  <tr> 
+    <td width="217" bgcolor="#999999">&nbsp;</td>
+    <td bgcolor="#CCCCCC" colspan="2">&nbsp;</td>
+    <td width="86" bgcolor="#CCCCCC">&nbsp;</td>
+  </tr>
+  <tr> 
+    <td width="217" bgcolor="#999999"> 
+      <div align="right"><font face="Arial, Helvetica, sans-serif" size="2">BROWSE 
+        profiles by</font></div>
+    </td>
+
+ 
+      <div align="center"><font face="Arial, Helvetica, sans-serif" size="3"> 
+      <FORM method='post' action =<TMPL_VAR NAME=ACTION > enctype="multipart/form-data" >
+      <input type='hidden' name='rm' value ='browse'>
+      <td bgcolor="#CCCCCC" colspan="2"> 
+       
+      <input type="submit" name="BROWSE" value="ID">
+      
+
+        <input type="submit" name="BROWSE" value="Name">
+        <input type="submit" name="BROWSE" value="Species">
+        <input type="submit" name="BROWSE" value="Class">
+	<input type="submit" name="BROWSE" value="Taxonomic group">
+        </font></div>
+    </td>
+
+</form>
+    <td width="86" bgcolor="#CCCCCC"><font face="Arial, Helvetica, sans-serif" size="1"><a href="/TEMPLATES/help.htm#browse">help</a></font></td>
+  </tr>
+  <tr> 
+    <td width="217" bgcolor="#999999"><font face="Arial, Helvetica, sans-serif" size="2"></font></td>
+    <td bgcolor="#CCCCCC" colspan="2"> 
+      <div align="center"><font face="Arial, Helvetica, sans-serif" size="3"></font></div>
+    </td>
+    <td width="86" bgcolor="#CCCCCC">&nbsp;</td>
+  </tr>
+  <tr> 
+    <td colspan="4" ><font size="2"></font></td>
+  </tr>
+  <tr> 
+    <td width="217" bgcolor="#999999"> 
+      <div align="right"><font face="Arial, Helvetica, sans-serif"><font face="Arial, Helvetica, sans-serif"><font size="3"><font size="1"><font size="2"></font></font></font></font></font></div>
+    </td>
+    <td width="266" bgcolor="#CCCCCC"> 
+      <div align="center"></div>
+    </td>
+    <td width="191" bgcolor="#CCCCCC" nowrap> 
+      <div align="left"><font face="Arial, Helvetica, sans-serif" size="2">combine 
+        searches with </font></div>
+    </td>
+    <td width="86" bgcolor="#CCCCCC">&nbsp;</td>
+  </tr>
+  <tr> 
+    <td width="217" bgcolor="#999999"> 
+      <div align="right"><font size="1"><font size="2"></font></font></div>
+    </td>
+    <td width="266" bgcolor="#CCCCCC"> 
+ <FORM method='post' action =<TMPL_VAR NAME=ACTION > enctype="multipart/form-data" >
+      <input type='hidden' name='rm' value ='select')
+      <div align="center"><font face="Arial, Helvetica, sans-serif" size="3"> 
+        <select name="select1">
+          <option>ID</option>
+          <option selected>Name</option>
+          <option>Species</option>
+          <option>Class</option>
+          <option>Type</option>
+        </select>
+        <input type="text" name="selectfield1" bgcolor="#CCCCCC" border=2>
+        </font></div>
+    </td>
+    <td width="191" bgcolor="#CCCCCC"> 
+      <div align="left"><font face="Arial, Helvetica, sans-serif" size="3"> 
+        <select name="boolean1" size="1">
+          <option selected>AND</option>
+          <option>OR</option>
+ <option>NOT</option>
+        </select>
+        </font></div>
+    </td>
+    <td width="86" bgcolor="#CCCCCC"><font face="Arial, Helvetica, sans-serif" size="1"><a href="/TEMPLATES/help.htm#search_by">help</a></font></td>
+  </tr>
+  <tr>  
+ 
+    <td width="217" bgcolor="#999999"> 
+      <div align="right"> <font face="Arial, Helvetica, sans-serif" size="2">SEARCH 
+        by </font></div>
+    </td>
+    <td width="266" bgcolor="#CCCCCC"> 
+      <div align="center"><font face="Arial, Helvetica, sans-serif" size="3"> 
+        <select name="select2">
+          <option>ID</option>
+          <option selected>Name</option>
+          <option>Species</option>
+          <option>Class</option>
+          <option>Type</option>
+        </select>
+        <input type="text" name="selectfield2" bgcolor="#CCCCCC" border=2>
+        </font></div>
+    </td>
+    <td width="191" bgcolor="#CCCCCC"> 
+      <div align="left"><font face="Arial, Helvetica, sans-serif" size="3"> 
+        <select name="boolean2" size="1">
+          <option selected>AND</option>
+          <option>OR</option>
+ <option>NOT</option>
+        </select>
+        </font></div>
+    </td>
+    <td width="86" bgcolor="#CCCCCC">&nbsp;</td>
+  </tr>
+  <tr> 
+    <td width="217" bgcolor="#999999"> 
+      <div align="right"> <font face="Arial, Helvetica, sans-serif" size="3"><font size="1"><font size="2"></font></font> 
+        </font></div>
+    </td>
+    <td width="266" bgcolor="#CCCCCC"> 
+      <div align="center"><font face="Arial, Helvetica, sans-serif" size="3"> 
+        <select name="select3">
+          <option>ID</option>
+          <option selected >Name</option>
+          <option>Species</option>
+          <option>Class</option>
+          <option>Type</option>
+        </select>
+        <input type="text" name="selectfield3" bgcolor="#CCCCCC" border=2>
+        </font></div>
+    </td>
+    <td width="191" bgcolor="#CCCCCC"> 
+      <div align="left"><font face="Arial, Helvetica, sans-serif" size="3"> 
+       
+       </option> <input type="submit" name="SELECT" value="Go   ">
+       
+        </font></div>
+    </td>
+</form>
+    <td width="86" bgcolor="#CCCCCC"></td>
+  </tr>
+  <tr> 
+    <td colspan="4" bgcolor="#FFFFFF"><font size="2"></font></td>
+  </tr>
+  <tr> 
+    <td width="217" bgcolor="#999999"><font face="Arial, Helvetica, sans-serif" size="2"></font></td>
+    <td bgcolor="#CCCCCC" colspan="2"> 
+      <div align="left"><font face="Arial, Helvetica, sans-serif" size="3"></font></div>
+    </td>
+    <td width="86" bgcolor="#CCCCCC">&nbsp;</td>
+  </tr>
+  <tr>  <FORM method='post' action =<TMPL_VAR NAME=ACTION > enctype="multipart/form-data" >
+<input type=hidden name="rm" value="upload">
+    <td width="217" bgcolor="#999999" nowrap> 
+      <div align="right"><font face="Arial, Helvetica, sans-serif" size="2">UPLOAD 
+        set of profiles</font></div>
+    </td>
+    <td  bgcolor="#CCCCCC" colspan="2"> 
+      <div align="left"><font face="Arial, Helvetica, sans-serif" size="3"> 
+        <input type="file" name="upload">
+       </font><input type="submit" name="upl" value="Go   "></div>
+    </td>
+    <td width="86" bgcolor="#CCCCCC"><font face="Arial, Helvetica, sans-serif" size="1"><a href="/TEMPLATES/help.htm#upload">help</a></font></td>
+  </tr>
+  <tr> 
+    <td width="217" bgcolor="#999999"><div align=right><font size="1">(previously saved list of IDs)</div></font></td></form>
+    <td bgcolor="#CCCCCC" colspan="2"><div align=right> &nbsp;</div></td>
+    <td width="86" bgcolor="#CCCCCC">&nbsp;</td>
+  </tr>
+  <tr> 
+    <td width="217" bgcolor="#999999"><font size="2"></font></td>
+    <td bgcolor="#CCCCCC" colspan="2">&nbsp;</td>
+    <td width="86" bgcolor="#CCCCCC">&nbsp;</td>
+  </tr>
+</FORM>
+ <tr> 
+    <td colspan="4" bgcolor="#FFFFFF"><font size="2"></font></td>
+  </tr>
+
+  <tr>  <FORM method='post' action =<TMPL_VAR NAME=ACTION > enctype="multipart/form-data" ><input type="hidden" name="rm" value="compare">
+    <td width="217" bgcolor="#999999" nowrap> 
+      <div align="right"><font face="Arial, Helvetica, sans-serif" size="2">COMPARE custom profile to database profile</font></div>
+    </td>
+    <td  bgcolor="#CCCCCC" colspan="2"> 
+      <div align="left"><font face="Arial, Helvetica, sans-serif" size="3"> 
+        <textarea name="matrix_string" rows=4></textarea>
+       </font><input type="submit" name="cmp" value="Go   "></div>
+    </td>
+    <td width="86" bgcolor="#CCCCCC"><font face="Arial, Helvetica, sans-serif" size="1"><a href="/TEMPLATES/help.htm#compare">help</a></font></td>
+  </tr>
+  <tr> 
+</FORM>
+
+ <tr> 
+    <td colspan="4" bgcolor="#FFFFFF"></td>
+  </tr>
+  <tr bgcolor="#FFFFFF"> 
+    <td width="217"> 
+      <div align="center"><b><font size="2" face="Arial, Helvetica, sans-serif"><A href="/TEMPLATES/help.htm">JASPAR INFORMATION</A></font></b></div>
+    </td>
+    <td colspan="2"> 
+      <div align="center"><b><font size="2" face="Arial, Helvetica, sans-serif">
+        <a href="/DOWNLOAD/">DATA DOWNLOAD</a></font></b></div>
+    </td>
+    <td width="86"> 
+      <div align="center"><b><font size="2" face="Arial, Helvetica, sans-serif"><A href="/TEMPLATES/links.htm">LINKS</A></font></b></div>
+    </td>
+  </tr>
+</table>
+<p align="center"><a href="http://info.ki.se/index_en.html"><img src="<TMPL_VAR NAME = IMAGE_DIR>logo_start_en.gif" width="300" height="81" border="0"></a>&nbsp;&nbsp;&nbsp; 
+  <a href="http://www.cmmt.ubc.ca/"><img src="<TMPL_VAR NAME = IMAGE_DIR>cmmtlogo33.gif" width="294" height="80" border="0"></a></p>
+<p align="center"><b>Questions or comments? contact <i>boris.lenhard AT cgb.ki.se</i></b>
+</body>
+</html>

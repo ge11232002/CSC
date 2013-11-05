@@ -1,0 +1,267 @@
+<html>
+
+<head>
+
+ 
+<title>The JASPAR database</title>
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+
+<link rel="stylesheet" type="text/css" href="<TMPL_VAR NAME=STYLE>" media="screen" />
+<script type="text/javascript" src="<TMPL_VAR NAME=COMMON_SCRIPT>" ></script>
+<script  type="text/javascript">
+
+function Help(anchor, help_url) {
+  help_page = "<TMPL_VAR NAME=HELP>#" + anchor;
+  OpenWin = this.open(help_page, "CtrlWindow1", "height=500,width=670,left=0,toolbar=no,menubar=no,location=no,scrollbars=yes,resizable=yes");
+}
+
+function toggleAll() {
+  for (var i = 0; i < document.forms.matrices.ID.length; i++) {
+    document.forms.matrices.ID[i].checked = !document.forms.matrices.ID[i].checked;
+  } 
+}
+
+</script>
+<script type="text/javascript" src="<TMPL_VAR NAME=SORT_SCRIPT>" ></script>
+
+
+</head>
+
+<body bgcolor="#ECECEC" text="#000000">
+
+<table width="900" border="1" cellspacing="1" cellpadding="5" align="left" bgcolor="#FFFFFF">
+
+<FORM method='post' action =<TMPL_VAR NAME=ACTION> enctype="multipart/form-data" >
+  <tr align="center"  bgcolor=grey > 
+    <td colspan="8" nowrap height="33"> <font face="Arial, Helvetica, sans-serif" size="2">SEARCH </font>
+      <select name="select1">
+        <option><font face="Arial, Helvetica, sans-serif" size="3">ID</font></option>
+        <option selected><font face="Arial, Helvetica, sans-serif" size="3">Name</font></option>
+        <option><font face="Arial, Helvetica, sans-serif" size="3">Species</font></option>
+        <option><font face="Arial, Helvetica, sans-serif" size="3">Class</font></option>
+        <option><font face="Arial, Helvetica, sans-serif" size="3">Type</font></option>
+      </select>
+      <font face="Arial, Helvetica, sans-serif" size="3"> 
+      <input type="text" name="selectfield1" bgcolor="#CCCCCC" border=2>
+      <select name="boolean1" size="1">
+        <option selected><font face="Arial, Helvetica, sans-serif" size="3">AND</font></option>
+        <option><font face="Arial, Helvetica, sans-serif" size="3">OR</font></option>
+	<option><font face="Arial, Helvetica, sans-serif" size="3">NOT</font></option>
+      </select>
+      <select name="select2">
+        <option><font face="Arial, Helvetica, sans-serif" size="3">ID</font></option>
+        <option><font face="Arial, Helvetica, sans-serif" size="3">Name</font></option>
+        <option selected><font face="Arial, Helvetica, sans-serif" size="3">Species</font></option>
+        <option><font face="Arial, Helvetica, sans-serif" size="3">Class</font></option>
+        <option><font face="Arial, Helvetica, sans-serif" size="3">Type</font></option>
+      </select>
+      <input type="text" name="selectfield2" bgcolor="#CCCCCC" border=2>
+      <select name="boolean2" size="1">
+        <option selected><font face="Arial, Helvetica, sans-serif" size="3">AND</font></option>
+        <option><font face="Arial, Helvetica, sans-serif" size="3">OR</font></option>
+	<option><font face="Arial, Helvetica, sans-serif" size="3">NOT</font></option>
+      </select>
+      <select name="select3">
+        <option><font face="Arial, Helvetica, sans-serif" size="3">ID</font></option>
+        <option><font face="Arial, Helvetica, sans-serif" size="3">Name</font></option>
+        <option><font face="Arial, Helvetica, sans-serif" size="3">Species</font></option>
+        <option selected><font face="Arial, Helvetica, sans-serif" size="3">Class</font></option>
+        <option><font face="Arial, Helvetica, sans-serif" size="3">Type</font></option>
+      </select>
+      <input type="text" name="selectfield3">  <input type="submit" name="select" value="SEARCH" class="btn"><input type=button value="?" onClick="Help('BROWSE')" class="btn2"> 
+      </font> </td>
+  </tr>
+<input type ="hidden" name='rm' value='select'>
+<input type ="hidden" name='db_for_search' value=<TMPL_VAR NAME=DB> >
+
+
+</FORM>
+
+  
+   
+    
+ <!--  this is the browse loop: it has two parts - first, a loop to define the columns, then a loop to fill it in (which actually is a loop-in-a loop). Also, the colspan has to be defined (nmber of kleys +3)-->
+
+
+<FORM name='matrices' method='post' action=<TMPL_VAR NAME=ACTION> enctype="multipart/form-data" >  
+<tr><td> 
+
+
+<TABLE border="0" cellspacing="0" cellpadding="0" bgcolor=white>
+
+<tr><td align=left bgcolor="#CCCCCC" size = 100% style="padding-top:5px;padding-bottom:5px;">
+<div align=center>
+<font face="Arial, Helvetica, sans-serif" size="3">
+<b>JASPAR matrix models:</b> </font></align> 
+</td></tr>
+<tr><td>
+
+<!-- <TABLE border="0" cellspacing="1" cellpadding="5" class="sortable" id="sortabletable" width=100%> -->
+<TABLE border="0" cellspacing="1" cellpadding="5" width=100%>
+<thead>  
+<tr> <b> 
+<td  bgcolor="#999999" style="padding:0px;">
+<!--<input type=button value="?" onClick="Help('BROWSE')" class="btn2">-->  
+<input type=button value="TOGGLE" onClick="toggleAll()" class="btn3">
+
+</td>
+
+<th  bgcolor="#999999"> <b><font face="Arial, Helvetica, sans-serif" size="2">ID</font></b></th>
+<TMPL_LOOP NAME=BROWSE_COLUMNS>  <!-- describe columns loop --->     
+     <th bgcolor="#999999"><b><font face="Arial, Helvetica, sans-serif" size="2"><TMPL_VAR NAME=KEY></font></b></th>
+</TMPL_LOOP>
+
+<td bgcolor="#999999"><b><font face="Arial, Helvetica, sans-serif" size="2"> Sequence logo <font></b></td>
+<TMPL_IF NAME=SCORE>  
+   <td width=1 bgcolor="#CCCCCC"><font face="Arial, Helvetica, sans-serif" size="2" >Score</td>
+   <td width=1 bgcolor="#CCCCCC"><font face="Arial, Helvetica, sans-serif" size="2" >% of max Score</td>
+   </TMPL_IF>
+
+</tr>
+</thead>
+<!-- nested loop: go through both all matrices AND the key-values for each loop --->
+
+<tbody>
+    <TMPL_LOOP NAME=SMALL_MATRIX><!-- nested loop: first level:one for each matrix--->
+    <tr>  <td  bgcolor="#999999"> <input type="checkbox" name="ID" value="<TMPL_VAR NAME=ID>"></td>
+    <td bgcolor="#CCCCCC" width="30"><font face="Arial, Helvetica, sans-serif" size="2"> <TMPL_VAR NAME=ID>&nbsp;</td>    
+
+           <TMPL_LOOP NAME=VALUES><!-- nested loop: second level: one for each value (for a given matrix) --->
+	          <td bgcolor="#CCCCCC" width="46"><font face="Arial, Helvetica, sans-serif" size="2"> <TMPL_VAR NAME=VAL>&nbsp;</td>
+
+           </TMPL_LOOP>
+    
+    <td width="106" bgcolor="#FFFFFF">    <button type=button style="width:220;height:100;background-color:white" onClick= "javascript:Start('<TMPL_VAR NAME=ACTION>', <TMPL_VAR NAME=HEIGHT>, <TMPL_VAR NAME=WIDTH>)" >  <IMG src="<TMPL_VAR NAME=LOGO>" > <div align=right><font face="Arial, Helvetica, sans-serif" size="1">Click to view details</div> </button>
+     </td>
+  <TMPL_IF NAME=SCORE>  
+   <td width=1 bgcolor="#CCCCCC"><font face="Arial, Helvetica, sans-serif" size="2" align="right"><TMPL_VAR NAME=SCORE></td>
+   <td width=1 bgcolor="#CCCCCC"><font face="Arial, Helvetica, sans-serif" size="2" align="right"><TMPL_VAR NAME=REL_SCORE></td>
+   </TMPL_IF>
+ </tr>
+
+ </TMPL_LOOP>
+</tbody> 
+</TABLE>
+</td></tr>
+</TABLE>
+
+<td width=25> &nbsp</td>
+
+</td>
+
+
+<td  width="50" VALIGN=TOP align=left  bgcolor="#CCCCCC"><font face="Arial, Helvetica, sans-serif" size="3">
+
+
+<TABLE>
+
+<TMPL_IF NAME=ALIGN>
+  <tr><td align="center"><b>Input matrix</b></td></tr>
+  <tr><td>
+  <table bgcolor="#AAAAAA" cellpadding="5" width=100% >
+    <tr><td align="center">  
+    <IMG src="<TMPL_VAR NAME=ALIGNED_LOGO>" >
+    </td></tr>
+  </table
+  <tr><td>&nbsp;</td></tr>
+</TMPL_IF>
+
+<TR><TD align=center><b>ANALYZE selected matrix models:</b> </TD></TR>
+<TR><TD>  </TD></TR>
+<TR><TD>  
+<TABLE BGCOLOR="#AAAAAA" cellpadding="5" width=100% >
+ <TR><TD>  
+   <INPUT TYPE="submit" name="rm" value="CLUSTER" class="btn" onClick="return validate_checkboxes(document.forms.matrices.ID, 2, 30);"><input type=button value="?" onClick="Help('CLUSTER')" class="btn2">  selected models using <a href="http://www.benoslab.pitt.edu/stamp/">STAMP</a>
+</TD></TR>
+</TABLE>
+
+<TR><TD>  </TD></TR>
+
+<TR><TD>
+  
+<TABLE BGCOLOR="#AAAAAA" cellpadding="5" width=100% >
+<TR><TD>  
+Create RANDOM matrix models based on selected models </TD></TR>
+<TR><TD>  
+
+Number of matrices: <INPUT TYPE="text" name="matrix_count" value="200" align="right" size="5">&nbsp;&nbsp;
+
+Format: 
+<SELECT NAME="random_format">
+  <OPTION VALUE="raw">Raw</OPTION>
+  <OPTION VALUE="pretty">JASPAR</OPTION>
+  <OPTION VALUE="TRANSFAC">TRANSFAC</OPTION>
+</SELECT>
+
+</TD></TR>
+<TR><TD align="right">
+  <INPUT TYPE="submit" name="rm" value="RANDOMIZE" class="btn" onClick="return validate_checkboxes(document.forms.matrices.ID, 1);"><input type=button value="?" onClick="Help('RANDOMIZER')" class="btn2"> 
+</TD></TR>
+</TABLE>
+
+
+
+<TR><TD>  </TD></TR>
+<TR><TD>  
+
+
+<TABLE BGCOLOR="#AAAAAA" cellpadding="5" width=100% >
+<TR><TD>  
+  Create models with PERMUTED columns from selected:
+</TD></TR>
+<TR><TD>  
+
+Type:
+<SELECT NAME="type">
+  <OPTION VALUE="intra">Within each matrix</OPTION>
+  <OPTION VALUE="inter">Between all matrices</OPTION>
+</SELECT>
+
+Format: 
+<SELECT NAME="permute_format">
+  <OPTION VALUE="raw">Raw</OPTION>
+  <OPTION VALUE="pretty">JASPAR</OPTION>
+  <OPTION VALUE="TRANSFAC">TRANSFAC</OPTION>
+</SELECT>
+
+</TD></TR>
+<TR><TD align="right">  
+  <INPUT TYPE="submit" name="rm" value="PERMUTE" class="btn" onClick="return validate_checkboxes(document.forms.matrices.ID, 1);"><input type=button value="?" onClick="Help('RANDOMIZER')" class="btn2"> 
+</TD></TR>
+</TABLE>
+
+</TD></TR>
+
+<TR><TD>  </TD></TR>
+
+<TR><TD>
+
+
+<TABLE BGCOLOR="#AAAAAA" cellpadding="5" width=100% >
+<tr>
+	<td>
+		SCAN this (fasta-formatted) sequence with selected matrix models <br>
+		<input type ="hidden" name='db_for_search' value =<TMPL_VAR NAME=DB> >
+		<textarea name="seq" rows="20" cols="60"></textarea><font face="Arial, Helvetica, sans-serif" size="2">Relative profile score threshold &nbsp; <input type="text" size=3 name="cutoff" value=80>% &nbsp;<input type="hidden" name="r" value ="SCAN">
+		</TD>
+<TR><TD align="right">  
+
+		<input type=submit name="rm" value="SCAN" class="btn" onClick="return validate_checkboxes(document.forms.matrices.ID, 1);"><input type=button value="?" onClick="Help('SCAN')" class="btn2"> 
+   </TD></TR>
+
+   
+ </td>
+ 
+ 
+ </tr>
+ </TABLE>
+ 
+ </td></tr>
+ 
+ </TABLE>
+ </tr>
+</FORM>
+</table>
+
+</body>
+</html>

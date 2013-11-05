@@ -1,0 +1,164 @@
+a {
+	color:green;
+	font-family:'trebuchet ms',helvetica,sans-serif;   
+	font-weight:bold;   
+	font-size: 12px;
+	text-decoration: none;
+}
+
+
+a:hover {
+	color:#309930;
+}
+
+
+input.btn { 	
+	color:green; 
+	font-family:'trebuchet ms',helvetica,sans-serif;   
+	font-size:84%;   font-weight:bold;   
+	background-color:#fed; 
+	border:1px solid; 
+	border-top-color:#696; 
+	border-left-color:#696; 
+	border-right-color:#363;  
+	border-bottom-color:#363;
+}
+ 
+input.btnb { 	
+	color:green; 
+	font-family:'trebuchet ms',helvetica,sans-serif;   
+	font-size:84%;   font-weight:bold;   
+	background-color:#fed; 
+	border:1px solid; 
+
+	overflow:visible;
+	margin:1;
+ 	border-top-color:#696; 
+	border-left-color:#696; 
+	border-right-color:#363;  
+	border-bottom-color:#363;
+}
+ 
+
+
+
+
+input.btn:hover { 	
+	color:#309930; 
+}
+  
+input.btn2 { 
+	color:green; 
+	font-family:'trebuchet ms',helvetica,sans-serif; 
+	font-size:84%; font-weight:bold;  
+	background-color:lightgrey; 
+	border:1px solid; border-top-color:#696; border-left-color:#696;  
+	border-right-color:#363;  
+	border-bottom-color:#363;
+}
+  
+input.btn3 { 
+	color:green; 
+	font-family:'trebuchet ms',helvetica,sans-serif; 
+	font-size:40%; 
+        font-weight: bold; 
+        padding: 0px;
+	padding-top: 8px;  
+	padding-bottom: 8px;  
+	background-color: #fed; 
+	border:1px solid; 
+        border-top-color:#696; 
+        border-left-color:#696;  
+	border-right-color:#363;  
+	border-bottom-color:#363;
+}
+
+input.btn2:hover { 	
+	color:#309930; 
+}
+
+
+.try,.try TH, .try TD {
+	background-color:lightgreen;
+	color:white;
+	height:40;
+	font-family:sans-serif;
+	font-weight:700;
+}     
+   
+select  {
+  color: green; 
+}
+
+
+
+
+table.alert { 
+	text-align: center;
+	font-family: Arial;
+	font-weight: normal;
+	font-size: 12px;
+	border-collapse: collapse;
+	border-spacing: 0px;
+	
+}
+
+td.desc{ 
+	text-align: justify;
+	font-family: Arial;
+	font-weight: normal;
+	font-size: 11px;
+	border-collapse: collapse;
+	border-spacing: 0px;
+	}
+
+OPTION.mar {
+	background-color:white; 
+	color:green; 
+	font-size: 13px;
+	text-align: left;
+}
+
+OPTGROUP.mas {
+	background-color:white; 
+	font-size: 10px;
+	text-align: left;
+	color:grey;
+}
+
+.right_celll {
+	border-right-style: groove;
+}
+
+.down_celll {
+	border-bottom-style: groove;
+}
+
+.right_cornerl {
+	border-right-style: groove;
+	border-bottom-style: groove;
+}
+
+.style4 {color: black}
+
+#dhtmltooltip{
+position: absolute;
+left: -300px;
+width: 150px;
+border: 1px solid black;
+padding: 2px;
+background-color: lightyellow;
+visibility: hidden;
+z-index: 100;
+/*Remove below line to remove shadow. Below line should always appear last within this CSS*/
+}
+
+#dhtmlpointer{
+position:absolute;
+left: -300px;
+z-index: 101;
+visibility: hidden;
+}
+
+
+

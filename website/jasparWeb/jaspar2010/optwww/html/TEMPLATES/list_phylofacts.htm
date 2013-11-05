@@ -1,0 +1,128 @@
+<html>
+
+
+<script name="javascript">
+
+
+function Start(page) {
+	OpenWin = this.open(page, "CtrlWindow", "height=510, width=440, toolbar=no,menubar=no,location=no,scrollbars=yes,resizable=yes");
+  }
+</script>
+
+
+
+
+
+
+
+<head>
+<title>The JASPAR database</title>
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+</head>
+
+<body bgcolor="#ECECEC" text="#000000">
+<table width="900" border="1" cellspacing="1" cellpadding="5" align="left" bgcolor="#FFFFFF">
+
+<FORM method='post' action =<TMPL_VAR NAME=ACTION> enctype="multipart/form-data" >
+  <tr align="left" valign="top"> 
+    <td colspan="8" nowrap height="33"> SEARCH 
+      <select name="select1">
+        <option><font face="Arial, Helvetica, sans-serif" size="3">ID</font></option>
+        <option selected><font face="Arial, Helvetica, sans-serif" size="3">Name</font></option>
+        <option><font face="Arial, Helvetica, sans-serif" size="3">Species</font></option>
+        <option><font face="Arial, Helvetica, sans-serif" size="3">Class</font></option>
+        <option><font face="Arial, Helvetica, sans-serif" size="3">Type</font></option>
+      </select>
+      <font face="Arial, Helvetica, sans-serif" size="3"> 
+      <input type="text" name="selectfield1" bgcolor="#CCCCCC" border=2>
+      <select name="boolean1" size="1">
+        <option selected><font face="Arial, Helvetica, sans-serif" size="3">AND</font></option>
+        <option><font face="Arial, Helvetica, sans-serif" size="3">OR</font></option>
+	<option><font face="Arial, Helvetica, sans-serif" size="3">NOT</font></option>
+      </select>
+      <select name="select2">
+        <option><font face="Arial, Helvetica, sans-serif" size="3">ID</font></option>
+        <option><font face="Arial, Helvetica, sans-serif" size="3">Name</font></option>
+        <option selected><font face="Arial, Helvetica, sans-serif" size="3">Species</font></option>
+        <option><font face="Arial, Helvetica, sans-serif" size="3">Class</font></option>
+        <option><font face="Arial, Helvetica, sans-serif" size="3">Type</font></option>
+      </select>
+      <input type="text" name="selectfield2" bgcolor="#CCCCCC" border=2>
+      <select name="boolean2" size="1">
+        <option selected><font face="Arial, Helvetica, sans-serif" size="3">AND</font></option>
+        <option><font face="Arial, Helvetica, sans-serif" size="3">OR</font></option>
+	<option><font face="Arial, Helvetica, sans-serif" size="3">NOT</font></option>
+      </select>
+      <select name="select3">
+        <option><font face="Arial, Helvetica, sans-serif" size="3">ID</font></option>
+        <option><font face="Arial, Helvetica, sans-serif" size="3">Name</font></option>
+        <option><font face="Arial, Helvetica, sans-serif" size="3">Species</font></option>
+        <option selected><font face="Arial, Helvetica, sans-serif" size="3">Class</font></option>
+        <option><font face="Arial, Helvetica, sans-serif" size="3">Type</font></option>
+      </select>
+      <input type="text" name="selectfield3">  <input type="submit" name="select" value="Submit">
+      </font> </td>
+  </tr>
+<input type ="hidden" name='rm' value ='select'>
+<input type ="hidden" name='db_for_search' value =<TMPL_VAR NAME=DB> >
+
+</FORM>
+
+  <tr> 
+   
+    
+ 
+<FORM method='post' action =<TMPL_VAR NAME=ACTION> enctype="multipart/form-data" >  
+<tr><td colspan=7 valign=top align=left>
+<TABLE border="0" cellspacing="1" cellpadding="5">
+
+     
+   <tr> <b>
+    <td width="10" bgcolor="#999999"></td>
+    <td bgcolor="#CCCCCC" width="30"><b><font face="Arial, Helvetica, sans-serif" size="2">ID</td>
+    <td bgcolor="#CCCCCC" width="46"><b><font face="Arial, Helvetica, sans-serif" size="2">NAME</b></td>
+    <td bgcolor="#CCCCCC" width="61"><b><font face="Arial, Helvetica, sans-serif" size="2">CLOSEST SIGNIFICANT PROFILE IN JASPAR CORE</b></td>
+    <td bgcolor="#CCCCCC" width="49"><b><font face="Arial, Helvetica, sans-serif" size="2">CLOSEST SIGNIFICANT PROFILE IN TRANSFAC </b></td>
+    <td bgcolor="#CCCCCC" width="2"><b><font face="Arial, Helvetica, sans-serif" size="2">LOGO</b></td>
+    <td width=1 bgcolor="#CCCCCC">   </td>
+     <td width=1 bgcolor="white"> <b><font face="Arial, Helvetica, sans-serif" size="2"> <TMPL_VAR NAME=SCORE_NAME> </b> </td>
+    <td width=1 bgcolor="white"> <b><font face="Arial, Helvetica, sans-serif" size="2"> <TMPL_VAR NAME=REL_SCORE_NAME> </b> </td>
+   
+ </tr>
+    <TMPL_LOOP NAME=SMALL_MATRIX>
+  <tr> 
+    <td  bgcolor="#999999"> <input type="checkbox" name="ID" value="<TMPL_VAR NAME=ID>"></td>
+    <td bgcolor="#CCCCCC" width="30"><font face="Arial, Helvetica, sans-serif" size="2"> <TMPL_VAR NAME=ID>&nbsp;</td>
+    <td bgcolor="#CCCCCC" width="46"><font face="Arial, Helvetica, sans-serif" size="2"> <TMPL_VAR NAME=NAME>&nbsp;</td>
+    <td bgcolor="#CCCCCC" width="61"><font face="Arial, Helvetica, sans-serif" size="2"> <TMPL_VAR NAME=JASPAR_CLOSEST>&nbsp;</td>
+    <td bgcolor="#CCCCCC" width="49"><font face="Arial, Helvetica, sans-serif" size="2"> <TMPL_VAR NAME=TRANSFAC_CLOSEST>&nbsp;</td>
+    <td width="106" bgcolor="#FFFFFF"> <IMG src="<TMPL_VAR NAME=LOGO>"  >  </td>
+     <td width=1 bgcolor="#CCCCCC"><a href="javascript:Start('<TMPL_VAR NAME=ACTION>')"> <IMG src="<TMPL_VAR NAME=IMAGE_DIR>view.gif" width=50 height=25 align="middle" border=0></a></td>
+  <td width=1 bgcolor="white"><font face="Arial, Helvetica, sans-serif" size="2"align="right"><TMPL_VAR NAME=SCORE></td>
+  <td width=1 bgcolor="white"><font face="Arial, Helvetica, sans-serif" size="2"align="right"><TMPL_VAR NAME=REL_SCORE></td>
+ </tr>
+
+ </TMPL_LOOP>
+
+ <tr> 
+</TABLE></td>
+<input type ="hidden" name='db_for_search' value =<TMPL_VAR NAME=DB> >
+<td  width="500"VALIGN=TOP align=left  bgcolor="#CCCCCC"><font face="Arial, Helvetica, sans-serif" size="3">Analyze this (fasta-formatted) sequence with selected profiles <br>
+<input type ="hidden" name='db_for_search' value =<TMPL_VAR NAME=DB> >
+<textarea name="seq" rows="20" cols="60"></textarea><font face="Arial, Helvetica, sans-serif" size="2">Relative profile score threshold &nbsp; <input type="text" size=3 name="cutoff" value=80>% &nbsp;<input type="hidden" name="r" value ="analyze"><input type=submit name="rm" value="Analyze">
+    <br><div align=right><A href="/TEMPLATES/help.htm#analyze">help</A></div>
+ </td>
+    </font> 
+
+ </tr>
+<tr>
+
+
+<td colspan=8><font face="Arial, Helvetica, sans-serif" size="2">Export selected profiles as<input type="hidden" name="r" value ="export"> <input type=radio name="export_as" value="IDs"> List of IDs  <input type=radio name="export_as" value="flatfile" CHECKED >Compressed matrix flatfile directory <input type="submit" name="rm" value="Go">
+ <div align="right"><A href="/TEMPLATES/help.htm#listpage">help</A></div>   <td>
+ </tr>
+</FORM>
+</table>
+
+</body>
+</html>

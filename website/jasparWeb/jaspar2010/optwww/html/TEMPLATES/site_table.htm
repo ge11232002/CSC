@@ -1,0 +1,47 @@
+<html>
+<head>
+<title>The JASPAR database</title>
+<body bgcolor =grey>
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+</head>
+
+
+<table width="400" border="1" cellspacing="0" cellpadding="5" align="left" bgcolor="white">
+<tr>
+<td colspan=8>
+<font face="Arial, Helvetica, sans-serif" size="2"> <font color=red><TMPL_VAR NAME=SITECOUNT></font> putative sites were predicted with these settings <font color=red>(<TMPL_VAR NAME=THRESHOLD>)</font> in sequence named<font color=red><b> <TMPL_VAR NAME=SEQNAME></font></b>
+</td>
+</tr>
+
+
+<tr>
+<td nowrap><font face="Arial, Helvetica, sans-serif" size="3"> Model ID </td>
+<td nowrap><font face="Arial, Helvetica, sans-serif" size="3">Model name</td>
+<td nowrap><font face="Arial, Helvetica, sans-serif" size="3">Score</td>
+<td nowrap><font face="Arial, Helvetica, sans-serif" size="3">Relative score</td> 
+<td nowrap><font face="Arial, Helvetica, sans-serif" size="3">Start</td> 
+<td nowrap><font face="Arial, Helvetica, sans-serif" size="3">End</td>
+<td nowrap><font face="Arial, Helvetica, sans-serif" size="3">Strand </td>
+<td nowrap><font face="Arial, Helvetica, sans-serif" size="3">predicted site sequence</td>
+</tr>
+ <TMPL_LOOP NAME=SITES>
+  <tr> 
+    <td  bgcolor="#999999"> <TMPL_VAR NAME=ID> </td>
+    <td bgcolor="#CCCCCC" width="46"><font face="Arial, Helvetica, sans-serif" size="2"> <TMPL_VAR NAME=NAME>&nbsp;</td>
+    <td  bgcolor="#CCCCCC" width="250"><font face="Arial, Helvetica, sans-serif" size="2"> <TMPL_VAR NAME=SCORE>&nbsp;</td>
+    <td bgcolor="#CCCCCC" width="49"><font face="Arial, Helvetica, sans-serif" size="2"> <TMPL_VAR NAME=REL_SCORE>&nbsp;</td>
+    <td bgcolor="#CCCCCC" width="49"><font face="Arial, Helvetica, sans-serif" size="2"> <TMPL_VAR NAME=START>&nbsp;</td>
+    <td bgcolor="#CCCCCC" width="49"><font face="Arial, Helvetica, sans-serif" size="2"> <TMPL_VAR NAME=END>&nbsp;</td>
+    <td  bgcolor="#CCCCCC" width="49"><font face="Arial, Helvetica, sans-serif" size="2"> <TMPL_VAR NAME=STRAND>&nbsp;</td>
+      <td  bgcolor="#CCCCCC" width="49"><font face="Arial, Helvetica, sans-serif" size="2"> <TMPL_VAR NAME=SEQ>&nbsp;</td>
+  </tr>
+
+ </TMPL_LOOP>
+
+<tr>
+<td colspan=8><font face="Arial, Helvetica, sans-serif" size="2">
+<b>Comment:</b> This type of analysis has a high sensitivity but abysmal selectivity. In other words: while true functional will be detected in most cases, most predictions will correspond to sites bound in vitro but with no function in vivo. A number of additional contraints of the analysis can improve the prediction; phylogenetic footprinting is the most common. We recommend using the <a href="http://www.phylofoot.org/consite">ConSite</a> service, which uses the JASPAR datasets. <p>The review <a href="http://www.ncbi.nlm.nih.gov/entrez/query.fcgi?cmd=Retrieve&db=pubmed&dopt=Abstract&list_uids=15131651&query_hl=1">Nat Rev Genet. 2004 Apr;5(4):276-87</a> gives a comprehensive overview of transcription binding site prediction
+</td>
+</tr>
+</table>
+<p>

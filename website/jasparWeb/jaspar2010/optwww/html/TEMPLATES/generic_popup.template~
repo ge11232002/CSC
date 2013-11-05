@@ -1,0 +1,154 @@
+<html>
+<head>
+<title><TMPL_VAR NAME=ID> detailed information</title>
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+
+
+<link rel="stylesheet" type="text/css" href="<TMPL_VAR NAME=STYLE>" media="screen" />
+<script type="text/javascript" src="<TMPL_VAR NAME=COMMON_SCRIPT>" ></script>
+<script  type="text/javascript">
+function Help(anchor, help_url) {
+  help_page = "<TMPL_VAR NAME=HELP>#" + anchor;
+  OpenWin = this.open(help_page, "CtrlWindow1", "height=500,width=670,left=0,toolbar=no,menubar=no,location=no,scrollbars=yes,resizable=yes");
+}
+</script>
+
+</head>
+
+<body bgcolor="#ECECEC" text="#000000">
+<center>
+<table border="1" cellspacing="5" cellpadding="5" width=500>
+	<FORM method='post' action =<TMPL_VAR NAME=ACTION> enctype="multipart/form-data">
+  	<tr bgcolor="#CCCCCC" > 
+		<td colspan=2>
+     
+      			<div align="center"><font size="2"><b><font face="Arial, Helvetica, sans-serif">Summary page for ID: <TMPL_VAR NAME=ID> NAME: <TMPL_VAR NAME=NAME> from the <TMPL_VAR NAME=DB_SHOW_NAME> database</font></b></font>
+    		<input type=button value="?" onClick="Help('SUMMARY')" class="btn2"> </div></td>
+ 	</tr>
+    
+	<tr bgcolor="WHITE" VALIGN=TOP>
+ 		<td>
+ 		
+ 		
+			<table width="220" cellspacing="2" cellpadding="2" align="left" border="0" >
+				 <tr bgcolor="#CCCCCC"> 
+	 				<td colspan=2><div align="center"><font size="2"><b><font face="Arial, Helvetica, sans-serif">DATA    </font></b></font></div>      </td>
+				</tr>
+
+ 				<TMPL_LOOP NAME=POP_UP_DATA>  
+
+				<tr>
+					<td bgcolor="grey"  nowrap><i><b><font size="2" face="Arial, Helvetica, sans-serif"> <TMPL_VAR NAME=KEY></font></b></i></td>
+			    		<td bgcolor="LIGHTGREY"><font size="2" face="Arial, Helvetica, sans-serif">  <TMPL_VAR NAME=VAL>&nbsp;</td>
+
+  				</tr>
+
+				</TMPL_LOOP>
+ <tr bgcolor="#CCCCCC"> 
+	 				<td colspan=2><div align="center"><font size="2"><b><font face="Arial, Helvetica, sans-serif">	    </font></b></font></div>      </td>
+<tr bgcolor="#CCCCCC"> 
+	 				<td colspan=2><div align="center"><font size="2"><b><font face="Arial, Helvetica, sans-serif">VERSION INFORMATION   </font></b></font></div>      </td>
+
+
+
+
+				</tr>
+ <TMPL_IF NAME="MULTIPLE_VERSIONS">
+	<TR>
+		<TD colspan=2>There are <TMPL_VAR NAME="MULTIPLE_VERSIONS">  versions of the model	 </TD></tr>
+	 <input type='hidden' name='base_id' value ="<TMPL_VAR NAME=BASE_ID>" >
+	<tr><td colspan=2> <input type=button name="rm" value="Show me all versions" class="btn"  onClick= "javascript:Start('<TMPL_VAR NAME=ACTION2>',1000, 800)" ><input type=button value="?" onClick="Help('VERSION')" class="btn2"></td></tr>
+ </TMPL_IF NAME="MULTIPLE_VERSIONS">
+
+
+
+
+			</table>
+			
+		</td>
+		<td>
+			<table width="120" cellspacing="2" cellpadding="2" align="center" border="1">
+				<tr bgcolor="#CCCCCC"> 
+					 <td  ><div align="center"><font size="2"><b><font face="Arial, Helvetica, sans-serif">SEQUENCE LOGO</font></b></font></div> </td>
+					<td width=1> <div align="right"><input type=button value="?" onClick="Help('LOGO')" class="btn2">        
+				
+					 </td>
+				
+				</tr>
+				<tr>
+    					<td colspan="2" bgcolor=white> <div align="center"><img src=<TMPL_VAR NAME=LOGO> 
+    						<br> 
+						 <input type='hidden' name='collection' value ="<TMPL_VAR NAME=db>" >
+						 <input type='hidden' name='fbp' value ="<TMPL_VAR NAME=fbp>" >
+						 <input type='hidden' name='ID' value ="<TMPL_VAR NAME=ID>" >
+    						 <input type='submit' name="rm" value="Make a SVG logo" class="btn"><input type=button value="?" onClick="Help('LOGO')" class="btn2"> 
+    						</div> 
+    					</td>
+  
+				</tr>
+
+				<tr bgcolor="#CCCCCC"> 
+					 <td ><div align="center"><font size="2"><b><font face="Arial, Helvetica, sans-serif">FREQUENCY MATRIX   </font></b></font></div>      </td>
+					 <td width=1> <div align="right"><input type=button value="?" onClick="Help('MATRIX')" class="btn2"> </td>
+				</tr>
+
+
+  				<tr> 
+					 <td bgcolor="white" colspan=2>   <div align="center"> 
+       					         <input type='hidden' name='status' value ="<TMPL_VAR NAME=STATUS>" >
+ 					        <pre><TMPL_VAR NAME=MATRIX></pre>
+						<input type='hidden' name='status' value ="<TMPL_VAR NAME=STATUS>">
+ 					        <input type='submit' name="rm" value="Reverse complement" class="btn"><input type=button value="?" onClick="Help('MATRIX')" class="btn2">
+					     </div> 
+					</td>
+  				</tr>
+ 				 
+    
+    <TMPL_IF NAME="HITS_PER_BP_PIC">
+				<tr bgcolor="#CCCCCC"> 
+					 <td ><div align="center"><font size="2"><b><font face="Arial, Helvetica, sans-serif">EXPECTED PREDICTIONS/BP </font></b></font></div>      </td>
+					 <td width=1> <div align="right"><input type=button value="?" onClick="Help('STATS')" class="btn2"> </td>
+				</tr>
+
+
+				<tr bgcolor="#CCCCCC"> 
+					 <td  bgcolor="white" colspan=2 ><div align="center"><font size="2"><b><font face="Arial, Helvetica, sans-serif">
+					 <img src=<TMPL_VAR NAME=HITS_PER_BP_PIC>>
+					 
+					 
+					 </font></b></font></div>      </td>
+				</tr>
+<TMPL_ELSE>
+
+
+
+</TMPL_IF>
+
+
+
+
+
+
+			</table>
+		</td>
+
+
+
+
+
+
+
+
+
+
+
+
+ 
+ 
+ 
+ 
+</form>
+	</table>	
+</center>
+</body>
+</html>

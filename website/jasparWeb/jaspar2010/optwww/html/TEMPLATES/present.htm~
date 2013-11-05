@@ -1,0 +1,86 @@
+<html>
+<head>
+<title><TMPL_VAR NAME=ID> detailed information</title>
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+</head>
+
+<body bgcolor="#ECECEC" text="#000000">
+<table border="0" cellspacing="1" cellpadding="1" width="410">
+<FORM method='post' action =<TMPL_VAR NAME=ACTION> enctype="multipart/form-data">
+  <tr bgcolor="#999999"> 
+    <td colspan="4"> 
+      <div align="center"><font size="2"><b><font face="Arial, Helvetica, sans-serif"><TMPL_VAR NAME=ID> <TMPL_VAR NAME=NAME></font></b></font></div>
+    </td>
+  </tr>
+  <tr> 
+    <td colspan="4"><img src=<TMPL_VAR NAME=LOGO> </td>
+  </tr>
+  <tr> 
+    <td colspan="4">   <div align="center"> 
+      <pre><TMPL_VAR NAME=MATRIX></pre>
+     </div> </td>
+  </tr>
+ <tr>
+ <td colspan="4">
+ <input type='hidden' name='ID' value ="<TMPL_VAR NAME=ID>">
+  <input type='hidden' name='rm' value = 'present'>    
+<input type='hidden' name='db' value ="<TMPL_VAR NAME=DB>" >
+
+ <div align="right"><font size="1"><font face="Arial, Helvetica, sans-serif"> <input type='submit' name="revcom" value="Reverse complement"></font></font></div>
+
+</td>
+ </tr>
+ <tr bgcolor="#CCCCCC"> 
+    <td colspan="4" bgcolor="#999999"> 
+      <div align="center"><font size="2"><b><i><font face="Arial, Helvetica, sans-serif">DATA</font></i></b></font></div>
+    </td>
+  </tr>
+
+
+
+  <tr bgcolor="#CCCCCC"> 
+    <td nowrap><i><b><font size="2" face="Arial, Helvetica, sans-serif">ID</font></b></i></td>
+    <td bgcolor="#FFFFFF" nowrap><font size="2" face="Arial, Helvetica, sans-serif"><TMPL_VAR NAME=ID>&nbsp;</font></td>
+    <td nowrap><i><b><font size="2" face="Arial, Helvetica, sans-serif">Supergroup</font></b></i></td>
+    <td bgcolor="#FFFFFF"><font size="2" face="Arial, Helvetica, sans-serif"><TMPL_VAR NAME=SUPERGROUP>&nbsp;</td>
+  </tr>
+  <tr bgcolor="#CCCCCC"> 
+    <td nowrap><i><b><font size="2" face="Arial, Helvetica, sans-serif">Name</font></b></i></td>
+    <td bgcolor="#FFFFFF" nowrap><font size="2" face="Arial, Helvetica, sans-serif"><TMPL_VAR NAME=NAME>&nbsp;</td>
+    <td nowrap><i><b><font size="2" face="Arial, Helvetica, sans-serif">Protein 
+      seq</font></b></i></td>
+    <td bgcolor="#FFFFFF"><font size="2" face="Arial, Helvetica, sans-serif"><a target= "1" href="http://www.ncbi.nlm.nih.gov/entrez/query.fcgi?cmd=search&db=protein&term=<TMPL_VAR NAME=ACC>&doptcmdl=Brief"><TMPL_VAR NAME=ACC></a>&nbsp;</td>
+  </tr>
+  <tr bgcolor="#CCCCCC"> 
+    <td nowrap><i><b><font size="2" face="Arial, Helvetica, sans-serif">Class</font></b></i></td>
+    <td bgcolor="#FFFFFF" nowrap><font size="2" face="Arial, Helvetica, sans-serif"><TMPL_VAR NAME=CLASS>&nbsp;</td>
+    <td nowrap><i><b><font size="2" face="Arial, Helvetica, sans-serif">Experiment</font></b></i></td>
+    <td bgcolor="#FFFFFF"><font size="2" face="Arial, Helvetica, sans-serif"><TMPL_VAR NAME=TYPE>&nbsp;</td>
+  </tr>
+  <tr bgcolor="#CCCCCC"> 
+    <td nowrap><i><b><font size="2" face="Arial, Helvetica, sans-serif">Species</font></b></i></td>
+    <td bgcolor="#FFFFFF" nowrap><font size="2" face="Arial, Helvetica, sans-serif"><TMPL_VAR NAME=SPECIES>&nbsp;</td>
+    <td nowrap><i><b><font size="2" face="Arial, Helvetica, sans-serif">Source 
+      PMID</font></b></i></td>
+    <td bgcolor="#FFFFFF"><font size="2" face="Arial, Helvetica, sans-serif"><a target= "1" href="http://www.ncbi.nlm.nih.gov/entrez/query.fcgi?cmd=search&db=pubmed&term=<TMPL_VAR PMID>"><TMPL_VAR NAME=PMID></a>&nbsp;</td>
+  </tr>
+  <tr bgcolor="#CCCCCC"> 
+    <td nowrap><i><b><font size="2" face="Arial, Helvetica, sans-serif">Information 
+      content</font></b></i></td>
+    <td bgcolor="#FFFFFF" nowrap><font size="2" face="Arial, Helvetica, sans-serif"><TMPL_VAR NAME=IC>&nbsp;</td>
+    <td nowrap> 
+</form>
+<FORM method='post' action =<TMPL_VAR NAME=ACTION> enctype="multipart/form-data">
+<input type='hidden'  <input type='hidden' name='rm' value ='export'> 
+ <input type='hidden' name='ID' value =<TMPL_VAR NAME=ID>>     
+ <div align="center"><font size="1"><font face="Arial, Helvetica, sans-serif"> 
+ <input type= 'hidden' name='rm' value='export'>
+ <input type= 'hidden' name='ID' value=  <TMPL_VAR NAME=ID>  >
+ <input type='submit' name=" Go" value="Save model"></font></font></div>
+    </td>
+</FORM>
+    <td bgcolor="#FFFFFF"><font size="1"><div align="right"><font face="Arial, Helvetica, sans-serif"><A href="/TEMPLATES/help.htm#details" target="_">Help</A></div></td>
+  </tr>
+</table>
+</body>
+</html>

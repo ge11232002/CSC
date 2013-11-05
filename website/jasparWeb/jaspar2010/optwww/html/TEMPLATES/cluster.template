@@ -1,0 +1,67 @@
+<HTML>
+   <HEAD>
+      <TITLE>Jaspar Matrix Clustering</TITLE>
+
+     <link rel="stylesheet" type="text/css" href="<TMPL_VAR NAME=STYLE>" media="screen" />
+     <script type="text/javascript" src="<TMPL_VAR NAME=COMMON_SCRIPT>" ></script>
+
+    </HEAD>
+    <BODY>
+       <center>
+
+<TABLE border="0" cellspacing = 0 bgcolor ="#ffffff">
+<tr><td align="center">
+    <TABLE border="0" cellspacing="1" cellpadding="5">     
+
+<!--    <h1>Optimal cluster: <TMPL_VAR NAME=OPTIMAL></h1> -->
+       <tr>
+        <td  align="center" bgcolor="#999999"><b>Matrix Hierarchical Distance</b></td>
+       </tr>
+       <tr>
+         <td align="center" bgcolor="#CCCCCC"><img src="<TMPL_VAR NAME=TREE_FILE>"></td>
+       </tr>
+    </table>
+    <TABLE border="0" cellspacing="1" cellpadding="5">     
+       <tr>
+         <td>&nbsp;</td>
+       </tr>
+       <tr>
+        <td colspan=7 align="center"><b>Familial Binding Profiles <TMPL_VAR NAME=CLUSTER_ID></b></td>
+       </tr>
+    <TMPL_LOOP NAME=CLUSTERS>
+       <tr><b>
+        <td width="10" bgcolor="#999999"></td>
+        <td bgcolor="#999999" width="30"><b><font face="Arial, Helvetica, sans-serif" size="2">ID</td>
+        <td bgcolor="#999999" width="400"><b><font face="Arial, Helvetica, sans-serif" size="2">BUILT FROM PROFILES</b></td>
+        <td bgcolor="#999999" width="2"><b><font face="Arial, Helvetica, sans-serif" size="2">LOGO</b></td>
+       </tr>
+       <tr> 
+        <td  bgcolor="#999999">&nbsp;</td>
+        <td bgcolor="#999999" width="30"><font face="Arial, Helvetica, sans-serif" size="2"> <TMPL_VAR NAME=CLUSTER_ID>&nbsp;</td>
+        <td bgcolor="#999999"><font face="Arial, Helvetica, sans-serif" size="2"> <TMPL_VAR NAME=MEMBER_IDS>&nbsp;</td>
+        <td width="106" bgcolor="#999999"> <button type=button style="width:220;height:100;background-color:white" onClick= "javascript:Start('<TMPL_VAR NAME=ACTION>', <TMPL_VAR NAME=HEIGHT>, <TMPL_VAR NAME=WIDTH>)" > <IMG src="<TMPL_VAR NAME=LOGO>"  ><div align=right><font face="Arial, Helvetica, sans-serif" size="1">Click to view details</div> </button>  </td>
+       </tr>
+       <tr>
+         <td width="10" bgcolor="#FFFFFF"></td>
+	 <td bgcolor="#CCCCCC" width="30"><b><font face="Arial, Helvetica, sans-serif" size="2">ID</td>
+	 <td bgcolor="#CCCCCC" width="46"><b><font face="Arial, Helvetica, sans-serif" size="2">NAME</b></td>
+	 <td bgcolor="#CCCCCC" width="2"><b><font face="Arial, Helvetica, sans-serif" size="2">LOGO</b></td>
+       </tr>
+    <TMPL_LOOP NAME=MEMBERS>
+       <tr> 
+           <td bgcolor="#FFFFFF">&nbsp;</td>
+	   <td bgcolor="#CCCCCC" width="30"><font face="Arial, Helvetica, sans-serif" size="2"> <TMPL_VAR NAME=ID>&nbsp;</td>
+	   <td bgcolor="#CCCCCC" width="46"><font face="Arial, Helvetica, sans-serif" size="2"> <TMPL_VAR NAME=NAME>&nbsp;</td>
+	   <td width="106" bgcolor="#FFFFFF"> <button type=button style="width:220;height:100;background-color:white" onClick= "javascript:Start('<TMPL_VAR NAME=ACTION>', <TMPL_VAR NAME=HEIGHT>, <TMPL_VAR NAME=WIDTH>)" ><IMG src="<TMPL_VAR NAME=LOGO>"> <div align=right><font face="Arial, Helvetica, sans-serif" size="1">Click to view details</div> </button>  </td>
+       </tr>    
+    </TMPL_LOOP>
+    <tr owpadding=10><td cellpadding=10>&nbsp;</td></tr>
+    </TMPL_LOOP>
+    </TABLE>
+</td></tr>
+</table>
+Hierarchical clustering and familial binding profile construction performed by <a href="http://www.benoslab.pitt.edu/stamp/">STAMP</a> (http://www.benoslab.pitt.edu/stamp/).  
+      </center>
+    </BODY>
+</HTML>
+

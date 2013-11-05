@@ -1,0 +1,375 @@
+<html>
+<head>
+<title>The JASPAR database</title>
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+
+
+
+
+
+<STYLE TYPE="text/css">
+	<!--
+
+	.try,.try TH, .try TD
+		{
+
+	background-color:lightgreen;
+
+	color:white;
+	height:40;
+	font-family:sans-serif;
+	font-weight:700;
+	}
+
+table.alert
+{ 
+	text-align: center;
+	font-family: Arial;
+	font-weight: normal;
+	font-size: 12px;
+
+	border-collapse: collapse;
+	border-spacing: 0px;
+	border-bottom:groove;
+	border-right:groove;
+	}
+td.desc{ 
+	text-align: justify;
+	font-family: Arial;
+	font-weight: normal;
+	font-size: 11px;
+
+	border-collapse: collapse;
+	border-spacing: 0px;
+	}
+
+OPTION.mar{background-color:white; color:green}
+.right_cell {
+	border-right-style: groove;
+}
+.down_cell {
+	border-bottom-style: groove;
+}
+.right_corner {
+	border-right-style: groove;
+	border-bottom-style: groove;
+}
+.style4 {color: #FFFFFF}
+
+
+
+	-->
+</STYLE>
+<!-- a script to display some nice lines about each sub-database" //--->
+<script language ="JavaScript">
+
+
+
+
+
+function visaVal(val){
+	show_descriptions ( val.options[val.selectedIndex].value);
+}
+
+function show_descriptions(index){
+<!-- load an array of descriptions //--->
+	desc=new Array();
+	<TMPL_LOOP NAME=DB_DESCS>
+		desc[ <TMPL_VAR NAME = DB_INDEX> ] = <TMPL_VAR NAME = DESCRIPTION> 
+	</TMPL_LOOP >
+	db_value= index;
+	el = document.getElementById("cell_Header");
+	el.innerHTML = desc[db_value];
+
+
+}
+
+function matrix_fill() {
+	el = document.getElementById("alignment_input");
+	el.value= "A  [13 13  3  1 54  1  1  1  0  3  2  5 ]\nC  [13 39  5 53  0  1 50  1  0 37  0 17 ]\nG  [17  2 37  0  0 52  3  0 53  8 37 12 ]\nT  [11  0  9  0  0  0  0 52  1  6 15 20 ] ";
+}
+
+
+</script>
+
+
+</head>
+
+<body bgcolor="#ECECEC" text="#000000"  onLoad= "show_descriptions(0)">
+<div align="center"></div>
+<table width="600" border="0" cellspacing="0" cellpadding="5" align="center" bgcolor="#FFFFFF">
+  <tr> 
+    <td nowrap>
+      <div align="center"> 
+        <p><img src="<TMPL_VAR NAME = IMAGE_DIR>/jasparlogo_beta.gif" width="200" height="141"></p>
+        <p>   <b><font face="Verdana, Arial, Helvetica, sans-serif" size="3">The <img src="<TMPL_VAR NAME = IMAGE_DIR>/openaccess.gif">
+          high-quality Transcription factor binding profile database</font></b></p><b>
+          
+     
+</div>
+    </td>
+  </tr>
+  
+</table>
+
+
+ <FORM method='post' action =<TMPL_VAR NAME=ACTION > enctype="multipart/form-data" >
+
+<table class="alert" align="center" bgcolor="#ECECEC"  border=0 width =600>
+
+ 
+<tr>
+
+<td colspan=1> </td>	<td colspan =5 > <div align=right> Fast choice: browse the JASPAR_CORE database 	<input type="submit"
+name="rm" value="right away! "> </div></td>
+</tr>
+
+
+<tr >
+
+	<td width=12  bgcolor="lightgreen" >  &nbsp</td>  
+	<td width=120  bgcolor="lightgreen" > Select a JASPAR sub-database  </td> 
+	<td width=12  >  &nbsp</td>  
+	<td width=350 >&nbsp; </td> 	
+	
+	<td width = 12>&nbsp; </td>
+
+</tr>
+<tr bgcolor="lightgreen">
+<td width=12   >  &nbsp</td>  
+	<td width=120>&nbsp   </td> 
+	<td width=12  >  &nbsp</td>  
+	<td width=350 >&nbsp; </td> 	
+	
+	<td width = 12>&nbsp; </td>
+</tr>
+
+
+<tr  bgcolor="lightgreen"	>
+	<td width=12  bgcolor="lightgreen" >  &nbsp</td>  
+	<td bgcolor="lightgreen"  >
+ <div align="center"> 
+
+ <select size=6 name="db_for_browse"    onChange="visaVal(this)"  id="browse_db_selector" >> 
+	<TMPL_LOOP NAME=BROWSE_DBS>  <!-- one per sub-database: value and showed name --->
+       	<option class=mar value= <TMPL_VAR NAME=DB_NR>  <TMPL_IF NAME="DB_PRESELECT">  selected </TMPL_IF>  ><TMPL_VAR NAME=DB_SHOW_NAME> 
+	
+	
+	 &nbsp;&nbsp; &nbsp; &nbsp; &nbsp;&nbsp; &nbsp; &nbsp; &nbsp;&nbsp; &nbsp; &nbsp;      </option>
+  	</TMPL_LOOP>
+</select>
+</div>
+       </td>
+      
+       <td width=12   >  &nbsp</td>  
+
+       
+	<td    bgcolor="lightyellow"   id="cell_Header"  class= "desc"><font ="Verdana, Arial, Helvetica, sans-serif" size="3">
+ 
+       <td width=12   >  &nbsp</td>  
+
+
+</td>
+
+</tr>
+<tr bgcolor="lightgreen">
+<td width=12   >  &nbsp</td>  
+	<td width=120>&nbsp   </td> 
+	<td width=12  >  &nbsp</td>  
+	<td width=250 >&nbsp; </td> 	
+	<td width = 12>&nbsp; </td>
+</tr>
+</table>
+
+
+<div align=center>
+<table width=600 border=1 class="alert">
+
+<tr bgcolor="lightblue" >
+
+	<td width=12   ></td>  
+	<td width=100  >Browse sub-database sorted by  <input type="submit" name=rm    value="Browse sorted by "> </td> 
+	<td width = 12>&nbsp; </td>
+
+	<td width=12 bgcolor="lightgrey" >  &nbsp</td>  
+	<td width = 12>&nbsp; </td>
+	<td width=50   > Search sub-database by   <input type="submit" name="rm" value="Search by "></td></td> 
+	<td width=12  >  &nbsp</td>  
+	<td width=50  > &nbsp </td> 
+	<td width=50 >&nbsp; </td> 	
+	<td width=12  >  &nbsp</td>  
+	<td width = 12>&nbsp; </td>
+<td width = 12>&nbsp; </td>
+</tr>
+
+<tr bgcolor="lightblue" >
+
+	<td width=12   >  &nbsp</td>  
+	<td width=100  >&nbsp   </td>
+	<td width = 12>&nbsp; </td> 
+	<td width = 12 bgcolor="lightgrey">&nbsp; </td>
+
+	<td width=12  >  &nbsp</td>  
+	<td width=50   >  &nbsp </td> 
+	<td width=12  >  &nbsp</td>  
+	<td width=50  > &nbsp </td> 
+	<td width=50 >&nbsp; </td> 	
+	<td width=12  >  &nbsp</td>  
+	<td width = 12>&nbsp; </td>
+<td width = 12>&nbsp; </td>
+</tr>
+
+<tr bgcolor="lightblue" >
+
+	<td width=12   >  &nbsp</td>  
+	<td width=100 rowspan=3  >
+	
+		<select size=4 name="BROWSE_BY"> 
+	   <option selected value=ID > ID  </option>
+	     <option value=Species>Species</option>
+ <option value=Class>Structural class</option>
+ <option value=Tax>Taxonomic group ;</option>
+		</select>   
+	</td> 
+<td width = 12>&nbsp; </td>
+<td width = 12 bgcolor="lightgrey">&nbsp; </td>
+
+	<td width=12  >  &nbsp</td>  
+	<td width=50   >  <select name="select1">
+          <option>ID</option>
+          <option selected>Name</option>
+          <option>Species</option>
+          <option>Class</option>
+          <option>Type</option>
+        </select> </td> 
+	<td width=12  >  &nbsp</td>  
+	<td width=50  >   <input type="text" name="selectfield1" bgcolor="#CCCCCC" border=2>  &nbsp   </td> 
+	<td width=50 >&nbsp; </td> 	
+	<td width=12  > <select name="boolean1" size="1">
+       ;    <option selected>AND</option>
+          <option>OR</option>
+ 			<option>NOT</option>
+        </select>
+</td>  
+	<td width = 12>&nbsp; </td>
+<td width = 12>&nbsp; </td>
+</tr>
+<tr bgcolor="lightblue" >
+
+	<td width=12   >  &nbsp</td>  
+	<td width = 12>&nbsp; </td>
+	<td width = 12 bgcolor="lightgrey">&nbsp; </td>
+
+	<td width=12  >  &nbsp</td>  
+	<td width=50   > <select name="select2">
+          <option>ID</option>
+          <option selected>Name</option>
+          <option>Species</option>
+          <option>Class</option>
+          <option>Type</option>
+        </select> </td>  &nbsp </td> 
+	<td width=12  >  &nbsp</td>  
+		<td width=50 >  <input type="text" name="selectfield2" bgcolor="#CCCCCC" border=2>&nbsp; </td> 	
+		<td width=50  > &nbsp </td> 
+
+	<td width=12  >  <select name="boolean1" size="1">
+       ;    <option selected>AND</option>
+          <option>OR</option>
+ 			<option>NOT</option>
+        </select>
+</td>  
+	<td width = 12>&nbsp; </td>
+<td width = 12>&nbsp; </td>
+</tr>
+<tr bgcolor="lightblue" >
+
+	<td width=12   >  &nbsp</td>  
+<td width = 12>&nbsp; </td>
+	<td width=12 bgcolor="lightgrey" >  &nbsp</td>  
+	<td width = 12>&nbsp; </td>
+
+	<td width=50   > <select name="select1">
+          <option>ID</option>
+          <option selected>Name</option>
+          <option>Species</option>
+          <option>Class</option>
+          <option>Type</option>
+        </select> </td>  </td> 
+	<td width=12  >  &nbsp</td>  
+	<td width=50 > <input type="text" name="selectfield3" bgcolor="#CCCCCC" border=2> </td> 	
+	<td width=50  > &nbsp </td> 
+
+	<td width=12  >  &nbsp</td>  
+	<td width = 12>&nbsp; </td>
+<td width = 12>&nbsp; </td>
+<td width = 12>&nbsp; </td>
+
+</tr>
+<tr bgcolor="lightblue" >
+<td width = 12>&nbsp; </td>
+	<td width=12   >  &nbsp</td>  
+	<td width=12  >  &nbsp</td> 
+	<td width = 12 bgcolor="lightgrey">&nbsp; </td>
+ 
+	<td width=50   > &nbsp </td> 
+	<td width=12  >  &nbsp</td>  
+	<td width=50  > &nbsp </td> 
+	<td width=50 >&nbsp; </td> 	
+	<td width=12  >  &nbsp</td>  
+	<td width = 12>&nbsp; </td>
+<td width = 12>&nbsp; </td>
+</tr>
+
+
+
+
+
+
+
+
+<br>
+</table>
+<table width=600 class="alert">
+<tr>
+	<td width=120  bgcolor="white" > <input type="submit" name="rm" value="Align to a custom matrix" > 
+ </td> 
+	<td width=250 >&nbsp; </td> 	
+	<td width = 100> &nbsp;</td>
+	<td width = 250>&nbsp; </td>
+</tr>
+<tr>
+	<td colspan=4 bgcolor="white"><br><div align="center">  <textarea cols=80  name="matrix_string" rows=5  id="alignment_input" ></textarea> </div>  <br>
+<div align="right">	<input
+type=reset>
+
+
+<button type="button" name="example_matrix"  onClick="matrix_fill()"  > 
+Fill in an example matrix  
+</button>
+</div>
+ 
+
+</td>
+</tr>
+
+
+
+
+
+</table>
+<table>
+
+
+PUT THIS SOMEWHERE: How can I cluster a set of matrices, or generate random matrices based on a given database? First select a set of matrices (using browse or select below), then use the cluster or generate ranomd matrices buttons;
+
+
+</FORM>
+
+
+
+
+<p align="center"><a href="http://www.ku.dk/english/"><img src="<TMPL_VAR NAME = IMAGE_DIR>ku_logo.gif"  border="0"></a>&nbsp;&nbsp;&nbsp; 
+  <a href="http://www.cmmt.ubc.ca/"><img src="<TMPL_VAR NAME = IMAGE_DIR>cmmtlogo33.gif" width="294" height="80" border="0"></a></p>
+<p align="center"><b>Questions or comments? contact <i>boris.lenhard AT cgb.ki.se</i></b>
+</body>
+</html>

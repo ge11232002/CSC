@@ -1,0 +1,120 @@
+<html>
+<head>
+   
+<TMPL_IF NAME="FASTA">
+	<meta http-equiv="Refresh" content="0; <TMPL_VAR NAME="SITES_FILE">   ">
+</TMPL_IF >
+<link rel="stylesheet" type="text/css" href="<TMPL_VAR NAME=STYLE>" media="screen" />
+
+<style>
+/* roScripts
+Table Design by Mihalcea Romeo
+www.roscripts.com
+----------------------------------------------- */
+
+table {
+		border-collapse:collapse;
+		background:#EFF4FB
+	
+		font:1.8em/145% 'Trebuchet MS',helvetica,arial,verdana;
+		color: #333;
+}
+
+td, th {
+		padding:0px;
+}
+
+caption {
+		padding: 0 0 .5em 0;
+		text-align: left;
+		font-size: 1.4em;
+		font-weight: bold;
+		text-transform: uppercase;
+		color: #333;
+		background: transparent;
+}
+
+/* =links
+----------------------------------------------- */
+
+table a {
+		color:#950000;
+		text-decoration:none;
+}
+
+table a:link {}
+
+table a:visited {
+		font-weight:normal;
+		color:#666;
+		text-decoration: line-through;
+}
+
+table a:hover {
+	
+}
+
+/* =head =foot
+----------------------------------------------- */
+
+thead th, tfoot th, tfoot td {
+	
+		color:#fff
+}
+
+tfoot td {
+		text-align:right
+}
+
+/* =body
+----------------------------------------------- */
+
+tbody th, tbody td {
+	
+}
+
+tbody th {
+		white-space: nowrap;
+}
+
+tbody th a {
+		color:#333;
+}
+
+.odd {}
+
+tbody tr:hover {
+		background:#fafafa
+}
+
+
+</style>
+
+
+
+
+</head>
+<font size="3"><b><font face="Arial, Helvetica, sans-serif">Sequences for model <TMPL_VAR NAME=ID></font> <br>
+
+<TMPL_IF NAME="NOFILE">
+<table width=500><tr><td>
+<font size="3"><font face="Arial, Helvetica, sans-serif">
+The sequence data for  <TMPL_VAR NAME=ID> in the  <TMPL_VAR NAME=COLLECTION> collection is missing.
+Only the CORE, POLII and PHYLOFACTS collection have sequences available. A few older CORE models are also lacking sequence data, for historical reasons: CORE was originally built in order to create familial binding profiles for as many structural classes of transcription factor classes as possible. In some experimental literature, only matrices and not sequences are available. For this project, we were forced to include some matrices to gain coverage of certain binding site classes. For recent additions, it is a requirement to have the sequences available.
+</td></tr></table></html>
+
+<TMPL_ELSE>
+<table class=alert border =0>
+<tr><th>Site</th><th>Occurences </th> </tr>
+
+<TMPL_LOOP NAME=SITES>    
+<tr>  <td>  <pre><font color="grey"><TMPL_VAR NAME=FP></font><font color="red"><TMPL_VAR NAME=BS></font><font color="grey"><TMPL_VAR NAME=TP> </font></pre>
+ </td> <td><pre><TMPL_VAR NAME=COUNT></pre> <td></tr>
+
+
+</TMPL_LOOP>
+</TMPL_IF>
+
+
+
+</html>

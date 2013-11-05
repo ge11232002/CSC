@@ -1,0 +1,86 @@
+<html>
+<title>The JASPAR database DATA SUBMISSION FORM </title>
+<table width=600>
+<tr><td>
+<font size="5" face="Arial, Helvetica, sans-serif"> JASPAR DATA SUBMISSION <p>
+<font size="2" face="Arial, Helvetica, sans-serif">We strongly encourage reseach groups to submit data for us to share with the community of researchers working on transcriptional regulation. The submission form below is a simple make-do until we have a more comprehensive system in place.
+<p>For inclusion in the JASPAR database, we can accept either
+<p> 1  suggestions for high-quality experimental models derived from published experimental papers, for inclusion in JASPAR CORE
+<p>2  whole datasets of models derived by other means (for instance data mining or chromatin IP), to form an additional sub-database in the JASPAR repository
+<p> In both cases, the data will be subject to internal review before we commit it to the database. To make this process as smooth as possible, please submit the information below
+</td></tr></table>
+
+<table width=600 border=1>
+<tr><td>
+<P>SINGLE PROFILE SUGGESTIONS FOR JASPAR CORE
+<p>JASPAR CORE scope:  <p>The JASPAR CORE database contains a curated, non-redundant set of profiles from published articles. All profiles are derived from published collections of experimentally defined transcription factor binding sites for multicellular eukaryotes. The database represents a curated collection of target sequences. The binding sites were determined either in SELEX experiments, or by the collection of data from the experimentally determined binding regions of actual regulatory regions; this distinction is clearly marked in the profiles' annotation. As far as possible, the collection is non-redundant (several models describing one transcription factor). The prime difference to similar resources (TRANSFAC, TESS etc) consist of the open data acess, non-redundancy and quality: JASPAR CORE is a smaller set that is non-redundant and curated.
+<br> Any new additions have to adhere to these strict criteria, there fore, please make sure to go through the following checklist:<b>
+<p>Is the transcription factor already described by JASPAR CORE?. If so, why is this suggestion better?
+<p>Is the sites described in published scientific papers? Only published sites will be used.
+<p>Do you judge the publication above to be of high quality?
+<p>Are  the sites retrievable either from publication or genome sequence
+<p>Are there enough sites? (10 or more is acceptable)
+<b>
+Please fill in the box below. Do not forget to add contact name and email adress
+<FORM method='post' action =<TMPL_VAR NAME=ACTION > enctype="multipart/form-data" >
+ <input type='hidden' name='rm' value ='submission'>
+  <input type='hidden' name='jaspar_core' value ='1'>
+ <textarea name ="core_submission" rows="10" cols="80"> 
+Suggestion for JASPAR CORE model inclusion
+
+1 Transcription factor name:
+
+2 Structural class of factor:
+
+3 Representative protein sequence accession number:
+
+4 Article(s) describing the sites used:
+
+5 Sites (please include some flanking sequence (~5bp) and mark the actual sites as capitals if possible)
+
+6 Comments:
+
+7 Contributor name and email adress:
+
+</textarea>
+<input type="submit" value="Send">
+</form>
+</td></tr></table>
+<p>
+<table width=600 border =1><tr><td>
+<P>SUBMISSION OF ADDITIONAL DATASETS TO THE JASPAR REPOSITORY
+<p>Scope: It is beneficial to have access to other data sets that are not fully compatible with the JASPAR CORE goal; for instance sites that have been discovered by datamining. The critera for inclusion is less strict than for JASPAR CORE; on the other hand, it is necessary to submit a detailed description of the dataset: generation, extent and recommended use.
+Please describe your dataset in detail, if possible with references. 
+<FORM method='post' action =<TMPL_VAR NAME=ACTION > enctype="multipart/form-data" > 
+ <input type='hidden' name='rm' value ='submission'>
+  <input type='hidden' name='dataset' value ='1'>
+ <textarea name ="data_desc" rows="10" cols="80"> 
+Dataset for inclusion in JASPAR
+1 Brief description:
+
+2 Generation:
+
+3 File format
+
+4 What is the prime benefit with the dataset compared to other contributions? When should it be used?
+
+5 Additional comments:
+
+6 Contributor name and email adress:
+
+</textarea>
+
+Please attach the dataset(preferrably zipped). Please describe the format in detail in the text area above.
+
+<input type="file" name="datafile" size="40">
+<input type="submit" value="Send">
+</form>
+
+
+
+</td></tr></table>
+
+
+
+
+
