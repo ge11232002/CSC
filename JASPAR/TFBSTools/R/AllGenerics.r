@@ -101,6 +101,9 @@ setGeneric("searchMatrix",
                     #max.results=10, min.percent_score=NULL, min.score=NULL) 
              standardGeneric("searchMatrix"))
 
+setGeneric("permuteMatrix", signature="x",
+           function(x, type="intra") standardGeneric("permuteMatrix"))
+
 ## wrappers
 setGeneric("runMEME", signature="x", function(x, binary="meme", seqtype="DNA", arguments="", tmpdir=tempdir()) standardGeneric("runMEME"))
 setGeneric("sitesSeq", signature="x", function(x, n=10, type="none") standardGeneric("sitesSeq"))

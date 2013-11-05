@@ -90,3 +90,48 @@ setMethod("searchMatrix", signature(pfmSubject="PFMatrixList", pfmQuery="charact
             return(ans)
           }
           )
+
+
+### -----------------------------------------------------------------
+### permute the PFM
+###
+setMethod("permuteMatrix", "matrix",
+          function(x, type="intra"){
+            if(type == "inter")
+              stop("Only permutation within matrix is available for single matrix!")
+            type = match.arg(type, c("intra", "inter"))
+            x = normargPfm(x)
+            index = sample(seq_len(ncol(x)), ncol(x), replace=FALSE)
+            x = x[ , index]
+            return(x)
+          }
+          )
+
+setMethod("permuteMatrix", "PFMatrix",
+          function(x, type="intra"){
+            Matrix(x) = permuteMatrix(Matrix(x), type=type)
+            return(x)
+          }
+          )
+
+setMethod("permuteMatrix", "PFMatrixList",
+          function(x, type="intra"){
+            type = match.arg(type, c("intra", "inter"))
+            if(type == "intra"){
+              for(i in seq_len(length(x))){
+                x[[i]] = permuteMatrix(x[[i]])
+              }
+            }else if(type =="inter"){
+              allMatrix = do.call(cbind, Matrix(x))
+              lengths = sapply(Matrix(x), ncol)
+              lengths = c(0, cumsum(lengths))
+              index = sample(seq_len(ncol(allMatrix)), ncol(allMatrix), replace=FALSE)
+              for(i in seq_len(length(x))){
+                Matrix(x[[i]]) = allMatrix[ , index[(lengths[i]+1):lengths[i+1]]]
+              }
+            }
+            return(x)
+          }
+          )
+
+
