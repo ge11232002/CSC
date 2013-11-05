@@ -984,6 +984,42 @@ This order can be changed by the user,
 who can also restore the default order by clicking the red “[Reset]” link in the genome browser.
 
 ### Making download files
+Ancora has a download section where files with CNE locations (bed format) 
+and CNE densities (wig format) can be downloaded. 
+The files are located under ```/opt/www/ancora/html/downloads```. 
+Download files can be created using the Perl script ```cne/scripts/cne_pipeline/make_download_files.pl``` 
+in the cne package. 
+Run the script without arguments for usage information. 
+There is a wrapper bash script ```make_download_files.sh``` 
+that runs the Perl script to create files for the assemblies currently 
+shown in Ancora. 
+It is therefore recommended to use this bash script 
+for updating the Ancora download files. 
+The bash script does not require any arguments.
+
+The output files are placed in subdirectories 
+created under the directory from which the scripts are run. 
+The directory structure created is identical to that 
+in the Ancora download section, 
+so that the directories created by the scripts simply 
+can be moved to the Ancora download directory ```/opt/www/ancora/html/downloads``` 
+after checking that the files seem OK.
+
+## The HTML pages and CGI scripts
+The HTML pages are located under ```cne/ancora/html``` in the cne package. 
+These files should be identical to the live HTML pages 
+that we keep under ```/opt/www/ancora/html```. 
+The style of the pages is defined in the stylesheet ```cne/ancora/html/main.css```. 
+A stylesheet for GBrowse (```cne/ancora/html/gbrowse/gbrowse-cne.css```) 
+is also part of the cne package, 
+to give GBrowse a look and feel similar to the Ancora pages.
+
+There are three CGI scripts for Ancora, 
+located under ```/opt/www/ancora/cgi-bin``` (live version) 
+and under ```cne/ancora/cgi-bin``` in the cne package:
+*	cne_color_legend - Shows available color legends for chromosome colors. Ancora runs this script in a popup window opened from the CNE track configuration page.
+*	cne_das_loader - Handles addition of DAS tracks to Ensembl.
+*	cne_details - Shows details of CNEs or synteny block. Invoked if user clicks on one of these features in the genome browser.
 
 
 **TO DO**
