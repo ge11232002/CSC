@@ -1,0 +1,346 @@
+package CONSITE::TFpicker;
+use vars qw(@ISA $AUTOLOAD);
+
+use TFBS::Matrix::PWM;
+use CGI qw(:standard);
+use Class::MethodMaker
+    new_with_init => 'new',
+    get_set => [ 'dbh', 'rel_cgi_bin_dir' ];
+use strict;
+# implicitly uses TFBS::DB
+@ISA= qw 'Bio::Root::Root';
+
+
+use constant DEFAULT_MIN_IC => 10;
+
+sub init  {
+    my ($self, $db, $rel_cgi_bin_dir) = @_;
+    $self->throw("No valid database object passed to TFpicker.")
+        unless ref($db) =~ /TFBS::DB/;
+    $self->dbh($db);
+    $self->rel_cgi_bin_dir($rel_cgi_bin_dir);
+    return $self;
+}
+
+
+sub class_table  {
+    my ($self) = @_;
+    my ($table, $listtable);
+    my (@tablecells, @listtablecells);
+    my @classes = $self->dbh->_get_class_list();
+
+    # Title
+
+
+    # Cells
+
+    foreach my $class (@classes)   {
+	my @names;
+	my $listcell = checkbox(-name=>"classes", -value=>$class,
+			    -label=>$class);
+	push @listtablecells, $listcell;
+	my $set =  $self->dbh->get_MatrixSet(-classes => [$class]);
+	$set->sort_by_name();
+	while (my $Matrix = $set->next)  {
+	    push @names, $Matrix->{name};
+	}
+	my $cell = scrolling_list(-name     => "names",
+				-value    => [@names],
+				-size     => 4,
+				-multiple => 1);
+	push @tablecells, $cell;
+    }
+
+    # Fill in the last column and format the listtable
+
+    while (scalar(@listtablecells) % 4)  {
+	push @listtablecells, "&nbsp;";
+    }
+    my $nrows = scalar(@listtablecells) /4;
+    foreach (0..$nrows-1)  {
+	$listtable .= Tr(td({-width=>"25%",},
+			    [font({-size=>"-1"}, $listtablecells[$_]),
+			     font({-size=>"-1"}, $listtablecells[$nrows+$_]),
+			     font({-size=>"-1"}, $listtablecells[2*$nrows+$_]),
+			     font({-size=>"-1"}, $listtablecells[3*$nrows+$_])
+			    ]));
+    }
+    $listtable = table({-width=>"100%",
+			-bgcolor=>"#ffffcc",
+			-border=>0,
+			-cellspacing=>0,
+			-cellpading=>0}, $listtable);
+
+    $table =
+	Tr(td({-colspan=>4, -bgcolor=>"#ffffcc"},
+	      p(font({-size=>"+1"},
+		     b(i("Select transcription factor classes")))))).
+	Tr(td({-colspan=>4, -height=>"5"})).
+        Tr(td({-colspan=>4, -bgcolor=>"#ffffcc"}, $listtable)).
+	Tr(td({-colspan=>4},
+	      checkbox(-name=>"min_ic_set",
+		       -value=>1,
+		       -label=>" with a minimum specificity of ",
+		       -checked=>1, -override=>1),
+	      textfield(-name=>"min_ic",
+			-value=>DEFAULT_MIN_IC,
+			-size=>2),
+	      " bits")).
+        Tr(td({-colspan=>4, -bgcolor=>"#ffffcc", -height=>24},
+              submit(-onClick=>"document.selectionform.sel_type.value='classes'; ".
+                               "return true;",
+                     -value=>"Analyze the sequence(s) with selected TF classes"))).
+                         # Tr(td({-colspan=>4, -height=>"5"})).
+	Tr(td({-colspan=>4, -height=>34},
+	      (b(i("OR")))));
+    $table  .= Tr(td{-colspan=>4, -bgcolor=>"#ffffcc"},
+		  p(font({-size=>"+1"},
+			 b(i('Select individual TFs by name'))))).
+	       Tr(td({-colspan=>4, -height=>"5"}));
+	    ;
+
+    # Fill in the last row and format the table
+
+    while (scalar(@classes) % 4) {
+	push @classes, "&nbsp;";
+	push @tablecells, "&nbsp;";
+    }
+
+    while (scalar(@classes))  {
+	$table .= Tr(td({-bgcolor=>"#ffffcc", -width=>"25%",
+			 -style=>"font-size:10pt; font-style:italic"},
+			[splice(@classes,0,4)]));
+	$table .= Tr(td({-bgcolor=>"white", -width=>"25%"},
+			[splice(@tablecells,0,4)]));
+	$table .= Tr(td({-bgcolor=>"white", -colspan=>4},"&nbsp;"));
+    }
+    # print STDERR $table;
+    return table ({-width=>"100%"}, $table);
+}
+
+sub user_matrix_table  {
+    my ($self) = @_;
+    my $table;
+    my @tablerows;
+    push @tablerows, td("Enter or paste your own matrix of choice");
+    push @tablerows, td("Matrix name: ".textfield(-name=>"matrixname",
+						  -value=>"MyProfile")) .td("<font size=2><i>Example (rows= base counts of A,C, T, G, colunms=position in the site</font></i>");
+    push @tablerows, td(textarea(-name => "matrixstring",
+				  -rows => 4,
+				  -cols =>50
+				 )). td("<pre>1    5   7   2  7  7\n10   0   4   0  2  1\n0    0   1   0  2  3\n1    7   0   10 1  1 </pre>");
+    push @tablerows, td("Matrix type: ".
+			radio_group(-name=>"matrixtype",
+				    -values=>['PFM', 'PWM'],
+				    -labels=>{PFM=>'Raw counts matrix',
+					      PWM=>'Position weight matrix'})
+
+			);
+    $table = Tr(\@tablerows);
+
+
+
+    return table ({-width=>"100%"}, $table);
+
+}
+
+sub name_table  {
+    my ($self) = @_;
+    my $table;
+    my @tablecells;
+    my @namelist = sort { uc($a) cmp uc($b) } $self->dbh->_get_name_list();
+
+    # Title
+
+    $table = Tr(td({-colspan=>4, -bgcolor=>"#ffffcc"},
+		    p(font({-size=>"+1"},
+		       b(i("Select ALL transcription factor profiles")))))).
+	     Tr(td({-colspan=>4, -height=>"5"})).
+	     Tr(td({-colspan=>4},
+		    checkbox(-name=>"min_ic_set",
+			     -value=>1,
+			     -label=>" with a minimum specificity of ",
+			     -checked=>1, -override=>1),
+		    textfield(-name=>"min_ic",
+			      -value=>DEFAULT_MIN_IC,
+			      -size=>2),
+		    " bits")).
+              Tr(td({-colspan=>4, -bgcolor=>"#ffffcc", -height=>24},
+                    submit(-onClick=>"document.selectionform.sel_type.value='all';  return true;",
+                           -value=>"Analyze the sequence(s) with all TFs"))).
+             # Tr(td({-colspan=>4, -height=>"5"})).
+	      Tr(td({-colspan=>4, -height=>34},
+		    (b(i("OR")))));
+    $table  .= Tr(td{-colspan=>4, -bgcolor=>"#ffffcc"},
+		  p(font({-size=>"+1"},
+			 b(i('Select individual TFs by name'))))).
+	       Tr(td({-colspan=>4, -height=>"5"}));
+
+
+
+    # Cells
+    my @lettersets;
+    my $letterset = "";
+    my @names;
+    foreach my $letter ('A'..'Z')   {
+	$letterset .= $letter;
+	my $cell = "";
+	#my $cell = checkbox(-name=>"species", -value=>$species,
+	#		    -label=>"select all").br;
+
+	while ($letter eq uc(substr($namelist[0],0,1)))  {
+	    print STDERR "$letterset $namelist[0]\n";
+	    push @names, (my $name = shift @namelist);
+	    last unless @namelist;
+	}
+	if ((scalar (@names) >= 10) or (scalar (@names) and !@namelist)) {
+	    $cell .= scrolling_list(-name     => "names",
+				    -value    => [@names],
+				    -size     => 4,
+				    -multiple => 1);
+	    push @tablecells, $cell;
+	    push @lettersets, $letterset;
+	    $letterset = '';
+	    @names = ();
+	}
+	last unless @namelist;
+    }
+
+    # Fill in the last row
+
+    while (scalar(@lettersets) % 4) {
+	push @lettersets, "&nbsp;";
+	push @tablecells, "&nbsp;";
+    }
+
+    # Format the table
+    while (scalar(@lettersets))  {
+	$table .= Tr(td({-bgcolor=>"#ffffcc", -width=>"25%",
+			 -style=>"font-size:11pt; font-style:italic"},
+			[splice(@lettersets,0,4)]));
+	$table .= Tr(td({-bgcolor=>"white", -width=>"25%"},
+			[splice(@tablecells,0,4)]));
+	$table .= Tr(td({-bgcolor=>"white", -colspan=>4},"&nbsp;"));
+    }
+    return table ({-width=>"100%"}, $table);
+
+}
+
+
+sub species_table  {
+    my $table;
+    my ($self) = @_;
+    my @tablecells;
+    my @sysgroups = $self->dbh->_get_sysgroup_list();
+    my @species = $self->dbh->_get_species_list();
+
+    # sysgroup row
+
+    my $sysgroupcells = "";
+    my $cell_width = (int(100/scalar(@sysgroups)))."%";
+    foreach my $sysgroup (@sysgroups)  {
+	my $label = " " . uc(substr($sysgroup,0,1)). substr($sysgroup,1)."s";
+
+	$sysgroupcells .= td({-bgcolor=>"#ffffcc", -align=>"center",
+			      -width=>$cell_width},
+			     checkbox(-name=>"sysgroups", -value=>$sysgroup,
+				      -label=>$label, -override=>1));
+    }
+
+    $table = Tr(td({-colspan=>4, -bgcolor=>"#ffffcc"},
+		    p(font({-size=>"+1"},
+		       b(i("Select all TFs from ".
+			   "the taxonomic supergroup(s)")))))).
+	Tr(td({-colspan=>4, -height=>"5"})).
+	     Tr(td({-colspan=>4, -height=>47},
+		 table({-width=>"100%"},Tr($sysgroupcells)))).
+	     Tr(td({-colspan=>4},
+		    checkbox(-name=>"min_ic_set",
+			     -checked=>1, -value=>1,
+			     -label=>" with a minimum specificity of "),
+		    textfield(-name=>"min_ic",
+			      -value=>DEFAULT_MIN_IC,
+			      -size=>2),
+		    " bits")).
+              Tr(td({-colspan=>4, -bgcolor=>"#ffffcc", -height=>24},
+                    submit(-onClick=>"document.selectionform.sel_type.value='sysgroups'; return true;",
+                           -value=>"Analyze the sequence(s) with TFs from selected supergroups"))).
+             # Tr(td({-colspan=>4, -height=>"5"})).
+	     Tr(td({-colspan=>4, -height=>47})).
+	      Tr(td({-colspan=>4, -height=>34},
+		    (b(i("OR")))));
+    $table  .= Tr(td{-colspan=>4, -bgcolor=>"#ffffcc"},
+		  p(font({-size=>"+1"},
+			 b(i('Select individual TFs by name'))))).
+	       Tr(td({-colspan=>4, -height=>"5"}));
+
+    # Cells
+
+    foreach my $species (@species)   {
+		my @names;
+		my $cell = ""; #checkbox(-name=>"species", -value=>$species,
+				   #     -label=>"select all").br;
+		my $set =  $self->dbh->get_MatrixSet(-species => [$species.""]);
+		$set->sort_by_name();
+		while (my $Matrix = $set->next)  {
+			push @names, $Matrix->{name};
+		}
+		$cell .= scrolling_list(-name     => "names",
+					-value    => [@names],
+					-size     => 4,
+					-multiple => 1,
+					-style    => "text-size:9pt");
+		push @tablecells, $cell;
+    }
+
+    # Fill in the last row
+
+    while (scalar(@species) % 4) {
+		push @species, "&nbsp;";
+		push @tablecells, "&nbsp;";
+    }
+
+    # Format the table
+    while (scalar(@species))  {
+		$table .= Tr(td({-bgcolor=>"#ffffcc", -width=>"25%",
+				 -style=>"font-size:11pt; font-style:italic"},
+				[splice(@species,0,4)]));
+		$table .= Tr(td({-bgcolor=>"white", -width=>"25%"},
+				[splice(@tablecells,0,4)]));
+		$table .= Tr(td({-bgcolor=>"white", -colspan=>4},"&nbsp;"));
+    }
+    return table ({-width=>"100%"}, $table);
+
+}
+
+
+sub specificity_table  {
+
+}
+
+sub upload_list {
+	my ($self) = @_;
+
+	my $table = table(Tr(td({-width=>263, -bgcolor=>"#FFFFCC"},
+							b(i(font({-size=>2, -face=>"Arial, Helvetica, sans-serif"},
+									 "Upload previously saved list of profiles"))))),
+					  Tr(td(input{-type=>"file", -name=>"tf_list_fh"}))
+					);
+	return $table;
+}
+
+
+1;
+
+
+
+
+
+
+
+
+
+
+
+
+

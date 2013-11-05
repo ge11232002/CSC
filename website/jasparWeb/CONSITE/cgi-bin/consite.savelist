@@ -1,0 +1,18 @@
+#!/usr/bin/env perl
+
+# a CGI script that sends list of transcription factors as octet stream
+
+use strict;
+use CGI qw(:standard);
+
+my @names = param('names');
+
+if (@names)  {
+    print header('application/octet-stream');
+    print join("\n", @names), "\n";
+}
+else {
+    print header, start_html;
+    print "No names selected. Press BACK button on your browser to return to selection.";
+    print end_html;
+}

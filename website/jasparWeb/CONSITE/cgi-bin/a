@@ -1,0 +1,15 @@
+#!/usr/bin/perl -w
+#-d:ptkdb
+
+BEGIN {$ENV{DISPLAY}="lorien.cgb.ki.se:0.0";
+        $ENV{PATH} = $ENV{PATH}.":/usr/local/bin"};
+#BEGIN: { $ENV{'BLASTDIR'}     = "/Programs/ncbi-blast";
+#	 $ENV{'BLASTDATADIR'} = "/Programs/ncbi-blast/data";
+#	 $ENV{'BLASTMAT'} = "/Programs/ncbi-blast/data";
+#     };
+use CONSITE_Interface;
+use Bio::Tools::Run::StandAloneBlast;
+$Bio::Tools::Run::StandAloneBlast::DATADIR = "/Programs/ncbi-blast/data";
+
+my $app = CONSITE_Interface->new();
+$app->run;

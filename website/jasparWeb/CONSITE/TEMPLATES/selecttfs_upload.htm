@@ -1,0 +1,29 @@
+ <div align="center" valign="top">
+    <p><img src="<TMPL_VAR NAME="IMAGE_DIR">/select_tfs.PNG" width="317" height="47"> </p>
+    <p><i><font size="2" face="Arial, Helvetica, sans-serif">Select a set
+      of transcription factor profiles to scan the sequence(s)</font></i></font>
+    </p>
+    <form name="selectionform"
+    action="<TMPL_VAR NAME="REL_CGI_BIN_DIR">/consite" method="POST">
+    <TMPL_VAR NAME="HIDDEN">
+    <input type="hidden" name="sel_type" value="names">
+    <table width="600" border="0" cellspacing="1" cellpadding="1" valign="top">
+      <tr>
+        <td width="100%" valign="top" colspan=2>
+	<TMPL_VAR NAME="SELECTION_TABLE">
+        </td>
+      </tr>
+      <tr>
+        <td width="50%" valign="center" align="left" bgcolor="#ffffcc">
+        <input type="submit" onClick ="document.selectionform.sel_type.value='upload_list'; return true;" value="Analyze the sequence(s) with TFs from the list">
+        </td>
+        <td width="50%" valign="center" align="right" bgcolor="#ffffcc">
+            &nbsp;
+        </td>
+
+      </tr>
+    </table>
+    </form>
+    <p>&nbsp;</p>
+    <p align="center">&nbsp;</p>
+  </div>

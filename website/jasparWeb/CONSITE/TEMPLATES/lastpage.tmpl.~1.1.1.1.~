@@ -1,0 +1,103 @@
+<html>
+<head>
+<title><TMPL_VAR NAME=TITLE></title>
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+</head>
+
+<body bgcolor="#FFFFFF" valign="center">
+<div align="left" valign="center"> 
+  <table width="100%" cellspacing="1" cellpadding="1" name="last-table" border="1">
+    <tr> 
+      <td width="13%" nowrap bgcolor="#FFFFFF" align="left" valign="top"> 
+        <div align="left"><b>Score</b></div>
+      </td>
+      <td colspan="3" nowrap><b>Position</b></td>
+      <td width="52%"><b>Sequence</b></td>
+    </tr>
+    <tr> 
+      <td width="13%" nowrap bgcolor="#FFFFFF" align="left" valign="top"> 
+        <div align="left"><TMPL_VAR NAME=SCORE_1></div>
+      </td>
+      <td colspan="3" nowrap><TMPL_VAR NAME=POS_1></td>
+      <td width="52%"><TMPL_VAR NAME=SEQ_1></td>
+    </tr>
+    <tr> 
+      <td width="13%" nowrap bgcolor="#FFFFFF" align="left" valign="top"> 
+        <div align="left"><TMPL_VAR NAME=SCORE_2></div>
+      </td>
+      <td colspan="3" nowrap><TMPL_VAR NAME=POS_2></td>
+      <td width="52%"><TMPL_VAR NAME=SEQ_2></td>
+    </tr>
+  </table>
+  <table width="400" cellspacing="1" cellpadding="1" name="last-table" border="0">
+    <tr> 
+      <td width="13%" nowrap bgcolor="#FFFFFF" height="18" align="left" valign="top"> 
+        <p align="left"><b>ID</b></p>
+      </td>
+      <td bgcolor="#FFFFCC" colspan="3" height="18" nowrap><TMPL_VAR NAME=ID></td>
+      <td rowspan="5" width="52%" >
+        <div align="center"><img src="<TMPL_VAR NAME="REL_TMP_DIR">/<TMPL_VAR NAME="LOGO">"  width=<TMPL_VAR NAME=XSIZE> height="190" ></div>
+      </td>
+    </tr>
+    <tr> 
+      <td width="13%" nowrap bgcolor="#FFFFFF" align="left" valign="top"> 
+        <div align="left"><b>Name</b></div>
+      </td>
+      <td bgcolor="#FFFFCC" colspan="3" nowrap><TMPL_VAR NAME=NAME></td>
+    </tr>
+    <tr> 
+      <td width="13%" nowrap bgcolor="#FFFFFF" align="left" valign="top"> 
+        <div align="left"><b>Class</b></div>
+      </td>
+      <td bgcolor="#FFFFCC" colspan="3" nowrap><TMPL_VAR NAME=CLASS></td>
+    </tr>
+    <tr> 
+      <td width="13%" nowrap bgcolor="#FFFFFF" height="24" align="left" valign="top"> 
+        <p align="left"><b>Species</b></p>
+      </td>
+      <td bgcolor="#FFFFCC" colspan="3" height="24" nowrap><TMPL_VAR NAME=SPECIES></td>
+    </tr>
+    <tr> 
+      <td width="13%" rowspan="2" nowrap bgcolor="#FFFFFF" align="left" valign="top"> 
+        <div align="left"><b>Sequence</b></div>
+      </td>
+      <td rowspan="2" colspan="3" bgcolor="#FFFFCC" nowrap><TMPL_VAR NAME=SEQ_ACC></td>
+
+    </tr>
+    <tr> </tr>
+    <tr> 
+      <td width="13%" nowrap bgcolor="#FFFFFF" align="left" valign="top"><b>Litt 
+        ref </b></td>
+      <td bgcolor="#FFFFCC" colspan="3" nowrap><TMPL_VAR NAME=LITT_REF></td>
+      <td nowrap rowspan="3" width="52%"> 
+        <div align="center"> 
+          <div align="left"> 
+            <pre><LEFT><font face="Courier New, Courier, mono"><TMPL_VAR NAME=STRING></font></LEFT></pre>
+          </div>
+        </div>
+      </td>
+    </tr>
+    <tr> 
+      <td width="13%" nowrap bgcolor="#FFFFFF" align="left" valign="top"> 
+        <div align="left"><b>Medline</b></div>
+      </td>
+      
+      
+     
+      <td bgcolor="#FFFFCC" colspan="3" nowrap><A HREF="http://www.ncbi.nlm.nih.gov/entrez/query.fcgi?cmd=Retrieve&db=PubMed&list_uids=<TMPL_VAR NAME=MEDLINE>&dopt=Abstract"> <TMPL_VAR NAME=MEDLINE> </A></td>
+    
+    
+    </tr>
+    
+    
+    
+    <tr> 
+      <td width="13%" nowrap bgcolor="#FFFFFF" height="17" align="left" valign="top"> 
+        <div align="left"><b>Genelynx</b></div>
+      </td>
+      <td bgcolor="#FFFFCC" colspan="3" height="17" nowrap>A NUMBER</td>
+    </tr>
+  </table>
+</div>
+</body>
+</html>

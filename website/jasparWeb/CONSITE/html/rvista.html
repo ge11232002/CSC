@@ -1,0 +1,102 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"><html><head><title>ConSIte: Additional Material</title>
+  
+  <meta http-equiv="content-type" content="text/html; charset=ISO-8859-1"></head><body>
+<table width="900" border="0">
+
+  <tbody>
+  
+  
+  
+  
+  
+  
+  
+  <tr> 
+    <td colspan="4"> 
+      <p><font size="6"><b><i><font face="Arial, Helvetica, sans-serif">rVISTA 
+        -ConSite comparison</font></i></b></font></p>
+      <p>&nbsp;</p>
+      <p><font size="5"><b><i><font face="Arial, Helvetica, sans-serif">Test setup 
+        </font></i></b></font></p>
+      <p><a href="http://pga.lbl.gov/rvista.html">rVISTA</a> was subject to the 
+        same testing procedure and data as ConSite (described in manuscript).</p>
+      <p>Worth consideration is that rVISTA is given several advantages during 
+        this test:</p>
+      <p><i>Circularity</i></p>
+      <p>It is not known (nor possible to find out) whether the TransFac matrix collection is independent 
+        from the sites we search for. Thereby, rVISTA has an advantage due to possible circularity in the testing procedure.</p>
+      <p><i>Redundancy</i></p>
+      <p>In addition, rVISTA includes a redundant matrix collection, i.e. they 
+        have multiple models for several of the transcription factors. In our 
+        experience with the TransFac database, many of these models are overly 
+        specific (and sensitive to circularity problems) as they are built with 
+        only a few sites</p>
+      <p><i>Evolutionary distance measurements</i></p>
+      <p>The available test sets are ill-suited to explore greater evolutionary 
+        distances. With greater evolutionary distances, the alignment algorithms 
+        probably favor ConSite even further, as VISTA/AVID alignment algorithm is optimized for rapid alignment 
+        of more similar pairs of sequences. ConSite also allows users to submit 
+        alignments from any algorithm through a standard format (ClustalW), which 
+        makes it more flexible for future improvements in alignment methods.</p>
+      <p>&nbsp;</p>
+      <p><b><i><font color="#000000" size="4" face="Arial, Helvetica, sans-serif">Sensitivity 
+        testing</font></i></b></p>
+      <p>In essence, the sensitivity is measured by analyzing how many of the 
+        known sites in the set that are found using the appropriate models. Since 
+        there is no possibility for users to view matrix models within rVISTA, 
+        identification of appropriatee matrix models was based on matrix names 
+        and biological knowledge.</p>
+      <p><b>At 70% matrix threshold and 70% conservation cutoff, (all other settings 
+        default), ConSite locates 62.5% of the true sites, while rVISTA can 
+        find 52.5%.</b></p>
+      <p>&nbsp;</p>
+      <p><font size="4"><b><i><font face="Arial, Helvetica, sans-serif">Selectivity</font></i></b></font></p>
+      <p>We measure how well the orthologous sequence analysis can filter out 
+        false positives compared to single sequence analysis. The total number 
+        of predictions using respective full matrix collection is used as an approximation 
+        of the number of false positives, since most predicted sites are not biologically 
+        relevant. There is no functionality for single sequence comparison within 
+        the rVISTA system, instead we have aligned two identical sequences and 
+        used that as input. Since rVISTA only uses the other sequence for identifying 
+        regions of conservation, the results should be identical to single sequence 
+        analysis.</p>
+      <p>The total number of predicted sites using orthologous analysis divided 
+        by the same results using a single sequence is used as a measure of the 
+        filtering efficiency. Since this is an internal test, differences in matrix 
+        collection size are not an issue. </p>
+      <p><b>At the same settings as above, the ratio for ConSite is 0.136 (13.6%), implying 
+        that about 87% of the noise is removed in the anlysis.</b></p>
+      <p><b>The corresponding test for rVISTA generates a ratio of 0.166 (16.6%).</b></p>
+      <p>It is also worth pointing out that rVISTA, partly due to the redundancy 
+        and low information content models in their matrix collection generates, 
+        on average, <b>4-5 as many predicted sites</b> as ConSite using any combination of settings.</p>
+      <p><i><b><font face="Arial, Helvetica, sans-serif" size="4">Conclusion</font></b></i></p>
+      <p>Even without taking into account ease of use and functionality,&nbsp; ConSite still outperforms 
+        rVISTA in both sensitivity and selectivity, despite that rVISTA is given 
+        several advantages during the test.</p>
+    </td>
+    <td width="113">&nbsp;</td>
+    <td width="100">&nbsp;</td>
+    <td width="166">&nbsp;</td>
+  </tr>
+</tbody>
+</table>
+
+<p>&nbsp;</p>
+
+<p>&nbsp;</p>
+
+<p>&nbsp;</p>
+
+<p>&nbsp;</p>
+
+<p>&nbsp;</p>
+
+<p>&nbsp;</p>
+
+<p>&nbsp;</p>
+
+<br>
+
+<br>
+</body></html>

@@ -1,0 +1,95 @@
+#!/usr/local/bin/perl -w
+#-d:ptkdb
+
+BEGIN {$ENV{DISPLAY}="lorien.cgb.ki.se:0.0";
+        $ENV{PATH} = $ENV{PATH}.":/usr/local/bin"};
+#BEGIN: { $ENV{'BLASTDIR'}     = "/Programs/ncbi-blast";
+#	 $ENV{'BLASTDATADIR'} = "/Programs/ncbi-blast/data";
+#	 $ENV{'BLASTMAT'} = "/Programs/ncbi-blast/data";
+#     };
+
+use vars qw'%ENV_PARAMS *LOG';
+
+
+use CONSITE_OPT;
+use lib GL_PERLLIB;
+use lib AT_PERLLIB;
+use lib CONSNP_PERLLIB;
+use lib CONSITE_PERLLIB;
+use lib ORCA_LIB;
+
+use ConSNPWeb::Environment;
+use GeneLynx::MySQLdb;
+use AT::DB::GenomeMapping;
+use AT::DB::GenomeAssembly;
+use AT::DB::GenomeAlignment;
+use TFBS::DB::JASPAR2;
+
+
+use CONSITE_Interface;
+use Bio::Tools::Run::StandAloneBlast;
+
+
+
+$Bio::Tools::Run::StandAloneBlast::DATADIR = "/Programs/ncbi-blast/data";
+
+my %spdb = #();
+    (   human => GeneLynx::MySQLdb->connect(-dbname => HUMAN_GENELYNX_DB_NAME,
+                                            -dbuser => HUMAN_GENELYNX_DB_USER,
+                                            -dbpass => HUMAN_GENELYNX_DB_PASS,
+                                            -dbhost => HUMAN_GENELYNX_DB_HOST),
+        mouse => GeneLynx::MySQLdb->connect(-dbname => MOUSE_GENELYNX_DB_NAME,
+                                            -dbuser => MOUSE_GENELYNX_DB_USER,
+                                            -dbpass => MOUSE_GENELYNX_DB_PASS,
+                                            -dbhost => MOUSE_GENELYNX_DB_HOST)
+    );
+my %mapdb =
+    (   human => AT::DB::GenomeMapping->connect(-dbname => HUMAN_MAPPING_DB_NAME,
+                                                -dbuser => HUMAN_MAPPING_DB_USER,
+                                                -dbpass => HUMAN_MAPPING_DB_PASS,
+                                                -dbhost => HUMAN_MAPPING_DB_HOST),
+        mouse => AT::DB::GenomeMapping->connect(-dbname => MOUSE_MAPPING_DB_NAME,
+                                                -dbuser => MOUSE_MAPPING_DB_USER,
+                                                -dbpass => MOUSE_MAPPING_DB_PASS,
+                                                -dbhost => MOUSE_MAPPING_DB_HOST)
+    );
+
+my %genomedb =
+    (   human =>AT::DB::GenomeAssembly->connect(-dbname => HUMAN_ASSEMBLY_DB_NAME,
+                                                -dbuser => HUMAN_ASSEMBLY_DB_USER,
+                                                -dbpass => HUMAN_ASSEMBLY_DB_PASS,
+                                                -dbhost => HUMAN_ASSEMBLY_DB_HOST),
+        mouse =>AT::DB::GenomeAssembly->connect(-dbname => MOUSE_ASSEMBLY_DB_NAME,
+                                                -dbuser => MOUSE_ASSEMBLY_DB_USER,
+                                                -dbpass => MOUSE_ASSEMBLY_DB_PASS,
+                                                -dbhost => MOUSE_ASSEMBLY_DB_HOST)
+    );
+
+my $aln_db = AT::DB::GenomeAlignment->connect(-dbhost => HUMAN_MAPPING_DB_HOST,
+                                        -dbname => HUMAN_MAPPING_DB_NAME,
+                                        -dbuser => HUMAN_MAPPING_DB_USER,
+                                        -dbpass => HUMAN_MAPPING_DB_PASS
+                                       );
+
+
+my %dbsnp = ();
+
+my $jaspardb = TFBS::DB::JASPAR2->connect("dbi:mysql:".JASPAR_DB_NAME.":".JASPAR_DB_HOST,
+                                            JASPAR_DB_USER,
+                                            JASPAR_DB_PASS);
+
+
+my $env = ConSNPWeb::Environment->new(genelynx_db => \%spdb,
+                                      mapping_db  => \%mapdb,
+                                      genome_db   => \%genomedb,
+                                      dbsnp       => \%dbsnp,
+                                      pattern_db  => $jaspardb,
+                                      alignment_db => $aln_db,
+                                      query       => CGI->new,
+                                      parameters  => \%ENV_PARAMS);
+
+
+
+
+my $app = CONSITE_Interface->new();
+$app->run;

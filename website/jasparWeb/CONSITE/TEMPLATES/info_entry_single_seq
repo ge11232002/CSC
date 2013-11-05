@@ -1,0 +1,224 @@
+
+<body bgcolor="#FFFFFF">
+<div align="center" bgcolor="#FFFFFF"> 
+  <p><img src="<!-- TMPL_VAR NAME="IMAGE_DIR" -->/seqentry.gif" width="188" height="47"> </p>
+  <h5><font face="Arial, Helvetica, sans-serif"><i>Enter two orthologous genomic 
+    sequences and a cDNA (optional) or exon positions (optional)</i></font></h5>
+  <form name="input" enctype="multipart/form-data" action="<TMPL_VAR NAME="WEBSERVER">/cgi-bin/consite" method="POST" >
+  <table width="600" border="0" align="center">
+    <tr> 
+      <td colspan=2  width="600" align="left" valign="top"><hr>
+      <font size="4" face="Arial, Helvetica, sans-serif"><b><i>Sequence#1 </i></b></font><img src="<!-- TMPL_VAR NAME="IMAGE_DIR" -->/seq_line_blue.PNG"</p>
+      </td>
+    </tr>
+    <tr > 
+      <td width="150" align="left" valign="center" bgcolor="#CCFFFF"> 
+         <p align="right"><font size="-1" face="Arial, Helvetica, sans-serif"><i>Sequence name</i></font></p>
+      </td>
+      <td width="76%" valign="center" > 
+          <input type="textfield" name="seq1name" value="Human_IR">
+      </td>
+    <tr> 
+
+    <tr> 
+      <td width="24%" align="left" valign="center" bgcolor="#CCFFFF">
+        <p align="right"><font size="-1" face="Arial, Helvetica, sans-serif"><i>Paste the sequence</i></font></p>
+      </td>
+      <td width="450" bgcolor="#FFFFFF" valign="center"> 
+          <textarea name="seq1" cols="40" rows="4">tcagagatgtccacctgcgccctattcgaggtctccggcgtcttctttggcgtcgtcttt
+gccctttcagaagcgtctgcacatttttccaggtgtcatttctccaacttgaacacaggg
+agcgcactgggcacgcgggcacgtggctgtccccaggggcctggcttgggtctcgcccct
+gggccggggcgcacgcgcgggcgggacatctgggggcgcccacgcgctctgggacgagtg
+tcgctggccaggcccggactgaggaaaggcgagtgagacactactcgcctggggtgcaaa
+atttaagggagtgaaaaaaaaaaaaaaagaaagaaaccaaaaccacctcgagtcaccaaa
+ataaacattttaatgcagtattttttaaaaaatcaacaggaatcctccaaagcccactat
+gaacaaaatagcaaaatggtagagaaaggatctgtgccgctgcgtcgggcctgtggggcg
+cctccgggggtctgaaactggaggagactcggggctgtagggcgcgcggatctggggcgc
+gccctcggtcccggcgcgcccagggcctcccgcgcggggcccggcacagggaggcgggga
+ggcgggcggggcggggcgggaccgggcggcacctccctcccctgcaagctttccctccct
+ctcctgggcctctcccgggcgcagagtcccttcctaggccagatccgcgccgccttttcc
+cgcggcccgcacggggcccagctgacgggccgcgttgtttacgggccggagcagccctct
+ctcccgccgcccgcccgccacccgccagcccaggtgcccgcccgccagtcagctagtccg
+tcggtccgcgcgtccctctgtcccggagcccgcagatcgcgacccagagcgcgcggggcc
+gagagccgagagacagtcccgggcgcagcgcggagctccgggccccgagatcctgggacg
+gggcccgggccgcagcggccggggggtcggggccaccaccgcaagggcctccgctcagta
+tttgtagctggcgaagccgcgcgcgcccttcccggggctgcctctgggccctccccggca
+ggggggctgcggcccgcgggtcgcgggcgtggaagagaaggacgcgcggcccccagcgcc
+tcttgggtggccgcctcggagcatgacccccgcgggccagcgccgcgcgctctgatccga
+ggagaccccgcgctcccgcagccatgggcaccgggggccggcggggagcggcggccgcgc
+cgctgctggtggcggtggccgcgctgctactgggcgccgcgggccacctgtaccccggag
+agggtgagtctgggggcgcgggcgtgggcggggagcgccgcgatggggagaggaccccac
+ccaagccaaaatcgatcccccgcttgtggactgagaaccctccccaggggcggggggcgg
+tggccaggacggtagctcctgcatcgcgtagggggagcgggaagc</textarea>
+      </td>
+    </tr>
+    <tr> 
+      <td width="24%" align="left" valign="center" bgcolor="#CCFFFF">
+        <p align="right"><font size="-1" face="Arial, Helvetica, sans-serif"><i>OR enter valid<br>accession number</i></font></p>
+      </td>
+      <td width="76%" bgcolor="#FFFFFF" valign="center"> 
+          <input type="textfield" name="seq1acc">
+      </td>
+    </tr>
+    <tr> 
+      <td width="24%" align="left" valign="center" bgcolor="#CCFFFF">
+        <p align="right"><font size="-1" face="Arial, Helvetica, sans-serif"><i>OR upload a sequence file</i></font></p>
+      </td>
+      <td width="76%" bgcolor="#FFFFFF" valign="center"> 
+          <input type="file" name="seq1fh">
+      </td>
+    </tr>
+  <TMPL_VAR NAME="HIDDEN">
+
+
+    <tr> 
+      <td colspan=2  align="left" valign="top"><br><hr>
+      <font size="4" face="Arial, Helvetica, sans-serif"><b><i>Sequence#2 </i></b></font><img src="<!-- TMPL_VAR NAME="IMAGE_DIR" -->/seq_line_green.PNG"</p>
+      </td>
+    </tr>
+    <tr> 
+      <td width="24%" align="left" valign="center" bgcolor="#CCFFCC">
+        <p align="right"><font size="-1" face="Arial, Helvetica, sans-serif"><i>Sequence name</i></font></p>
+      </td>
+      <td width="76%" bgcolor="#FFFFFF" valign="center"> 
+          <input type="textfield" name="seq1name" value="Mouse_IR">
+      </td>
+    <tr> 
+      <td width="24%" align="left" valign="center" bgcolor="#CCFFCC"> 
+        <p align="right"><font size="-1" face="Arial, Helvetica, sans-serif"><i>Paste the sequence</i></font></p>
+      </td>
+      <td width="76%" bgcolor="#FFFFFF" valign="center"> 
+          <textarea name="seq2" cols="40" rows="4" value=>ccacgggagtcaaaaaaatagtaaaaaggagtaaagaaagacaaaatgtgcttggttgaa
+tctggcatctagggcatattggggtgtttatgtcctggggtatctggcggcatttccaga
+ctttaaaattgttatttcggggtaatttggggtgtctcgctctggcggagatctagagtg
+tgctccagacctttaaattggaacctcggtgttacttgtgtttgctgcagtcaggagggg
+acctgggggcgtccctaggcttttaaactggaacctcaggcctgtttagtggttttcgag
+tcaggcggggatctggggacccctaggttttaaaatcggaactttgggactctttggggg
+cgttcgtgtcaggtgcggatatgggcagctccggacgtttgacaggtgagtcttagagtt
+gtttgggtgtttatgttacactggtatctgagaacgcttacaagcttttaaatcgtaatc
+tttctaagccagcagttcggggtgttgggattggaagaatctgaagtgagcctcgggtct
+ctgaagttgcgggttttacggggcaagggggaaaggggccgaggaggcgaggaggcgagg
+aggcgtggcgttgccagctctggccacgcctccccgagctctgctggctttctccccctc
+cccccccagcgggcctcactggagcgcacagtcccttccctgtcttaatccgcgccacct
+tttcccttggcccgcgcgggcccagctgacgggctgcgttgtttacgggctggagtcgag
+ccctagctcccgccgccaccaccagcccaggtgccctccagtgcgcgcgtccctctgtct
+cagactccacacaacgcgacccacccagagctgcacggagggcagaagcaggagacccgg
+acaggagacgcaccgcggtgagctctggactctgggattgcgggcacgggaccgggcctg
+ggtgacctgcgggccgcgccacggtgttgcttgcggccgaggcctctgtgctcttcccgg
+gactgtccccagggccctctaggctggagagctgcggcctgtgagccacgggcgtggaag
+agaaggacgtgcggccccgagcgcctctccagagaccttctcacggagtatgtccccagt
+aggccggcgtggcgtgctctgatcgccggggtcccagcactcctactgctatgggcttcg
+ggagaggatgtgagacgacggctgtgccattgctggtggccgtggccgcgttgctggtgg
+gcacagccggccacctgtaccctggagagggtaagtctgg</textarea>
+      </td>
+    </tr>
+    <tr> 
+      <td width="24%" align="left" valign="center" bgcolor="#CCFFCC">
+        <p align="right"><font size="-1" face="Arial, Helvetica, sans-serif"><i>OR enter valid<br>accession number</i></font></p>
+      </td>
+      <td width="76%" bgcolor="#FFFFFF" valign="center"> 
+          <input type="textfield" name="seq2acc">
+      </td>
+    </tr>
+    <tr> 
+      <td width="24%" align="left" valign="center" bgcolor="#CCFFCC">
+        <p align="right"><font size="-1" face="Arial, Helvetica, sans-serif"><i>OR upload a sequence file</i></font></p>
+      </td>
+      <td width="76%" bgcolor="#FFFFFF" valign="center"> 
+          <input type="file" name="seq2fh">
+      </td>
+    </tr>
+    <tr> 
+      <td colspan=2  align="left" valign="top"><br><hr>
+      <font size="4" face="Arial, Helvetica, sans-serif"><b><i>cDNA (optional)</i></b></font></p>
+      </td>
+    </tr>
+    <tr> 
+      <td width="24%" align="left" valign="center">
+        <p align="right"><font size="-1" face="Arial, Helvetica, sans-serif"><i>Sequence name</i></font></p>
+      </td>
+      <td width="76%" bgcolor="#FFFFFF" valign="center"> 
+          <input type="textfield" name="seq3name" value="cDNA">
+      </td>
+    <tr> 
+    <tr> 
+      <td width="24%" align="right" valign="top"> 
+        <p align="right"><font size="-1" face="Arial, Helvetica, sans-serif"><i>Paste the sequence</i></font></p>
+      </td>
+      <td width="76%" bgcolor="#FFFFFF"> 
+          <textarea name="seq3" cols="40" rows="3">GAGAAGGACGCGCGGCCCCCAGCGCTCTTGGGGGCCGCCTCGGAGCATGACCCCCGCGGGCCAGCGCCGC
+GCGCCTGATCCGAGGAGACCCCGCGCTCCCGCAGCCATGGGCACCGGGGGCCGGCGGGGGGCGGCGGCCG
+CGCCGCTGCTGGTGGCGGTGGCCGCGCTGCTACTGGGCGCCGCGGGCCACCTGTACCCCGGAGAGGTGTG
+TCCCGGCATGGATATCCGGAACAACCTCACTAGGTTGCATGAGCTGGAGAATTGCTCTGTCATCGAAGGA
+CACTTGCAGATACTCTTGATGTTCAAAACGAGGCCCGAAGATTTCCGAGACCTCAGTTTCCCCAAACTCA
+TCATGATCACTGATTACTTGCTGCTCTTCCGGGTCTATGGGCTCGAGAGCCTGAAGGACCTGTTCCCCAA
+CCTCACGGTCATCCGGGGATCACGACTGTTCTTTAACTACGCGCTGGTCATCTTCGAGATGGTTCACCTC
+AAGGAACTCGGCCTCTACAACCTGATGAACATCACCCGGGGTTCTGTCCGCATCGAGAAGAACAATGAGC
+TCTGTTACTTGGCCACTATCGACTGGTCCCGTATCCTGGATTCCGTGGAGGATAATCACATCGTGTTGAA
+CAAAGATGACAACGAGGAGTGTGGAGACATCTGTCCGGGTACCGCGAAGGGCAAGACCAACTGCCCCGCC
+ACCGTCATCAACGGGCAGTTTGTCGAACGATGTTGGACTCATAGTCACTGCCAGAAAGTTTGCCCGACCA
+TCTGTAAGTCACACGGCTGCACCGCCGAAGGCCTCTGTTGCCACAGCGAGTGCCTGGGCAACTGTTCTCA
+GCCCGACGACCCCACCAAGTGCGTGGCCTGCCGCAACTTCTACCTGGACGGCAGGTGTGTGGAGACCTGC
+CCGCCCCCGTACTACCACTTCCAGGACTGGCGCTGTGTGAACTTCAGCTTCTGCCAGGACCTGCACCACA
+AATGCAAGAACTCGCGGAGGCAGGGCTGCCACCAATACGTCATTCACAACAACAAGTGCATCCCTGAGTG
+TCCCTCCGGGTACACGATGAATTCCAGCAACTTGCTGTGCACCCCATGCCTGGGTCCCTGTCCCAAGGTG
+TGCCACCTCCTAGAAGGCGAGAAGACCATCGACTCGGTGACGTCTGCCCAGGAGCTCCGAGGATGCACCG
+TCATCAACGGGAGTCTGATCATCAACATTCGAGGAGGCAACAATCTGGCAGCTGAGCTAGAAGCCAACCT
+CGGCCTCATTGAAGAAATTTCAGGGTATCTAAAAATCCGCCGATCCTACGCTCTGGTGTCACTTTCCTTC
+TTCCGGAAGTTACGTCTGATTCGAGGAGAGACCTTGGAAATTGGGAACTACTCCTTCTATGCCTTGGACA
+ACCAGAACCTAAGGCAGCTCTGGGACTGGAGCAAACACAACCTCACCACCACTCAGGGGAAACTCTTCTT
+CCACTATAACCCCAAACTCTGCTTGTCAGAAATCCACAAGATGGAAGAAGTTTCAGGAACCAAGGGGCGC
+CAGGAGAGAAACGACATTGCCCTGAAGACCAATGGGGACAAGGCATCCTGTGAAAATGAGTTACTTAAAT
+TTTCTTACATTCGGACATCTTTTGACAAGATCTTGCTGAGATGGGAGCCGTACTGGCCCCCCGACTTCCG
+AGACCTCTTGGGGTTCATGCTGTTCTACAAAGAGGCCCCTTATCAGAATGTGACGGAGTTCGATGGGCAG
+GATGCGTGTGGTTCCAACAGTTGGACGGTGGTAGACATTGACCCACCCCTGAGGTCCAACGACCCCAAAT
+CACAGAACCACCCAGGGTGGCTGATGCGGGGTCTCAAGCCCTGGACCCAGTATGCCATCTTTGTGAAGAC
+CCTGGTCACCTTTTCGGATGAACGCCGGACCTATGGGGCCAAGAGTGACATCATTTATGTCCAGACAGAT
+GCCACCAACCCCTCTGTGCCCCTGGATCCAATCTCAGTGTCTAACTCATCATCCCAGATTATTCTGAAGT
+GGAAACCACCCTCCGACCCCAATGGCAACATCACCCACTACCTGGTTTTCTGGGAGAGGCAGGCGGAAGA
+</textarea>
+      </td>
+    </tr>
+    <tr> 
+      <td width="24%" align="right" valign="top"><font size="-1" face="Arial, Helvetica, sans-serif"><i>OR enter valid<br>accession number</i></font></td>
+      <td width="76%" bgcolor="#FFFFFF"> 
+          <input type="seq3acc" name="file3">
+      </td>
+    </tr>
+    <tr> 
+      <td width="24%" align="right" valign="top"><font size="-1" face="Arial, Helvetica, sans-serif"><i>OR upload a sequence file</i></font></td>
+      <td width="76%" bgcolor="#FFFFFF"> 
+          <input type="file" name="seq3fh">
+      </td>
+    </tr>
+    <tr> 
+      <td colspan=2   width="100%"align="left" valign="top"><br><hr>
+      <font size="4" face="Arial, Helvetica, sans-serif"><b><i>Exon positions (optional)</i></b></font></p>
+      </td>
+    </tr>
+    <tr> 
+      <td width="24%" align="left" valign="top"> 
+        <div align="right"><font size="-1" face="Arial, Helvetica, sans-serif"><i>Upload a file of exon positions</i></font></div>
+      </td>
+      <td width="76%" bgcolor="#FFFFFF"> 
+        <input type="file" name="exonfh">
+      </td>
+    </tr>
+    <tr>
+      <td width="24%" align="left" valign="top">&nbsp;</td>
+      <td width="76%" bgcolor="#FFFFFF">&nbsp;</td>
+    </tr>
+    <tr> 
+      <td width="100%" align="center" valign="top" colspan=2> <br><hr>
+          <input type="submit" name="submit" value="Proceed to transcription factor selection">
+      </td>
+    </tr>
+    <tr> 
+      <td width="24%" align="left" valign="top">&nbsp;</td>
+      <td width="76%" bgcolor="#FFFFFF">&nbsp;</td>
+    </tr>
+  </table>
+  </form>
+  <p align="left">&nbsp;</p>
+  <p align="center">&nbsp;</p>
+</div>

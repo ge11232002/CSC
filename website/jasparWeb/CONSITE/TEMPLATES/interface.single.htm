@@ -1,0 +1,195 @@
+<script language="JavaScript">
+<!--
+function MM_swapImgRestore() { //v3.0
+  var i,x,a=document.MM_sr; for(i=0;a&&i<a.length&&(x=a[i])&&x.oSrc;i++) x.src=x.oSrc;
+}
+
+function MM_preloadImages() { //v3.0
+  var d=document; if(d.images){ if(!d.MM_p) d.MM_p=new Array();
+    var i,j=d.MM_p.length,a=MM_preloadImages.arguments; for(i=0; i<a.length; i++)
+    if (a[i].indexOf("#")!=0){ d.MM_p[j]=new Image; d.MM_p[j++].src=a[i];}}
+}
+
+function MM_findObj(n, d) { //v3.0
+  var p,i,x;  if(!d) d=document; if((p=n.indexOf("?"))>0&&parent.frames.length) {
+    d=parent.frames[n.substring(p+1)].document; n=n.substring(0,p);}
+  if(!(x=d[n])&&d.all) x=d.all[n]; for (i=0;!x&&i<d.forms.length;i++) x=d.forms[i][n];
+  for(i=0;!x&&d.layers&&i<d.layers.length;i++) x=MM_findObj(n,d.layers[i].document); return x;
+}
+
+function MM_swapImage() { //v3.0
+  var i,j=0,x,a=MM_swapImage.arguments; document.MM_sr=new Array; for(i=0;i<(a.length-2);i+=3)
+   if ((x=MM_findObj(a[i]))!=null){document.MM_sr[j++]=x; if(!x.oSrc) x.oSrc=x.src; x.src=a[i+2];}
+}
+//-->
+</script>
+
+<table width="175" border="0" height="300">
+
+  <form name="modeform" action="<TMPL_VAR NAME="REL_CGI_BIN_DIR">/consite" method="POST">
+<tr>
+ <td align="center"><img src="<TMPL_VAR NAME='IMAGE_DIR'>/logga1small.gif" width="103" height="89">  
+      <INPUT type="hidden" name="mode" value="Graphical">
+      <TMPL_VAR NAME="HIDDEN">
+     </td>
+</tr>
+<tr>
+<td> 
+        <div align="center"><a href= "<TMPL_VAR NAME="REL_CGI_BIN_DIR">/consite"
+                           onMouseOut="MM_swapImgRestore()"
+			   onMouseOver="MM_swapImage('Image10','','<TMPL_VAR NAME='IMAGE_DIR'>/home3.gif',1)">
+			   <img name="Image10" border="0" src="<TMPL_VAR NAME='IMAGE_DIR'>/home.gif" width="140" height="30"></a></div>
+      </td>
+
+</tr>
+<tr>
+<td height="30"> <div align="center"><i><b><font face="Arial, Helvetica, sans-serif" size="2">visual options</font></b></i></div>
+ 
+</td>
+
+</tr>
+
+
+  <tr> 
+    <td background="<TMPL_VAR NAME='IMAGE_DIR'>/interface_single_backg.gif" align="left" valign="top" width="175" height="310"> 
+      <table width="175"  background= "" border="0" cellspacing="0" cellpadding="0" name="inner" height="310">
+        <tr> 
+          <td width="14">&nbsp;</td>
+          <td width="56">&nbsp;</td>
+          <td width="35">&nbsp;</td>
+          <td width="51">&nbsp;</td>
+          <td width="19">&nbsp;</td>
+        </tr>
+        <tr> 
+          <td width="14">&nbsp;</td>
+          <td  width="142" colspan="3"> 
+            <div align="center"><font size="2" face="Arial, Helvetica, sans-serif"><b><i>range</i></b></font></div>
+          </td>
+          <td width="19">&nbsp;</td>
+        </tr>
+        <tr> 
+          <td width="14">&nbsp;</td>
+          <td width="56"><font face="Arial, Helvetica, sans-serif" size="1">from</font></td>
+          <td width="86" colspan="2" align="left" valign="middle"> 
+            <div align="left"> 
+              <input type="text" name="start_at" size="6" value="<TMPL_VAR NAME='START_AT'>">
+            </div>
+          </td>
+          <td width="19">&nbsp;</td>
+        </tr>
+        <tr> 
+          <td width="14">&nbsp;</td>
+          <td width="56"><font size="1" face="Arial, Helvetica, sans-serif">to</font></td>
+          <td width="86"colspan="2"> 
+            <div align="left"> 
+              <input type="text" name="end_at" size="6" value="<TMPL_VAR NAME='END_AT'>">
+            </div>
+          </td>
+          <td width="19">&nbsp;</td>
+        </tr>
+        
+       
+        
+        <tr> 
+          <td width="14">&nbsp;</td>
+          <td width="142" colspan="3"> 
+            <div align="center"><font size="2" face="Arial, Helvetica, sans-serif"><b><i>advanced</i></b></font></div>
+          </td>
+          <td width="19">&nbsp;</td>
+        
+        <tr> 
+          <td width="14">&nbsp;</td>
+          <td colspan="3" width="142"><font size="1" face="Arial, Helvetica, sans-serif">TF score cutoff</font></td>
+          <td width="19">&nbsp;</td>
+        </tr>
+        <tr> 
+          <td width="14">&nbsp;</td>
+          <td width="56">&nbsp;</td>
+          <td colspan="2" width="86" >
+	  <input type="text" name="threshold" size="3" value="<TMPL_VAR NAME="THRESHOLD">"><font size="1">%</font>
+	  </td>
+        
+          <td width="19">&nbsp;</td>
+        </tr>
+       
+        <tr> 
+          <td width="14"height="30">&nbsp;</td>
+          <td colspan="3"width="142" height="30"> 
+            <div align="center">
+	    <a href="#" onClick='document.modeform.mode.value="<TMPL_VAR NAME="MODE">"; document.modeform.submit() ; return false;' 
+	onMouseOut="status=''; MM_swapImgRestore()" 
+	onMouseOver="MM_swapImage('Image6','','<TMPL_VAR NAME='IMAGE_DIR'>/redraw2.gif',1)">
+	<img name="Image6" border="0" src="<TMPL_VAR NAME='IMAGE_DIR'>/redraw.gif" width="124" height="30"></a>
+	    
+	    
+	   
+          </td>
+          <td width="19"height="30">&nbsp;</td>
+        </tr>
+	
+	
+        <tr> 
+          <td width="14">&nbsp;</td>
+          <td colspan="3" width="142"> 
+            <div align="center"><font face="Arial, Helvetica, sans-serif" size="2"><b><i>present 
+              as</i></b></font></div>
+          </td>
+          <td width="19">&nbsp;</td>
+        </tr>
+        
+	<TMPL_UNLESS NAME="GRAPHICAL">
+	<tr> 
+          <td width="14" height="30">&nbsp;</td>
+          <td colspan="3" width="142" height="30"> 
+           <div align="center"><a href="#" onMouseOut="MM_swapImgRestore()" 
+	 onClick='document.modeform.mode.value="Graphical"; document.modeform.submit() ; return false;' 
+	onMouseOver="MM_swapImage('Image5','','<TMPL_VAR NAME='IMAGE_DIR'>/graph_view2.gif',1)">
+	<img name="Image5" border="0" src="<TMPL_VAR NAME='IMAGE_DIR'>/graph_view.gif" width="124" height="30"></a></div> 
+	    
+          </td>
+          <td width="19" height="30">&nbsp;</td>
+        </tr>
+        
+	</TMPL_UNLESS>
+	<TMPL_UNLESS NAME="ALIGNMENT">
+	<tr> 
+          <td width="14"  height="30">&nbsp;</td>
+          <td colspan="3" width="142" height="30"> 
+            <div align="center"> <a href="#" onMouseOut="MM_swapImgRestore()" 
+	 onClick='document.modeform.mode.value="Alignment"; document.modeform.submit() ; return false;' 
+	onMouseOver="MM_swapImage('Image3','','<TMPL_VAR NAME='IMAGE_DIR'>/sequence_view2.gif',1)">
+	<img name="Image3" border="0" src="<TMPL_VAR NAME='IMAGE_DIR'>/sequence_view.gif" width="124" height="30"></a></div>
+          </td>
+          <td width="19" height="30">&nbsp;</td>
+        </tr>
+        
+	</TMPL_UNLESS>
+	<TMPL_UNLESS NAME="TABLE">
+	<tr> 
+          <td width="14">&nbsp;</td>
+          <td colspan="3" width="142"> 
+            <div align="center"><a href="#" onMouseOut="MM_swapImgRestore()" 
+	 onClick='document.modeform.mode.value="Table"; document.modeform.submit() ; return false;' 
+	onMouseOver="MM_swapImage('Image4','','<TMPL_VAR NAME='IMAGE_DIR'>/table_view2.gif',1)">
+	<img name="Image4" border="0" src="<TMPL_VAR NAME='IMAGE_DIR'>/table_view.gif" width="124" height="30"></a></div>
+          </td>
+          <td width="19">&nbsp;</td>
+        </tr>
+        
+	</TMPL_UNLESS>
+	
+	
+	
+	
+          <td width="14">&nbsp;</td>
+          <td width="56">&nbsp;</td>
+          <td width="35">&nbsp;</td>
+          <td width="51">&nbsp;</td>
+          <td width="19">&nbsp;</td>
+        </tr>
+        
+      </table>
+    </td>
+  </tr>
+   </FORM>
+</table>

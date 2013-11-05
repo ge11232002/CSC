@@ -1,0 +1,60 @@
+
+<basefont face="Arial, Helvetica, sans-serif">
+  <div align="center">
+    <p><img src="<TMPL_VAR NAME="IMAGE_DIR">/<TMPL_VAR NAME="TITLE_IMG">"> </p>
+    <p><i><font size="2">&nbsp;</font></i></font>
+    </p>
+    <table width="600" border="0" cellspacing="1" cellpadding="1" valign="top">
+      <TMPL_IF NAME="GRAPHALN">
+
+      <tr><td width="100%" valign="top" align="center"> <font size="4" face="Arial, Helvetica, sans-serif"><b>Displayed range</b></font></td>
+      </tr>
+
+      <tr>
+         <td>
+            <div align="center">
+                <TMPL_VAR NAME='GRAPHALN'>
+            </div>
+         </td>
+      </tr>
+      <tr> <td> &nbsp; </td> </tr>
+      </TMPL_IF>
+      <TMPL_IF NAME="GRAPHICAL">
+      <TMPL_IF NAME="SINGLE">
+      <tr>
+        <td width="100%" valign="top">
+      	<TMPL_INCLUDE NAME="graphic_legend_single.htm">
+        </td>
+      </tr>
+      <TMPL_ELSE>
+      <tr>
+        <td width="100%" valign="top">
+      	<TMPL_INCLUDE NAME="graphic_legend.htm">
+        </td>
+      </tr>
+      <tr>
+        <td > &nbsp;
+         </td>
+      </tr>
+      </TMPL_IF>
+      </TMPL_IF>
+      <TMPL_IF NAME="ALIGNMENT">
+      <tr>
+        <td width="100%" valign="top">
+
+	  <TMPL_IF NAME='SINGLE'>
+      	    <TMPL_INCLUDE NAME="alignment_legend_single.htm">
+	  <TMPL_ELSE>
+      	    <TMPL_INCLUDE NAME="alignment_legend.htm">
+	  </TMPL_IF>
+	 </td>
+      </tr>
+     </TMPL_IF>
+
+      <tr>
+        <td width="100%" valign="top">
+	<TMPL_VAR NAME="VIEW_RESULTS">
+        </td>
+      </tr>
+    </table>
+  </div>

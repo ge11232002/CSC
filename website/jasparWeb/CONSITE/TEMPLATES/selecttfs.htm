@@ -1,0 +1,39 @@
+  <div align="center" valign="top">
+    <p><img src="<TMPL_VAR NAME="IMAGE_DIR">/select_tfs.PNG" width="317" height="47"> </p>
+    <p><i><font size="2" face="Arial, Helvetica, sans-serif">Select a set
+      of transcription factor profiles to scan the sequence(s)</font></i></font>
+    </p>
+    <form name="selectionform" enctype="multipart/form-data"
+    action="<TMPL_VAR NAME="REL_CGI_BIN_DIR">/consite" method="POST">
+    <TMPL_VAR NAME="HIDDEN">
+    <input type="hidden" name="sel_type" value="names">
+    <table width="600" border="0" cellspacing="1" cellpadding="1" valign="top">
+      <tr>
+        <td width="100%" valign="top" colspan=2>
+	<TMPL_VAR NAME="SELECTION_TABLE">
+        </td>
+      </tr>
+      <tr>
+       <TMPL_IF  NAME="UPLOAD_LIST">
+        <td width="50%" valign="center" align="left" bgcolor="#ffffcc">
+	    <input type="submit" onClick="document.selectionform.sel_type.value='upload_list'; document.selectionform.action='<TMPL_VAR NAME="REL_CGI_BIN_DIR">/consite'; return true;" value="Analyze the sequence(s) with TFs from the list">
+        </td>
+        <td width="50%" valign="center" align="right" bgcolor="#ffffcc">
+            &nbsp;
+        </td>
+
+       <TMPL_ELSE>
+        <td width="50%" valign="center" align="left" bgcolor="#ffffcc">
+	    <input type="submit" onClick ="document.selectionform.sel_type.value='names'; document.selectionform.action='<TMPL_VAR NAME="REL_CGI_BIN_DIR">/consite'; return true;" value="Analyze the sequence(s) with individually selected TFs">
+        </td>
+        <td width="50%" valign="center" align="right" bgcolor="#ffffcc">
+        <input type="submit"  onMouseover="status=document.selectionform.names.selectedIndex;" onClick ="document.selectionform.action='<TMPL_VAR NAME="REL_CGI_BIN_DIR">/consite.savelist'; return true;" value="Save selection">
+        </td>
+       </TMPL_IF>
+
+      </tr>
+    </table>
+    </form>
+    <p>&nbsp;</p>
+    <p align="center">&nbsp;</p>
+  </div>

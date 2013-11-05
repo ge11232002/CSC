@@ -1,0 +1,30 @@
+#!/usr/bin/env perl
+
+# a CGI script that sends list of transcription factors as octet stream
+
+use strict;
+use CONSITE_OPT;
+use lib CONSITE_PERLLIB;
+use CONSITE::Job;
+use Bio::AlignIO;
+use constant TMPDIR=>'/home/httpd/TEMP/';
+use CGI qw(:standard);
+if (my $jobID = param('jobID'))  {
+
+    my $job = CONSITE::Job->load(ABS_TMP_DIR."/$jobID");
+    print header('text/plain');
+    if ($job->alignstring) {
+        print $job->alignstring()."\n";
+    }
+    elsif ($job->alignobject) {
+        my $outstream = Bio::AlignIO->new(-fh =>\*STDOUT, -format=>"clustalw");
+        $outstream->write_aln($job->alignobject);
+        $outstream->close;
+    }
+    else {
+        print "NONE";
+    }
+
+
+}
+

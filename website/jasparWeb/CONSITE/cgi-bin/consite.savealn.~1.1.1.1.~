@@ -1,0 +1,16 @@
+#!/usr/bin/env perl
+
+# a CGI script that sends list of transcription factors as octet stream
+
+use strict;
+use lib '/home/httpd/cgi-bin';
+use CONSITE::Job;
+use constant TMPDIR=>'/home/httpd/TEMP/';
+use CGI qw(:standard);
+if (my $jobID = param('jobID'))  {
+    
+    my $job = CONSITE::Job->load(TMPDIR.$jobID);
+    print header('application/octet-stream');
+    print $job->alignstring()."\n";
+}
+

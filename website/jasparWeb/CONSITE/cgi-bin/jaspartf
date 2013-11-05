@@ -1,0 +1,171 @@
+#!/usr/bin/env perl 
+
+use CONSITE_OPT;
+use lib CONSITE_PERLLIB;
+
+use CGI qw(:standard);
+use HTML::Template;
+use TFBS::DB::JASPAR2;
+use TFBS::Matrix::ICM;
+use TFBS::Matrix::PFM;
+use CONSITE::UserMatrix;
+use CONSITE::Job;
+use CGI::Carp qw(carpout);# fatalsToBrowser);
+    open (LOG, ">>".ABS_TMP_DIR."/JASPAR.errorlog") 
+       or die "Could not open log file.";
+    carpout(LOG);
+use strict;
+
+my ($matrixobj, $prettyprint_obj, $string, $score1);
+
+my $db = TFBS::DB::JASPAR2->connect("dbi:mysql:".JASPAR_DB_NAME.":".JASPAR_DB_HOST, 
+				    JASPAR_DB_USER, JASPAR_DB_PASS);
+$score1=param('score1');
+# Retrieve matrix object
+
+my $job = CONSITE::Job->load(ABS_TMP_DIR."/".param('jobID'));
+
+if ($job->user_matrix())  {
+    if ($job->user_matrix->type() eq "PFM")  {
+	$matrixobj = $job->user_matrix->get_Matrix("PFM")->to_ICM();
+    }
+    else  {
+	$matrixobj = "No sequence logo available";
+    }
+    $prettyprint_obj = 
+	$job->user_matrix->get_Matrix($job->user_matrix->type());
+}
+elsif(param('ID'))  
+{
+     $matrixobj = $db->get_Matrix_by_ID( param('ID'), 'ICM');
+     $prettyprint_obj = $db->get_Matrix_by_ID( param('ID'), 'PFM');
+
+}
+elsif (param('name'))  
+{
+     $matrixobj = $db->get_Matrix_by_name(param('name'),'ICM');
+}
+else  
+{
+    ExitError ("No ID or name parameter passed to script $0");
+}
+
+# Check if matrix object is undef
+
+unless ($matrixobj)  {
+    ExitError("Matrix with the ID/name ".
+	      (param('ID') or param('name')).
+	       "not found.");
+}
+
+
+my $logofile;
+my $xsize;
+my ($ID, $medline, @species, @seq_dbs, @acc, $genelynx);
+
+if (ref $matrixobj)  {
+    $logofile = $matrixobj->{ID}.".png";
+    $xsize = 60+20*$matrixobj->length();
+    $xsize=278 if($matrixobj->length()<10);
+
+    $matrixobj->draw_logo(-file =>ABS_TMP_DIR."/$logofile",
+			  -full_scale =>2.25,
+#		          -margin     =>30,
+			  -xsize      =>$xsize,
+			  -ysize      =>190, 
+#                         -graph_title=> "a name",
+#                         -x_title=>"Nucleotide position", 
+			  -y_title=>"ic [bits]");
+
+    $ID = $matrixobj->{ID};
+    $medline = $db->_get_medline($ID);
+    @species = $db->_get_species($ID);
+    @seq_dbs   = $db->_get_seqdb($ID);
+    @acc       = $db->_get_acc($ID);
+    
+}
+else  {
+    $logofile = "no_logo.png";
+    $xsize=256;
+    $ID = "User defined";
+    $medline = "";
+    @species = @seq_dbs = @acc = ("-");
+    $matrixobj = { name => param('name'),
+		   ID   => $ID,
+		   class=> "N.D." };
+}
+
+
+#for retrieving protein seqs
+
+my @get_protein_string;
+my $acc;
+my $count=0;
+foreach $acc(@acc)
+{
+    if ($seq_dbs[$count] eq 'SWISSPROT')
+    {
+	$get_protein_string[$count]="http://kisac.cgr.ki.se:6666/srs6bin/cgi-bin/wgetz?-newId+-e+[SWISSPROT-AccNumber:'$acc']";
+    } 
+    elsif($seq_dbs[$count] eq 'EMBL')
+    {
+	$get_protein_string[$count]="http://kisac.cgr.ki.se:6666/srs6bin/cgi-bin/wgetz?-newId+-e+[EMBL-AccNumber:'$acc']";
+    }
+    elsif($seq_dbs[$count] eq 'FLYBASE')
+    {
+	$get_protein_string[$count]="http://www.flybase.org/.bin/fbidq.html?$acc";
+    }
+    
+    elsif($seq_dbs[$count] eq 'GENBANK')
+    {
+	$get_protein_string[$count]="http://www.ncbi.nlm.nih.gov/entrez/query.fcgi?cmd=Retrieve&db=Protein&list_uids=$acc&dopt=GenPept";
+    }
+    $count++;
+
+}
+
+my $template =HTML::Template->new
+    (filename=>ABS_TEMPLATE_DIR."/lastpage.tmpl", die_on_bad_params =>0);
+$template->param(
+		 SCORE_1        =>param('score1')."",
+		 SCORE_2        =>param('score2')."",
+		 POS_1          =>param('pos1')."",
+		 POS_2          =>param('pos2')."",
+		 SEQ_1          =>param('seq1')."",
+		 SEQ_2          =>param('seq2')."",
+		 ID             =>$ID."",
+		 NAME           =>$matrixobj->{name}."",
+		 CLASS          =>$matrixobj->{class}."",
+		 SPECIES        =>join(br,@species)."", 
+		# LITT_REF      =>"some paper",
+		 MEDLINE        =>$medline,
+		 SEQ_ACC_1      =>$acc[0]." ",
+		 SEQ_ACC_2      =>$acc[1]." ",
+		 LOGO           =>$logofile."",
+		 'WEBSERVER'   => WEBSERVER."",
+		 'REL_TMP_DIR'      =>REL_TMP_DIR."",
+		 STRING         =>$prettyprint_obj->prettyprint(),
+		 XSIZE          =>$xsize,
+		 YSIZE          =>190,
+		 GENELYNX	=>"$genelynx",
+		 GET_PROTEIN_1  =>$get_protein_string[0],
+		 GET_PROTEIN_2  =>$get_protein_string[1],
+ );
+
+print "Content-Type:text/html\n\n";
+
+
+print $template->output;
+
+
+
+sub ExitError  {
+    my $errormsg = shift;
+    print header("text/plain"),
+    print $errormsg;
+    exit;
+}
+
+
+
+

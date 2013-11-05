@@ -1,0 +1,4 @@
+#!/usr/local/bin/perl -w
+use CONSITE_test;
+my $app = CONSITE->new();
+$app->run;

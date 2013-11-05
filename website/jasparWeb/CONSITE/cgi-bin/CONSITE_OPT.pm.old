@@ -1,0 +1,54 @@
+# server name
+
+use constant WEBSERVER        => 'http://mordor.cgb.ki.se';
+
+# consite perl library
+
+use constant CONSITE_PERLLIB       => '/opt/www/CONSITE/lib';
+
+# Absolute paths
+
+use constant ABS_HTML_DIR     => '/opt/www/CONSITE/html'    ;
+use constant ABS_CGI_BIN_DIR  => '/opt/www/CONSITE/cgi-bin' ;
+use constant ABS_IMAGES_DIR   => '/opt/www/CONSITE/html/IMG';
+use constant ABS_TMP_DIR      => '/opt/www/CONSITE/html/TEMP'    ;
+use constant ABS_TEMPLATE_DIR => '/opt/www/CONSITE/TEMPLATES'    ;
+use constant LOG_DIR          => '/opt/www/CONSITE/html/TEMP';
+
+
+# HTML page (RELATIVE) paths
+
+use constant REL_CGI_BIN_DIR  => '/cgi-bin/CONSITE';
+use constant REL_IMG_DIR      => '/CONSITE/IMG';
+use constant REL_HTML_DIR     => '/CONSITE';
+use constant REL_TMP_DIR      => '/CONSITE/TEMP';
+
+# which alignment program to use
+
+use constant ALIGNMENT_PROGRAM => "ORCA";
+
+# DPB settings
+use constant DPB_CGI => "http://pegasus.cgb.ki.se/cgi-bin/DPB.cgi";
+use constant MAX_SEQ_LENGTH => 1000000;
+use constant DPB_TIMEOUT => 600;
+
+# orca settings
+
+use constant ORCA_BINARY => ABS_CGI_BIN_DIR."/orca";
+use constant ORCA_LIB    => '/opt/www/orca/Orca';
+
+# SQL settings
+
+use constant DBI_DBNAME   => 'JASPAR2';
+use constant DBI_HOST     => 'mordor.cgb.ki.se';
+use constant DBI_USER     => 'albin';
+use constant DBI_PASS     => 'as4488';
+
+# Layout
+
+use constant ADMIN_EMAIL   => 'Boris.Lenhard@cgb.ki.se';
+
+# TMP directory cleaning
+use constant CLEAN_TEMPFILES_OLDER_THAN => 3; # in days
+
+1;

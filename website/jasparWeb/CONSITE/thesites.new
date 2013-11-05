@@ -1,0 +1,76 @@
+	# the sites
+	
+	my (@site1strings, @site2strings, %url1, %url2);
+	while ($site1 
+	       and 
+	       ((my $sitepos = $self->pdlindex($site1->start(), 1=>0)) 
+		< 
+	       ( $blockstart + $BLOCK_WIDTH - $SITE_SHIFT)))  {
+
+	    my $strlen; my $is_free = 0; my $offset=0;
+	    $strlen = (length($site1strings[$is_free]) or 0);
+	    while ($strlen =(length($site1strings[$is_free]) or 0)
+		    >= 
+		    (($offset = ($sitepos+$SITE_SHIFT) % $BLOCK_WIDTH) -1) 
+		   and $strlen > 0
+		   )
+	    {  
+	  
+		$is_free++; last if $offset <0;
+	    }
+
+	    my $site_id; 
+	    
+	    # pick an unused three-digit label for the site
+
+	    do 
+	    {$site_id = sprintf("%03d", rand(1000))} 
+	    while defined $url1{$site_id};
+	    print STDERR "FACTOR NAME:".$site1->Matrix->{name}."\n";
+	    $site1strings[$is_free] .= (" "x($offset-$strlen-1)).
+		$site_id.$site1->strand().$site1->siteseq().
+		    ":".$site1->Matrix->{name};
+	    $site2strings[$is_free] .= (" "x($offset-$strlen-1)).
+		$site_id.$site2->strand().$site2->siteseq().
+		    ":".$site2->Matrix->{name};
+	    $url1{$site_id} = $self->site_url($site1, $site2, $site1);
+	    $url2{$site_id} = $self->site_url($site1, $site2, $site2);
+	    
+
+	    ($site1 = $self->fsiteset1->next_site()) || last;
+	    ($site2 = $self->fsiteset2->next_site()) || last;
+		
+	}
+
+	foreach (0..$#site1strings)  {
+	    print STDERR "SITE1STRING: before:".$site1strings[$_]."\n";
+	    $site1strings[$_] =~ s/(\d{3})(\+|\-)\S+/$url1{$1} /g;
+	    print STDERR "SITE1STRING: after:".$site1strings[$_]."\n";
+	    $site2strings[$_] =~ s/(\d{3})(\+|\-)\S+/$url2{$1} /g;
+	}
+	
+
+	$outstring .= join 
+	    ("", hr,br,"&nbsp;\n",
+	     (map {(" "x($TITLE_AREA + 4-$SITE_SHIFT). $_."\n")} 
+	          reverse(@site1strings)),
+	     "$seq1_ruler\n",
+	     sprintf("%".$TITLE_AREA."s    %-".$BLOCK_WIDTH."s  %s\n",
+		     " ", $seq1_ruler_bars, " "),
+	     sprintf("<I><B><FONT color=$seq1hex>%".$TITLE_AREA.
+		     "s</FONT></B></I>    %-".$BLOCK_WIDTH."s  %s\n",
+		     $self->seq1name(), $seq1slice, " "),
+	     sprintf("%".$TITLE_AREA."s    %-".$BLOCK_WIDTH."s  %s\n",
+		     "", $identity_bars, ""),
+	     sprintf("<I><B><FONT color=$seq2hex>%".$TITLE_AREA.
+		     "s</FONT></B></I>    %-".$BLOCK_WIDTH."s  %s\n",
+		     $self->seq2name(), $seq2slice, " "),
+	     sprintf("%".$TITLE_AREA."s    %-".$BLOCK_WIDTH."s  %s\n",
+		     " ", $seq2_ruler_bars, " "),
+	     "$seq2_ruler\n", 
+	     (map {(" "x($TITLE_AREA + 4-$SITE_SHIFT). $_."\n")} @site2strings),
+	     "\n\n");
+	$blockstart += $BLOCK_WIDTH;
+	
+    } while ($blockstart <= length $self->alignseq1());
+

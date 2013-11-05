@@ -1,0 +1,28 @@
+<html>
+<head>
+<title>CONSITE - TF selection</title>
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+</head>
+<style type="text/css">
+body {font-family: Arial, Helvetica, sans-serif}
+p {font-family: Arial, Helvetica, sans-serif}
+
+</style>
+<!-- ALBIN, PLEASE DO NOT CHANGE INCLUDE FILES UNTIL THE NEW ONES WORK. THERE IS SOME BETA TESTING GOING ON, AND THEY WERE UNABLE TO MAKE IT WORK BECAUSE OF THAT. -->
+<body topmargin="0" leftmargin="0" marginheight="0" marginwidth="0" bgcolor=white
+onLoad="MM_preloadImages('<TMPL_VAR NAME='IMAGE_DIR'>/home3.gif','<TMPL_VAR NAME='IMAGE_DIR'>/alignment_view1.gif','<TMPL_VAR NAME='IMAGE_DIR'>/alignment_view2.gif','<TMPL_VAR NAME='IMAGE_DIR'>/table_view1.gif','<TMPL_VAR NAME='IMAGE_DIR'>/table_view2.gif','<TMPL_VAR NAME='IMAGE_DIR'>/graphical_view1.gif','<TMPL_VAR NAME='IMAGE_DIR'>/graphical_view2.gif','<TMPL_VAR NAME='IMAGE_DIR'>/sequence_view2.gif')">
+<table cellspacing=0 cellpadding=0 border=0 valign="top">
+   <tr>
+     <td valign= "top" width=157 height=900 background="<!-- TMPL_VAR NAME=IMAGE_DIR -->/border3.jpg"> 
+     <TMPL_IF NAME="SINGLE">
+        <TMPL_INCLUDE NAME="interface_single.htm">
+     <TMPL_ELSE>
+        <TMPL_INCLUDE NAME="interface.htm">
+     </TMPL_IF></td> 
+     <td width=600 valign= "top" ><TMPL_INCLUDE NAME="viewarea.htm"></td>
+   </tr> 
+
+</table>
+</body>
+</html>
+

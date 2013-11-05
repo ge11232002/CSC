@@ -1,0 +1,89 @@
+<html>
+<head>
+<title>entry page</title>
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+<script language="JavaScript">
+<!--
+function MM_swapImgRestore() { //v3.0
+  var i,x,a=document.MM_sr; for(i=0;a&&i<a.length&&(x=a[i])&&x.oSrc;i++) x.src=x.oSrc;
+}
+
+function MM_preloadImages() { //v3.0
+  var d=document; if(d.images){ if(!d.MM_p) d.MM_p=new Array();
+    var i,j=d.MM_p.length,a=MM_preloadImages.arguments; for(i=0; i<a.length; i++)
+    if (a[i].indexOf("#")!=0){ d.MM_p[j]=new Image; d.MM_p[j++].src=a[i];}}
+}
+
+function MM_findObj(n, d) { //v3.0
+  var p,i,x;  if(!d) d=document; if((p=n.indexOf("?"))>0&&parent.frames.length) {
+    d=parent.frames[n.substring(p+1)].document; n=n.substring(0,p);}
+  if(!(x=d[n])&&d.all) x=d.all[n]; for (i=0;!x&&i<d.forms.length;i++) x=d.forms[i][n];
+  for(i=0;!x&&d.layers&&i<d.layers.length;i++) x=MM_findObj(n,d.layers[i].document); return x;
+}
+
+function MM_swapImage() { //v3.0
+  var i,j=0,x,a=MM_swapImage.arguments; document.MM_sr=new Array; for(i=0;i<(a.length-2);i+=3)
+   if ((x=MM_findObj(a[i]))!=null){document.MM_sr[j++]=x; if(!x.oSrc) x.oSrc=x.src; x.src=a[i+2];}
+}
+//-->
+</script>
+</head>
+
+<body bgcolor="#FFFFFF" onLoad="MM_preloadImages('<!-- TMPL_VAR NAME="IMAGE_DIR" -->/gobutton2b.gif')">
+<div align="center">
+  <p><img src="<!-- TMPL_VAR NAME="IMAGE_DIR" -->/logga1movie.gif" width="252" height="134"> </p>
+  <h5><font face="Arial, Helvetica, sans-serif"><i>Explore transcription factor
+    binding sites shared by two genomic sequences</i></font></h5>
+  <h5>&nbsp;</h5>
+ 
+  <table width="64%" border="0" height="51">
+    <tr>
+      <td width="65%">
+        <div align="right"><font size="4"><i><b><font size="2" face="Arial, Helvetica, sans-serif">Analyze orthologous
+          pairs of genomic sequences</font></b></i></font></div>
+      </td>
+      <td width="35%" bgcolor="#FFFFFF"><a href="<TMPL_VAR NAME="REL_CGI_BIN_DIR">/consite?rm=t_input" onMouseOut="MM_swapImgRestore()" onMouseOver="MM_swapImage('Image7','','<!-- TMPL_VAR NAME="IMAGE_DIR" -->/gobutton2b.gif',1)"><img name="Image7" border="0" src="<!-- TMPL_VAR NAME=IMAGE_DIR -->/gobutton_small.jpg" width="104" height="36"></a></td>
+    </tr>
+    <tr>
+      <td width="65%">&nbsp;</td>
+      <td width="35%" bgcolor="#FFFFFF">&nbsp;</td>
+    </tr>
+    <tr>
+      <td width="65%">
+        <div align="right"><font size="4"><i><b><font size="2" face="Arial, Helvetica, sans-serif">Analyze an existing
+          alignment of genomic sequences</font></b></i></font></div>
+      </td>
+      <td width="35%" bgcolor="#FFFFFF"><a href="<TMPL_VAR NAME="REL_CGI_BIN_DIR">/consite?rm=t_input_readyaln" onMouseOut="MM_swapImgRestore()" onMouseOver="MM_swapImage('ImageGo2','','<!-- TMPL_VAR NAME="IMAGE_DIR" -->/gobutton2b.gif',1)"><img name="ImageGo2" border="0" src="<!-- TMPL_VAR NAME=IMAGE_DIR -->/gobutton_small.jpg" width="104" height="36"></a></td>
+    </tr>
+    <tr>
+      <td width="65%">&nbsp;</td>
+      <td width="35%" bgcolor="#FFFFFF">&nbsp;</td>
+    </tr>
+    <tr>
+      <td width="65%">
+        <div align="right"><font size="4"><i><b><font size="2" face="Arial, Helvetica, sans-serif">Fetch genomic sequences of human:mouse orthologs by ID or keyword - TEMPORARILY DISABLED</font></b></i></font></div>
+      </td>
+      <td width="35%" bgcolor="#FFFFFF"><a href="<TMPL_VAR NAME="REL_CGI_BIN_DIR">/consite?rm=t_searchform" onMouseOut="MM_swapImgRestore()" onMouseOver="MM_swapImage('ImageGo3','','<!-- TMPL_VAR NAME="IMAGE_DIR" -->/gobutton2b.gif',1)"><img name="ImageGo3" border="0" src="<!-- TMPL_VAR NAME=IMAGE_DIR -->/gobutton_small.jpg" width="104" height="36"></a></td>
+    </tr>
+    <tr>
+      <td width="65%">&nbsp;</td>
+      <td width="35%" bgcolor="#FFFFFF">&nbsp;</td>
+    </tr>
+    <tr>
+      <td width="65%">
+        <p align="right"><font size="4"><b><i><font size="2" face="Arial, Helvetica, sans-serif">Analyze single sequence</font></i></b></font></p>
+      </td>
+      <td width="35%" bgcolor="#FFFFFF">
+      <a href="<TMPL_VAR NAME="REL_CGI_BIN_DIR">/consite?rm=t_input_single"
+       onMouseOut="MM_swapImgRestore()"
+      onMouseOver="MM_swapImage('Image9','','<!-- TMPL_VAR NAME="IMAGE_DIR" -->/gobutton2b.gif',1)"><img name="Image9" border="0" src="<!-- TMPL_VAR NAME=IMAGE_DIR -->/gobutton_small.jpg" width="104" height="36">
+      </a>
+      </td>
+    </tr>
+  </table>
+  <p>&nbsp;</p>
+  <!-- Messages go here -->
+  <p align="center">&nbsp;</p>
+</div>
+</body>
+</html>

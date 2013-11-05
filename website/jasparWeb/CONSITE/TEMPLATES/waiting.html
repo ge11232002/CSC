@@ -1,0 +1,14 @@
+<div align="center" halign="center">
+<p>ConSite is aligning the sequences you have submitted..</p>
+
+
+<p><font size="-1" face="Arial, Helvetica, sans-serif">The page refreshes automatically in <TMPL_VAR NAME='SECONDS'> seconds.</font></p>
+<p><font size="-1" face="Arial, Helvetica, sans-serif">You can also bookmark <a href ="<TMPL_VAR NAME='REL_CGI_BIN_DIR'>/consite?rm=t_view&jobID=<TMPL_VAR NAME='JOB_ID'>">this link</a> to view the results later.</font></p>
+
+<form name='viewform' method='POST' action="<TMPL_VAR NAME='REL_CGI_BIN_DIR'>/consite" >
+<TMPL_VAR NAME="HIDDEN">
+<hidden name="seconds" value="<TMPL_VAR NAME='SECONDS'>">
+</form>
+
+<img src="<TMPL_VAR NAME='REL_IMG_DIR'>/logga1small.gif" onLoad="setTimeout('document.viewform.submit()',<TMPL_VAR NAME='MILISECONDS'>)">
+</div>
