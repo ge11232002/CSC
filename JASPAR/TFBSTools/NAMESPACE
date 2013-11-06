@@ -11,6 +11,8 @@ importClassesFrom(IRanges, SimpleList)
 #importClassesFrom(JASPAR2014, JASPAR2014)
 importClassesFrom(Biostrings, DNAStringSet, PairwiseAlignments)
 importClassesFrom(GenomicRanges, GRanges)
+importClassesFrom(rtracklayer, Chain)
+
 
 ### -----------------------------------------------------------------
 ### Import S4 methods defined in other packages
@@ -19,6 +21,7 @@ importMethodsFrom(Biostrings, reverseComplement, matchPWM, maxScore, minScore, c
 importMethodsFrom(RSQLite, dbGetQuery, dbConnect, dbDisconnect)
 importMethodsFrom(XVector, subseq)
 importMethodsFrom(GenomicRanges, seqnames)
+importMethodsFrom(rtracklayer, import.chain)
 
 ### -----------------------------------------------------------------
 ### Import ordinary functions, variables in other packages
