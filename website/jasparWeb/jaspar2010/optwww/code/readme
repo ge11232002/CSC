@@ -1,0 +1,14 @@
+g++ -Wall -I/usr/local/include -c Alignment.cpp
+g++ -Wall -I/usr/local/include -c ColumnComp.cpp
+g++ -Wall -I/usr/local/include -c Motif.cpp
+g++ -Wall -I/usr/local/include -c MultipleAlignment.cpp
+g++ -Wall -I/usr/local/include -c NeuralTree.cpp
+g++ -Wall -I/usr/local/include -c PSSM.cpp
+g++ -Wall -I/usr/local/include -c PlatformSupport.cpp
+g++ -Wall -I/usr/local/include -c PlatformTesting.cpp
+g++ -Wall -I/usr/local/include -c ProteinDomains.cpp
+g++ -Wall -I/usr/local/include -c RandPSSMGen.cpp
+g++ -Wall -I/usr/local/include -c Tree.cpp
+g++ -Wall -I/usr/local/include -c main.cpp
+g++ -L/usr/local/lib -lgsl Alignment.o ColumnComp.o Motif.o MultipleAlignment.o NeuralTree.o PSSM.o PlatformSupport.o PlatformTesting.o ProteinDomains.o RandPSSMGen.o Tree.o main.o -g -o2 -o STAMP
+
