@@ -226,6 +226,7 @@ setMethod("searchAln", signature(pwm="PWMatrix", aln1="character", aln2="charact
                           conservation=conservation)
           }
           )
+
 setMethod("searchAln", signature(pwm="PWMatrix", aln1="character", aln2="missing"),
           function(pwm, aln1, aln2, min.score="80%", windowSize=51L, cutoff=0.7,
                    strand="*", type="any", conservation=NULL){
@@ -237,6 +238,7 @@ setMethod("searchAln", signature(pwm="PWMatrix", aln1="character", aln2="missing
                           conservation=conservation)
           }
           )
+
 setMethod("searchAln", signature(pwm="PWMatrix", aln1="DNAStringSet", aln2="missing"),
           function(pwm, aln1, aln2, min.score="80%", windowSize=51L, cutoff=0.7,
                    strand="*", type="any", conservation=NULL){
@@ -248,6 +250,7 @@ setMethod("searchAln", signature(pwm="PWMatrix", aln1="DNAStringSet", aln2="miss
                           type=type, conservation=conservation)
           }
           )
+
 setMethod("searchAln", signature(pwm="PWMatrix", aln1="DNAString", aln2="DNAString"),
           function(pwm, aln1, aln2, min.score="80%", windowSize=51L, cutoff=0.7,
                    strand="*", type="any", conservation=NULL){
@@ -257,6 +260,7 @@ setMethod("searchAln", signature(pwm="PWMatrix", aln1="DNAString", aln2="DNAStri
                              type=type, conservation=conservation)
           }
           )
+
 #setMethod("searchAln", signature(pwm="PWMatrix", aln1="PairwiseAlignmentTFBS", aln2="missing"),
 #          function(pwm, aln1, aln2, min.score="80%", windowSize=51L, cutoff=0.7,
 #                   strand="*", type="any", conservation=NULL){
