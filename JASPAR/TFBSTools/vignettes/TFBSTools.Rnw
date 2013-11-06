@@ -224,6 +224,23 @@ IUPACString = "ACGTMRWSYKVHDBN"
 searchMatrix(pfmList, IUPACString)
 @
 
+\subsection{PFM permutation}
+In this section, we will demonstrate the matrix permutation.
+This method simply shuffles the columns in matrices.
+This can either be done by just shuffling columns within each selected matrix,
+or by shuffling columns almong all selected matrices.
+<<rtl-matrixMethods, eval=FALSE, results = hide>>=
+library(JASPAR2014)
+pfmSubject = getMatrixByID(JASPAR2014, ID="MA0055")
+pfmQuery = getMatrixByID(JASPAR2014, ID="MA0048")
+opts = list()
+opts[["class"]] = "Ig-fold"
+pfmList = getMatrixSet(JASPAR2014, opts)
+foo = permuteMatrix(pfmQuery)
+foo1 = permuteMatrix(pfmList, type="intra")
+foo2 = permuteMatrix(pfmList, type="inter")
+@
+
 \section{Scan sequence and alignments with PWM pattern}
 \subsection{searchSeq}
 \textit{searchSeq} scans a nucleotide sequence with the pattern represented by the PWM.
