@@ -195,7 +195,7 @@ pwm = toPWM(pfm, pseudocounts=0.8)
 @
 
 \subsection{PFM to ICM}
-The method \textit{toICM} can convert PFM to ICM \cite{Schneider:1986ur}.
+The method \textit{toICM} can convert PFM to ICM (\cite{Schneider:1986ur}).
 Besides the similar \textit{pseudocounts}, \textit{bg}, 
 you can also choose to do the \textbf{schneider} correction.
 
