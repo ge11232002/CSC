@@ -2,10 +2,13 @@
 \docType{methods}
 \alias{searchMatrix}
 \alias{searchMatrix-methods}
+\alias{searchMatrix,matrix,character-method}
 \alias{searchMatrix,matrix,matrix-method}
 \alias{searchMatrix,matrix,PFMatrix-method}
+\alias{searchMatrix,PFMatrix,character-method}
 \alias{searchMatrix,PFMatrix,matrix-method}
 \alias{searchMatrix,PFMatrix,PFMatrix-method}
+\alias{searchMatrix,PFMatrixList,character-method}
 \alias{searchMatrix,PFMatrixList,matrix-method}
 \alias{searchMatrix,PFMatrixList,PFMatrix-method}
 \title{searchMatrix method}
