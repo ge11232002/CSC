@@ -86,6 +86,11 @@ setGeneric("doSiteSearch",
              standardGeneric("doSiteSearch")
            )
 
+setGeneric("searchPairBSgenome",
+           function(pwm, seq1, seq2, min.score="80%", strand="*", chain)
+             standardGeneric("searchPairSeq")
+           )
+
 setGeneric("calConservation",
            function(aln1, aln2, windowSize=51L, which="1")
              standardGeneric("calConservation")

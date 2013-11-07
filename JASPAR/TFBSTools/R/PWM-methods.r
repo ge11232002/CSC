@@ -272,3 +272,12 @@ setMethod("searchAln", signature(pwm="PWMatrix", aln1="DNAString", aln2="DNAStri
 #          }
 #          )
 
+### -----------------------------------------------------------------
+### searchPairSeq, it search two unaligned sequences, usually the genome wise. and find the shared binding sites.
+###
+setMethod("searchPairSeq", signature(pwm="PWMatrix", seq1="DNAString", seq2="DNAString"),
+          function(pwm, seq1, seq2, min.score="80%", chain){
+            do_pairseqSearch(pwm, seq1, seq2, min.score=min.score, chain=chain)
+          }
+          )
+
