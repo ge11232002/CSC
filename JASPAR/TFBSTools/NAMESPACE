@@ -21,7 +21,8 @@ importMethodsFrom(Biostrings, reverseComplement, matchPWM, maxScore, minScore, c
 importMethodsFrom(RSQLite, dbGetQuery, dbConnect, dbDisconnect)
 importMethodsFrom(XVector, subseq)
 importMethodsFrom(GenomicRanges, seqnames)
-importMethodsFrom(rtracklayer, import.chain)
+importMethodsFrom(rtracklayer, import.chain, liftOver)
+importMethodsFrom(BSgenome, getSeq)
 
 ### -----------------------------------------------------------------
 ### Import ordinary functions, variables in other packages
