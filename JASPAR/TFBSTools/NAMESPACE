@@ -11,7 +11,7 @@ importClassesFrom(IRanges, SimpleList)
 #importClassesFrom(JASPAR2014, JASPAR2014)
 importClassesFrom(Biostrings, DNAStringSet, PairwiseAlignments)
 importClassesFrom(GenomicRanges, GRanges)
-importClassesFrom(rtracklayer, Chain)
+#importClassesFrom(rtracklayer, Chain)
 
 
 ### -----------------------------------------------------------------
@@ -89,6 +89,7 @@ export(
   toPWM,
   searchSeq,
   searchAln,
+  searchPairBSgenome,
 
   ## ICM-methods.r
   toICM,
