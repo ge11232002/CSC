@@ -4,6 +4,7 @@
 \alias{SiteSet}
 \alias{SiteSet-class}
 \alias{[,SiteSet-method}
+\alias{[,SiteSet,ANY,ANY-method}
 \alias{c-methods}
 \alias{c,SiteSet-method}
 \alias{length,SiteSet-method}
