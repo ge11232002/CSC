@@ -278,7 +278,18 @@ setMethod("searchAln", signature(pwm="PWMatrix", aln1="DNAString", aln2="DNAStri
 setMethod("searchPairBSgenome", signature(pwm="PWMatrix"),
           function(pwm, BSgenome1, BSgenome2, chr1, chr2,
                    min.score="80%", strand="*", chain){
-            do_PairBSgenomeSearch(pwm, BSgenome1, BSgenome2, chr1, chr2, strand, min.score, chain)
+            ans = do_PairBSgenomeSearch(pwm, BSgenome1, BSgenome2, chr1, chr2, strand, min.score, chain)
+            return(ans)
+          }
+          )
+
+setMethod("searchPairBSgenome", signature(pwm="PWMatrixList"),
+          function(pwm, BSgenome1, BSgenome2, chr1, chr2,
+                   min.score="80%", strand="*", chain){
+            ans_list = lapply(pwm, searchPairBSgenome, BSgenome1, BSgenome2,
+                              chr1, chr2, min.score, strand, chain)
+            ans = SitePairSetList(ans_list)
+            return(ans)
           }
           )
 
