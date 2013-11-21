@@ -3,6 +3,7 @@
 \alias{searchPairBSgenome}
 \alias{searchPairBSgenome-methods}
 \alias{searchPairBSgenome,PWMatrix-method}
+\alias{searchPairBSgenome,PWMatrixList-method}
 \title{searchPairBSgenome method} 
 \description{
   Given a chain file for liftover from one genome to another, 
