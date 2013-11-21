@@ -3,7 +3,7 @@
 \alias{searchPairBSgenome}
 \alias{searchPairBSgenome-methods}
 \alias{searchPairBSgenome,PWMatrix-method}
-\title{\code{searchPairBSgenome}} 
+\title{searchPairBSgenome method} 
 \description{
   Given a chain file for liftover from one genome to another, 
   it searches two \code{BSgenome} with a \code{PWMatrix},
@@ -11,7 +11,8 @@
 }
 
 \usage{
-  searchPairBSgenome(pwm, BSgenome1, BSgenome2, chr1, chr2, min.score="80%", strand="*", chain)
+  searchPairBSgenome(pwm, BSgenome1, BSgenome2, chr1, chr2,
+                     min.score="80\%", strand="*", chain)
 }
 
 \arguments{
@@ -61,10 +62,12 @@
     pfm = getMatrixByID(JASPAR2014, ID="MA0004.1")
     pwm=toPWM(pfm)
     chain = import.chain("Downloads/hg19ToMm10.over.chain")
-    sitepairset = searchPairBSgenome(pwm, BSgenome.Hsapiens.UCSC.hg19, BSgenome.Mmusculus.UCSC.mm10, chr1="chr1", chr2="chr1", min.score="90%", strand="+", chain=chain)
+    sitepairset = searchPairBSgenome(pwm, BSgenome.Hsapiens.UCSC.hg19,
+                                     BSgenome.Mmusculus.UCSC.mm10,
+                                     chr1="chr1", chr2="chr1",
+                                     min.score="90%", strand="+", chain=chain)
   }
-
 }
 
 \keyword{methods}
-\keyword{ ~~ other possible keyword(s) ~~ }
+
