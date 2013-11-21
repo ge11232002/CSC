@@ -10,7 +10,7 @@ Depends: R (>= 3.0.1), methods, IRanges(>= 1.19.38)
 Suggests: JASPAR2014(>= 0.99.3)
 SystemRequirements: meme
 License: GPL-2
-URL: http://jaspardev.genereg.net/
+URL: http://jaspar.genereg.net/
 Type: Package
 biocViews: MotifAnnotation, GeneRegulation, MotifDiscovery
 NeedsCompilation: yes
