@@ -67,8 +67,8 @@
 }
 
 \value{
-  A \code{SiteSet} object is returned when pwm is a \code{PWMatrix}, 
-  while a \code{SiteSetList} is returned when pwm is a \code{PWMatrixList}.
+  A \code{SitePairSet} object is returned when pwm is a \code{PWMatrix}, 
+  while a \code{SitePairSetList} is returned when pwm is a \code{PWMatrixList}.
 }
 
 \author{
