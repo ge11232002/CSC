@@ -60,7 +60,7 @@ such as MEME (\cite{Bailey:1994wq}).
 
 \section{S4 classes in TFBSTools}
 The package is built around a number of S4 class of which the \Rclass{XMatrix}, 
-\Rclass{Site} classes are the most important.
+\Rclass{SiteSet} classes are the most important.
 The section will briefly explain most of them defined in \textbf{TFBSTools}.
 %These classes were designed to store necessary information relevant to 
 
