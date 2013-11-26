@@ -274,6 +274,25 @@ writeGFF3(sitePair)
 writeGFF2(sitePair)
 @
 
+\subsection{searchPairBSgenome}
+\textit{searchPairBSgenome} is designed to do the genome-wise phylogenetic footprinting.
+Given two \Rclass{BSgenome}, a chain file for liftover from one genome to another,
+\textit{searchPairBSgenome} identifies the putative transcription factor binding sites
+which are conserved in both genomes.
+<<rtl-search, eval=FALSE, results = hide>>=
+library(rtracklayer)
+library(JASPAR2014)
+library(BSgenome.Hsapiens.UCSC.hg19)
+library(BSgenome.Mmusculus.UCSC.mm10)
+pfm = getMatrixByID(JASPAR2014, ID="MA0004.1")
+pwm=toPWM(pfm)
+chain = import.chain("Downloads/hg19ToMm10.over.chain")
+sitepairset = searchPairBSgenome(pwm, BSgenome.Hsapiens.UCSC.hg19,
+                                 BSgenome.Mmusculus.UCSC.mm10,
+                                 chr1="chr1", chr2="chr1",
+                                 min.score="90%", strand="+", chain=chain)
+@
+
 \section{Use external pattern generators}
 In this section, we will introduce wrapper functions for external motif discovery programs. 
 So far, MEME is supported.
