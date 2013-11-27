@@ -3,15 +3,16 @@ Version: 0.99.0
 Date: 2013-09-22
 Title: CNE detection and visualization.
 Description: Large-scale identification and advanced visualization of sets of conserved noncoding elements.
-Author: Ge Tan <gtan@me.com> 
-Maintainer: Ge Tan <gtan@me.com>
-Depends: R (>= 2.15.2), Biostrings(>= 2.26.3), RSQLite(>= 0.11.4), GenomicRanges(>= 1.12.5), rtracklayer(>= 1.20.4), methods, Gviz(>= 1.5.15)
+Author: Ge Tan <ge.tan09@imperial.ac.uk> 
+Maintainer: Ge Tan <ge.tan09@imperial.ac.uk>
+Imports: Biostrings(>= 2.26.3), RSQLite(>= 0.11.4), GenomicRanges(>= 1.12.5), rtracklayer(>= 1.20.4), Gviz(>= 1.5.15)
+Depends: R (>= 2.15.2), methods, IRanges(>= 1.19.38)
 LinkingTo: IRanges, XVector
 Suggests: RMySQL(>= 0.9-3)
-License: GPL (>= 2)
+License: GPL-2
 URL: http://ancora.genereg.net/
 Type: Package
-biocViews: 
+biocViews: GeneRegulation, Visualization, DataImport
 NeedsCompilation: yes
 LazyData: yes
 Collate: class.r utils.r ceScan.r plot.r makeGeneDbFromUCSC.r io.r
