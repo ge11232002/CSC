@@ -13,12 +13,14 @@ import(RSQLite)
 ### Import S4 methods defined in other packages
 ###
 importMethodsFrom(rtracklayer, import.bed)
+importMethodsFrom(GenomicRanges, seqnames)
+importMethodsFrom(XVector, subseq)
 
 ### -----------------------------------------------------------------
 ### Import ordinary functions, variables in other packages
 ###
 importFrom(GenomicRanges, GRanges)
-
+importFrom(Biostrings, DNAStringSet)
 
 ### -----------------------------------------------------------------
 ### Export S4 classes defined in CNEr
