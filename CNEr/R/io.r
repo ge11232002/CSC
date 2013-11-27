@@ -1,9 +1,9 @@
-# tFilterFile = "/export/data/CNEs/danRer7/filters/filter_regions.danRer7.bed"
-# qFilterFile = "/export/data/CNEs/hg19/filters/filter_regions.hg19.bed"
-readBed = function(bedFile){
+### -----------------------------------------------------------------
+### read the bed file into GRanges.
+###
+readBedR = function(bedFile){
 ## This GRanges is in 1-based.
-  require(rtracklayer)
-  bed = import(bedFile, asRangedData = FALSE)
+  bed = import.bed(bedFile, asRangedData = FALSE)
   strand(bed) = "+"
   bed = reduce(bed)
 }
@@ -11,7 +11,7 @@ readBed = function(bedFile){
 ### -----------------------------------------------------------------
 ### read the bed file (with only 3 columns) into GRanges.
 ###
-readBedToGRanges = function(bedFile=NULL){
+readBed = function(bedFile=NULL){
 ## This GRanges have the different coordinates system with the original bed file. i.e. with 1-based start end coordinates.
   if(is.null(bedFile)){
     return(NULL)
@@ -19,7 +19,6 @@ readBedToGRanges = function(bedFile=NULL){
   if(!file.exists(bedFile)){
     stop("No such file ", bedFile) 
   }
-  #dyn.load("~/Repos/CSC/CNEr/src/CNEr.so")
   bed = .Call2("myReadBed", bedFile, PACKAGE="CNEr")
   bed = GRanges(seqnames=Rle(bed[[1]]),
                 ranges=IRanges(start=bed[[2]], end=bed[[3]]),
@@ -34,8 +33,6 @@ readAxt = function(axtFiles){
   if(any(index_noexists)){
     stop("No such file ", paste(axtFiles[index_noexists], sep=" "))
   }
-  require(GenomicRanges)
-  require(Biostrings)
   #dyn.load("~/Repos/CSC/CNEr/src/CNEr.so")
   myAxt = .Call2("readAxt", axtFiles, PACKAGE="CNEr")
   #myAxtInfo = .Call("axt_info", axtFiles)
