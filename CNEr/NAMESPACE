@@ -1,11 +1,24 @@
 useDynLib(CNEr)
-import(BiocGenerics)
-import(Biostrings)
+import(methods)
 import(RSQLite)
 #import(RMySQL)
-import(GenomicRanges)
 
-##exportPattern("^[^\\.]")
+### -----------------------------------------------------------------
+#### Import S4 classes defined in other packages
+####
+#import(Biostrings)
+#import(GenomicRanges)
+
+### -----------------------------------------------------------------
+### Import S4 methods defined in other packages
+###
+importMethodsFrom(rtracklayer, import.bed)
+
+### -----------------------------------------------------------------
+### Import ordinary functions, variables in other packages
+###
+importFrom(GenomicRanges, GRanges)
+
 
 ### -----------------------------------------------------------------
 ### Export S4 classes defined in CNEr
@@ -39,6 +52,11 @@ export(
   ## class.r
   axt,
 
+  # io.r
+  readBed,
+  readAxt,
+  axtInfo,
+
   ## ceScan.r
   ceScan, ceScanFile,
   ceMerge,
@@ -58,16 +76,12 @@ export(
 ### Export S4 generics defined in CNEr + export corresponding methods
 ###
 
-export(
+exportMethods(
   ## class.r
   targetRanges, queryRanges,
   targetSeqs, querySeqs,
   symCount,
-  subAxt,
-
-  ## io.r
-  readAxt,
-  readBedToGRanges,
-  axtInfo
+  subAxt
 
 )
+
