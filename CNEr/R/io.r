@@ -33,9 +33,7 @@ readAxt = function(axtFiles){
   if(any(index_noexists)){
     stop("No such file ", paste(axtFiles[index_noexists], sep=" "))
   }
-  #dyn.load("~/Repos/CSC/CNEr/src/CNEr.so")
   myAxt = .Call2("readAxt", axtFiles, PACKAGE="CNEr")
-  #myAxtInfo = .Call("axt_info", axtFiles)
   axts = axt(targetRanges=GRanges(seqnames=Rle(myAxt[[1]]),
                                  ranges=IRanges(start=myAxt[[2]],
                                                 end=myAxt[[3]]),
