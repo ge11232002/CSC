@@ -1,30 +1,39 @@
-
+### -----------------------------------------------------------------
+### Compare two DNAStringSet. Match is TRUE, Mismatch is FALSE.
+### Not used, exported so far.
 compDNAStringSet = function(DNAStringSet1, DNAStringSet2){
   tmp = cbind(strsplit(as.character(DNAStringSet1), ""), 
               strsplit(as.character(DNAStringSet2), ""))
   apply(tmp, 1, function(x){x[[1]]==x[[2]]})
 }
-
 #system.time(foo<-compDNAStringSet(targetSeqs(myAxt), querySeqs(myAxt)))
 #system.time(foo1<-RleList(foo))
 
+
+### -----------------------------------------------------------------
+### For a GRanges object of filter, make the revered GRanges. chromSize needs to be known.
+### Not used, exported so far.
 makeReversedFilter = function(qFilter, chromSizes){
   revFilterBed = GRanges(seqnames=seqnames(qFilter),
-                         ranges=IRanges(start=chromSizes[as.vector(seqnames(qFilter))] - end(qFilter),
-                                        end=chromSizes[as.vector(seqnames(qFilter))] - start(qFilter)
+                         ranges=IRanges(start=chromSizes[as.character(seqnames(qFilter))] - end(qFilter),
+                                        end=chromSizes[as.character(seqnames(qFilter))] - start(qFilter)
                                         ),
                          strand=Rle("-"))
   return(revFilterBed)
 }
 
+### -----------------------------------------------------------------
+### Generate a translation from sequence index to alignment index.
+### Not used, exported so far.
 seqToAlignment = function(DNAStringSet){
   foo = strsplit(as.character(DNAStringSet), "")
   foo = lapply(foo, function(x){grep("-", x, invert=TRUE)})
   return(foo)
 }
 
+### -----------------------------------------------------------------
 ### rever the cigar string. i.e. 20M15I10D will be reversed to 10D15I20M.
-## EXPORTED!
+### EXPORTED!
 reverseCigar = function(cigar, ops=CIGAR_OPS){
   #cigar = sapply(splitCigar(cigar), function(x){
   #               paste0(rev(x[[2]]), rev(rawToChar(x[[1]], multiple=TRUE)), 
@@ -39,6 +48,9 @@ reverseCigar = function(cigar, ops=CIGAR_OPS){
   return(cigar)
 }
 
+### -----------------------------------------------------------------
+### Better system interface
+### Not exported.
 my.system = function(cmd, echo=TRUE, intern=FALSE, ...){
   if (echo){
     message(cmd)
@@ -50,10 +62,10 @@ my.system = function(cmd, echo=TRUE, intern=FALSE, ...){
   return(res)
 }
 
-#isSingleString = function(x){
-#  is.character(x) && length(x) == 1L && !is.na(x)
-#}
 
+### -----------------------------------------------------------------
+### Return the bin number that should be assigned to a feature spanning the given range. * USE THIS WHEN CREATING A DB *
+### Exported!
 .validateBinRanges = function(starts, ends){
   if(any(ends <= 0 | starts <= 0)){
     stop("starts and ends must be positive integers!")
@@ -66,27 +78,26 @@ my.system = function(cmd, echo=TRUE, intern=FALSE, ...){
   }
   return(TRUE) 
 }
-## Return the bin number that should be assigned to a feature spanning the given range. * USE THIS WHEN CREATING A DB *
-## EXPORTED!
+
 binFromCoordRange = function(starts, ends){
-  #dyn.load("~/Repos/CSC/CNEr/src/CNEr.so")
   .validateBinRanges(starts, ends)
   bins = .Call2("bin_from_coord_range", as.integer(starts), as.integer(ends), PACKAGE="CNEr")
   return(bins)
 }
 
-## Return the set of bin ranges that overlap a given coordinate range. It is usually more convenient to use bin_restriction string than to use this method directly.
-## EXPORTED!
+### -----------------------------------------------------------------
+### Return the set of bin ranges that overlap a given coordinate range. It is usually more convenient to use bin_restriction string than to use this method directly.
+### EXPORTED!
 binRangesFromCoordRange = function(start, end){
-  #dyn.load("~/Repos/CSC/CNEr/src/CNEr.so")
   stopifnot(length(start)==1 && length(end)==1)
   .validateBinRanges(start, end)
   binRanges = .Call2("bin_ranges_from_coord_range", as.integer(start), as.integer(end), PACKAGE="CNEr")
   return(binRanges)
 }
 
-## Given a coordinate range, return a string to be used in the WHERE section of a SQL SELECT statement that is to select features overlapping a certain range. * USE THIS WHEN QUERYING A DB *
-## EXPORTED!
+### -----------------------------------------------------------------
+### Given a coordinate range, return a string to be used in the WHERE section of a SQL SELECT statement that is to select features overlapping a certain range. * USE THIS WHEN QUERYING A DB *
+### EXPORTED!
 binRestrictionString = function(start, end, field="bin"){
   binRanges = binRangesFromCoordRange(start, end)
   cmdString = mapply(function(x,y, field){
@@ -101,6 +112,10 @@ binRestrictionString = function(start, end, field="bin"){
   cmdString = paste0("((", cmdString, "))")
   return(cmdString)
 }
+
+
+
+
 
 get_cne_ranges_in_region = function(CNE, whichAssembly=c(1,2), chr, CNEstart, CNEend, min_length){
  ## This CNE data.frame does not have the bin column yet. I am not sure whether it is necessary to add this column in R since it's quiet fast to select the cnes which meet the criteria (~0.005 second).
