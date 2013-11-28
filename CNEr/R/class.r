@@ -20,16 +20,11 @@ setValidity("axt",
 ### - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 ### Slot getters and setters.
 ###
-setGeneric("targetRanges", function(x) standardGeneric("targetRanges"))
 setMethod("targetRanges", "axt", function(x) x@targetRanges)
-setGeneric("targetSeqs", function(x) standardGeneric("targetSeqs"))
 setMethod("targetSeqs", "axt", function(x) x@targetSeqs)
-setGeneric("queryRanges", function(x) standardGeneric("queryRanges"))
 setMethod("queryRanges", "axt", function(x) x@queryRanges)
-setGeneric("querySeqs", function(x) standardGeneric("querySeqs"))
 setMethod("querySeqs", "axt", function(x) x@querySeqs)
 setMethod("score", "axt", function(x) x@score)
-setGeneric("symCount", function(x) standardGeneric("symCount"))
 setMethod("symCount", "axt", function(x) x@symCount)
 setMethod("length", "axt", function(x) length(targetRanges(x)))
 
@@ -60,7 +55,6 @@ setMethod("update", "axt",
           }
 )
 
-setGeneric("clone", function(x, ...) standardGeneric("clone"))  # not exported
 setMethod("clone", "ANY",  # not exported
     function(x, ...)
     {
@@ -128,9 +122,6 @@ setMethod("c", "axt",
           )
 
 
-setGeneric("subAxt", function(x, chr, start, end, strand=c("+", "-", "*"),
-                              select=c("target", "query"), 
-                              type=c("any", "within")) standardGeneric("subAxt"))
 setMethod("subAxt", "axt",
 ## This is to fetch the axts within the specific chrs, starts, ends based on target sequences.
           function(x, chr, start, end, strand=c("+", "-", "*"), 
