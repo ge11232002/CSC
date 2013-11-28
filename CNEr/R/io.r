@@ -26,6 +26,9 @@ readBed = function(bedFile=NULL){
   return(bed)
 }
 
+### -----------------------------------------------------------------
+### read the axt files into an axt object.
+###
 readAxt = function(axtFiles){
   # Read axt files into R axt object.
   # The coordinates are 1-based for start and end.
@@ -50,8 +53,10 @@ readAxt = function(axtFiles){
   return(axts)
 }
 
+### -----------------------------------------------------------------
+### read the axt files and return the widths of all the alignments
+###
 axtInfo = function(axtFiles){
-  #dyn.load("~/Repos/CSC/CNEr/src/CNEr.so")
   ans = .Call2("axt_info", axtFiles, PACKAGE="CNEr")
   return(ans)
 }
