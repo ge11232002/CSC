@@ -1,9 +1,10 @@
 \name{reverseCigar}
 \alias{reverseCigar}
 
-\title{reverse the cigar string}
+\title{reverseCigar function}
 
-\description{reverse the cigar string}
+\description{This function reverses the cigar string, i.e., 
+  20M15I10D will be reversed to 10D15I20M.}
 
 \usage{
   reverseCigar(cigar, ops=CIGAR_OPS)

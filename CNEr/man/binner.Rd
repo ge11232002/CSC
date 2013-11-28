@@ -1,6 +1,7 @@
 \name{binning-utils}
 \alias{binFromCoordRange}
 \alias{binRangesFromCoordRange}
+\alias{binRestrictionString}
 
 \title{UCSC bin indexing system utility functions}
 
