@@ -1,8 +1,9 @@
 
-
-ceScan = function(axts, tFilter=NULL, qFilter=NULL, qSizes=NULL, thresholds=c("49,50")){
+### -----------------------------------------------------------------
+### The main function for scanning the axts and get the CNEs
+### Not exported!
+ceScanR = function(axts, tFilter=NULL, qFilter=NULL, qSizes=NULL, thresholds=c("49,50")){
   ## Here the returned tStart and qStart are 1-based coordinates. Of course ends are also 1-based.
-  #dyn.load("~/Repos/CSC/CNEr/src/CNEr.so")
   if(!is.null(qFilter))
     if(is.null(qSizes) || !is(qSizes, "Seqinfo"))
       stop("qSizes must exist and be a Seqinfo object when qFilter exists")
@@ -10,13 +11,69 @@ ceScan = function(axts, tFilter=NULL, qFilter=NULL, qSizes=NULL, thresholds=c("4
   winSize = as.integer(sapply(strsplit(thresholds, ","), "[", 2))
   minScore = as.integer(sapply(strsplit(thresholds, ","), "[", 1))
   resFiles = tempfile(pattern = paste(minScore, winSize, "ceScan", sep="-"), tmpdir = tempdir(), fileext = "")
-  .Call2("myCeScan", as.vector(seqnames(tFilter)), start(tFilter), end(tFilter),
-              as.vector(seqnames(qFilter)), start(qFilter), end(qFilter),
-              as.vector(seqnames(qSizes)), as.vector(seqlengths(qSizes)), 
-              as.vector(seqnames(targetRanges(axts))), start(targetRanges(axts)), end(targetRanges(axts)), as.vector(strand(targetRanges(axts))), as.vector(targetSeqs(axts)),
-              as.vector(seqnames(queryRanges(axts))), start(queryRanges(axts)), end(queryRanges(axts)), as.vector(strand(queryRanges(axts))), as.vector(querySeqs(axts)),
-              score(axts), symCount(axts), winSize, minScore, as.vector(resFiles),
+  #dyn.load("/usr/local/Cellar/r/3.0.2/R.framework/Resources/library/CNEr/libs/CNEr.so")
+  ## How stupid I am...
+  if(is.null(tFilter) && is.null(qFilter)){
+    .Call2("myCeScan", NULL, NULL, NULL,
+           NULL, NULL, NULL,
+           NULL, NULL,
+           as.character(seqnames(targetRanges(axts))),
+           start(targetRanges(axts)), end(targetRanges(axts)),
+           as.character(strand(targetRanges(axts))),
+           as.character(targetSeqs(axts)),
+           as.character(seqnames(queryRanges(axts))),
+           start(queryRanges(axts)), end(queryRanges(axts)),
+           as.character(strand(queryRanges(axts))),
+           as.character(querySeqs(axts)),
+           score(axts), symCount(axts), winSize, minScore,
+           as.character(resFiles),
+           PACKAGE="CNEr")
+  }else if(is.null(tFilter) && !is.null(qFilter)){
+    .Call2("myCeScan", NULL, NULL, NULL,
+           as.character(seqnames(qFilter)), start(qFilter), end(qFilter),
+           as.character(seqnames(qSizes)), as.integer(seqlengths(qSizes)),
+           as.character(seqnames(targetRanges(axts))),
+           start(targetRanges(axts)), end(targetRanges(axts)),
+           as.character(strand(targetRanges(axts))),
+           as.character(targetSeqs(axts)),
+           as.character(seqnames(queryRanges(axts))),
+           start(queryRanges(axts)), end(queryRanges(axts)),
+           as.character(strand(queryRanges(axts))),
+           as.character(querySeqs(axts)),
+           score(axts), symCount(axts), winSize, minScore,
+           as.character(resFiles),
+           PACKAGE="CNEr")
+  }else if(!is.null(tFilter) && is.null(qFilter)){
+    .Call2("myCeScan", as.character(seqnames(tFilter)), start(tFilter), end(tFilter),
+           NULL, NULL, NULL,
+           NULL, NULL,
+           as.character(seqnames(targetRanges(axts))),
+           start(targetRanges(axts)), end(targetRanges(axts)),
+           as.character(strand(targetRanges(axts))),
+           as.character(targetSeqs(axts)),
+           as.character(seqnames(queryRanges(axts))),
+           start(queryRanges(axts)), end(queryRanges(axts)),
+           as.character(strand(queryRanges(axts))),
+           as.character(querySeqs(axts)),
+           score(axts), symCount(axts), winSize, minScore,
+           as.character(resFiles),
+           PACKAGE="CNEr")
+  }else{
+    .Call2("myCeScan", as.character(seqnames(tFilter)), start(tFilter), end(tFilter),
+              as.character(seqnames(qFilter)), start(qFilter), end(qFilter),
+              as.character(seqnames(qSizes)), as.integer(seqlengths(qSizes)), 
+              as.character(seqnames(targetRanges(axts))), 
+              start(targetRanges(axts)), end(targetRanges(axts)), 
+              as.character(strand(targetRanges(axts))), 
+              as.character(targetSeqs(axts)),
+              as.character(seqnames(queryRanges(axts))), 
+              start(queryRanges(axts)), end(queryRanges(axts)), 
+              as.character(strand(queryRanges(axts))), 
+              as.character(querySeqs(axts)),
+              score(axts), symCount(axts), winSize, minScore, 
+              as.character(resFiles),
               PACKAGE="CNEr")
+  }
   CNE = lapply(resFiles, 
                function(x){res=read.table(x, header=FALSE, sep="\t", as.is=TRUE)
                colnames(res)=c("tName", "tStart", "tEnd", "qName", "qStart", "qEnd", "strand", "score", "cigar")
@@ -26,10 +83,13 @@ ceScan = function(axts, tFilter=NULL, qFilter=NULL, qSizes=NULL, thresholds=c("4
   return(CNE)
 }
 
+
+### -----------------------------------------------------------------
+### Another main function for CNEs identification, but it takes the axt files and bed files as input
+### Not exported!
 ceScanFile = function(axtFiles, tFilterFile=NULL, qFilterFile=NULL, qSizes=NULL,
                       thresholds=c("49,50")){
   ## Here the returned tStart and qStart are 1-based coordinates. Of course ends are also 1-based.
-  #dyn.load("~/Repos/CSC/CNEr/src/CNEr.so")
   if(!is.null(qFilterFile))
     if(is.null(qSizes) || !is(qSizes, "Seqinfo"))
       stop("qSizes must exist and be a Seqinfo object when qFilter exists")
@@ -37,7 +97,7 @@ ceScanFile = function(axtFiles, tFilterFile=NULL, qFilterFile=NULL, qSizes=NULL,
   minScore = as.integer(sapply(strsplit(thresholds, ","), "[", 1))
   resFiles = tempfile(pattern = paste(minScore, winSize, "ceScan", sep="-"), tmpdir = tempdir(), fileext = "")
   .Call2("ceScanFile", axtFiles, tFilterFile, qFilterFile, 
-        as.vector(seqnames(qSizes)), as.vector(seqlengths(qSizes)),
+        as.character(seqnames(qSizes)), as.character(seqlengths(qSizes)),
         winSize, minScore,
         resFiles, PACKAGE="CNEr")
   CNE = lapply(resFiles,
@@ -49,6 +109,69 @@ ceScanFile = function(axtFiles, tFilterFile=NULL, qFilterFile=NULL, qSizes=NULL,
   return(CNE)
 }
 
+### -----------------------------------------------------------------
+### The S4 methods for ceScan
+### Exported!
+setMethod("ceScan", signature(axts="axt", tFilter="GRanges", qFilter="GRanges",
+                              qSizes="Seqinfo"),
+          function(axts, tFilter, qFilter, qSizes, thresholds="49,50"){
+            ceScanR(axts, tFilter=tFilter, qFilter=qFilter, 
+                    qSizes=qSizes, thresholds=thresholds)
+          }
+          )
+setMethod("ceScan", signature(axts="axt", tFilter="missing", qFilter="GRanges",
+                              qSizes="Seqinfo"),
+          function(axts, tFilter, qFilter, qSizes, thresholds="49,50"){
+            ceScanR(axts, tFilter=NULL, qFilter=qFilter,
+                    qSizes=qSizes, thresholds=thresholds)
+          }
+          )
+setMethod("ceScan", signature(axts="axt", tFilter="missing", qFilter="missing",
+                              qSizes="missing"),
+          function(axts, tFilter, qFilter, qSizes, thresholds="49,50"){
+            ceScanR(axts, tFilter=NULL, qFilter=NULL,
+                    qSizes=NULL, thresholds=thresholds)
+          }
+          )
+setMethod("ceScan", signature(axts="axt", tFilter="GRanges", qFilter="missing",
+                              qSizes="missing"),
+          function(axts, tFilter, qFilter, qSizes, thresholds="49,50"){
+            ceScanR(axts, tFilter=tFilter, qFilter=NULL,
+                    qSizes=NULL, thresholds=thresholds)
+          }
+          )
+setMethod("ceScan", signature(axts="character", tFilter="character", 
+                              qFilter="character", qSizes="Seqinfo"),
+          function(axts, tFilter, qFilter, qSizes, thresholds="49,50"){
+            ceScanFile(axtFiles=axts, tFilterFile=tFilter, qFilterFile=qFilter,
+                       qSizes=qSizes, thresholds=thresholds)
+          }
+          )
+setMethod("ceScan", signature(axts="character", tFilter="missing",
+                              qFilter="character", qSizes="Seqinfo"),
+          function(axts, tFilter, qFilter, qSizes, thresholds="49,50"){
+            ceScanFile(axtFiles=axts, tFilterFile=NULL, qFilter=qFilter,
+                       qSizes=qSizes, thresholds=thresholds)
+          }
+          )
+setMethod("ceScan", signature(axts="character", tFilter="missing",
+                              qFilter="missing", qSizes="missing"),
+          function(axts, tFilter, qFilter, qSizes, thresholds="49,50"){
+            ceScanFile(axtFiles=axts, tFilterFile=NULL, qFilter=NULL,
+                       qSizes=NULL, thresholds=thresholds)
+          }
+          )
+setMethod("ceScan", signature(axts="character", tFilter="character",
+                              qFilter="missing", qSizes="missing"),
+          function(axts, tFilter, qFilter, qSizes, thresholds="49,50"){
+            ceScanFile(axtFiles=axts, tFilterFile=tFilter, qFilter=NULL,
+                       qSizes=NULL, thresholds=thresholds)
+          }
+          )
+
+### -----------------------------------------------------------------
+### Merge two side cnes
+###
 ceMerge = function(cne1, cne2){
   # In this function, cne's start is 1-based coordinates. ends are 1-based too. 
   require(GenomicRanges)
