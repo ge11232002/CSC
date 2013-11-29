@@ -15,3 +15,12 @@ setGeneric("subAxt", function(x, chr, start, end, strand=c("+", "-", "*"),
 ###
 setGeneric("clone", function(x, ...) standardGeneric("clone"))  # not exported
 
+
+
+### -----------------------------------------------------------------
+### ceScan
+###
+setGeneric("ceScan", function(axts, tFilter, qFilter, qSizes, thresholds="49,50")
+           standardGeneric("ceScan"))
+
+
