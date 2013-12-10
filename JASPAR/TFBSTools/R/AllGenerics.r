@@ -99,6 +99,8 @@ setGeneric("writeGFF3", signature="x", function(x) standardGeneric("writeGFF3"))
 setGeneric("writeGFF2", signature="x", function(x) standardGeneric("writeGFF2"))
 setGeneric("relScore", signature="x", function(x) standardGeneric("relScore"))
 setGeneric("clone", signature="x", function(x, ...) standardGeneric("clone"))
+setGeneric("PWMSimilarity", function(x) standardGeneric("PWMSimilarity"))
+
 
 ## PFM methods
 setGeneric("searchMatrix", 

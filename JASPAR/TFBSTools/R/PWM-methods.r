@@ -293,3 +293,46 @@ setMethod("searchPairBSgenome", signature(pwm="PWMatrixList"),
           }
           )
 
+### -----------------------------------------------------------------
+### PWMDivergence, computes the normalised Euclidian distance
+###  (Harbison et al. 2004)
+PWMEuclidian = function(pwm1, pwm2){
+  # now the pwm1 and pwm2 must have same widths
+  stopifnot(isConstant(ncol(pwm1), ncol(pwm2)))
+  width = ncol(pwm1)
+  diffMatrix = (pwm1 - pwm2)^2
+  PWMDistance = sum(sqrt(colSums(diffMatrix))) / sqrt(2) / width
+  return(PWMDistance) 
+}
+
+PWMPearson = function(pwm1, pwm2){
+  # now the pwm1 and pwm2 must have the same widths
+  stopifnot(isConstant(ncol(pwm1), ncol(pwm2)))
+  top = colSums((pwm1 - 0.25) * (pwm2 - 0.25))
+  bottom = sqrt(colSums((pwm1 - 0.25)^2) * colSums((pwm2 - 0.25)^2))
+  r = 1 / width(pwm1) * sum((top / bottom))
+  return(r)
+}
+
+PWMKL = function(pwm1, pwm2){
+  # now the pwm1 and pwm2 must have the same widths
+  stopifnot(isConstant(ncol(pwm1), ncol(pwm2)))
+  KL = 0.5 / width(pwm1) * sum(colSums(pwm1 * log(pwm1 / pwm2) + pwm2 * log(pwm2 / pwm2)))
+  return(KL)
+}
+
+
+setMethod("PWMSimilarity", signature(pwm1="matrix", pwm2="matrix"),
+          function(pwm1, pwm2, method=c("Euclidian", "Pearson", "KL")){
+            method = match.arg(method)
+            pwm1 = Biostrings:::.normargPwm(pwm1)
+            pwm2 = Biostrings:::.normargPwm(pwm2)
+            ans = switch(method,
+                         "Euclidian"=PWMEuclidian(pwm1, pwm2),
+                         "Pearson"=PWMPearson(pwm1, pwm2),
+                         "KL"=PWMKL(pwm1, pwm2))
+            return(ans)
+          }
+          )
+
+
