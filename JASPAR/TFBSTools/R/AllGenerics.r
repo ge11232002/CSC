@@ -99,14 +99,14 @@ setGeneric("writeGFF3", signature="x", function(x) standardGeneric("writeGFF3"))
 setGeneric("writeGFF2", signature="x", function(x) standardGeneric("writeGFF2"))
 setGeneric("relScore", signature="x", function(x) standardGeneric("relScore"))
 setGeneric("clone", signature="x", function(x, ...) standardGeneric("clone"))
-setGeneric("PWMSimilarity", function(x) standardGeneric("PWMSimilarity"))
+setGeneric("PWMSimilarity", function(pwm1, pwm2, method=c("Euclidian", "Pearson", "KL")) standardGeneric("PWMSimilarity"))
 
 
 ## PFM methods
-setGeneric("searchMatrix", 
+setGeneric("PFMSimilarity", 
            function(pfmSubject, pfmQuery, openPenalty=3, extPenalty=0.01)
                     #max.results=10, min.percent_score=NULL, min.score=NULL) 
-             standardGeneric("searchMatrix"))
+             standardGeneric("PFMSimilarity"))
 
 setGeneric("permuteMatrix", signature="x",
            function(x, type="intra") standardGeneric("permuteMatrix"))
