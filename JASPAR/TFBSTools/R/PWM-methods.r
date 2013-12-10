@@ -328,6 +328,7 @@ PWMKL = function(pwm1, pwm2){
 }
 
 setMethod("PWMSimilarity", signature(pwm1="matrix", pwm2="matrix"),
+          ## It takes the prob PWM, rather than log prob PWM.
           function(pwm1, pwm2, method=c("Euclidian", "Pearson", "KL")){
             method = match.arg(method)
             widthMin = min(ncol(pwm1), ncol(pwm2))
