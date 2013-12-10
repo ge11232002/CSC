@@ -299,6 +299,8 @@ setMethod("searchPairBSgenome", signature(pwm="PWMatrixList"),
 PWMEuclidian = function(pwm1, pwm2){
   # now the pwm1 and pwm2 must have same widths
   stopifnot(isConstant(ncol(pwm1), ncol(pwm2)))
+  pwm1 = Biostrings:::.normargPwm(pwm1)
+  pwm2 = Biostrings:::.normargPwm(pwm2)
   width = ncol(pwm1)
   diffMatrix = (pwm1 - pwm2)^2
   PWMDistance = sum(sqrt(colSums(diffMatrix))) / sqrt(2) / width
@@ -308,6 +310,8 @@ PWMEuclidian = function(pwm1, pwm2){
 PWMPearson = function(pwm1, pwm2){
   # now the pwm1 and pwm2 must have the same widths
   stopifnot(isConstant(ncol(pwm1), ncol(pwm2)))
+  pwm1 = Biostrings:::.normargPwm(pwm1)
+  pwm2 = Biostrings:::.normargPwm(pwm2)
   top = colSums((pwm1 - 0.25) * (pwm2 - 0.25))
   bottom = sqrt(colSums((pwm1 - 0.25)^2) * colSums((pwm2 - 0.25)^2))
   r = 1 / width(pwm1) * sum((top / bottom))
@@ -317,22 +321,68 @@ PWMPearson = function(pwm1, pwm2){
 PWMKL = function(pwm1, pwm2){
   # now the pwm1 and pwm2 must have the same widths
   stopifnot(isConstant(ncol(pwm1), ncol(pwm2)))
+  pwm1 = Biostrings:::.normargPwm(pwm1)
+  pwm2 = Biostrings:::.normargPwm(pwm2)
   KL = 0.5 / width(pwm1) * sum(colSums(pwm1 * log(pwm1 / pwm2) + pwm2 * log(pwm2 / pwm2)))
   return(KL)
 }
 
-
 setMethod("PWMSimilarity", signature(pwm1="matrix", pwm2="matrix"),
           function(pwm1, pwm2, method=c("Euclidian", "Pearson", "KL")){
             method = match.arg(method)
-            pwm1 = Biostrings:::.normargPwm(pwm1)
-            pwm2 = Biostrings:::.normargPwm(pwm2)
-            ans = switch(method,
-                         "Euclidian"=PWMEuclidian(pwm1, pwm2),
-                         "Pearson"=PWMPearson(pwm1, pwm2),
-                         "KL"=PWMKL(pwm1, pwm2))
+            widthMin = min(ncol(pwm1), ncol(pwm2))
+            ans = Inf
+            for(i in 1:(1+ncol(pwm1)-widthMin)){
+              for(j in 1:(1+ncol(pwm2)-widthMin)){
+                pwm1Temp = pwm1[i:widthMin]
+                pwm2Temp = pwm2[j:widthMin]
+                ansTemp = switch(method,
+                                 "Euclidian"=PWMEuclidian(pwm1Temp, pwm2Temp),
+                                 "Pearson"=PWMPearson(pwm1Temp, pwm2Temp),
+                                 "KL"=PWMKL(pwm1Temp, pwm2Temp))
+                ans = min(ans, ansTemp)
+              }
+            }
             return(ans)
           }
           )
 
+setMethod("PWMSimilarity", signature(pwm1="PWMatrix", pwm2="PWMatrix"),
+          function(pwm1, pwm2, method=c("Euclidian", "Pearson", "KL")){
+            PWMSimilarity(pwm1@Matrix, pwm2@Matrix, method=method)
+          }
+          )
+
+setMethod("PWMSimilarity", signature(pwm1="matrix", pwm2="PWMatrix"),
+          function(pwm1, pwm2, method=c("Euclidian", "Pearson", "KL")){
+            PWMSimilarity(pwm1, pwm2@Matrix, method=method)
+          }
+          )
+
+setMethod("PWMSimilarity", signature(pwm1="PWMatrix", pwm2="matrix"),
+          function(pwm1, pwm2, method=c("Euclidian", "Pearson", "KL")){
+            PWMSimilarity(pwm1@Matrix, pwm2, method=method)
+          }
+          )
+
+setMethod("PWMSimilarity", signature(pwm1="PWMatrixList", pwm2="PWMatrix"),
+          function(pwm1, pwm2, method=c("Euclidian", "Pearson", "KL")){
+            #ans = lapply(pwm1, PWMSimilarity, pwm2, method=method)
+            PWMSimilarity(pwm1, pwm2@Matrix, method=method)
+          }
+          )
+
+setMethod("PWMSimilarity", signature(pwm1="PWMatrixList", pwm2="matrix"),
+          function(pwm1, pwm2, method=c("Euclidian", "Pearson", "KL")){
+            ans = sapply(pwm1, PWMSimilarity, pwm2, method=method)
+            return(ans)
+          }
+          )
+
+setMethod("PWMSimilarity", signature(pwm1="PWMatrixList", pwm2="PWMatrixList"),
+          function(pwm1, pwm2, method=c("Euclidian", "Pearson", "KL")){
+            ans = mapply(PWMSimilarity, pwm1, pwm2, method=method)
+            return(ans)
+          }
+          )
 
