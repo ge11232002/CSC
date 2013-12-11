@@ -330,9 +330,11 @@ PWMKL = function(pwm1, pwm2){
   return(KL)
 }
 
-setMethod("PWMSimilarity", signature(pwm1="matrix", pwm2="matrix"),
+setMethod("PWMSimilarity", signature(pwmSubject="matrix", pwmQuery="matrix"),
           ## It takes the prob PWM, rather than log prob PWM.
-          function(pwm1, pwm2, method=c("Euclidian", "Pearson", "KL")){
+          function(pwmSubject, pwmQuery, method=c("Euclidian", "Pearson", "KL")){
+            pwm1 = pwmSubject
+            pwm2 = pwmQuery
             method = match.arg(method)
             widthMin = min(ncol(pwm1), ncol(pwm2))
             ans = c()
@@ -356,41 +358,41 @@ setMethod("PWMSimilarity", signature(pwm1="matrix", pwm2="matrix"),
           }
           )
 
-setMethod("PWMSimilarity", signature(pwm1="PWMatrix", pwm2="PWMatrix"),
-          function(pwm1, pwm2, method=c("Euclidian", "Pearson", "KL")){
-            PWMSimilarity(pwm1@matrix, pwm2@matrix, method=method)
+setMethod("PWMSimilarity", signature(pwmSubject="PWMatrix", pwmQuery="PWMatrix"),
+          function(pwmSubject, pwmQuery, method=c("Euclidian", "Pearson", "KL")){
+            PWMSimilarity(pwmSubject@matrix, pwmQuery@matrix, method=method)
           }
           )
 
-setMethod("PWMSimilarity", signature(pwm1="matrix", pwm2="PWMatrix"),
-          function(pwm1, pwm2, method=c("Euclidian", "Pearson", "KL")){
-            PWMSimilarity(pwm1, pwm2@matrix, method=method)
+setMethod("PWMSimilarity", signature(pwmSubject="matrix", pwmQuery="PWMatrix"),
+          function(pwmSubject, pwmQuery, method=c("Euclidian", "Pearson", "KL")){
+            PWMSimilarity(pwmSubject, pwmQuery@matrix, method=method)
           }
           )
 
-setMethod("PWMSimilarity", signature(pwm1="PWMatrix", pwm2="matrix"),
-          function(pwm1, pwm2, method=c("Euclidian", "Pearson", "KL")){
-            PWMSimilarity(pwm1@matrix, pwm2, method=method)
+setMethod("PWMSimilarity", signature(pwmSubject="PWMatrix", pwmQuery="matrix"),
+          function(pwmSubject, pwmQuery, method=c("Euclidian", "Pearson", "KL")){
+            PWMSimilarity(pwmSubject@matrix, pwmQuery, method=method)
           }
           )
 
-setMethod("PWMSimilarity", signature(pwm1="PWMatrixList", pwm2="PWMatrix"),
-          function(pwm1, pwm2, method=c("Euclidian", "Pearson", "KL")){
+setMethod("PWMSimilarity", signature(pwmSubject="PWMatrixList", pwmQuery="PWMatrix"),
+          function(pwmSubject, pwmQuery, method=c("Euclidian", "Pearson", "KL")){
             #ans = lapply(pwm1, PWMSimilarity, pwm2, method=method)
-            PWMSimilarity(pwm1, pwm2@matrix, method=method)
+            PWMSimilarity(pwmSubject, pwmQuery@matrix, method=method)
           }
           )
 
-setMethod("PWMSimilarity", signature(pwm1="PWMatrixList", pwm2="matrix"),
-          function(pwm1, pwm2, method=c("Euclidian", "Pearson", "KL")){
-            ans = sapply(pwm1, PWMSimilarity, pwm2, method=method)
+setMethod("PWMSimilarity", signature(pwmSubject="PWMatrixList", pwmQuery="matrix"),
+          function(pwmSubject, pwmQuery, method=c("Euclidian", "Pearson", "KL")){
+            ans = sapply(pwmSubject, PWMSimilarity, pwmQuery, method=method)
             return(ans)
           }
           )
 
-setMethod("PWMSimilarity", signature(pwm1="PWMatrixList", pwm2="PWMatrixList"),
-          function(pwm1, pwm2, method=c("Euclidian", "Pearson", "KL")){
-            ans = mapply(PWMSimilarity, pwm1, pwm2, method=method)
+setMethod("PWMSimilarity", signature(pwmSubject="PWMatrixList", pwmQuery="PWMatrixList"),
+          function(pwmSubject, pwmQuery, method=c("Euclidian", "Pearson", "KL")){
+            ans = mapply(PWMSimilarity, pwmSubject, pwmQuery, method=method)
             return(ans)
           }
           )
