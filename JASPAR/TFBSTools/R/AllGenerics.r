@@ -102,7 +102,7 @@ setGeneric("writeGFF3", signature="x", function(x) standardGeneric("writeGFF3"))
 setGeneric("writeGFF2", signature="x", function(x) standardGeneric("writeGFF2"))
 setGeneric("relScore", signature="x", function(x) standardGeneric("relScore"))
 setGeneric("clone", signature="x", function(x, ...) standardGeneric("clone"))
-setGeneric("PWMSimilarity", function(pwm1, pwm2, method=c("Euclidian", "Pearson", "KL")) standardGeneric("PWMSimilarity"))
+setGeneric("PWMSimilarity", function(pwmSubject, pwmQuery, method=c("Euclidian", "Pearson", "KL")) standardGeneric("PWMSimilarity"))
 
 
 ## PFM methods
