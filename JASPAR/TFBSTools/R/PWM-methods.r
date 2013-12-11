@@ -301,7 +301,7 @@ setMethod("searchPairBSgenome", signature(pwm="PWMatrixList"),
 ###  (Harbison et al. 2004)
 PWMEuclidian = function(pwm1, pwm2){
   # now the pwm1 and pwm2 must have same widths
-  stopifnot(isConstant(ncol(pwm1), ncol(pwm2)))
+  stopifnot(isConstant(c(ncol(pwm1), ncol(pwm2))))
   pwm1 = Biostrings:::.normargPwm(pwm1)
   pwm2 = Biostrings:::.normargPwm(pwm2)
   width = ncol(pwm1)
@@ -312,21 +312,21 @@ PWMEuclidian = function(pwm1, pwm2){
 
 PWMPearson = function(pwm1, pwm2){
   # now the pwm1 and pwm2 must have the same widths
-  stopifnot(isConstant(ncol(pwm1), ncol(pwm2)))
+  stopifnot(isConstant(c(ncol(pwm1), ncol(pwm2))))
   pwm1 = Biostrings:::.normargPwm(pwm1)
   pwm2 = Biostrings:::.normargPwm(pwm2)
   top = colSums((pwm1 - 0.25) * (pwm2 - 0.25))
   bottom = sqrt(colSums((pwm1 - 0.25)^2) * colSums((pwm2 - 0.25)^2))
-  r = 1 / width(pwm1) * sum((top / bottom))
+  r = 1 / ncol(pwm1) * sum((top / bottom))
   return(r)
 }
 
 PWMKL = function(pwm1, pwm2){
   # now the pwm1 and pwm2 must have the same widths
-  stopifnot(isConstant(ncol(pwm1), ncol(pwm2)))
+  stopifnot(isConstant(c(ncol(pwm1), ncol(pwm2))))
   pwm1 = Biostrings:::.normargPwm(pwm1)
   pwm2 = Biostrings:::.normargPwm(pwm2)
-  KL = 0.5 / width(pwm1) * sum(colSums(pwm1 * log(pwm1 / pwm2) + pwm2 * log(pwm2 / pwm2)))
+  KL = 0.5 / ncol(pwm1) * sum(colSums(pwm1 * log(pwm1 / pwm2) + pwm2 * log(pwm2 / pwm2)))
   return(KL)
 }
 
@@ -338,8 +338,8 @@ setMethod("PWMSimilarity", signature(pwm1="matrix", pwm2="matrix"),
             ans = Inf
             for(i in 1:(1+ncol(pwm1)-widthMin)){
               for(j in 1:(1+ncol(pwm2)-widthMin)){
-                pwm1Temp = pwm1[i:widthMin]
-                pwm2Temp = pwm2[j:widthMin]
+                pwm1Temp = pwm1[ ,i:widthMin]
+                pwm2Temp = pwm2[ ,j:widthMin]
                 ansTemp = switch(method,
                                  "Euclidian"=PWMEuclidian(pwm1Temp, pwm2Temp),
                                  "Pearson"=PWMPearson(pwm1Temp, pwm2Temp),
