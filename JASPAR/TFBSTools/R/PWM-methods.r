@@ -335,18 +335,23 @@ setMethod("PWMSimilarity", signature(pwm1="matrix", pwm2="matrix"),
           function(pwm1, pwm2, method=c("Euclidian", "Pearson", "KL")){
             method = match.arg(method)
             widthMin = min(ncol(pwm1), ncol(pwm2))
-            ans = Inf
+            ans = c()
             for(i in 1:(1+ncol(pwm1)-widthMin)){
               for(j in 1:(1+ncol(pwm2)-widthMin)){
-                pwm1Temp = pwm1[ ,i:widthMin]
-                pwm2Temp = pwm2[ ,j:widthMin]
+                pwm1Temp = pwm1[ ,i:(i+widthMin-1)]
+                pwm2Temp = pwm2[ ,j:(j+widthMin-1)]
                 ansTemp = switch(method,
                                  "Euclidian"=PWMEuclidian(pwm1Temp, pwm2Temp),
                                  "Pearson"=PWMPearson(pwm1Temp, pwm2Temp),
                                  "KL"=PWMKL(pwm1Temp, pwm2Temp))
-                ans = min(ans, ansTemp)
+                ans = c(ans, ansTemp)
               }
             }
+            ans = switch(method,
+                         "Euclidian"=min(ans),
+                         "Pearson"=max(ans),
+                         "KL"=min(ans)
+                         )
             return(ans)
           }
           )
