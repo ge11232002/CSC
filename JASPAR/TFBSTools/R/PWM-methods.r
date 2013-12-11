@@ -27,7 +27,8 @@ setMethod("toPWM", "character",
           function(x, type="log2probratio", pseudocounts=0.8, 
                    bg=c(A=0.25, C=0.25, G=0.25, T=0.25)){
             dnaset = DNAStringSet(x)
-            toPWM(dnaset, pseudocounts=pseudocounts,
+            toPWM(dnaset, type=type,
+                  pseudocounts=pseudocounts,
                   bg=bg)
           }
           )
@@ -37,7 +38,8 @@ setMethod("toPWM", "DNAStringSet",
             if(!isConstant(width(x)))
               stop("'x' must be rectangular (i.e. have a constant width)")
             pfm = consensusMatrix(x)
-            toPWM(pfm, pseudocounts=pseudocounts,
+            toPWM(pfm, type=type,
+                  pseudocounts=pseudocounts,
                   bg=bg)
           }
           )
@@ -45,7 +47,8 @@ setMethod("toPWM", "PFMatrix",
           function(x, type="log2probratio", pseudocounts=0.8, bg=NULL){
             if(is.null(bg))
               bg = bg(x)
-            pwmMatrix = toPWM(Matrix(x), pseudocounts=pseudocounts,
+            pwmMatrix = toPWM(Matrix(x), type=type,
+                              pseudocounts=pseudocounts,
                               bg=bg)
             pwm = PWMatrix(ID=ID(x), name=name(x), matrixClass=matrixClass(x),
                            strand=strand(x), bg=bg, 
@@ -350,26 +353,26 @@ setMethod("PWMSimilarity", signature(pwm1="matrix", pwm2="matrix"),
 
 setMethod("PWMSimilarity", signature(pwm1="PWMatrix", pwm2="PWMatrix"),
           function(pwm1, pwm2, method=c("Euclidian", "Pearson", "KL")){
-            PWMSimilarity(pwm1@Matrix, pwm2@Matrix, method=method)
+            PWMSimilarity(pwm1@matrix, pwm2@matrix, method=method)
           }
           )
 
 setMethod("PWMSimilarity", signature(pwm1="matrix", pwm2="PWMatrix"),
           function(pwm1, pwm2, method=c("Euclidian", "Pearson", "KL")){
-            PWMSimilarity(pwm1, pwm2@Matrix, method=method)
+            PWMSimilarity(pwm1, pwm2@matrix, method=method)
           }
           )
 
 setMethod("PWMSimilarity", signature(pwm1="PWMatrix", pwm2="matrix"),
           function(pwm1, pwm2, method=c("Euclidian", "Pearson", "KL")){
-            PWMSimilarity(pwm1@Matrix, pwm2, method=method)
+            PWMSimilarity(pwm1@matrix, pwm2, method=method)
           }
           )
 
 setMethod("PWMSimilarity", signature(pwm1="PWMatrixList", pwm2="PWMatrix"),
           function(pwm1, pwm2, method=c("Euclidian", "Pearson", "KL")){
             #ans = lapply(pwm1, PWMSimilarity, pwm2, method=method)
-            PWMSimilarity(pwm1, pwm2@Matrix, method=method)
+            PWMSimilarity(pwm1, pwm2@matrix, method=method)
           }
           )
 
