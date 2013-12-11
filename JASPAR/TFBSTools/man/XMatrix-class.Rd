@@ -9,6 +9,10 @@
 \alias{PWMatrix-class}
 \alias{ICMatrix}
 \alias{ICMatrix-class}
+\alias{colSums}
+\alias{dim}
+\alias{ncol}
+\alias{rowSums}
 \alias{bg}
 \alias{bg,XMatrix-method}
 \alias{bg<-,XMatrix-method}
