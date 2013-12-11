@@ -15,7 +15,7 @@ setMethod("pseudocounts", "PWMatrix", function(x) x@pseudocounts)
 setMethod("schneider", "ICMatrix", function(x) x@schneider)
 setMethod("colSums", "XMatrix", function(x) colSums(x@matrix))
 setMethod("rowSums", "XMatrix", function(x) rowSums(x@matrix))
-
+setMethod("dim", "XMatrix", function(x) dim(x@matrix))
 
 ### -----------------------------------------------------------------
 ### Setters
