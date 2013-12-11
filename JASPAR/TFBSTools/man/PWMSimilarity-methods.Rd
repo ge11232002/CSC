@@ -37,17 +37,18 @@
   and compare all the possible alignments.
   Only the smallest distance, divergence or largest correlation will be reported.
   
-  Given two PWMs, P^1 and P^2, where l is the length. 
-  P_{i,b} is the values in column i with base b.
-  The normalised Euclidian distance is computed in
-  D(a,b) = {1 \over {\sqrt{2}l}} \cdot \sum_{i=1}^{l} \sqrt{\sum_{b \in {\{A,C,G,T\}}} (P_{i,b}^1-P_{i,b}^2)^2}.
-  This distance is between 0 (perfect identity) and 1 (complete dis-similarity).
+  %Given two PWMs, P^1 and P^2, where l is the length. 
+  %P_{i,b} is the values in column i with base b.
+  %The normalised Euclidian distance is computed in
+  %D(a,b) = {1 \over {\sqrt{2}l}} \cdot \sum_{i=1}^{l} \sqrt{\sum_{b \in {\{A,C,G,T\}}} (P_{i,b}^1-P_{i,b}^2)^2}
+  %.
+  %This distance is between 0 (perfect identity) and 1 (complete dis-similarity).
   
-  The pearson correlation coefficient is computed in
-  r(P^1, P^2) = {1 \over l} \cdot \sum_{i=1}^l {\sum_{b \in \{A,C,G,T\}} (P_{i,b}^1 - 0.25)(P_{i,b}^2-0.25) \over \sqrt{\sum_{b \in \{A,C,G,T\}} (P_{i,b}^1 - 0.25)^2 \cdot \sum_{b \in \{A,C,G,T\}} (P_{i,b}^2 - 0.25)^2}}.
+  %The pearson correlation coefficient is computed in
+  %r(P^1, P^2) = {1 \over l} \cdot \sum_{i=1}^l {\sum_{b \in \{A,C,G,T\}} (P_{i,b}^1 - 0.25)(P_{i,b}^2-0.25) \over \sqrt{\sum_{b \in \{A,C,G,T\}} (P_{i,b}^1 - 0.25)^2 \cdot \sum_{b \in \{A,C,G,T\}} (P_{i,b}^2 - 0.25)^2}}.
   
-  The Kullback-Leibler divergence is computed in 
-  KL(P^1, P^2) = {1 \over {2l}} \cdot \sum_{i=1}^l \sum_{b \in \{A,C,G,T\}} (P_{i,b}^1\log{ P_{i,b}^1 \over P_{i,b}^2}+ P_{i,b}^2\log{P_{i,b}^2 \over {P_{i,b}^1}}).
+  %The Kullback-Leibler divergence is computed in 
+  %KL(P^1, P^2) = {1 \over {2l}} \cdot \sum_{i=1}^l \sum_{b \in \{A,C,G,T\}} (P_{i,b}^1\log{ P_{i,b}^1 \over P_{i,b}^2}+ P_{i,b}^2\log{P_{i,b}^2 \over {P_{i,b}^1}}).
 }
 
 \references{
