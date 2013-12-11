@@ -59,6 +59,8 @@ export(
 exportMethods(
   ## XMatrix-methods.r
   length,
+  ncol,
+  dim,
   reverseComplement
 )
 
@@ -84,6 +86,10 @@ export(
   matrixType,
   XMatrixList,
   #alignments,
+
+  # XMatrix-methods.r
+  colSums,
+  rowSums,
 
   ## PWM-methods.r
   toPWM,
