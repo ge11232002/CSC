@@ -265,6 +265,7 @@ The Kullback-Leibler divergence is computed in
   KL(P^1, P^2) = {1 \over {2l}} \cdot \sum_{i=1}^l \sum_{b \in \{A,C,G,T\}} (P_{i,b}^1\log{ P_{i,b}^1 \over P_{i,b}^2}+ P_{i,b}^2\log{P_{i,b}^2 \over {P_{i,b}^1}}).
 \end{equation}
 
+
 \section{Scan sequence and alignments with PWM pattern}
 \subsection{searchSeq}
 \textit{searchSeq} scans a nucleotide sequence with the pattern represented by the PWM.
