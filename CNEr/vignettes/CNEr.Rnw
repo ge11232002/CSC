@@ -1,0 +1,81 @@
+\documentclass{article}
+%\VignetteIndexEntry{TFBSTools}
+\usepackage[usenames,dvipsnames]{color}
+\usepackage[colorlinks=true, linkcolor=Blue, urlcolor=Blue,
+   citecolor=Blue]{hyperref}
+\usepackage[round]{natbib}
+
+\newcommand{\Rfunction}[1]{{\texttt{#1}}}
+\newcommand{\Robject}[1]{{\texttt{#1}}}
+\newcommand{\Rpackage}[1]{{\textit{#1}}}
+\newcommand{\Rmethod}[1]{{\texttt{#1}}}
+\newcommand{\Rfunarg}[1]{{\texttt{#1}}}
+\newcommand{\Rclass}[1]{{\textit{#1}}}
+\newcommand{\Rcode}[1]{{\texttt{#1}}}
+
+\newcommand{\software}[1]{\textsf{#1}}
+\newcommand{\R}{\software{R}}
+\newcommand{\IRanges}{\Rpackage{IRanges}}
+\usepackage{amsmath}
+
+\title{The \textbf{TFBSTools} package overview}
+\author{Ge Tan}
+
+\begin{document}
+\SweaveOpts{concordance=TRUE}
+\maketitle
+<<initialize, echo=FALSE>>=
+options(width=70)
+@
+
+\tableofcontents
+
+\section{Introduction}
+
+
+\section{S4 classes in TFBSTools}
+
+\subsection{XMatrix and its subclasses}
+<<rtl-PFMatrix, eval=FALSE, results = hide>>=
+library(TFBSTools)
+pfm = PFMatrix(ID="MA0004.1", name="Arnt", matrixClass="Zipper-Type", strand="+",
+        bg=c(A=0.25, C=0.25, G=0.25, T=0.25),
+        tags=list(family="Helix-Loop-Helix", species="10090", tax_group="vertebrates",
+        medline="7592839", type="SELEX", ACC="P53762", pazar_tf_id="TF0000003",
+        TFBSshape_ID="11", TFencyclopedia_ID="580"),
+        matrix=matrix(c(4L,  19L, 0L,  0L,  0L,  0L,
+                16L, 0L,  20L, 0L,  0L,  0L,
+                0L,  1L,  0L,  20L, 0L,  20L,
+                0L,  0L,  0L,  0L,  20L, 0L),
+                byrow=TRUE, nrow=4, dimnames=list(c("A", "C", "G", "T")))
+        )
+
+## coerced to matrix
+as.matrix(pfm)
+
+## access the slots of pfm
+ID(pfm)
+name(pfm)
+Matrix(pfm)
+
+## conversion to pwm, icm
+pwm = toPWM(pfm)
+icm = toICM(pfm)
+
+## get the reverse complment matrix with all the same information except the strand.
+reverseComplement(pwm)
+
+@
+
+
+\section{Conclusion}
+The following is the session info that generated this vignette:
+<<session-info>>=
+  sessionInfo()
+@
+
+\newpage
+\bibliographystyle{jss}
+\bibliography{TFBSTools}
+
+\end{document}

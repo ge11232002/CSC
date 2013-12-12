@@ -5,7 +5,10 @@
 static const R_CallMethodDef callMethods[] = {
   /* io.c */
   CALLMETHOD_DEF(myReadBed, 1),
-
+  CALLMETHOD_DEF(readAxt, 1),
+  CALLMETHOD_DEF(axt_info, 1),
+  CALLMETHOD_DEF(bin_from_coord_range, 2),
+  CALLMETHOD_DEF(bin_ranges_from_coord_range, 2),
   {NULL, NULL, 0}
 };
 
