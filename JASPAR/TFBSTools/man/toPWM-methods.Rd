@@ -87,7 +87,7 @@ Ge Tan
                                byrow=TRUE, nrow=4, dimnames=list(c("A", "C", "G", "T")))
                  )
   ## Convert it into a PWMatrix
-  pwm = toPWM(pfm, pseudocounts=0.8)
+  pwm = toPWM(pfm, type="log2probratio", pseudocounts=0.8)
 }
 
 \keyword{methods}
