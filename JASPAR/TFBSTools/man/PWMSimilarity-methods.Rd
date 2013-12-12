@@ -86,5 +86,19 @@
 %%  ~~describe this method here~~
 }
 }}
+
+\seealso{
+  \code{\link{PFMSimilarity}}
+}
+
+\examples{
+  data(MA0003.2)
+  data(MA0004.1)
+  pwm1 = toPWM(MA0003.2, type="prob")
+  pwm2 = toPWM(MA0004.1, type="prob")
+  PWMSimilarity(pwm1, pwm2, method="Euclidian")
+}
+
+
 \keyword{methods}
 \keyword{ ~~ other possible keyword(s) ~~ }
