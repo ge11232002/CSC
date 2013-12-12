@@ -51,11 +51,11 @@
 }
 
 \examples{
-  \dontrun{
-    site = searchSeq(pwm, "GAATTCTCTCTTGTTGTAGTCTCTTGACAAAATG", min.score="60%")
-    siteList = searchSeq(pwmList, "GAATTCTCTCTTGTTGTAGTCTCTTGACAAAATG", 
-                         min.score="60%", strand="*", type="any")
-  }
+  data(MA0003.2)
+  pwm = toPWM(MA0003.2)
+  site = searchSeq(pwm, "GAATTCTCTCTTGTTGTAGTCTCTTGACAAAATG", min.score="60\%")
+  siteList = searchSeq(pwmList, "GAATTCTCTCTTGTTGTAGTCTCTTGACAAAATG", 
+                       min.score="60\%", strand="*", type="any")
 }
 
 \keyword{methods}
