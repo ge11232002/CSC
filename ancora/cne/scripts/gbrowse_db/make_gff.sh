@@ -17,11 +17,11 @@
     /export/data/CNEs/hg19/annotation/hsa.gff3 \
     >>/export/data/CNEs/gff/hg19.gff
   wc -l /export/data/CNEs/gff/hg19.gff
-  #perl /opt/www/cne/scripts/gbrowse_db/synteny2gff.pl jn danRer7 \
-  #  /export/data/CNEs/synteny/joinedNets_danRer7_hg19_gap100k300k.txt \
-  #  /export/data/CNEs/synteny/joinedNets_danRer7_hg19_gap100k300k.hg19_detail.bed \
-   # >>/export/data/CNEs/gff/hg19.gff
-  #wc -l /export/data/CNEs/gff/hg19.gff
+  perl /opt/www/cne/scripts/gbrowse_db/synteny2gff.pl jn danRer7 \
+    /export/data/CNEs/synteny/joinedNets_danRer7_hg19_gap150k450k.txt \
+    /export/data/CNEs/synteny/joinedNets_danRer7_hg19_gap150k450k.hg19_detail.bed \
+    >>/export/data/CNEs/gff/hg19.gff
+  wc -l /export/data/CNEs/gff/hg19.gff
 
 
 #mm10
@@ -133,11 +133,11 @@
     /export/data/CNEs/danRer7/annotation/dre.gff3 \
     >>/export/data/CNEs/gff/danRer7.gff
   wc -l /export/data/CNEs/gff/danRer7.gff
-  #perl /opt/www/cne/scripts/gbrowse_db/synteny2gff.pl jn hg19 \
-  #  /export/data/CNEs/synteny/joinedNets_hg19_danRer7_gap300k100k.txt \
-  #  /export/data/CNEs/synteny/joinedNets_hg19_danRer7_gap300k100k.danRer7_detail.bed \
-  #  >>/export/data/CNEs/gff/danRer7.gff
-  #wc -l /export/data/CNEs/gff/danRer7.gff
+  perl /opt/www/cne/scripts/gbrowse_db/synteny2gff.pl jn hg19 \
+    /export/data/CNEs/synteny/joinedNets_hg19_danRer7_gap450k150k.txt \
+    /export/data/CNEs/synteny/joinedNets_hg19_danRer7_gap450k150k.danRer7_detail.bed \
+    >>/export/data/CNEs/gff/danRer7.gff
+  wc -l /export/data/CNEs/gff/danRer7.gff
 
 
 #tetNig2
