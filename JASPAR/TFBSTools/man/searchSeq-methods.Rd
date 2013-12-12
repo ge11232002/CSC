@@ -53,9 +53,10 @@
 \examples{
   data(MA0003.2)
   pwm = toPWM(MA0003.2)
+  pwmList = PWMatrixList(pwm1=pwm, pwm2=pwm)
   site = searchSeq(pwm, "GAATTCTCTCTTGTTGTAGTCTCTTGACAAAATG", min.score="60\%")
   siteList = searchSeq(pwmList, "GAATTCTCTCTTGTTGTAGTCTCTTGACAAAATG", 
-                       min.score="60\%", strand="*", type="any")
+                       min.score="60\%", strand="*")
 }
 
 \keyword{methods}

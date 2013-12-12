@@ -6,7 +6,7 @@
   Some example PFM matrices.
 }
 \description{
-%%  ~~ A concise (1-5 lines) description of the dataset. ~~
+  Some example PFM matrices from JASPAR 2014.
 }
 \usage{data(MA0004.1)
        data(MA0003.2)
@@ -19,9 +19,6 @@
 }
 \source{
   http://jaspar.genereg.net/
-}
-\references{
-%%  ~~ possibly secondary sources and usages ~~
 }
 \examples{
 data(MA0004.1)

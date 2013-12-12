@@ -12,7 +12,7 @@
 \alias{colSums,XMatrix-method}
 \alias{dim,XMatrix-method}
 \alias{ncol,XMatrix-method}
-\alias{rowSumsm,XMatrix-method}
+\alias{rowSums,XMatrix-method}
 \alias{bg}
 \alias{bg,XMatrix-method}
 \alias{bg<-,XMatrix-method}
