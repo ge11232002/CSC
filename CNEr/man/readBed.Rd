@@ -55,6 +55,7 @@ Ge Tan
 \examples{
   \dontrun{
     bedhg19 = readBed("/Users/gtan/CSC/CNEr/filters/filter_regions.hg19.bed")
+    beddanRer7 = readBed("/Users/gtan/CSC/CNEr/filters/filter_regions.danRer7.bed")
   }
 }
 % Add one or more standard keywords, see file 'KEYWORDS' in the
