@@ -191,3 +191,28 @@ queryAnnotationSQLite = function(dbname, tablename, chr, start, end){
   ans = dbGetQuery(con, query)
   ans = ans[ ,c("chromosome", "start", "end", "strand", "transcript", "gene", "symbol")]
 }
+
+###------------------------------------------------------------------
+### fetchChromSizes fetches the chromosome sizes.
+### Exported!
+fetchChromSizes = function(assembly){
+  # UCSC
+  message("Trying UCSC...")
+  con = try(dbConnect(MySQL(), user="genome", password="", 
+                      dbname=assembly, host="genome-mysql.cse.ucsc.edu"), 
+            silent=TRUE)
+  on.exit(dbDisconnect(con))
+  if(class(con) != "try-error"){
+    sqlCmd = "SELECT chrom,size FROM chromInfo ORDER BY size DESC"
+    ans = try(dbGetQuery(con, sqlCmd))
+    if(class(ans) == "try-error"){
+      return(NULL)
+    }else{
+      return(ans)
+    }
+  }
+  # other sources? Add later
+  return(NULL)
+}
+
+

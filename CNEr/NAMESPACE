@@ -1,7 +1,7 @@
 useDynLib(CNEr)
 import(methods)
 import(RSQLite)
-#import(RMySQL)
+import(RMySQL)
 
 ### -----------------------------------------------------------------
 #### Import S4 classes defined in other packages
@@ -50,6 +50,7 @@ export(
   binRestrictionString,
   readCNERangesFromSQLite,
   queryAnnotationSQLite,
+  fetchChromSizes,
 
   ## class.r
   axt,
@@ -84,6 +85,5 @@ exportMethods(
   targetSeqs, querySeqs,
   symCount,
   subAxt
-
 )
 
