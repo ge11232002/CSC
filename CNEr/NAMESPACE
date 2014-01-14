@@ -1,7 +1,7 @@
 useDynLib(CNEr)
 import(methods)
 import(RSQLite)
-import(RMySQL)
+#import(RMySQL)
 
 ### -----------------------------------------------------------------
 #### Import S4 classes defined in other packages
@@ -15,12 +15,14 @@ import(RMySQL)
 importMethodsFrom(rtracklayer, import.bed)
 importMethodsFrom(GenomicRanges, seqnames)
 importMethodsFrom(XVector, subseq)
+importMethodsFrom(DBI, dbGetQuery, dbConnect, dbDisconnect)
 
 ### -----------------------------------------------------------------
 ### Import ordinary functions, variables in other packages
 ###
 importFrom(GenomicRanges, GRanges)
 importFrom(Biostrings, DNAStringSet)
+importFrom(RMySQL, MySQL)
 
 ### -----------------------------------------------------------------
 ### Export S4 classes defined in CNEr
