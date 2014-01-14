@@ -1,6 +1,6 @@
 useDynLib(CNEr)
 import(methods)
-import(RSQLite)
+#import(RSQLite)
 #import(RMySQL)
 
 ### -----------------------------------------------------------------
@@ -23,6 +23,7 @@ importMethodsFrom(DBI, dbGetQuery, dbConnect, dbDisconnect)
 importFrom(GenomicRanges, GRanges)
 importFrom(Biostrings, DNAStringSet)
 importFrom(RMySQL, MySQL)
+importFrom(RSQLite, SQLite)
 
 ### -----------------------------------------------------------------
 ### Export S4 classes defined in CNEr
