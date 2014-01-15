@@ -67,7 +67,7 @@ lastz = function(assemblyTarget, assemblyQuery, chrsTarget=NULL, chrsQuery=NULL,
                      ".", sub("\\..*$", "", basename(assemblyQuery)),
                      ".", format, sep="")
       outputToReturn = c(outputToReturn, output)
-      cmd = paste(LASTZ, " ", assemblyTarget, "/", chrTarget, " ", 
+      cmd = paste("lastz", " ", assemblyTarget, "/", chrTarget, " ", 
                   assemblyQuery, "/", chrQuery, " ", 
                   lastzOptions[[distance]], 
                   " --format=", format, 
@@ -101,7 +101,7 @@ validateLastz = function(lavs){
 lavToPsl = function(lavs, psls=sub("\\.lav$", ".psl", lavs, ignore.case=TRUE), 
                     removeLav=TRUE){
   for(i in 1:length(lavs)){
-    cmd = paste(file.path(KENT_DIR, "lavToPsl"), lavs[i], psls[i])
+    cmd = paste("lavToPsl", lavs[i], psls[i])
     my.system(cmd)
   }
   if(removeLav){
@@ -145,7 +145,7 @@ axtChain = function(inputs, assemblyTarget, assemblyQuery, format="axt",
   write.table(lastzMatrix[[distance]], file=matrixFile, quote=FALSE, 
               sep=" ", row.names=FALSE, col.names=TRUE)
   for(i in 1:length(inputs)){
-    cmd = file.path(KENT_DIR, "axtChain")
+    cmd = "axtChain"
     if(format == "psl"){
       cmd = paste(cmd, "-psl")
     }
@@ -167,7 +167,7 @@ chainMergeSort = function(chains, assemblyTarget, assemblyQuery, removeChains=TR
                    sub("\\.2bit$", "", basename(assemblyQuery), ignore.case=TRUE),
                    ".all.chain", sep=""
                    )
-  cmd = file.path(KENT_DIR, "chainMergeSort")
+  cmd = "chainMergeSort"
   cmd = paste(cmd, paste(chains, collapse=" "), ">", allChain)
   my.system(cmd)
   if(removeChains){
@@ -194,7 +194,7 @@ chainPreNet = function(allChain, assemblyTarget, assemblyQuery, removeAllChain=F
                       sub("\\.2bit$", "", basename(assemblyQuery), ignore.case=TRUE),
                       ".all.pre.chain", sep=""
                       )
-  cmd = file.path(KENT_DIR, "chainPreNet")
+  cmd = "chainPreNet"
   cmd = paste(cmd, allChain, target.sizesFile, query.sizesFile, allPreChain)
   my.system(cmd)
   unlink(c(target.sizesFile, query.sizesFile))
@@ -205,7 +205,7 @@ chainPreNet = function(allChain, assemblyTarget, assemblyQuery, removeAllChain=F
 }
 
 chainNetSyntenic = function(allPreChain, assemblyTarget, assemblyQuery){
-  cmd = file.path(KENT_DIR, "chainNet")
+  cmd = "chainNet"
   target.sizesFile = paste(Sys.getpid(), "-target.sizes.txt", sep="")
   genomeSizesFrom2Bit(assemblyTarget, target.sizesFile)
   query.sizesFile = paste(Sys.getpid(), "-query.sizes.txt", sep="")
@@ -216,7 +216,7 @@ chainNetSyntenic = function(allPreChain, assemblyTarget, assemblyQuery){
   my.system(cmd)
   unlink(c(target.sizesFile, query.sizesFile))
 
-  cmd = file.path(KENT_DIR, "netSyntenic")
+  cmd = "netSyntenic"
   netSyntenicFile = paste(sub("\\.2bit$", "", basename(assemblyTarget), ignore.case=TRUE),
                           ".",                                                      
                           sub("\\.2bit$", "", basename(assemblyQuery), ignore.case=TRUE),            
@@ -229,14 +229,14 @@ chainNetSyntenic = function(allPreChain, assemblyTarget, assemblyQuery){
 }
 
 netToAxt = function(in.net, in.chain, assemblyTarget, assemblyQuery, removeFiles=FALSE){
-  cmd = file.path(KENT_DIR, "netToAxt")
+  cmd = "netToAxt"
   axtFile = paste(sub("\\.2bit$", "", basename(assemblyTarget), ignore.case=TRUE),
                   ".",
                   sub("\\.2bit$", "", basename(assemblyQuery), ignore.case=TRUE),
                   ".net.axt", sep=""
                   )
   cmd = paste(cmd, in.net, in.chain, assemblyTarget, assemblyQuery, "stdout |",
-              file.path(KENT_DIR, "axtSort"), "stdin", axtFile)
+              "axtSort", "stdin", axtFile)
   my.system(cmd)
   if(removeFiles){
     unlink(c(in.net, in.chain))
