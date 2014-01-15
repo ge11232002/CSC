@@ -102,9 +102,12 @@ The alignments between two genomes can also be in one file or in several files,
 such as chr1.hg19.mm10.net.axt.gz, chr2.hg19.mm10.net.axt.gz, etc.
 
 <<rtl-Axt, eval=FALSE, results = hide>>=
-axtFileshg19danRer7 = list.files(path="/Users/gtan/CSC/CNEr/axtNet",
+axtFilesHg19DanRer7 = list.files(path="/Users/gtan/CSC/CNEr/axtNet",
                                  pattern=".*hg19\\.danRer7\\.*", full.names=TRUE)
-axtshg19danRer7 = readAxt(axtFileshg19danRer7)
+axtHg19DanRer7 = readAxt(axtFileshg19danRer7)
+axtFilesDanRer7Hg19 = list.files(path="/Users/gtan/CSC/CNEr/axtNet",
+                                 pattern=".*danRer7\\.hg19\\.*", full.names=TRUE)
+axtDanRer7Hg19 = readAxt(axtFilesDanRer7Hg19)
 @
 
 \subsection{bed files}
@@ -147,9 +150,12 @@ To import bed file into \Rcode{GRanges} in \Rcode{R},
 However, if your bed file only contains 3 columns: chromosome, start and end,
 that are the information needed by \Rcode{CNEr},
 then it is better to use the \Rcode{readBed} function that is much faster with C implementation.
+
 <<rtl-Bed, eval=FALSE, results = hide>>=
-bedhg19 = readBed("/Users/gtan/CSC/CNEr/filters/filter_regions.hg19.bed")
-beddanRer7 = readBed("/Users/gtan/CSC/CNEr/filters/filter_regions.danRer7.bed")
+bedHg19Fn = "/Users/gtan/CSC/CNEr/filters/filter_regions.hg19.bed"
+bedHg19 = readBed(bedHg19Fn)
+bedDanRer7Fn = "/Users/gtan/CSC/CNEr/filters/filter_regions.danRer7.bed"
+bedDanRer7 = readBed(bedDanRer7Fn)
 @
 
 \subsection{Chromosome size of query assembly}
@@ -182,11 +188,29 @@ at least \textbf{I} identities over \textbf{C} alignment columns.
 Because different genes and loci may favor various similarity scores,
 we usually scan at two diffrent window sizes 30 and 50 with several similarity criterias (\textbf{I/C}) range from 70\% to 100\%.
 
+<<rtl-CNEScan, eval=FALSE, results = hide>>=
+## axt, GRanges objects as input
+CNEHg19DanRer7 = ceScan(axts=axtHg19DanRer7, tFilter=bedHg19,
+                        qFilter=bedDanRer7, qSizes=qSizesDanRer7,
+                        thresholds=c("45,50", "48,50", "49,50"))
+CNEDanRer7Hg19 = ceScan(axts=axtDanRer7Hg19, tFilter=bedDanRer7,
+                        qFilter=bedHg19, qSizes=qSizesHg19,
+                        thresholds=c("45,50", "48,50", "49,50"))
+
+## axt and bed files as input
+CNEHg19DanRer7 = ceScan(axts=axtFilesHg19DanRer7, tFilter=bedHg19Fn,
+                        qFilter=bedDanRer7Fn, qSizes=qSizesDanRer7,
+                        thresholds=c("45,50", "48,50", "49,50"))
+CNEDanRer7Hg19 = ceScan(axts=axtFilesDanRer7Hg19, tFilter=bedDanRer7Fn,
+                        qFilter=bedHg19Fn, qSizes=qSizesHg19,
+                        thresholds=c("45,50", "48,50", "49,50"))
+@
 
 \subsection{Merge CNEs}
 
 
 \section{CNE visualisation}
+
 
 \section{Conclusion}
 The following is the session info that generated this vignette:

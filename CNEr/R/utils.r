@@ -201,8 +201,8 @@ fetchChromSizes = function(assembly){
   con = try(dbConnect(MySQL(), user="genome", password="", 
                       dbname=assembly, host="genome-mysql.cse.ucsc.edu"), 
             silent=TRUE)
-  on.exit(dbDisconnect(con))
   if(class(con) != "try-error"){
+    on.exit(dbDisconnect(con))
     sqlCmd = "SELECT chrom,size FROM chromInfo ORDER BY size DESC"
     ans = try(dbGetQuery(con, sqlCmd))
     if(class(ans) == "try-error"){

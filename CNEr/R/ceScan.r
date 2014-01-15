@@ -171,10 +171,9 @@ setMethod("ceScan", signature(axts="character", tFilter="character",
 
 ### -----------------------------------------------------------------
 ### Merge two side cnes
-###
+### Exported!
 ceMerge = function(cne1, cne2){
   # In this function, cne's start is 1-based coordinates. ends are 1-based too. 
-  require(GenomicRanges)
   ## first reverse the cne2's cigar
   cne2 = transform(cne2, cigar=chartr("DI", "ID", cigar))
   cne2[cne2$strand=="-" , ] = transform(subset(cne2, strand=="-"), cigar=reverseCigar(cigar))
