@@ -20,7 +20,7 @@ importMethodsFrom(DBI, dbGetQuery, dbConnect, dbDisconnect)
 ### -----------------------------------------------------------------
 ### Import ordinary functions, variables in other packages
 ###
-importFrom(GenomicRanges, GRanges)
+importFrom(GenomicRanges, GRanges, Seqinfo)
 importFrom(Biostrings, DNAStringSet)
 importFrom(RMySQL, MySQL)
 importFrom(RSQLite, SQLite)

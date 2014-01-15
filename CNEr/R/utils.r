@@ -208,6 +208,7 @@ fetchChromSizes = function(assembly){
     if(class(ans) == "try-error"){
       return(NULL)
     }else{
+      ans = Seqinfo(seqnames=ans$chrom, seqlengths=ans$size, genome=assembly)
       return(ans)
     }
   }
