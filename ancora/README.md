@@ -827,6 +827,14 @@ They provide ```tab``` format and ```gff3``` format.
 For display in GBrowse, we use the ```gff3``` format 
 with lasted version [C_albicans_SC5314_version_A19-s01-m04-r03_features.gff](http://www.candidagenome.org/download/gff/C_albicans_SC5314/C_albicans_SC5314_version_A19-s01-m04-r03_features.gff).
 
+Name conventions for candida:
+
+| full name | short name |
+| --------------- |--------------- | 
+| C_albicans_SC5314A21 | SC5314A21 |
+| C_dubliniensis_CD36 | CD36 |
+| C_glabrata_CBS138 | CBS138 |
+| C_parapsilosis_CDC317 |  CDC317 | 
 
 
 ### Creating and loading GFF files
