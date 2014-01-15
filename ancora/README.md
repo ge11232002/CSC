@@ -836,6 +836,14 @@ Name conventions for candida:
 | C_glabrata_CBS138 | CBS138 |
 | C_parapsilosis_CDC317 |  CDC317 | 
 
+The original reference genome from CGD is not repeat masked, 
+i.e., all the bases in the upper case.
+To mask the repeats into lower case, ```cne/scripts/gbrowse_db/candida/repeatmaskReference.r```
+can be used to do that.
+
+The evolutionary distance between these species can be found from 
+[Broad Institute](http://www.broadinstitute.org/annotation/genome/candida_group/MultiHome.html).
+
 
 ### Creating and loading GFF files
 The annotations in the UCSC MySQL tables and 
