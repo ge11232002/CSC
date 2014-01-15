@@ -844,6 +844,16 @@ can be used to do that.
 The evolutionary distance between these species can be found from 
 [Broad Institute](http://www.broadinstitute.org/annotation/genome/candida_group/MultiHome.html).
 
+**Aspergillus annotation**
+The reference genome is downloaded from ensembl fungi.
+
+| full name | short name |
+| --------- | ---------- |
+| Aspergillus nidulans | FGSCA4    |
+| Aspergillus oryzae   | RIB40     |
+| Aspergillus fumigatus | AF293    |
+| Aspergillus niger    | CBS513.88 |
+
 
 ### Creating and loading GFF files
 The annotations in the UCSC MySQL tables and 
