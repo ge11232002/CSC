@@ -1,7 +1,7 @@
 ## This script is used to mask the reference genome sequence with the repeats coordinates from gff file downloaded from http://www.candidagenome.org/download/gff/C_albicans_SC5314/
 
-gffFn = "/export/data/CNEs/SC5314A21/annotations/C_albicans_SC5314_A21_current_features.gff"
-twoBitFn = "/export/data/goldenpath/SC5314A21/assembly.2bit"
+gffFn = "/export/data/CNEs/CDC317/annotations/C_parapsilosis_CDC317_current_features.gff"
+twoBitFn = "/export/data/goldenpath/CDC317/assembly.2bit"
 
 library(rtracklayer)
 library(GenomicRanges)
@@ -14,7 +14,8 @@ rownames(chromSizes) = chromSizes$chrom
 repeats = subset(gff, V3 %in% c("repeat_region", "long_terminal_repeat"), 
                  select=c("V1", "V4", "V5", "V7"))
 colnames(repeats) = c("chrom", "start", "end", "strand")
-
+if(length(repeats) == 0L)
+  stop("no need to proceed")
 
 ## process the coordinates of repeats on the negative strand
 indexNegative = repeats$strand == "-"
@@ -42,4 +43,10 @@ for(i in 1:length(repeats)){
 library(seqinr)
 reference = strsplit(reference, "")
 write.fasta(reference, names=names(reference), file.out=sub("2bit$", "fa", twoBitFn))
+
+## make it back to 2bit
+unlink(twoBitFn)
+cmd = paste("faToTwoBit", sub("2bit$", "fa", twoBitFn), twoBitFn)
+system(cmd)
+#unlink(sub("2bit$", "fa", twoBitFn))
 
