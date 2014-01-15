@@ -102,9 +102,10 @@ The alignments between two genomes can also be in one file or in several files,
 such as chr1.hg19.mm10.net.axt.gz, chr2.hg19.mm10.net.axt.gz, etc.
 
 <<rtl-Axt, eval=FALSE, results = hide>>=
+library(CNEr)
 axtFilesHg19DanRer7 = list.files(path="/Users/gtan/CSC/CNEr/axtNet",
                                  pattern=".*hg19\\.danRer7\\.*", full.names=TRUE)
-axtHg19DanRer7 = readAxt(axtFileshg19danRer7)
+axtHg19DanRer7 = readAxt(axtFilesHg19DanRer7)
 axtFilesDanRer7Hg19 = list.files(path="/Users/gtan/CSC/CNEr/axtNet",
                                  pattern=".*danRer7\\.hg19\\.*", full.names=TRUE)
 axtDanRer7Hg19 = readAxt(axtFilesDanRer7Hg19)
