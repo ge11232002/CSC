@@ -48,7 +48,7 @@
   
   \code{type}: "SELEX", "ChIP-seq", "PBM", etc.
   
-  \code{tax_group}: "plants", "vertebrate", "insects", "urochordat", "nematodes", "fungi".
+  \code{tax_group}: "plants", "vertebrates", "insects", "urochordat", "nematodes", "fungi".
   
   \code{family}, \code{medline}, 
 
