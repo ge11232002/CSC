@@ -856,6 +856,9 @@ The reference genome is downloaded from ensembl fungi.
 | Aspergillus fumigatus | AF293    |
 | Aspergillus niger    | CBS513.88 |
 
+The evolutionary distance between these species can be found from 
+[Broad Institute](http://www.broadinstitute.org/annotation/genome/aspergillus_group/MultiHome.html).
+
 
 ### Creating and loading GFF files
 The annotations in the UCSC MySQL tables and 
