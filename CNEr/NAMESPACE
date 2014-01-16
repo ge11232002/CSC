@@ -13,14 +13,14 @@ import(methods)
 ### Import S4 methods defined in other packages
 ###
 importMethodsFrom(rtracklayer, import.bed)
-importMethodsFrom(GenomicRanges, seqnames)
+importMethodsFrom(GenomicRanges, seqnames, seqlengths)
 importMethodsFrom(XVector, subseq)
 importMethodsFrom(DBI, dbGetQuery, dbConnect, dbDisconnect)
 
 ### -----------------------------------------------------------------
 ### Import ordinary functions, variables in other packages
 ###
-importFrom(GenomicRanges, GRanges, Seqinfo)
+importFrom(GenomicRanges, GRanges, Seqinfo, explodeCigarOps)
 importFrom(Biostrings, DNAStringSet)
 importFrom(RMySQL, MySQL)
 importFrom(RSQLite, SQLite)
