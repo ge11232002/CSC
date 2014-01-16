@@ -1,4 +1,4 @@
-preBlatFilter = "/export/data/CNEs/pre-blatFilter"
+preBlatFilter = "/export/data/CNEs/pre-blatFilter-CE"
 blatFilter = "."
 
 nr_cores = 8

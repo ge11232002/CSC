@@ -61,3 +61,8 @@ CalbicansSC5314A21 4
 CdubliniensisCD36   4
 CglabrataCBS138     4
 CparapsilosisCDC317 4
+
+SC5314A21 4
+CD36      4
+CBS138    4
+CDC317    4
