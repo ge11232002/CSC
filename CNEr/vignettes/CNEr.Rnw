@@ -219,6 +219,7 @@ CNEDanRer7Hg19 = ceScan(axts=axtFilesDanRer7Hg19, tFilter=bedDanRer7Fn,
 
 \subsection{Merge CNEs}
 
+ceMerge(CNEDanRer7Hg19[[3]], CNEHg19DanRer7[[3]])
 
 \section{CNE visualisation}
 

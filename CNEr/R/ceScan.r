@@ -191,7 +191,7 @@ ceMerge = function(cne1, cne2){
   cneQ_overlap = findOverlaps(cneQ, type="within", ignoreSelf=TRUE, ignoreRedundant=TRUE)
   #cneQ_overlap1 = findOverlaps(cneQ, type="equal", ignoreSelf=TRUE, ignoreRedundant=TRUE)
   #cneQ_overlap2 = findOverlaps(cneQ, type="any", ignoreSelf=TRUE, ignoreRedundant=TRUE)
-  redundance = intersect(cneT_overlap, cneQ_overlap)
+  redundance = IRanges::intersect(cneT_overlap, cneQ_overlap)
   #any_overlap = intersect(cneT_overlap2, cneQ_overlap2)
   #foo = setdiff(any_overlap, redundance)
   #paste(subjectHits(foo), queryHits(foo), sep=",") %in% paste(queryHits(redundance), subjectHits(redundance), sep=",")
