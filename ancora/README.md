@@ -822,6 +822,7 @@ File mapping gene and transcript IDs to symbols are downloaded from the same pla
 The conversion can be done by the script ```cne/scripts/gbrowse_db/extract_genes_from_gff3.r```.
 
 **CGD annotations**
+
 The annotation for Candida is downloaded from [CGD](http://www.candidagenome.org/download/).
 They provide ```tab``` format and ```gff3``` format. 
 For display in GBrowse, we use the ```gff3``` format 
@@ -845,6 +846,7 @@ The evolutionary distance between these species can be found from
 [Broad Institute](http://www.broadinstitute.org/annotation/genome/candida_group/MultiHome.html).
 
 **Aspergillus annotation**
+
 The reference genome is downloaded from ensembl fungi.
 
 | full name | short name |
