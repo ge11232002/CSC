@@ -174,6 +174,7 @@ setMethod("ceScan", signature(axts="character", tFilter="character",
 ### Exported!
 ceMerge = function(cne1, cne2){
   # In this function, cne's start is 1-based coordinates. ends are 1-based too. 
+  # Although in cne1 and cne2, query strand can be negative, but the coordinate is already on positive strand.
   ## first reverse the cne2's cigar
   cne2 = transform(cne2, cigar=chartr("DI", "ID", cigar))
   cne2[cne2$strand=="-" , ] = transform(subset(cne2, strand=="-"), cigar=reverseCigar(cigar))
