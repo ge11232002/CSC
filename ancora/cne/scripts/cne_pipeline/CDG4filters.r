@@ -1,13 +1,17 @@
 
 
-CDGGff = "../annotation/C_parapsilosis_CDC317_version_s01-m03-r07_features.gff"
-filtersFn = "filter_regions.C_parapsilosis_CDC317.bed"
+CDGGff = list.files("../annotation/", "*.gff", full.names=TRUE)
+stopifnot(length(CDGGff) == 1)
 
-gff = read.table(CDGGff, header=FALSE, sep="\t", stringsAsFactors=FALSE)
+filtersFn = "filter_regions.FGSCA4.bed"
+
+gff = read.table(CDGGff, header=FALSE, sep="\t", stringsAsFactors=FALSE, quote="")
 
 filterFeatures = c("exon", "repeat_region", "long_terminal_repeat")
 
 gff = gff[gff$V3 %in% filterFeatures, c("V1", "V4", "V5")]
+
+gff = transform(gff, V4=V4-1)
 
 write.table(gff, file=filtersFn, quote=FALSE, sep="\t", col.names=FALSE, row.names=FALSE)
 
