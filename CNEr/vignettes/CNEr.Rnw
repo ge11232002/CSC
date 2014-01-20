@@ -217,10 +217,12 @@ CNEDanRer7Hg19 = ceScan(axts=axtFilesDanRer7Hg19, tFilter=bedDanRer7Fn,
                         thresholds=c("45,50", "48,50", "49,50"))
 @
 
-At this stage, a \Robject(data.frame) is returned from \Rfunction(ceScan),
+At this stage, a \Robject(list) of \Robject(data.frame) is returned from \Rfunction(ceScan),
 which contains the preliminary CNEs.
+Here is some exemple output:
 
-<<rtl-CNEScan, eval=FALSE, results = hide>>=
+<<rtl-CNEScan, eval=TRUE, results = verbatim>>=
+library(CNEr)
 data(CNEHg19DanRer7)
 head(CNEHg19DanRer7)
 @
@@ -228,6 +230,8 @@ Please note, even though the strand for query element can be negative,
 the coordiante for that query element is already on the positive strand.
 
 \subsection{Merge CNEs}
+Because we do two rounds of CNE detections with each genome as reference,
+some conserved
 
 ceMerge(CNEDanRer7Hg19[[3]], CNEHg19DanRer7[[3]])
 
