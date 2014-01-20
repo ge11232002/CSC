@@ -854,7 +854,7 @@ The reference genome is downloaded from ensembl fungi.
 | Aspergillus nidulans | FGSCA4    |
 | Aspergillus oryzae   | RIB40     |
 | Aspergillus fumigatus | AF293    |
-| Aspergillus niger    | CBS513.88 |
+| Aspergillus niger    | CBS51388 |
 
 The evolutionary distance between these species can be found from 
 [Broad Institute](http://www.broadinstitute.org/annotation/genome/aspergillus_group/MultiHome.html).
