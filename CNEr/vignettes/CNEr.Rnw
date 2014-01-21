@@ -32,8 +32,8 @@ options(width=70)
 
 \section{Introduction}
 Conserved noncoding elements (CNEs) are pervasive class of elements 
-clustering around genes with roles in development and differentiation in Metazoa. 
-While many have been shown to act as long-range developmental enhancers, 
+clustering around genes with roles in development and differentiation in Metazoa  \citep{Woolfe:2004ur}. 
+While many have been shown to act as long-range developmental enhancers \citep{Sandelin:2004bd}, 
 the source of their extreme conservation remains unexplained. 
 To study the evolutionary dynamics of these elements 
 and their relationship to the genes around which they cluster, 
@@ -222,18 +222,31 @@ which contains the preliminary CNEs.
 Here is some exemple output:
 
 <<rtl-CNEScan, eval=TRUE, results = verbatim>>=
-library(CNEr)
 data(CNEHg19DanRer7)
-head(CNEHg19DanRer7)
+lapply(CNEHg19DanRer7, head)
 @
-Please note, even though the strand for query element can be negative,
+
+In the result table, even though the strand for query element can be negative,
 the coordiante for that query element is already on the positive strand.
 
 \subsection{Merge CNEs}
 Because we do two rounds of CNE detections with each genome as reference,
-some conserved
+some conserved elements overlap on both genomes and are supposed to be removed.
+But elements that only overlap on one of the genomes are kept, 
+so that duplicated elements remain distinct.
 
-ceMerge(CNEDanRer7Hg19[[3]], CNEHg19DanRer7[[3]])
+<<rtl-CNEMerge, eval=TRUE, results = verbatim>>=
+data(CNEDanRer7Hg19)
+cneMergedDanRer7Hg19 = mapply(cneMerge, CNEDanRer7Hg19, CNEHg19DanRer7, SIMPLIFY=FALSE)
+lapply(cneMergedDanRer7Hg19, head)
+@
+
+\subsection{Realignment of CNEs}
+Some CNEs might be unannotated repeats.
+To remove them, currently we use \textbf{blat} \citep{Kent:2002jd} to realign
+each sequence of CNEs against the respective genomes.
+When the number of matches exceed certain threshold, for instance, 8,
+that CNE will be discarded.
 
 \section{CNE visualisation}
 
