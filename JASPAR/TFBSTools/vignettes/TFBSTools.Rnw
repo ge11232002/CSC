@@ -78,7 +78,7 @@ Compared with \Rclass{PFMatrix}, it has one extra slot \Rfunarg{pseudocounts}.
 \Rclass{ICMatrix} is used to store a information content matrix (ICM).
 Compared with \Rclass{PWMatrix}, it has one extra slot \Rfunarg{schneider}.
 
-<<rtl-PFMatrix, eval=TRUE, results = hide>>=
+<<rtl-PFMatrix, eval=TRUE, results = verbatim>>=
 library(TFBSTools)
 pfm = PFMatrix(ID="MA0004.1", name="Arnt", matrixClass="Zipper-Type", strand="+",
         bg=c(A=0.25, C=0.25, G=0.25, T=0.25),
@@ -95,14 +95,19 @@ pfm = PFMatrix(ID="MA0004.1", name="Arnt", matrixClass="Zipper-Type", strand="+"
 ## coerced to matrix
 as.matrix(pfm)
 
+
 ## access the slots of pfm
 ID(pfm)
 name(pfm)
 Matrix(pfm)
 
+
 ## conversion to pwm, icm
 pwm = toPWM(pfm)
+pwm 
+
 icm = toICM(pfm)
+icm
 
 ## get the reverse complment matrix with all the same information except the strand.
 reverseComplement(pwm)
@@ -115,10 +120,11 @@ Basically it is a SimpleList for easy manipulation the whole set of
 \Rclass{XMatrix}. 
 The concrete objects can be \Rclass{PFMatrix}, \Rclass{PWMatrix} and \Rclass{ICMatrix}.
 
-<<rtl-PFMatrixList, eval=FALSE, results = hide>>=
+<<rtl-PFMatrixList, eval=TRUE, results =verbatim>>=
 pfm2 = pfm
 pfmList = PFMatrixList(pfm1=pfm, pfm2=pfm2, use.names=TRUE)
-name(pfmList)
+pfmList
+names(pfmList)
 @
 
 \subsection{SiteSet, SiteSetList ,SitePairSet and SitePairSetList}
@@ -144,8 +150,10 @@ This search function fetches matrix data for all matrices in the database
 matching criteria defined by the named arguments
 and returns a PFMatrixList object.
 For more search criterias, please see the help page for \Rfunction(getMatrixSet).
+
 <<rtl-searchDB, eval=FALSE, results = hide>>=
 library(JASPAR2014)
+library(TFBSTools)
 opts = list()
 opts[["species"]] = 9606
 opts[["name"]] = "RUNX1"
@@ -191,8 +199,9 @@ However, it has been shown to too harsh (\cite{Nishida:2009kf}).
 Hence, a default value of 0.8 is used. 
 Of course, it can be changed to other customized value or even different values for each column.
 
-<<rtl-matrixMethods, eval=FALSE, results = hide>>=
+<<rtl-matrixMethods, eval=TRUE, results = verbatim>>=
 pwm = toPWM(pfm, pseudocounts=0.8)
+pwm
 @
 
 \subsection{PFM to ICM}
@@ -200,29 +209,46 @@ The method \Rfunarg{toICM} can convert PFM to ICM (\cite{Schneider:1986ur}).
 Besides the similar \Rfunarg{pseudocounts}, \Rfunarg{bg}, 
 you can also choose to do the \Rfunarg{schneider} correction.
 
-<<rtl-matrixMethods, eval=FALSE, results = hide>>=
-icm = toICM(pfm, pseudocounts=0.8)
+<<rtl-matrixMethods, eval=TRUE, results = verbatim>>=
+icm = toICM(pfm, pseudocounts=0.8, schneider=TRUE)
+icm
+@
+
+To plot the sequence logo shown in figure \ref{fig.logo1},
+we use the package \Rpackage{seqlogo}.
+
+\begin{figure}
+\centering
+\caption{Sequence logo with column heights proportional to information content. \label{fig.logo1}}
+<<seqLogo1, fig=TRUE, echo=TRUE, height=4, width=6>>=
 seqLogo(icm)
 @
+\end{figure}
 
 \subsection{Align PFM to a custom matrix or IUPAC string}
 In some cases, it is beneficial to assess similarity to input data 
 (as with using BLAST for sequence data comparison when using Genbank).
 
-<<rtl-matrixMethods, eval=FALSE, results = hide>>=
-library(JASPAR2014)
+<<rtl-matrixMethods, eval=TRUE, results = verbatim>>=
+#library(JASPAR2014)
 ## one to one comparison
-pfmSubject = getMatrixByID(JASPAR2014, ID="MA0055")
-pfmQuery = getMatrixByID(JASPAR2014, ID="MA0048")
-score = searchMatrix(pfmSubject, pfmQuery)
+#pfmSubject = getMatrixByID(JASPAR2014, ID="MA0055")
+#pfmQuery = getMatrixByID(JASPAR2014, ID="MA0048")
+data(MA0003.2)
+data(MA0004.1)
+pfmSubject = MA0003.2
+pfmQuery =  MA0004.1
+score = PFMSimilarity(pfmSubject, pfmQuery)
+
 ## one to several comparsion
-opts = list()
-opts[["class"]] = "Ig-fold"
-pfmList = getMatrixSet(JASPAR2014, opts)
-scores = searchMatrix(pfmList, pfmQuery)
+#opts = list()
+#opts[["class"]] = "Ig-fold"
+#pfmList = getMatrixSet(JASPAR2014, opts)
+scores = PFMSimilarity(pfmList, pfmQuery)
+
 ## align IUPAC string
 IUPACString = "ACGTMRWSYKVHDBN"
-searchMatrix(pfmList, IUPACString)
+PFMSimilarity(pfmList, IUPACString)
 @
 
 \subsection{PFM permutation}
