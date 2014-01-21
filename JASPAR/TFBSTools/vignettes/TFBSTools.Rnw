@@ -309,9 +309,9 @@ data(MA0003.2)
 data(MA0004.1)
 pwmList = PWMatrixList(MA0003.2=toPWM(MA0003.2), MA0004.1=toPWM(MA0004.1), use.names=TRUE)
 subject = DNAString("GAATTCTCTCTTGTTGTAGTCTCTTGACAAAATG")
-siteset = searchSeq(pwm, subject, min.score="60%")
+siteset = searchSeq(pwm, subject, seqname="seq1", min.score="60%", strand="*")
 
-sitesetList = searchSeq(pwmList, subject,
+sitesetList = searchSeq(pwmList, subject, seqname="seq1",
                         min.score="60%", strand="*")
 
 
@@ -337,7 +337,8 @@ data(MA0003.2)
 pwm = toPWM(MA0003.2)
 aln1 = DNAString("ACTTCACCAGCTCCCTGGCGGTAAGTTGATC---AAAGG---AAACGCAAAGTTTTCAAG")
 aln2 = DNAString("GTTTCACTACTTCCTTTCGGGTAAGTAAATATATAAATATATAAAAATATAATTTTCATC")
-sitePairSet = searchAln(pwm, aln1, aln2, min.score="50%", cutoff=0.5, 
+sitePairSet = searchAln(pwm, aln1, aln2, seqname1="seq1", seqname2="seq2",
+                        min.score="50%", cutoff=0.5, 
                         strand="*", type="any")
 ## generate gff style output
 head(writeGFF3(sitePairSet))
@@ -357,7 +358,7 @@ library(BSgenome.Mmusculus.UCSC.mm10)
 pfm = getMatrixByID(JASPAR2014, ID="MA0004.1")
 pwm=toPWM(pfm)
 chain = import.chain("Downloads/hg19ToMm10.over.chain")
-sitepairset = searchPairBSgenome(pwm, BSgenome.Hsapiens.UCSC.hg19,
+sitePairSet = searchPairBSgenome(pwm, BSgenome.Hsapiens.UCSC.hg19,
                                  BSgenome.Mmusculus.UCSC.mm10,
                                  chr1="chr1", chr2="chr1",
                                  min.score="90%", strand="+", chain=chain)
