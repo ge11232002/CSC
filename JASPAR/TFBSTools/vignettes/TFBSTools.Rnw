@@ -287,6 +287,15 @@ The Kullback-Leibler divergence is computed in
   KL(P^1, P^2) = {1 \over {2l}} \cdot \sum_{i=1}^l \sum_{b \in \{A,C,G,T\}} (P_{i,b}^1\log{ P_{i,b}^1 \over P_{i,b}^2}+ P_{i,b}^2\log{P_{i,b}^2 \over {P_{i,b}^1}}).
 \end{equation}
 
+<<rtl-PWMSimilarity, eval=TRUE, results = verbatim>>=
+  data(MA0003.2)
+  data(MA0004.1)
+  pwm1 = toPWM(MA0003.2, type="prob")
+  pwm2 = toPWM(MA0004.1, type="prob")
+  PWMSimilarity(pwm1, pwm2, method="Euclidian")
+  PWMSimilarity(pwm1, pwm2, method="Pearson")
+  PWMSimilarity(pwm1, pwm2, method="KL")
+@
 
 \section{Scan sequence and alignments with PWM pattern}
 \subsection{searchSeq}
@@ -322,14 +331,17 @@ It reports only those hits that are present in equivalent positions of both sequ
 and exceed a specified threshold score in both, 
 AND are found in regions of the alignment above the specified.
 
-<<rtl-search, eval=FALSE, results = hide>>=
+<<rtl-search, eval=TRUE, results = verbatim>>=
+library(Biostrings)
+data(MA0003.2)
+pwm = toPWM(MA0003.2)
 aln1 = DNAString("ACTTCACCAGCTCCCTGGCGGTAAGTTGATC---AAAGG---AAACGCAAAGTTTTCAAG")
 aln2 = DNAString("GTTTCACTACTTCCTTTCGGGTAAGTAAATATATAAATATATAAAAATATAATTTTCATC")
-sitePair = searchAln(pwm, aln1, aln2, min.score="50%", cutoff=0.5, 
-                     strand="*", type="any")
+sitePairSet = searchAln(pwm, aln1, aln2, min.score="50%", cutoff=0.5, 
+                        strand="*", type="any")
 ## generate gff style output
-writeGFF3(sitePair)
-writeGFF2(sitePair)
+head(writeGFF3(sitePairSet))
+head(writeGFF2(sitePairSet))
 @
 
 \subsection{searchPairBSgenome}
