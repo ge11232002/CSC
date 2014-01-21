@@ -151,7 +151,8 @@ setMethod("searchSeq", "PWMatrixList",
             #ans = lapply(pwms, matchPWM, subject, min.score)
             ans_list = lapply(x, searchSeq, subject=subject, seqname=seqname, 
                               strand=strand, min.score=min.score)
-            ans = SiteSetList(ans_list)
+            ans = do.call(SiteSetList, ans_list)
+            #ans = SiteSetList(ans_list)
             return(ans)
           }
           )
@@ -168,10 +169,12 @@ setMethod("searchAln", signature(pwm="PWMatrixList", aln1="character", aln2="cha
                               windowSize=windowSize, cutoff=cutoff, 
                               strand=strand, type=type,
                               conservation=conservation)
-            ans = SitePairSetList(ans_list)
+            #ans = SitePairSetList(ans_list)
+            ans = do.call(SitePairSetList, ans_list)
             return(ans)
           }
           )
+
 setMethod("searchAln", signature(pwm="PWMatrixList", aln1="character", aln2="missing"),
           function(pwm, aln1, aln2, min.score="80%", windowSize=51L, cutoff=0.7,
                    strand="*", type="any", conservation=NULL){
@@ -180,7 +183,8 @@ setMethod("searchAln", signature(pwm="PWMatrixList", aln1="character", aln2="mis
                               windowSize=windowSize, cutoff=cutoff, 
                               strand=strand, type=type, 
                               conservation=conservation)
-            ans = SitePairSetList(ans_list)
+            #ans = SitePairSetList(ans_list)
+            ans = do.call(SitePairSetList, ans_list)
             return(ans)
           }
           )
@@ -192,7 +196,8 @@ setMethod("searchAln", signature(pwm="PWMatrixList", aln1="DNAStringSet", aln2="
                               windowSize=windowSize, cutoff=cutoff, 
                               strand=strand, type=type,
                               conservation=conservation)
-            ans = SitePairSetList(ans_list)
+            #ans = SitePairSetList(ans_list)
+            ans = do.call(SitePairSetList, ans_list)
             return(ans)
           }
           )
@@ -204,7 +209,8 @@ setMethod("searchAln", signature(pwm="PWMatrixList", aln1="DNAString", aln2="DNA
                               windowSize=windowSize, cutoff=cutoff, 
                               strand=strand, type=type, 
                               conservation=conservation)
-            ans = SitePairSetList(ans_list)
+            #ans = SitePairSetList(ans_list)
+            ans = do.call(SitePairSetList, ans_list)
             return(ans)
           }
           )
@@ -292,7 +298,8 @@ setMethod("searchPairBSgenome", signature(pwm="PWMatrixList"),
                    min.score="80%", strand="*", chain){
             ans_list = lapply(pwm, searchPairBSgenome, BSgenome1, BSgenome2,
                               chr1, chr2, min.score, strand, chain)
-            ans = SitePairSetList(ans_list)
+            #ans = SitePairSetList(ans_list)
+            ans = do.call(SitePairSetList, ans_list)
             return(ans)
           }
           )
