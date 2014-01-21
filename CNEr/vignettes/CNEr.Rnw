@@ -248,6 +248,26 @@ each sequence of CNEs against the respective genomes.
 When the number of matches exceed certain threshold, for instance, 8,
 that CNE will be discarded.
 
+This step can be very time-consuming when the number of CNEs are large.
+Other alignment method can also be considerd, such as Bowtie2, BWA.
+The two bit file for each assembly is required.
+
+<<rtl-CNERealignment, eval=TRUE, results = verbatim>>=
+assemblyHg19Twobit = "/Users/gtan/CSC/CNEr/2bit/danRer7.2bit"
+assemblyDanRer7Twobit = "/Users/gtan/CSC/CNEr/2bit/hg19.2bit"
+cneBlatedDanRer7Hg19 = list()
+for(i in 1:length(cneMergedDanRer7Hg19)){
+  cneBlatedDanRer7Hg19[[names(cneMergedDanRer7Hg19)[i]]] = 
+    blatCNE(cneMergedDanRer7Hg19[[i]], 
+            sub("\\d+_", "", names(cneMergedDanRer7Hg19)[i]), 
+            cutoffs1=8, cutoffs2=4, 
+            assembly1Twobit=assemblyDanRer7Twobit, 
+            assembly2Twobit=assemblyHg19Twobit,
+            blatBinary="blat")
+}
+
+@
+
 \section{CNE visualisation}
 
 
