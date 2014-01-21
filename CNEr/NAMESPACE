@@ -20,7 +20,7 @@ importMethodsFrom(DBI, dbGetQuery, dbConnect, dbDisconnect)
 ### -----------------------------------------------------------------
 ### Import ordinary functions, variables in other packages
 ###
-importFrom(GenomicRanges, GRanges, Seqinfo, explodeCigarOps)
+importFrom(GenomicRanges, GRanges, Seqinfo, explodeCigarOps, CIGAR_OPS, explodeCigarOpLengths)
 importFrom(Biostrings, DNAStringSet)
 importFrom(RMySQL, MySQL)
 importFrom(RSQLite, SQLite)
@@ -65,7 +65,7 @@ export(
 
   ## ceScan.r
   ceScan, ceScanFile,
-  ceMerge,
+  cneMerge,
   blatCNE,
   detectCNEs,
 
