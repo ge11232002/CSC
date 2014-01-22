@@ -252,21 +252,23 @@ This step can be very time-consuming when the number of CNEs are large.
 Other alignment method can also be considerd, such as Bowtie2, BWA.
 The two bit file for each assembly is required.
 
-<<rtl-CNERealignment, eval=TRUE, results = verbatim>>=
+<<rtl-CNERealignment, eval=FALSE, results = hide>>=
 assemblyHg19Twobit = "/Users/gtan/CSC/CNEr/2bit/hg19.2bit"
 assemblyDanRer7Twobit = "/Users/gtan/CSC/CNEr/2bit/danRer7.2bit"
 cneBlatedDanRer7Hg19 = list()
 for(i in 1:length(cneMergedDanRer7Hg19)){
   cneBlatedDanRer7Hg19[[names(cneMergedDanRer7Hg19)[i]]] = 
     blatCNE(cneMergedDanRer7Hg19[[i]], 
-            sub("\\d+_", "", names(cneMergedDanRer7Hg19)[i]), 
-            cutoffs1=4, cutoffs2=8, 
+            as.integer(sub("\\d+_", "", names(cneMergedDanRer7Hg19)[i])), 
+            cutoffs1=4L, cutoffs2=8L, 
             assembly1Twobit=assemblyDanRer7Twobit, 
             assembly2Twobit=assemblyHg19Twobit,
             blatBinary="blat")
 }
-
 @
+
+Now at this stage, these elements are the final CNEs.
+
 
 \section{CNE visualisation}
 
