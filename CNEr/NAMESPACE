@@ -15,7 +15,7 @@ import(methods)
 importMethodsFrom(rtracklayer, import.bed)
 importMethodsFrom(GenomicRanges, seqnames, seqlengths)
 importMethodsFrom(XVector, subseq)
-importMethodsFrom(DBI, dbGetQuery, dbConnect, dbDisconnect)
+importMethodsFrom(DBI, dbGetQuery, dbConnect, dbDisconnect, dbWriteTable)
 
 ### -----------------------------------------------------------------
 ### Import ordinary functions, variables in other packages
