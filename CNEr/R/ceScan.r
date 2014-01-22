@@ -206,28 +206,27 @@ cneMerge = function(cne1, cne2){
 #cutoffs2 = 8
 
 blatCNE = function(CNE, winSize, cutoffs1, cutoffs2, assembly1Twobit, assembly2Twobit, 
-                   blatOptions=NULL, cutIdentity=NULL, tmpDir=NULL, blatBinary=NULL){
+                   blatOptions=NULL, cutIdentity=90, tmpDir=tempdir(), blatBinary="blat"){
   # In this function, the input CNE's start and end are 1-based coordinates.
   blatOptionsALL = list("DEF_BLAT_OPT_WSLO"="-tileSize=9 -minScore=24 -repMatch=16384",
                         "DEF_BLAT_OPT_WSMID"="-tileSize=10 -minScore=28 -repMatch=4096",
                         "DEF_BLAT_OPT_WSHI"="-tileSize=11 -minScore=30 -repMatch=1024")
+  if(!is(winSize, "integer"))
+    stop("winSize must be an integer!")
   if(is.null(blatOptions)){
-    if(winSize > 45)
+    if(winSize > 45L)
       blatOptions = blatOptionsALL[["DEF_BLAT_OPT_WSHI"]]
-    else if(winSize > 35)
+    else if(winSize > 35L)
       blatOptions = blatOptionsALL[["DEF_BLAT_OPT_WSMID"]]
     else
       blatOptions = blatOptionsALL[["DEF_BLAT_OPT_WSLO"]]
   }
-  if(is.null(cutIdentity)){
-    cutIdentity = 90
-  }
-  if(is.null(tmpDir)){
-    tmpDir = tempdir()
-  }
-  if(is.null(blatBinary)){
-    blatBinary = "blat"
-  }
+  if(cutIdentity > 100  || cutIdentity < 0)
+    stop("cutIdentity must be between 0 and 100!")
+  if(!is(cutoffs1, "integer"))
+    stop("cutoffs1 must be an integer!")
+  if(!is(cutoffs2, "integer"))
+    stop("cutoffs2 must be an integer!")
   
   .run_blat = function(cne, cutIdentity, whichAssembly, assemblyTwobit, blatBinary, blatOptions, tmpDir){
     temp_cne = tempfile(pattern="cne-", tmpdir=tmpDir)
