@@ -143,16 +143,18 @@ get_cne_ranges_in_region_partitioned_by_other_chr = function(CNE, whichAssembly=
   return(res)
 }
 
+### -----------------------------------------------------------------
+### save the CNE tables into a local SQLite database
+### Exported!!
 saveCNEToSQLite = function(CNE, dbName, tableName, overwrite=FALSE){
-  require(RSQLite)
   CNE$bin1 = binFromCoordRange(CNE$start1, CNE$end1)
   CNE$bin2 = binFromCoordRange(CNE$start2, CNE$end2)
   # reorder it
   CNE = CNE[ ,c("bin1", "chr1", "start1", "end1", "bin2", "chr2", "start2", "end2", "strand", "similarity", "cigar")]
-  drv = dbDriver("SQLite")
+  drv = dbDriver(SQLite())
   con = dbConnect(drv, dbname=dbName)
+  on.exit(dbDisconnect(con))
   dbWriteTable(con, tableName, CNE, row.names=FALSE, overwrite=overwrite)
-  dbDisconnect(con)
 }
 
 readCNERangesFromSQLite = function(dbName, tableName, chr, CNEstart, CNEend, whichAssembly=c("1","2"), minLength=NULL, nrGraphs=1){
