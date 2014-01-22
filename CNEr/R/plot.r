@@ -1,4 +1,4 @@
-CNEAnnotate = function(dbName, tableName, whichAssembly=c("1","2"), chr, CNEstart, CNEend, windowSize, minLength=NULL, nrGraphs=1){
+CNEAnnotate = function(dbName, tableName, whichAssembly=c("L","R"), chr, CNEstart, CNEend, windowSize, minLength=NULL, nrGraphs=1){
   # This is the pipeline of doing the density plot
   # The windowSize is in kb.
   whichAssembly = match.arg(whichAssembly)
