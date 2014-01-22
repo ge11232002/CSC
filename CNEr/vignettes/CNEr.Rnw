@@ -308,8 +308,7 @@ fetchedCNERanges = readCNERangesFromSQLite(dbName, tableName, chr,
                                            minLength=minLength)
 @
 
-
-\subsection{annotation storage}
+\subsection{Annotation storage}
 
 
 
