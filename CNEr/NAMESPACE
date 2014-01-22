@@ -54,6 +54,7 @@ export(
   readCNERangesFromSQLite,
   queryAnnotationSQLite,
   fetchChromSizes,
+  saveCNEToSQLite,
 
   ## class.r
   axt,
