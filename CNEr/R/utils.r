@@ -151,8 +151,7 @@ saveCNEToSQLite = function(CNE, dbName, tableName, overwrite=FALSE){
   CNE$bin2 = binFromCoordRange(CNE$start2, CNE$end2)
   # reorder it
   CNE = CNE[ ,c("bin1", "chr1", "start1", "end1", "bin2", "chr2", "start2", "end2", "strand", "similarity", "cigar")]
-  drv = dbDriver(SQLite())
-  con = dbConnect(drv, dbname=dbName)
+  con = dbConnect(SQLite(), dbname=dbName)
   on.exit(dbDisconnect(con))
   dbWriteTable(con, tableName, CNE, row.names=FALSE, overwrite=overwrite)
 }
@@ -160,8 +159,7 @@ saveCNEToSQLite = function(CNE, dbName, tableName, overwrite=FALSE){
 readCNERangesFromSQLite = function(dbName, tableName, chr, CNEstart, CNEend, whichAssembly=c("1","2"), minLength=NULL, nrGraphs=1){
   require(RSQLite)
   whichAssembly = match.arg(whichAssembly)
-  drv = dbDriver("SQLite")
-  con = dbConnect(drv, dbname=dbName)
+  con = dbConnect(SQLite(), dbname=dbName)
   if(nrGraphs == 1){    
     sqlCmd = switch(whichAssembly,
                     "1"=paste("SELECT start1,end1 from", tableName, "WHERE chr1=", paste0("'", chr, "'"), "AND start1 >=", CNEstart, "AND end1 <=", CNEend, "AND", binRestrictionString(CNEstart, CNEend, "bin1")),
