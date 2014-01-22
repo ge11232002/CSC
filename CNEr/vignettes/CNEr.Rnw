@@ -294,7 +294,19 @@ for(i in 1:length(cneBlatedDanRer7Hg19)){
 }
 @
 
-To query results from the local SQLite database, 
+When querying results from the local SQLite database based on the chr, coordinates and other criterias, 
+a \Robject{IRanges} object is returned.
+
+<<queryCNE, eval=FALSE, results = hide>>=
+chr = "chr6"
+CNEstart = 19900000
+CNEend =  28000000
+minLength = 50
+tableName = "cne_twoWay_danRer7_hg19_len50_id960_v1"
+fetchedCNERanges = readCNERangesFromSQLite(dbName, tableName, chr, 
+                                           CNEstart, CNEend, whichAssembly="1",
+                                           minLength=minLength)
+@
 
 
 \subsection{annotation storage}
