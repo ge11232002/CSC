@@ -270,13 +270,13 @@ for(i in 1:length(cneMergedDanRer7Hg19)){
 Now at this stage, these elements are the final CNEs.
 
 
-\section{CNE and annotation storage}
+\section{CNE and annotation storage and query}
 As the computation of CNEs from the whole pipeline and 
 the preparation of annotation package can be very time-consuming,
 for a smoother visualisation experience, 
 we decided to use a local SQLite database to store these information.
 
-\subsection{CNE storage}
+\subsection{CNE storage and query}
 Since the CNEs \Robject{data.frame} is just a table and 
 can be imported into a SQL table naturally.
 To speed up the query from the SQL database,
@@ -285,8 +285,17 @@ For more information, please refer to the paper \citep{Kent:2002bw}
 and \href{http://genomewiki.ucsc.edu/index.php/Bin_indexing_system}{genomewiki}.
 
 <<saveCNE, eval=FALSE, results = hide>>=
-
+dbName = "/Users/gtan/CSC/CNEr/CNESQL/cne.sqlite"
+for(i in 1:length(cneBlatedDanRer7Hg19)){
+  tableName = paste0("cne_twoWay_danRer7_hg19_len50_id", 
+                     as.integer(sub("_\\d+$", "", 
+                                    names(cneBlatedDanRer7Hg19)[i]))*20, "_v1")
+	saveCNEToSQLite(cneBlatedDanRer7Hg19[[i]], dbName, tableName, overwrite=TRUE)
+}
 @
+
+To query results from the local SQLite database, 
+
 
 \subsection{annotation storage}
 
