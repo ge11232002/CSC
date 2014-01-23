@@ -1,13 +1,13 @@
 ## This script is used to mask the reference genome sequence with the repeats coordinates from gff file downloaded from http://www.candidagenome.org/download/gff/C_albicans_SC5314/
 
-gffFn = "/export/data/CNEs/CDC317/annotations/C_parapsilosis_CDC317_current_features.gff"
-twoBitFn = "/export/data/goldenpath/CDC317/assembly.2bit"
+gffFn = "/export/data/CNEs/CBS51388/annotation/A_niger_CBS_513_88_version_s01-m06-r09_features.gff"
+twoBitFn = "/export/data/goldenpath/CBS51388/assembly.2bit"
 
 library(rtracklayer)
 library(GenomicRanges)
 reference = import.2bit(twoBitFn)
 gff = read.table(gffFn, sep="\t", stringsAsFactors=FALSE)
-chromSizes = subset(gff, V3=="chromosome", select=c("V1", "V4", "V5"))
+chromSizes = subset(gff, V3 %in% c("contig", "chromosome") , select=c("V1", "V4", "V5"))
 colnames(chromSizes) = c("chrom", "start", "end")
 rownames(chromSizes) = chromSizes$chrom
 
