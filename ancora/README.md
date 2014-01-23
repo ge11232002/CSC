@@ -847,14 +847,14 @@ The evolutionary distance between these species can be found from
 
 **Aspergillus annotation**
 
-The reference genome is downloaded from ensembl fungi.
+The reference genome is downloaded from [Aspergillus Genome Database](http://www.aspgd.org/).
 
 | full name | short name |
 | --------- | ---------- |
-| Aspergillus nidulans | FGSCA4    |
-| Aspergillus oryzae   | RIB40     |
-| Aspergillus fumigatus | AF293    |
-| Aspergillus niger    | CBS51388 |
+| A_nidulans_FGSC_A4 | FGSCA4    |
+| A_oryzae_RIB40  | RIB40     |
+| A_fumigatus_Af293 | AF293    |
+| A_niger_CBS_513_88    | CBS51388 |
 
 The evolutionary distance between these species can be found from 
 [Broad Institute](http://www.broadinstitute.org/annotation/genome/aspergillus_group/MultiHome.html).
