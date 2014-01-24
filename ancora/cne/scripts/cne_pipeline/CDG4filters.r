@@ -3,7 +3,7 @@ library(rtracklayer)
 CDGGff = list.files("../annotation/", "*.gff", full.names=TRUE)
 stopifnot(length(CDGGff) == 1)
 
-filtersFn = "filter_regions.CBS51388.bed"
+filtersFn = "filter_regions.CBS51388_real.bed"
 
 chroms = seqnames(seqinfo(TwoBitFile("/export/data/goldenpath/CBS51388/assembly.2bit")))
 
