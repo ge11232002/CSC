@@ -86,7 +86,7 @@ makeGeneDbFromUCSC = function(genome="hg19",
                               tablenameSQLite=paste(genome, tablename, sep="_"),
                               overwrite=FALSE 
                               ){
-  require(RMySQL)
+  #require(RMySQL)
   if(!isSingleString(genome))
     stop("'genome' must be a single string")
   if(!isSingleString(tablename))

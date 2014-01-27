@@ -150,21 +150,21 @@ setMethod("ceScan", signature(axts="character", tFilter="character",
 setMethod("ceScan", signature(axts="character", tFilter="missing",
                               qFilter="character", qSizes="Seqinfo"),
           function(axts, tFilter, qFilter, qSizes, thresholds="49,50"){
-            ceScanFile(axtFiles=axts, tFilterFile=NULL, qFilter=qFilter,
+            ceScanFile(axtFiles=axts, tFilterFile=NULL, qFilterFile=qFilter,
                        qSizes=qSizes, thresholds=thresholds)
           }
           )
 setMethod("ceScan", signature(axts="character", tFilter="missing",
                               qFilter="missing", qSizes="missing"),
           function(axts, tFilter, qFilter, qSizes, thresholds="49,50"){
-            ceScanFile(axtFiles=axts, tFilterFile=NULL, qFilter=NULL,
+            ceScanFile(axtFiles=axts, tFilterFile=NULL, qFilterFile=NULL,
                        qSizes=NULL, thresholds=thresholds)
           }
           )
 setMethod("ceScan", signature(axts="character", tFilter="character",
                               qFilter="missing", qSizes="missing"),
           function(axts, tFilter, qFilter, qSizes, thresholds="49,50"){
-            ceScanFile(axtFiles=axts, tFilterFile=tFilter, qFilter=NULL,
+            ceScanFile(axtFiles=axts, tFilterFile=tFilter, qFilterFile=NULL,
                        qSizes=NULL, thresholds=thresholds)
           }
           )
@@ -265,9 +265,9 @@ blatCNE = function(CNE, winSize, cutoffs1, cutoffs2, assembly1Twobit, assembly2T
 }
 
 
-detectCNEs = function(axt1, filter1=NULL, sizes1, axt2, filter2=NULL, sizes2, thresholds=c("49,50")){
-  CNE1 = ceScan(axt1, filter1, filter2, sizes2, thresholds)
-  CNE2 = ceScan(axt2, filter2, filter1, sizes1, thresholds)
-  CNE = ceMerge(CNE1, CNE2)
+#detectCNEs = function(axt1, filter1=NULL, sizes1, axt2, filter2=NULL, sizes2, thresholds=c("49,50")){
+#  CNE1 = ceScan(axt1, filter1, filter2, sizes2, thresholds)
+#  CNE2 = ceScan(axt2, filter2, filter1, sizes1, thresholds)
+#  CNE = ceMerge(CNE1, CNE2)
   
-}
+#}
