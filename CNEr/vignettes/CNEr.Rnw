@@ -270,7 +270,7 @@ for(i in 1:length(cneMergedDanRer7Hg19)){
 Now at this stage, these elements are the final CNEs.
 
 
-\section{CNE and annotation storage and query}
+\section{CNE storage and query}
 As the computation of CNEs from the whole pipeline and 
 the preparation of annotation package can be very time-consuming,
 for a smoother visualisation experience, 
@@ -299,24 +299,156 @@ a \Robject{IRanges} object is returned.
 
 <<queryCNE, eval=FALSE, results = hide>>=
 chr = "chr6"
-CNEstart = 19900000
-CNEend =  28000000
-minLength = 50
+start = 19900000L
+end =  28000000L
+minLength = 50L
 tableName = "cne_twoWay_danRer7_hg19_len50_id960_v1"
 fetchedCNERanges = readCNERangesFromSQLite(dbName, tableName, chr, 
-                                           CNEstart, CNEend, whichAssembly="1",
+                                           start, end, whichAssembly="1",
                                            minLength=minLength)
 @
 
-\subsection{Annotation storage}
+\section{CNEs visualisation}
+To visualise the CNEs together with other gene annotations, 
+we choose to use the Bioconductor package \Rpackage{Gviz} in this vignette.
+\Rpackage{Gviz}, based on the \Rpackage{grid} graphics scheme, 
+is a very powerful package for plotting data and annotation information
+along genomic coordinates.
+The functionality of integrating publicly available genome annotation data, such as UCSC or Ensembl,
+significantly reduced the burden of preparing annotations for common assemblies.
+Since the Bioconductor release 2.13 of \Rpackage{Gviz}, 
+it provides the data track in horizon plot,
+which exactly meets our needs for visualisation of CNEs density plots.
+For more detailed usage, please check the vignette or manual of \Rpackage{Gviz}.
 
+Another option for visualisation is the package \Rpackage{ggbio}, 
+which is based on \Rpackage{ggplot2}.
+The advantage of \Rpackage{ggbio} is the simplicity of 
+adding any customised \Robject{ggplot2} style track
+into the plot without tuning the coordinate systems.
+The densities generated in the following section can be easily plot in the 
+horizon plot.
+A short straightforward tutorial regarding horizon plot in \Robject{ggplot2} format
+is available from \url{http://timelyportfolio.blogspot.co.uk/2012/08/horizon-on-ggplot2.html}.
 
+\subsection{Gene annotation visualisation}
+For the example of hg19 vs danRer7 in this vignette, 
+we choose hg19 as the reference and show the range of developmental gene \textbf{PAX6}.
 
+<<queryUCSC, eval=TRUE, results = verbatim>>=
+library(Gviz)
+genome="hg19"
+chr = "chr11"
+start = 31000000L
+end =  33000000L
+axisTrack = GenomeAxisTrack()
+ideoTrack = IdeogramTrack(genome=genome, chromosome=chr)
+cpgIslands = UcscTrack(genome=genome, chromosome=chr,
+                       track="cpgIslandExt", from=start, to=end,
+                       trackType="AnnotationTrack", start="chromStart",
+                       end="chromEnd", id="name", shape="box",
+                       fill="#006400", name="CpG Islands")
+refGenes = UcscTrack(genome="hg19", chromosome=chr,
+                     track="refGene", from=start, to=end,
+                     trackType="GeneRegionTrack", rstarts="exonStarts",
+                     rends="exonEnds", gene="name", symbol="name2",
+                     transcript="name", strand="strand", fill="#8282d2",
+                     name="refSeq Genes", collapseTranscripts=TRUE)
+biomTrack = BiomartGeneRegionTrack(genome="hg19", chromosome=chr, 
+                                   start=start , end=end, name="Ensembl")
+@
 
-\section{CNE visualisation}
+<<plotAnnotation, fig=TRUE, results=hide, echo=TRUE, height=10, width=7.5>>=
+## I do not know why the transcripts from UcscTrack are not merged into one. 
+## Already asked Florian.
+plotTracks(list(axisTrack, ideoTrack, cpgIslands, refGenes, biomTrack), 
+           collapseTranscripts=TRUE, shape="arrow",
+           showId=TRUE, transcriptAnnotation="symbol")
+@
 
+It is also possible to plot the annotation from an ordinary \R{R} object,
+such as\Robject{data.frame}, \Robject{GRanges}, \Robject{IRanges}
+or even from a local file.
+Usually the \textbf{gff} file containing the gene annotation can be processed by
+\Rpackage{Gviz} directly.
+For more details, please look into the vignette of \Rpackage{Gviz}.
+
+\subsection{CNEs horizon plot}
+<<CNEDensity, eval=FALSE, results = hide>>=
+dbName = "/Users/gtan/CSC/CNEr/CNESQL/cne.sqlite"
+windowSize= 300L
+minLength = 50L
+cneHg19DanRer7_45_50 = CNEDensity(dbName=dbName, 
+                                  tableName="cne_twoWay_danRer7_hg19_len50_id900_v1", 
+                                  whichAssembly="R", chr=chr, start=start,
+                                  CNEend=CNEend, windowSize=windowSize, 
+                                  minLength=minLength)
+cneHg19DanRer7_48_50 = CNEDensity(dbName=dbName, 
+                                  tableName="cne_twoWay_danRer7_hg19_len50_id960_v1", 
+                                  whichAssembly="R", chr=chr, start=start,
+                                  CNEend=CNEend, windowSize=windowSize, 
+                                  minLength=minLength)
+cneHg19DanRer7_49_50 = CNEDensity(dbName=dbName, 
+                                  tableName="cne_twoWay_danRer7_hg19_len50_id980_v1", 
+                                  whichAssembly="R", chr=chr, start=start,
+                                  CNEend=CNEend, windowSize=windowSize, 
+                                  minLength=minLength)
+@
+
+<<GvizDataTrack, eval=TRUE, results = verbatim>>=
+data(cneHg19DanRer7_45_50)
+data(cneHg19DanRer7_48_50)
+data(cneHg19DanRer7_49_50)
+genome="hg19"
+chr = "chr11"
+start = 31000000L
+end =  33000000L
+axisTrack = GenomeAxisTrack()
+ideoTrack = IdeogramTrack(genome=genome, chromosome=chr)
+strand = "+"
+dataMatrix= cneHg19DanRer7_45_50
+dTrack1 = DataTrack(start=dataMatrix[ ,1], end=dataMatrix[ ,1], 
+                    data=dataMatrix[ ,2], chromosome=chr, strand=strand, 
+                    genome=genome, type="horiz", horizon.scale=0.1, 
+                    fill.horizon=c("#B41414", "#E03231", "#F7A99C", 
+                                   "yellow", "orange", "red"), 
+                    name="danRer7 45/50")
+dataMatrix = cneHg19DanRer7_48_50
+dTrack2 = DataTrack(start=dataMatrix[ ,1], end=dataMatrix[ ,1], 
+                    data=dataMatrix[ ,2], chromosome=chr, strand=strand, 
+                    genome=genome, type="horiz", horizon.scale=0.1, 
+                    fill.horizon=c("#B41414", "#E03231", "#F7A99C", 
+                                   "yellow", "orange", "red"), 
+                    name="danRer7 48/50")
+dataMatrix = cneHg19DanRer7_49_50
+dTrack3 = DataTrack(start=dataMatrix[ ,1], end=dataMatrix[ ,1], 
+                    data=dataMatrix[ ,2], chromosome=chr, strand=strand, 
+                    genome=genome, type="horiz", horizon.scale=0.1, 
+                    fill.horizon=c("#B41414", "#E03231", "#F7A99C", 
+                                   "yellow", "orange", "red"), 
+                    name="danRer7 49/50")
+@
+
+<<plotCNE, fig=TRUE, results=hide, echo=TRUE, height=15, width=7.5>>=
+plotTracks(list(axisTrack, ideoTrack, cpgIslands, 
+                refGenes, biomTrack, 
+                dTrack1, dTrack2, dTrack3),
+           collapseTranscripts=TRUE, shape="arrow",
+           showId=TRUE, transcriptAnnotation="symbol")
+@
+
+From this horizon plot compared with Zebrafish with Human as reference genome, 
+the developmental gene PAX6 was surrounded by the density peaks of CNEs.
 
 \section{Conclusion}
+With this package, we are able to identify CNEs efficiently 
+and handle the corresponding objects conveniently in R. 
+Horizon plot shows a superior dynamic range to the standard density plots, 
+simultaneously revealing CNE clusters characterized by vastly different levels of sequence conservation. 
+Such CNE density plots generated using precise locations of CNEs 
+can be used to identify genes involved in developmental regulation, 
+even for novel genes that are not yet annotated.
+
 The following is the session info that generated this vignette:
 <<session-info>>=
   sessionInfo()
