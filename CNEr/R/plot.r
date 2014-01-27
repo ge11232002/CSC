@@ -5,6 +5,8 @@ CNEDensity = function(dbName, tableName, whichAssembly=c("L","R"),
                       chr, CNEstart, CNEend, windowSize, 
                       minLength=NULL){
   nrGraphs=1
+  CNEstart = start
+  CNEend = end
   # This is the pipeline of doing the density plot
   # The windowSize is in kb.
   whichAssembly = match.arg(whichAssembly)
