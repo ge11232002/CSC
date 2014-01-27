@@ -2,7 +2,7 @@
 ### Fetch the CNE coordinates from SQL and compute the densities
 ### Exported!
 CNEDensity = function(dbName, tableName, whichAssembly=c("L","R"), 
-                      chr, CNEstart, CNEend, windowSize, 
+                      chr, start, end, windowSize, 
                       minLength=NULL){
   nrGraphs=1
   CNEstart = start

@@ -1,21 +1,23 @@
 \name{axt-class}
 \Rdversion{1.1}
 \docType{class}
-\alias{axy}
+\alias{axt}
 \alias{axt-class}
 \alias{[,axt,ANY,ANY-method}
 \alias{c,axt-method}
-\alias{ceScan,axt,GRanges,GRanges,Seqinfo-method}
-\alias{ceScan,axt,GRanges,missing,missing-method}
-\alias{ceScan,axt,missing,GRanges,Seqinfo-method}
-\alias{ceScan,axt,missing,missing,missing-method}
 \alias{length,axt-method}
+\alias{queryRanges}
 \alias{queryRanges,axt-method}
+\alias{querySeqs}
 \alias{querySeqs,axt-method}
 \alias{score,axt-method}
+\alias{subAxt}
 \alias{subAxt,axt-method}
+\alias{symCount}
 \alias{symCount,axt-method}
+\alias{targetRanges}
 \alias{targetRanges,axt-method}
+\alias{targetSeqs}
 \alias{targetSeqs,axt-method}
 
 \title{Class \code{"axt"}}

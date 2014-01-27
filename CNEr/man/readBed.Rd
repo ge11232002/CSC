@@ -8,11 +8,11 @@ readBed function
 readBed reads bed file with an embeded C IO function.
 }
 \usage{
-readBed(x)
+readBed(bedFile)
 }
 %- maybe also 'usage' for other objects documented here.
 \arguments{
-  \item{x}{
+  \item{bedFile}{
   The path of bed file.
 }
 }

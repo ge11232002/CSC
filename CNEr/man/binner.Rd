@@ -20,7 +20,7 @@
   \item{start, end}{
     A integer vector of length 1. A coordinate range.
   }
-  \item{filed}{
+  \item{field}{
     Name of bin column. Default: "bin".
   }
 }

@@ -8,11 +8,11 @@
   Given the path of axt file, retrieve the alignments' withs information.
 }
 \usage{
-axtInfo(x)
+axtInfo(axtFiles)
 }
 %- maybe also 'usage' for other objects documented here.
 \arguments{
-  \item{x}{
+  \item{axtFiles}{
   Object of \code{character}. The length can be one or more.
 }
 }
