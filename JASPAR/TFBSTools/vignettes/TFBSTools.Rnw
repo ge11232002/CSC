@@ -330,7 +330,7 @@ It reports only those hits that are present in equivalent positions of both sequ
 and exceed a specified threshold score in both, 
 AND are found in regions of the alignment above the specified.
 
-<<rtl-search, eval=TRUE, results = verbatim>>=
+<<rtl-searchAln, eval=TRUE, results = verbatim>>=
 library(Biostrings)
 data(MA0003.2)
 pwm = toPWM(MA0003.2)
