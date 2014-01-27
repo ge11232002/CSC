@@ -1,3 +1,6 @@
+### -----------------------------------------------------------------
+### Fetch the CNE coordinates from SQL and compute the densities
+### Exported!
 CNEDensity = function(dbName, tableName, whichAssembly=c("L","R"), 
                       chr, CNEstart, CNEend, windowSize, 
                       minLength=NULL){
@@ -9,7 +12,7 @@ CNEDensity = function(dbName, tableName, whichAssembly=c("L","R"),
     stop("windowSize must be an integer!")
   windowSize = windowSize * 1000
   CNElength = CNEend - CNEstart + 1
-  pixel_width = 800
+  pixel_width = 2048
   if(CNElength <= pixel_width) {
     step_size = 1
   }else{
