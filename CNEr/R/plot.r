@@ -98,8 +98,8 @@ plotCNE = function(listToPlot, horizonscale=2, nbands=3){
 }
 
 horizon.panel.ggplot = function(mergedDf, horizonscale=2, nbands=3, my.title="fun"){
-  require(ggplot2)
-  require(reshape2)
+  #require(ggplot2)
+  #require(reshape2)
   origin = 0
   #require(RColorBrewer)
   #col.brew = brewer.pal(name="RdBu",n=10)
@@ -138,10 +138,9 @@ horizon.panel.ggplot = function(mergedDf, horizonscale=2, nbands=3, my.title="fu
     return(p)
 }
 
-prepareCNETracks = function(dataMatrix, chr, strand, genome){
-  require(Gviz)
-  dTrack = DataTrack(start=dataMatrix[ ,1], end=dataMatrix[ ,1], data=dataMatrix[ ,2], chromosome=chr, strand=strand, genome=genome)
+#prepareCNETracks = function(dataMatrix, chr, strand, genome){
+#  dTrack = DataTrack(start=dataMatrix[ ,1], end=dataMatrix[ ,1], data=dataMatrix[ ,2], chromosome=chr, strand=strand, genome=genome)
 
-}
+#}
 
 
