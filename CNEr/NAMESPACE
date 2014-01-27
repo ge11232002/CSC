@@ -52,7 +52,7 @@ export(
   binRangesFromCoordRange,
   binRestrictionString,
   readCNERangesFromSQLite,
-  queryAnnotationSQLite,
+  #queryAnnotationSQLite,
   fetchChromSizes,
   saveCNEToSQLite,
 
@@ -71,9 +71,9 @@ export(
   detectCNEs,
 
   ## makeGeneDbFromUCSC.r
-  supportedUCSCtables,
-  queryrefGene, queryknownGene, queryensGene,
-  makeGeneDbFromUCSC,
+  #supportedUCSCtables,
+  #queryrefGene, queryknownGene, queryensGene,
+  #makeGeneDbFromUCSC,
 
   ## plot.r
   CNEAnnotate
