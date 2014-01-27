@@ -65,10 +65,9 @@ export(
   axtInfo,
 
   ## ceScan.r
-  ceScan, ceScanFile,
+  ceScan, 
   cneMerge,
   blatCNE,
-  detectCNEs,
 
   ## makeGeneDbFromUCSC.r
   #supportedUCSCtables,
