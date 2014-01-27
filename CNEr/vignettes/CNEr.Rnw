@@ -335,7 +335,7 @@ is available from \url{http://timelyportfolio.blogspot.co.uk/2012/08/horizon-on-
 For the example of hg19 vs danRer7 in this vignette, 
 we choose hg19 as the reference and show the range of developmental gene \textbf{PAX6}.
 
-<<queryUCSC, eval=TRUE, results = verbatim>>=
+<<queryUCSC, eval=FALSE, results = verbatim>>=
 library(Gviz)
 genome="hg19"
 chr = "chr11"
@@ -358,7 +358,7 @@ biomTrack = BiomartGeneRegionTrack(genome="hg19", chromosome=chr,
                                    start=start , end=end, name="Ensembl")
 @
 
-<<plotAnnotation, fig=TRUE, results=hide, echo=TRUE, height=10, width=7.5>>=
+<<plotAnnotation, fig=TRUE, eval=FALSE, results=hide, echo=TRUE, height=10, width=7.5>>=
 ## I do not know why the transcripts from UcscTrack are not merged into one. 
 ## Already asked Florian.
 plotTracks(list(axisTrack, ideoTrack, cpgIslands, refGenes, biomTrack), 
@@ -395,7 +395,7 @@ cneHg19DanRer7_49_50 = CNEDensity(dbName=dbName,
                                   minLength=minLength)
 @
 
-<<GvizDataTrack, eval=TRUE, results = verbatim>>=
+<<GvizDataTrack, eval=FALSE, results = verbatim>>=
 data(cneHg19DanRer7_45_50)
 data(cneHg19DanRer7_48_50)
 data(cneHg19DanRer7_49_50)
@@ -429,7 +429,7 @@ dTrack3 = DataTrack(start=dataMatrix[ ,1], end=dataMatrix[ ,1],
                     name="danRer7 49/50")
 @
 
-<<plotCNE, fig=TRUE, results=hide, echo=TRUE, height=15, width=7.5>>=
+<<plotCNE, fig=TRUE, eval=FALSE, results=hide, echo=TRUE, height=15, width=7.5>>=
 plotTracks(list(axisTrack, ideoTrack, cpgIslands, 
                 refGenes, biomTrack, 
                 dTrack1, dTrack2, dTrack3),
