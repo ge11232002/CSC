@@ -20,7 +20,8 @@ importMethodsFrom(DBI, dbGetQuery, dbConnect, dbDisconnect, dbWriteTable)
 ### -----------------------------------------------------------------
 ### Import ordinary functions, variables in other packages
 ###
-importFrom(GenomicRanges, GRanges, Seqinfo, explodeCigarOps, CIGAR_OPS, explodeCigarOpLengths)
+importFrom(GenomicRanges, GRanges, Seqinfo)
+importFrom(GenomicAlignments, explodeCigarOps, CIGAR_OPS, explodeCigarOpLengths)
 importFrom(Biostrings, DNAStringSet)
 importFrom(RMySQL, MySQL)
 importFrom(RSQLite, SQLite)
