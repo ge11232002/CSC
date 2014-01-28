@@ -29,7 +29,7 @@
 }
 
 \seealso{
-  \code{\link[GenomicRanges]{cigar-utils}}
+  \code{\link[GenomicAlignments]{cigar-utils}}
 }
 
 \examples{
