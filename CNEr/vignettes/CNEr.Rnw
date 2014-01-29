@@ -43,13 +43,13 @@ each with multiple size and conservation thresholds.
 
 This \Rcode{CNEr} package aims to detect CNEs and visualise them along the genome.
 For performance reasons, the implementation of CNEs detection 
-and corresponding I/O functions are primarily written as C extenstions to R. 
+and corresponding I/O functions are primarily written as C extensions to R. 
 We have used CNEr to produce sets of CNEs by scanning pairwise whole-genome net alignments with multiple reference species, 
 each with two different window sizes and a range of minimum identity thresholds. 
 Then, to pinpoint the boundaries of CNE arrays, 
 we compute the CNE densities as the percentages of length 
 covered by CNEs within a user specified window size. 
-Finally, we describe a novel visualidation method using horizon plot tracks 
+Finally, we describe a novel visualisation method using horizon plot tracks 
 that shows a superior dynamic range to the standard density plots, 
 simultaneously revealing CNE clusters characterized 
 by vastly different levels of sequence conservation. 
