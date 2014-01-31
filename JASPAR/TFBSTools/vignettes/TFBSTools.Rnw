@@ -350,7 +350,7 @@ head(writeGFF2(sitePairSet))
 Given two \Rclass{BSgenome}, a chain file for liftover from one genome to another,
 \Rfunction{searchPairBSgenome} identifies the putative transcription factor binding sites
 which are conserved in both genomes.
-<<rtl-search, eval=FALSE, results = hide>>=
+<<searchBSgenome, eval=FALSE, results = hide>>=
 library(rtracklayer)
 library(JASPAR2014)
 library(BSgenome.Hsapiens.UCSC.hg19)
@@ -377,6 +377,7 @@ motifSet = runMEME(file.path(system.file("extdata", package="TFBSTools"), "crp0.
                    arguments="-nmotifs 3")
 sitesSeq(motifSet, type="all")
 sitesSeq(motifSet, type="none")
+consensusMatrix(motifSet)
 @
 
 

@@ -257,7 +257,7 @@ setMethod("searchAln", signature(pwm="PWMatrix", aln1="character", aln2="missing
           function(pwm, aln1, aln2, seqname1="Unknown1", seqname2="Unknown2",
                    min.score="80%", windowSize=51L, cutoff=0.7,
                    strand="*", type="any", conservation=NULL){
-            if(length(aln1) != 2)
+            if(length(aln1) != 2L)
               stop("'aln1' must be of length 2 when 'aln2' is missing")
             do_sitesearch(pwm, aln1[1], aln1[2], 
                           seqname1=seqname1, seqname2=seqname2,
@@ -272,7 +272,7 @@ setMethod("searchAln", signature(pwm="PWMatrix", aln1="DNAStringSet", aln2="miss
           function(pwm, aln1, aln2, seqname1="Unknown1", seqname2="Unknown2",
                    min.score="80%", windowSize=51L, cutoff=0.7,
                    strand="*", type="any", conservation=NULL){
-            if(length(aln1) != 2)
+            if(length(aln1) != 2L)
               stop("'aln1' must be of length 2 when 'aln2' is missing")
             do_sitesearch(pwm, as.character(aln1[1]), as.character(aln1[2]),
                           seqname1=seqname1, seqname2=seqname2,
