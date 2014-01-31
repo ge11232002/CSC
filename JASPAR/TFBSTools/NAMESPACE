@@ -63,7 +63,10 @@ exportMethods(
   length,
   ncol,
   dim,
-  reverseComplement
+  reverseComplement,
+
+  ## Motif-methods.r
+  consensusMatrix
 )
 
 ### -----------------------------------------------------------------
