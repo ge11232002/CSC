@@ -17,7 +17,7 @@ importClassesFrom(GenomicRanges, GRanges)
 ### -----------------------------------------------------------------
 ### Import S4 methods defined in other packages
 ###
-importMethodsFrom(Biostrings, reverseComplement, matchPWM, maxScore, minScore, consensusMatrix, PairwiseAlignments, pattern)
+importMethodsFrom(Biostrings, reverseComplement, matchPWM, maxScore, minScore, consensusMatrix, PairwiseAlignments, pattern, consensusMatrix)
 importMethodsFrom(RSQLite, dbGetQuery, dbConnect, dbDisconnect)
 importMethodsFrom(XVector, subseq)
 importMethodsFrom(GenomicRanges, seqnames)
