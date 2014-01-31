@@ -38,7 +38,8 @@ importFrom(GenomicRanges, GRanges, GRangesList)
 ###
 exportClasses(PFMatrix, PWMatrix, ICMatrix,
   PFMatrixList, PWMatrixList, ICMatrixList,
-  SiteSet, SiteSetList, SitePairSet, SitePairSetList
+  SiteSet, SiteSetList, SitePairSet, SitePairSetList,
+  MotifSet
   #PairwiseAlignmentTFBS
   )
 
@@ -47,11 +48,11 @@ exportClasses(PFMatrix, PWMatrix, ICMatrix,
 ###
 export(
   ## AllClasses.r
-  PFMatrix,
-  PFMatrixList,
-  #PairwiseAlignmentTFBS,
-  ICMatrixList,
-  PWMatrixList,
+  PFMatrix, PFMatrixList,
+  ICMatrix, ICMatrixList,
+  PWMatrix, PWMatrixList,
+  MotifSet,
+  SitePairSetList, SitePairSet,
   SiteSet, SiteSetList
 )
 
