@@ -1,0 +1,39 @@
+Hi Albin, Ge Tang
+
+Here is the source code for the PWM randomizer.
+The folder contains both the matlab and the C implementation of the program.
+
+In brief, the randomizer uses a mixture model learnt from all Jaspar matrices and an input count matrix (e.g PCM.txt) to generate N random matrices of length W. The input matrix is first permuted and used as priors to emit the frequency matrices of desired width
+Example:
+Usage: ./PWMrandom PCM.txt test.out 8 13
+Sample output: 
+
+permuted PCM
+13 16 4 1 0 
+1 0 4 0 0 
+1 0 4 3 8 
+1 0 4 12 8 
+
+Matrix8
+0.0116806 0.0818588 0.00033508 0.0490806 0.107816 0.196926 0.00900056 0.00345274 0.00219401 0.03758 0.00780355 0.0263796 0.0822988 
+0.00621056 1.05552e-07 0.0235184 0.146442 0.00055609 0.0802933 0.102474 0.118651 0.0813797 0.00804578 0.0122865 0.0307858 0.0730625 
+0.479446 0.888604 0.934547 0.785753 0.87055 0.66173 0.824102 0.398362 0.878327 0.353016 0.457758 0.839689 0.703212 
+0.502662 0.0295375 0.0415999 0.0187249 0.0210777 0.0610505 0.0644238 0.479535 0.0380997 0.601358 0.522152 0.103146 0.141427 
+
+The Matlab implementation is a bit more advanced. It provides both the routine to train new mixture models (Dirichlet_mixture_EM_estimation.m ) and the actual PWM randomizer (PWMrandomizeBayes_run.m). Currently, the C version is compiled to read the mixture models from the text files (Dirichlet_mixture_EM_estimation_jaspar_K6_alpha1.txt, Dirichlet_mixture_EM_estimation_jaspar_K6_pmix.txt) but these models can easily be replaced by running the EM algorithm.
+
+Please let me know if you need assistance to get this running. 
+
+
+Yes, that's correct. I completely forgot about it, sorry. 
+If you don't specify a width for your random matrix, it will be drawn from the distribution.
+
+So I would suggest for the new version to include the lengths of all matrices in the latest version of the database.
+
+And perhaps also rerun the Matlab script to learn the new mixture model. 
+There might be only minor changes. With 6 components, you will get one for each nucleotide and two for balanced mixtures, with maybe very small changes in the frequencies
+Since you have more matrices, you may increase the number of components is you want to try to pick up special mixtures involving di-nucleotide bias, etc.
+for this: run 
+Dirichlet_mixture_EM_estimation.m , providing as input a N*4 column matrix made of all concatenated matrices columns from Jaspar, K the number of components.
+and then save the alpha and pmix variable into a text file as in the example.
+
