@@ -63,8 +63,12 @@ SiteSet(views, score, strand="*", seqname="Unknown", sitesource="TFBS",
     \item{seqname}{\code{signature(x = "SiteSet")}: Returns the sequence name of the sequence which contains these sites.}
     \item{strand}{\code{signature(x = "SiteSet")}: Returns the strand information.}
     \item{views}{\code{signature(x = "SiteSet")}: Returns the views object.}
-    \item{writeGFF2}{\code{signature(x = "SiteSet")}: Returns a standard GFF2 format data frame.}
-    \item{writeGFF3}{\code{signature(x = "SiteSet")}: Returns a standard GFF3 format data frame.}
+    \item{writeGFF2}{\code{signature(x = "SiteSet")}(x, scoreType=c("absolute", "relative")): 
+    Returns a standard GFF2 format data frame.
+    The score column can have absolute value or relative value.}
+    \item{writeGFF3}{\code{signature(x = "SiteSet")}(x, scoreType=c("absolute", "relative")): 
+    Returns a standard GFF3 format data frame.
+    The score column can have absolute value or relative value.}
 	 }
 }
 \author{
