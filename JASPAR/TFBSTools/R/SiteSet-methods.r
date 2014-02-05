@@ -31,21 +31,21 @@ setMethod("length", "SitePairSet", function(x) length(siteset1(x)))
 ### SitePairSet Method
 ###
 setMethod("writeGFF3", "SitePairSet",
-          function(x){
+          function(x, scoreType=c("absolute", "relative")){
             if(length(x) == 0)
               return(data.frame())
-            gff1 = writeGFF3(siteset1(x))
-            gff2 = writeGFF3(siteset2(x))
+            gff1 = writeGFF3(siteset1(x), scoreType=scoreType)
+            gff2 = writeGFF3(siteset2(x), scoreType=scoreType)
             ans = rbind(gff1, gff2)
             return(ans)
           }
           )
 setMethod("writeGFF2", "SitePairSet",
-          function(x){
+          function(x, scoreType=c("absolute", "relative")){
             if(length(x) == 0)
               return(data.frame())
-            gff1 = writeGFF2(siteset1(x))
-            gff2 = writeGFF2(siteset2(x))
+            gff1 = writeGFF2(siteset1(x), scoreType=scoreType)
+            gff2 = writeGFF2(siteset2(x), scoreType=scoreType)
             ans = rbind(gff1, gff2)
             return(ans)
           }
@@ -129,17 +129,23 @@ setMethod("c", "SiteSet",
 ### Methods
 ###
 setMethod("writeGFF3", "SiteSet",
-          function(x){
+          function(x, scoreType=c("absolute", "relative")){
             if(length(x) == 0)
               return(data.frame())
+            scoreType = match.arg(scoreType, c("absolute", "relative"))
             seqs = DNAStringSet(views(x))
             seqs[strand(x) == "-"] = reverseComplement(seqs[strand(x) == "-"])
+            if(scoreType =="absolute"){
+              score = score(x)
+            }else{
+              score = relScore(x)
+            }
             gff = list(seqname=seqname(x),
                        source=sitesource(x),
                        feature=sitesource(x),
                        start=start(views(x)),
                        end=end(views(x)),
-                       score=score(x),
+                       score=score,
                        strand=strand(x),
                        frame=".",
                        attributes=paste(
@@ -154,17 +160,23 @@ setMethod("writeGFF3", "SiteSet",
           )
 
 setMethod("writeGFF2", "SiteSet",
-          function(x){
+          function(x, scoreType=c("absolute", "relative")){
             if(length(x) == 0)
               return(data.frame())
+            scoreType = match.arg(scoreType, c("absolute", "relative"))
             seqs = DNAStringSet(views(x))
             seqs[strand(x) == "-"] = reverseComplement(seqs[strand(x) == "-"])
+            if(scoreType == "absolute"){
+              score = score(x)
+            }else{
+              score = relScore(x)
+            }
             gff = list(seqname=seqname(x),
                        source=sitesource(x),
                        feature=sitesource(x),
                        start=start(views(x)),
                        end=end(views(x)),
-                       score=score(x),
+                       score=score,
                        strand=strand(x),
                        frame=".",
                        attributes=paste(
