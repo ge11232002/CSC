@@ -328,9 +328,9 @@ setMethod("searchPairBSgenome", signature(pwm="PWMatrixList"),
           )
 
 ### -----------------------------------------------------------------
-### PWMDivergence, computes the normalised Euclidian distance
+### PWMDivergence, computes the normalised Euclidean distance
 ###  (Harbison et al. 2004)
-PWMEuclidian = function(pwm1, pwm2){
+PWMEuclidean = function(pwm1, pwm2){
   # now the pwm1 and pwm2 must have same widths
   stopifnot(isConstant(c(ncol(pwm1), ncol(pwm2))))
   pwm1 = Biostrings:::.normargPwm(pwm1)
@@ -363,7 +363,7 @@ PWMKL = function(pwm1, pwm2){
 
 setMethod("PWMSimilarity", signature(pwmSubject="matrix", pwmQuery="matrix"),
           ## It takes the prob PWM, rather than log prob PWM.
-          function(pwmSubject, pwmQuery, method=c("Euclidian", "Pearson", "KL")){
+          function(pwmSubject, pwmQuery, method=c("Euclidean", "Pearson", "KL")){
             pwm1 = pwmSubject
             pwm2 = pwmQuery
             method = match.arg(method)
@@ -374,14 +374,14 @@ setMethod("PWMSimilarity", signature(pwmSubject="matrix", pwmQuery="matrix"),
                 pwm1Temp = pwm1[ ,i:(i+widthMin-1)]
                 pwm2Temp = pwm2[ ,j:(j+widthMin-1)]
                 ansTemp = switch(method,
-                                 "Euclidian"=PWMEuclidian(pwm1Temp, pwm2Temp),
+                                 "Euclidean"=PWMEuclidean(pwm1Temp, pwm2Temp),
                                  "Pearson"=PWMPearson(pwm1Temp, pwm2Temp),
                                  "KL"=PWMKL(pwm1Temp, pwm2Temp))
                 ans = c(ans, ansTemp)
               }
             }
             ans = switch(method,
-                         "Euclidian"=min(ans),
+                         "Euclidean"=min(ans),
                          "Pearson"=max(ans),
                          "KL"=min(ans)
                          )
@@ -390,39 +390,39 @@ setMethod("PWMSimilarity", signature(pwmSubject="matrix", pwmQuery="matrix"),
           )
 
 setMethod("PWMSimilarity", signature(pwmSubject="PWMatrix", pwmQuery="PWMatrix"),
-          function(pwmSubject, pwmQuery, method=c("Euclidian", "Pearson", "KL")){
+          function(pwmSubject, pwmQuery, method=c("Euclidean", "Pearson", "KL")){
             PWMSimilarity(pwmSubject@matrix, pwmQuery@matrix, method=method)
           }
           )
 
 setMethod("PWMSimilarity", signature(pwmSubject="matrix", pwmQuery="PWMatrix"),
-          function(pwmSubject, pwmQuery, method=c("Euclidian", "Pearson", "KL")){
+          function(pwmSubject, pwmQuery, method=c("Euclidean", "Pearson", "KL")){
             PWMSimilarity(pwmSubject, pwmQuery@matrix, method=method)
           }
           )
 
 setMethod("PWMSimilarity", signature(pwmSubject="PWMatrix", pwmQuery="matrix"),
-          function(pwmSubject, pwmQuery, method=c("Euclidian", "Pearson", "KL")){
+          function(pwmSubject, pwmQuery, method=c("Euclidean", "Pearson", "KL")){
             PWMSimilarity(pwmSubject@matrix, pwmQuery, method=method)
           }
           )
 
 setMethod("PWMSimilarity", signature(pwmSubject="PWMatrixList", pwmQuery="PWMatrix"),
-          function(pwmSubject, pwmQuery, method=c("Euclidian", "Pearson", "KL")){
+          function(pwmSubject, pwmQuery, method=c("Euclidean", "Pearson", "KL")){
             #ans = lapply(pwm1, PWMSimilarity, pwm2, method=method)
             PWMSimilarity(pwmSubject, pwmQuery@matrix, method=method)
           }
           )
 
 setMethod("PWMSimilarity", signature(pwmSubject="PWMatrixList", pwmQuery="matrix"),
-          function(pwmSubject, pwmQuery, method=c("Euclidian", "Pearson", "KL")){
+          function(pwmSubject, pwmQuery, method=c("Euclidean", "Pearson", "KL")){
             ans = sapply(pwmSubject, PWMSimilarity, pwmQuery, method=method)
             return(ans)
           }
           )
 
 setMethod("PWMSimilarity", signature(pwmSubject="PWMatrixList", pwmQuery="PWMatrixList"),
-          function(pwmSubject, pwmQuery, method=c("Euclidian", "Pearson", "KL")){
+          function(pwmSubject, pwmQuery, method=c("Euclidean", "Pearson", "KL")){
             ans = mapply(PWMSimilarity, pwmSubject, pwmQuery, method=method)
             return(ans)
           }
