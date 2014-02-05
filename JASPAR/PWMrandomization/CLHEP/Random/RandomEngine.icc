@@ -1,0 +1,27 @@
+// $Id: RandomEngine.icc,v 1.2 2003/07/17 19:20:02 garren Exp $
+// -*- C++ -*-
+// 
+// -----------------------------------------------------------------------
+//                             HEP Random
+//                       --- HepRandomEngine ---
+//                 inlined functions implementation file
+// -----------------------------------------------------------------------
+// This file is part of Geant4 (simulation toolkit for HEP).
+
+// =======================================================================
+// Gabriele Cosmo - Created: 5th September 1995
+//                - Added == and != operators: 19th November 1996
+//                - Moved seeds table to HepRandom: 19th March 1998
+// =======================================================================
+
+namespace CLHEP {
+
+inline bool HepRandomEngine::operator==(const HepRandomEngine& engine) {
+  return (this==&engine) ? true : false;
+}
+
+inline bool HepRandomEngine::operator!=(const HepRandomEngine& engine) {
+  return (this!=&engine) ? true : false;
+}
+
+}  // namespace CLHEP

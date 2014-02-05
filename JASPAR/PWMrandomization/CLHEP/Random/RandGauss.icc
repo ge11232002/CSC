@@ -1,0 +1,44 @@
+// $Id: RandGauss.icc,v 1.2 2003/07/17 19:20:02 garren Exp $
+// -*- C++ -*-
+// 
+// -----------------------------------------------------------------------
+//                             HEP Random
+//                         --- RandGauss ---
+//                 inlined functions implementation file
+// -----------------------------------------------------------------------
+// This file is part of Geant4 (simulation toolkit for HEP).
+ 
+// =======================================================================
+// Gabriele Cosmo - Created: 19th August 1998
+// =======================================================================
+
+namespace CLHEP {
+
+inline RandGauss::RandGauss(HepRandomEngine & anEngine, double mean,
+                                                        double stdDev )
+: defaultMean(mean), defaultStdDev(stdDev),
+  localEngine(&anEngine), deleteEngine(false), set(false), nextGauss(0.0){}
+
+inline RandGauss::RandGauss(HepRandomEngine * anEngine, double mean,
+                                                        double stdDev )
+: defaultMean(mean), defaultStdDev(stdDev),
+  localEngine(anEngine), deleteEngine(true), set(false), nextGauss(0.0) {}
+
+inline double RandGauss::shoot(double mean, double stdDev) {
+  return shoot()*stdDev + mean;
+}
+
+inline double RandGauss::shoot(HepRandomEngine* anEngine,
+                                  double mean, double stdDev) {
+  return shoot(anEngine)*stdDev + mean;
+}
+
+inline double RandGauss::fire() {
+  return normal()*defaultStdDev + defaultMean;
+}
+
+inline double RandGauss::fire(double mean, double stdDev) {
+  return normal()*stdDev + mean;
+}
+
+}  // namespace CLHEP
