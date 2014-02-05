@@ -52,7 +52,7 @@
     data(MA0004.1)
     pwmList = PWMatrixList(MA0003.2=toPWM(MA0003.2), MA0004.1=toPWM(MA0004.1))
     sitesetList = searchSeq(pwmList, "GAATTCTCTCTTGTTGTAGTCTCTTGACAAAATG", 
-                            min.score="50%")
+                            min.score="50\%")
 
 }
 \keyword{classes}

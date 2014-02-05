@@ -71,13 +71,12 @@ SiteSet(views, score, strand="*", seqname="Unknown", sitesource="TFBS",
     The score column can have absolute value or relative value.}
 	 }
 }
+
 \author{
 Ge Tan
 }
 
 \seealso{
-%%  ~~objects to See Also as \code{\link{~~fun~~}}, ~~~
-%%  ~~or \code{\linkS4class{CLASSNAME}} for links to other classes ~~~
   \code{\link{searchSeq}},
   \code{\link{searchAln}},
   \code{\linkS4class{PWMatrix}},
@@ -89,8 +88,9 @@ Ge Tan
 \examples{
     data(MA0003.2)
     pwm = toPWM(MA0003.2)
-    siteset = searchSeq(pwm, "GAATTCTCTCTTGTTGTAGTCTCTTGACAAAATG", min.score="60%")
+    siteset = searchSeq(pwm, "GAATTCTCTCTTGTTGTAGTCTCTTGACAAAATG", min.score="60\%")
     writeGFF3(pwm)
     relScore(siteset)
 }
+
 \keyword{classes}
