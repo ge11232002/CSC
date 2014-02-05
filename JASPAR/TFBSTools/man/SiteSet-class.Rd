@@ -89,7 +89,7 @@ Ge Tan
     data(MA0003.2)
     pwm = toPWM(MA0003.2)
     siteset = searchSeq(pwm, "GAATTCTCTCTTGTTGTAGTCTCTTGACAAAATG", min.score="60\%")
-    writeGFF3(pwm)
+    writeGFF3(siteset)
     relScore(siteset)
 }
 

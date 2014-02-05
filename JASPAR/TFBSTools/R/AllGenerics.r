@@ -116,6 +116,6 @@ setGeneric("permuteMatrix", signature="x",
            function(x, type="intra") standardGeneric("permuteMatrix"))
 
 ## wrappers
-setGeneric("runMEME", signature="x", function(x, binary="meme", seqtype="DNA", arguments="", tmpdir=tempdir()) standardGeneric("runMEME"))
+setGeneric("runMEME", signature="x", function(x, binary="meme", seqtype="DNA", arguments=list(), tmpdir=tempdir()) standardGeneric("runMEME"))
 setGeneric("sitesSeq", signature="x", function(x, n=10, type="none") standardGeneric("sitesSeq"))
 
