@@ -98,12 +98,21 @@ do_sitesearchOneStrand = function(pwm, aln1, aln2,
   seq12aln = seq_len(length(alignedSeq1))[!indexGap]
   indexGap = alignedSeq2 == "-" | alignedSeq2 == "." | alignedSeq2 == "_"
   seq22aln = seq_len(length(alignedSeq2))[!indexGap]
-  pos1_in_aln = seq12aln[start(siteset1)]
-  pos2_in_aln = seq22aln[start(siteset2)]
-  matchedPairs = match(pos1_in_aln, pos2_in_aln)
-  conservations1 = mapply(window, start=start(siteset1), 
-                          end=end(siteset1), MoreArgs=list(conservation), 
-                          SIMPLIFY=FALSE)[!is.na(matchedPairs)]
+  # If we only consider it matched when the starts match.
+  #pos1_in_aln = seq12aln[start(siteset1)]
+  #pos2_in_aln = seq22aln[start(siteset2)]
+  #matchedPairs = match(pos1_in_aln, pos2_in_aln)
+  ranges1_in_aln = IRanges(start=seq12aln[start(siteset1)],
+                           end=seq12aln[end(siteset1)])
+  ranges2_in_aln = IRanges(start=seq22aln[start(siteset2)],
+                           end=seq22aln[end(siteset2)])
+  matchedPairs = findLargestOverlaps(ranges1_in_aln, ranges2_in_aln)
+  #conservations1 = mapply(window, start=start(siteset1), 
+  #                        end=end(siteset1), MoreArgs=list(conservation), 
+  #                        SIMPLIFY=FALSE)[!is.na(matchedPairs)]
+  conservations1 = mapply(window, start=start(siteset1),
+                          end=end(siteset1), MoreArgs=list(conservation),
+                          SIMPLIFY=FALSE)[queryHits(matchedPairs)]
   if(type == "all"){
     keep = sapply(lapply(conservations1, ">=", cutoff), all)
   }else if(type == "any"){
@@ -111,8 +120,10 @@ do_sitesearchOneStrand = function(pwm, aln1, aln2,
   }else{
     stop(type, " is not supported yet!")
   }
-  ans_siteset1 = site1[!is.na(matchedPairs)][keep]
-  ans_siteset2 = site2[na.omit(matchedPairs)][keep]
+  #ans_siteset1 = site1[!is.na(matchedPairs)][keep]
+  #ans_siteset2 = site2[na.omit(matchedPairs)][keep]
+  ans_siteset1 = site1[queryHits(matchedPairs)][keep]
+  ans_siteset2 = site2[subjectHits(matchPairs)][keep]
   return(list(ans_siteset1=ans_siteset1, ans_siteset2=ans_siteset2))
 }
 
