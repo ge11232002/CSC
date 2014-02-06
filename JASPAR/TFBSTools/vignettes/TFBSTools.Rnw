@@ -266,7 +266,8 @@ permuteMatrix(pfmList, type="inter")
 
 \subsection{PWM similarity}
 To measure the similarity of two PWM matrix in three measurements:
-"normalised Euclidean distance", "Pearson correlation" and "Kullback Leibler divergence".
+"normalised Euclidean distance", "Pearson correlation" 
+and "Kullback Leibler divergence" \citep{Linhart:2008gy}.
 Given two PWMs, $P^1$ and $P^2$, where l is the length. 
 $P_{i,b}$ is the values in column i with base b.
 The normalised Euclidean distance is computed in
@@ -372,9 +373,11 @@ So far, MEME is supported.
 and returns a \Rclass{MotifSet} object.
 
 <<MEME-wrapper, eval=FALSE, results = hide>>=
-motifSet = runMEME(file.path(system.file("extdata", package="TFBSTools"), "crp0.s"),
+motifSet = runMEME(file.path(system.file("extdata", 
+                                         package="TFBSTools"), "crp0.s"),
                    binary="meme",
                    arguments=list("-nmotifs"=3)
+                  )
 sitesSeq(motifSet, type="all")
 sitesSeq(motifSet, type="none")
 consensusMatrix(motifSet)

@@ -123,7 +123,7 @@ do_sitesearchOneStrand = function(pwm, aln1, aln2,
   #ans_siteset1 = site1[!is.na(matchedPairs)][keep]
   #ans_siteset2 = site2[na.omit(matchedPairs)][keep]
   ans_siteset1 = site1[queryHits(matchedPairs)][keep]
-  ans_siteset2 = site2[subjectHits(matchPairs)][keep]
+  ans_siteset2 = site2[subjectHits(matchedPairs)][keep]
   return(list(ans_siteset1=ans_siteset1, ans_siteset2=ans_siteset2))
 }
 
