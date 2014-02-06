@@ -374,7 +374,7 @@ and returns a \Rclass{MotifSet} object.
 <<MEME-wrapper, eval=FALSE, results = hide>>=
 motifSet = runMEME(file.path(system.file("extdata", package="TFBSTools"), "crp0.s"),
                    binary="meme",
-                   arguments="-nmotifs 3")
+                   arguments=list("-nmotifs"=3)
 sitesSeq(motifSet, type="all")
 sitesSeq(motifSet, type="none")
 consensusMatrix(motifSet)
