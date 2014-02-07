@@ -73,6 +73,8 @@ SiteSet(views, score, strand="*", seqname="Unknown", sitesource="TFBS",
     The score column can have absolute value or relative value.}
    \item{pvalues}{\code{signature(x = "SiteSet")}(x):
      Calculates the empirical p-values for the scores.
+     The background probability for sampling is based on 
+     the PWM matrix in the \code{SiteSet} object.
    }
   }
 }
