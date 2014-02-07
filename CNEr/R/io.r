@@ -12,7 +12,8 @@ readBedR = function(bedFile){
 ### read the bed file (with only 3 columns) into GRanges.
 ###
 readBed = function(bedFile=NULL){
-## This GRanges have the different coordinates system with the original bed file. i.e. with 1-based start end coordinates.
+## This GRanges have the different coordinates system 
+## with the original bed file. i.e. with 1-based start end coordinates.
   if(is.null(bedFile)){
     return(NULL)
   }

@@ -10,7 +10,8 @@ setClass(Class="axt",
 
 setValidity("axt",
             function(object){
-              length(unique(length(object@targetRanges), length(object@targetSeqs),
+              length(unique(length(object@targetRanges), 
+                            length(object@targetSeqs),
               length(object@queryRanges), length(object@querySeqs),
               length(object@score), length(object@symCount))) == 1 && 
               all(object@symCount >= 0)
@@ -103,7 +104,8 @@ setMethod("c", "axt",
             if(any(arg_is_null))
               args[arg_is_null] = NULL
             if(!all(sapply(args, is, class(x))))
-              stop("all arguments in '...' must be ", class(x), " objects (or NULLs)")
+              stop("all arguments in '...' must be ", 
+                   class(x), " objects (or NULLs)")
             new_targetRanges = do.call(c, lapply(args, targetRanges))
             new_targetSeqs = do.call(c, lapply(args, targetSeqs))
             new_queryRanges = do.call(c, lapply(args, queryRanges))
@@ -123,7 +125,8 @@ setMethod("c", "axt",
 
 
 setMethod("subAxt", "axt",
-## This is to fetch the axts within the specific chrs, starts, ends based on target sequences.
+## This is to fetch the axts within the specific chrs, starts, ends 
+## based on target sequences.
           function(x, chr, start, end, strand=c("+", "-", "*"), 
                    select=c("target", "query"),
                    type=c("any", "within")){
@@ -136,9 +139,13 @@ setMethod("subAxt", "axt",
             if(length(searchGRanges) == 0)
               return(x)
             if(select == "target"){
-              index = which(!is.na(findOverlaps(targetRanges(x), searchGRanges, type=type, select="first")))
+              index = which(!is.na(findOverlaps(targetRanges(x), 
+                                                searchGRanges, type=type, 
+                                                select="first")))
             }else{
-              index = which(!is.na(findOverlaps(queryRanges(x), searchGRanges, type=type, select="first")))
+              index = which(!is.na(findOverlaps(queryRanges(x), 
+                                                searchGRanges, type=type, 
+                                                select="first")))
             }
             return(x[index])
           }
@@ -166,15 +173,19 @@ toSeqSnippet <- function(x, width)
 }
 
 
-.axt.show_frame_line = function(x, i, iW, tNameW, tStartW, tEndW, qNameW, qStartW, qEndW, scoreW){
+.axt.show_frame_line = function(x, i, iW, tNameW, tStartW, tEndW, 
+                                qNameW, qStartW, qEndW, scoreW){
   cat(format(i, width=iW, justify="right"), " ",
-      format(as.character(seqnames(targetRanges(x)[i])), width=tNameW, justify="right"), " ",
+      format(as.character(seqnames(targetRanges(x)[i])), 
+             width=tNameW, justify="right"), " ",
       format(start(targetRanges(x)[i]), width=tStartW, justify="right"), " ",
       format(end(targetRanges(x)[i]), width=tEndW, justify="right"), " ",
-      format(as.character(seqnames(queryRanges(x)[i])), width=qNameW, justify="right"), " ",
+      format(as.character(seqnames(queryRanges(x)[i])), 
+             width=qNameW, justify="right"), " ",
       format(start(queryRanges(x)[i]), width=qStartW, justify="right"), " ",
       format(end(queryRanges(x)[i]), width=qEndW, justify="right"), " ",
-      format(as.character(strand(queryRanges(x))[i]), width=1, justify="right"), " ",
+      format(as.character(strand(queryRanges(x))[i]), 
+             width=1, justify="right"), " ",
       format(score(x)[i], width=scoreW, justify="right"), " ",
       sep=""
       )
@@ -204,18 +215,27 @@ showAxt = function(x, margin="", half_nrow=5L){
     qEndW = max(nchar(as.character(end(queryRanges(x)))))
     scoreW = max(nchar(as.character(score(x))))
     for(i in seq_len(lx))
-      .axt.show_frame_line(x, i, iW, tNameW, tStartW, tEndW, qNameW, qStartW, qEndW, scoreW)
+      .axt.show_frame_line(x, i, iW, tNameW, tStartW, tEndW, 
+                           qNameW, qStartW, qEndW, scoreW)
   }else{
-    tNameW = max(nchar(as.character(seqnames(targetRanges(x)[c(1:head_nrow, (lx-tail_nrow+1L):lx)]))))
-    tStartW = max(nchar(as.character(start(targetRanges(x)[c(1:head_nrow, (lx-tail_nrow+1L):lx)]))))
-    tEndW = max(nchar(as.character(end(targetRanges(x)[c(1:head_nrow, (lx-tail_nrow+1L):lx)]))))
-    qNameW = max(nchar(as.character(seqnames(queryRanges(x)[c(1:head_nrow, (lx-tail_nrow+1L):lx)]))))
-    qStartW = max(nchar(as.character(start(queryRanges(x)[c(1:head_nrow, (lx-tail_nrow+1L):lx)]))))
-    qEndW = max(nchar(as.character(end(queryRanges(x)[c(1:head_nrow, (lx-tail_nrow+1L):lx)]))))
-    scoreW = max(nchar(as.character(score(x)[c(1:head_nrow, (lx-tail_nrow+1L):lx)])))
+    tNameW = max(nchar(as.character(seqnames(targetRanges(x)
+                        [c(1:head_nrow, (lx-tail_nrow+1L):lx)]))))
+    tStartW = max(nchar(as.character(start(targetRanges(x)
+                        [c(1:head_nrow, (lx-tail_nrow+1L):lx)]))))
+    tEndW = max(nchar(as.character(end(targetRanges(x)
+                        [c(1:head_nrow, (lx-tail_nrow+1L):lx)]))))
+    qNameW = max(nchar(as.character(seqnames(queryRanges(x)
+                        [c(1:head_nrow, (lx-tail_nrow+1L):lx)]))))
+    qStartW = max(nchar(as.character(start(queryRanges(x)
+                        [c(1:head_nrow, (lx-tail_nrow+1L):lx)]))))
+    qEndW = max(nchar(as.character(end(queryRanges(x)
+                        [c(1:head_nrow, (lx-tail_nrow+1L):lx)]))))
+    scoreW = max(nchar(as.character(score(x)
+                        [c(1:head_nrow, (lx-tail_nrow+1L):lx)])))
     if(head_nrow > 0){
       for(i in 1:head_nrow)
-        .axt.show_frame_line(x, i, iW, tNameW, tStartW, tEndW, qNameW, qStartW, qEndW, scoreW)
+        .axt.show_frame_line(x, i, iW, tNameW, tStartW, tEndW, 
+                             qNameW, qStartW, qEndW, scoreW)
     }
     cat(format("...", width=iW, justify="right"),
         format("...", width=tNameW, justify="right"),
@@ -229,7 +249,8 @@ showAxt = function(x, margin="", half_nrow=5L){
     cat("\n")
     if(tail_nrow > 0){
       for(i in (lx-tail_nrow+1L):lx)
-        .axt.show_frame_line(x, i, iW, tNameW, tStartW, tEndW, qNameW, qStartW, qEndW, scoreW)
+        .axt.show_frame_line(x, i, iW, tNameW, tStartW, tEndW, 
+                             qNameW, qStartW, qEndW, scoreW)
     }
   }
 }
@@ -242,9 +263,11 @@ setMethod("show", "axt",
           function(object){
             lx = length(object)
             cat(" A ", class(object), " with ", length(object), " ", 
-                ifelse(lx == 1L, "alignment pair", "alignment pairs"), ":\n", sep="")
+                ifelse(lx == 1L, "alignment pair", "alignment pairs"), 
+                ":\n", sep="")
             if(lx != 0){
               showAxt(object, margin="  ")
             }
           }
 )
+
