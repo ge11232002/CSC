@@ -189,8 +189,10 @@ cneMerge = function(cne1, cne2){
   # but the coordinate is already on positive strand.
   ## first reverse the cne2's cigar
   cne2 = transform(cne2, cigar=chartr("DI", "ID", cigar))
-  cne2[cne2$strand=="-" , ] = transform(subset(cne2, strand=="-"), 
-                                        cigar=reverseCigar(cigar))
+  if(any(cne2$strand=="-")){
+    cne2[cne2$strand=="-", ] = transform(subset(cne2, strand=="-"), 
+                                          cigar=reverseCigar(cigar))
+  }
   colnames(cne2) = c("qName", "qStart", "qEnd", "tName", 
                      "tStart", "tEnd", "strand", "score", "cigar")
   cne1T = GRanges(seqnames=cne1$tName, 
