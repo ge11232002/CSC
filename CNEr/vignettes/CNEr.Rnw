@@ -281,8 +281,10 @@ the bin indexing system is acquired.
 For more information, please refer to the paper \citep{Kent:2002bw} 
 and \href{http://genomewiki.ucsc.edu/index.php/Bin_indexing_system}{genomewiki}.
 
-<<saveCNE, eval=FALSE, results = hide>>=
-dbName = "/Users/gtan/CSC/CNEr/CNESQL/cne.sqlite"
+<<saveCNE, eval=TRUE, results = verbatim>>=
+#dbName = "/Users/gtan/CSC/CNEr/CNESQL/cne.sqlite"
+dbName = tempfile()
+data(cneBlatedDanRer7Hg19)
 for(i in 1:length(cneBlatedDanRer7Hg19)){
   tableName = paste0("cne_twoWay_danRer7_hg19_len50_id", 
                      as.integer(sub("_\\d+$", "", 
@@ -294,14 +296,14 @@ for(i in 1:length(cneBlatedDanRer7Hg19)){
 When querying results from the local SQLite database based on the chr, coordinates and other criterias, 
 a \Robject{IRanges} object is returned.
 
-<<queryCNE, eval=FALSE, results = hide>>=
+<<queryCNE, eval=TRUE, results = verbatim>>=
 chr = "chr6"
 start = 19900000L
 end =  28000000L
 minLength = 50L
 tableName = "cne_twoWay_danRer7_hg19_len50_id960_v1"
 fetchedCNERanges = readCNERangesFromSQLite(dbName, tableName, chr, 
-                                           start, end, whichAssembly="1",
+                                           start, end, whichAssembly="L",
                                            minLength=minLength)
 @
 
@@ -356,8 +358,6 @@ biomTrack = BiomartGeneRegionTrack(genome="hg19", chromosome=chr,
 @
 
 <<plotAnnotation, fig=TRUE, eval=TRUE, results=hide, echo=TRUE, height=10, width=7.5>>=
-## I do not know why the transcripts from UcscTrack are not merged into one. 
-## Already asked Florian.
 plotTracks(list(axisTrack, ideoTrack, cpgIslands, refGenes, biomTrack), 
            collapseTranscripts=TRUE, shape="arrow",
            showId=TRUE, transcriptAnnotation="symbol")
@@ -371,24 +371,24 @@ Usually the \textbf{gff} file containing the gene annotation can be processed by
 For more details, please look into the vignette of \Rpackage{Gviz}.
 
 \subsection{CNEs horizon plot}
-<<CNEDensity, eval=FALSE, results = hide>>=
-dbName = "/Users/gtan/CSC/CNEr/CNESQL/cne.sqlite"
+<<CNEDensity, eval=TRUE, results = verbatim>>=
+#dbName = "/Users/gtan/CSC/CNEr/CNESQL/cne.sqlite"
 windowSize= 300L
 minLength = 50L
 cneHg19DanRer7_45_50 = CNEDensity(dbName=dbName, 
                                   tableName="cne_twoWay_danRer7_hg19_len50_id900_v1", 
                                   whichAssembly="R", chr=chr, start=start,
-                                  CNEend=CNEend, windowSize=windowSize, 
+                                  end=end, windowSize=windowSize, 
                                   minLength=minLength)
 cneHg19DanRer7_48_50 = CNEDensity(dbName=dbName, 
                                   tableName="cne_twoWay_danRer7_hg19_len50_id960_v1", 
                                   whichAssembly="R", chr=chr, start=start,
-                                  CNEend=CNEend, windowSize=windowSize, 
+                                  end=end, windowSize=windowSize, 
                                   minLength=minLength)
 cneHg19DanRer7_49_50 = CNEDensity(dbName=dbName, 
                                   tableName="cne_twoWay_danRer7_hg19_len50_id980_v1", 
                                   whichAssembly="R", chr=chr, start=start,
-                                  CNEend=CNEend, windowSize=windowSize, 
+                                  end=end, windowSize=windowSize, 
                                   minLength=minLength)
 @
 
