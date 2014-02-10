@@ -48,8 +48,11 @@ Ge Tan
 
 
 \examples{
-    dbName = file.path(system.file("extdata", package=CNEr),
+    dbName = file.path(system.file("extdata", package="CNEr"),
                        "cne.sqlite")
+    chr = "chr6"
+    start = 19900000L
+    end =  28000000L
     windowSize= 300L
     minLength = 50L
     cneHg19DanRer7_45_50 = CNEDensity(dbName=dbName, 

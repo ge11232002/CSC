@@ -44,7 +44,7 @@ Ge Tan
 }
 
 \examples{
-    dbName = file.path(system.file("extdata", package=CNEr),
+    dbName = file.path(system.file("extdata", package="CNEr"),
                        "cne.sqlite")
     chr = "chr6"
     start = 19900000
