@@ -372,7 +372,6 @@ For more details, please look into the vignette of \Rpackage{Gviz}.
 
 \subsection{CNEs horizon plot}
 <<CNEDensity, eval=TRUE, results = verbatim>>=
-#dbName = "/Users/gtan/CSC/CNEr/CNESQL/cne.sqlite"
 windowSize= 300L
 minLength = 50L
 cneHg19DanRer7_45_50 = CNEDensity(dbName=dbName, 

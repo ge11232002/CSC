@@ -44,7 +44,8 @@ Ge Tan
 }
 
 \examples{
-  \dontrun{
+    dbName = file.path(system.file("extdata", package=CNEr),
+                       "cne.sqlite")
     chr = "chr6"
     start = 19900000
     end =  28000000
@@ -52,5 +53,4 @@ Ge Tan
     tableName = "cne_twoWay_danRer7_hg19_len50_id960_v1"
     fetchedCNERanges = readCNERangesFromSQLite(dbName, tableName, chr, 
       start, end, whichAssembly="L", minLength=minLength)
-  }
 }

@@ -38,13 +38,11 @@ Ge Tan
 }
 
 \examples{
-  \dontrun{
-    dbName = "/Users/gtan/CSC/CNEr/CNESQL/cne.sqlite"
-    for(i in 1:length(cneBlatedDanRer7Hg19)){
-      tableName = paste0("cne_twoWay_danRer7_hg19_len50_id", 
-      as.integer(sub("_\\d+$", "", names(cneBlatedDanRer7Hg19)[i]))*20, "_v1")
-      saveCNEToSQLite(cneBlatedDanRer7Hg19[[i]], dbName, tableName, overwrite=TRUE)
-    }
+  dbName = tempfile()
+  for(i in 1:length(cneBlatedDanRer7Hg19)){
+    tableName = paste0("cne_twoWay_danRer7_hg19_len50_id", 
+    as.integer(sub("_\\d+$", "", names(cneBlatedDanRer7Hg19)[i]))*20, "_v1")
+    saveCNEToSQLite(cneBlatedDanRer7Hg19[[i]], dbName, tableName, overwrite=TRUE)
   }
 }
 

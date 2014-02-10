@@ -48,26 +48,25 @@ Ge Tan
 
 
 \examples{
-  \dontrun{
-    dbName = "/Users/gtan/CSC/CNEr/CNESQL/cne.sqlite"
+    dbName = file.path(system.file("extdata", package=CNEr),
+                       "cne.sqlite")
     windowSize= 300L
     minLength = 50L
     cneHg19DanRer7_45_50 = CNEDensity(dbName=dbName, 
                                   tableName="cne_twoWay_danRer7_hg19_len50_id900_v1", 
                                   whichAssembly="R", chr=chr, start=start,
-                                  CNEend=CNEend, windowSize=windowSize, 
+                                  end=end, windowSize=windowSize, 
                                   minLength=minLength)
     cneHg19DanRer7_48_50 = CNEDensity(dbName=dbName, 
                                   tableName="cne_twoWay_danRer7_hg19_len50_id960_v1", 
                                   whichAssembly="R", chr=chr, start=start,
-                                  CNEend=CNEend, windowSize=windowSize, 
+                                  end=end, windowSize=windowSize, 
                                   minLength=minLength)
     cneHg19DanRer7_49_50 = CNEDensity(dbName=dbName, 
                                   tableName="cne_twoWay_danRer7_hg19_len50_id980_v1", 
                                   whichAssembly="R", chr=chr, start=start,
-                                  CNEend=CNEend, windowSize=windowSize, 
+                                  end=end, windowSize=windowSize, 
                                   minLength=minLength)
-  }
 }
 
 
