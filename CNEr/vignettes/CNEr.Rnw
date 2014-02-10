@@ -153,11 +153,13 @@ However, if your bed file only contains 3 columns: chromosome, start and end,
 that are the information needed by \Rcode{CNEr},
 then it is better to use the \Rcode{readBed} function that is much faster with C implementation.
 
-<<rtl-Bed, eval=FALSE, results = hide>>=
-bedHg19Fn = "/Users/gtan/CSC/CNEr/filters/filter_regions.hg19.bed"
+<<rtl-Bed, eval=TRUE, results = verbatim>>=
+bedHg19Fn = file.path(system.file("extdata", package="CNEr"), "filter_regions.hg19.bed")
 bedHg19 = readBed(bedHg19Fn)
-bedDanRer7Fn = "/Users/gtan/CSC/CNEr/filters/filter_regions.danRer7.bed"
+bedHg19
+bedDanRer7Fn = file.path(system.file("extdata", package="CNEr"), "filter_regions.danRer7.bed")
 bedDanRer7 = readBed(bedDanRer7Fn)
+bedDanRer7
 @
 
 \subsection{Chromosome size of query assembly}
@@ -170,20 +172,14 @@ and more assemblies from other sources will be implemented in the future.
 A object of \Rcode{Seqinfo} is returned which suits the input to downstream analysis.
 
 <<rtl-chromSizes, eval=TRUE, results = verbatim>>=
-library(CNEr)
 qSizesHg19 = fetchChromSizes("hg19")
 qSizesHg19
 qSizesDanRer7 = fetchChromSizes("danRer7")
 qSizesDanRer7
 @
 
-\Robject(Seqinfo) can also be generated from local two bit file.
-
-<<rtl-chromSizes2, eval=FALSE, results = hide>>=
-library(rtracklayer)
-qSizesDanRer7 = seqinfo(TwoBitFile("/Users/gtan/CSC/CNEr/2bit/danRer7.2bit"))
-qSizesHg19 = seqinfo(TwoBitFile("/Users/gtan/CSC/CNEr/2bit/hg19.2bit"))
-@
+\Robject(Seqinfo) can also be generated from local two bit file with \Rfunction{seqinfo} from 
+\Rpackage{rtracklayer}.
 
 
 \section{CNE identification}
@@ -200,7 +196,7 @@ at least \textbf{I} identities over \textbf{C} alignment columns.
 Because different genes and loci may favor various similarity scores,
 we usually scan at two diffrent window sizes 30 and 50 with several similarity criterias (\textbf{I/C}) range from 70\% to 100\%.
 
-<<rtl-CNEScan, eval=FALSE, results = hide>>=
+<<rtl-CNEScan, eval=TRUE, results = verbatim>>=
 ## axt, GRanges objects as input
 CNEHg19DanRer7 = ceScan(axts=axtHg19DanRer7, tFilter=bedHg19,
                         qFilter=bedDanRer7, qSizes=qSizesDanRer7,
@@ -223,7 +219,7 @@ which contains the preliminary CNEs.
 Here is some exemple output:
 
 <<rtl-CNEScan, eval=TRUE, results = verbatim>>=
-data(CNEHg19DanRer7)
+#data(CNEHg19DanRer7)
 lapply(CNEHg19DanRer7, head)
 @
 
