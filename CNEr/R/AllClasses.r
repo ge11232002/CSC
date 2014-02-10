@@ -127,25 +127,50 @@ setMethod("c", "axt",
 setMethod("subAxt", "axt",
 ## This is to fetch the axts within the specific chrs, starts, ends 
 ## based on target sequences.
-          function(x, chr, start, end, strand=c("+", "-", "*"), 
+          function(x, chr, start, end, #strand=c("+", "-", "*"), 
                    select=c("target", "query"),
-                   type=c("any", "within")){
-            strand = match.arg(strand)
+                   type=c("any", "within"),
+                   qSize=NULL){
             type = match.arg(type)
             select = match.arg(select)
-            searchGRanges = GRanges(seqnames=chr, 
-                                    ranges=IRanges(start=start, end=end),
-                                    strand=strand)
-            if(length(searchGRanges) == 0)
-              return(x)
+            if(select == "query"){
+              if(is.null(qSize))
+                stop("When selecting on query alignments, 
+                     qSize must be provided.")
+              if(!is(qSize, "integer"))
+                stop("qSize must be an integer object.")
+            }
             if(select == "target"){
-              index = which(!is.na(findOverlaps(targetRanges(x), 
-                                                searchGRanges, type=type, 
-                                                select="first")))
+              searchGRanges = GRanges(seqnames=chr,
+                                      ranges=IRanges(start=start, end=end),
+                                      strand="+")
+              if(length(searchGRanges) == 0)
+                return(x)
+              index = queryHits(findOverlaps(targetRanges(x), 
+                                             searchGRanges, type=type, 
+                                             select="all"))
+            }else if(select == "query"){
+              # first search axts on positive strand
+              searchGRanges = GRanges(seqnames=chr,
+                                      ranges=IRanges(start=start, end=end),
+                                      strand="+")
+              if(length(searchGRanges) == 0)
+                return(x)
+              indexPositive = queryHits(findOverlaps(queryRanges(x),
+                                                     searchGRanges, type=type,
+                                                     select="all"))
+              # then search axts on negative strand.
+              # we need to prepare the searchGRanges on negative strand.
+              searchGRanges = GRanges(seqnames=chr,
+                                      ranges=IRanges(start=qSize-end+1,
+                                                     end=qSize-start+1),
+                                      strand="-")
+              indexNegative = queryHits(findOverlaps(queryRanges(x),
+                                                     searchGRanges, type=type,
+                                                     select="all"))
+              index = sort(c(indexPositive, indexNegative))
             }else{
-              index = which(!is.na(findOverlaps(queryRanges(x), 
-                                                searchGRanges, type=type, 
-                                                select="first")))
+              stop("Wrong select!")
             }
             return(x[index])
           }
