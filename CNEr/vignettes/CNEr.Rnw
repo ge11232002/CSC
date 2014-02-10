@@ -233,7 +233,7 @@ But elements that only overlap on one of the genomes are kept,
 so that duplicated elements remain distinct.
 
 <<rtl-CNEMerge, eval=TRUE, results = verbatim>>=
-data(CNEDanRer7Hg19)
+#data(CNEDanRer7Hg19)
 cneMergedDanRer7Hg19 = mapply(cneMerge, CNEDanRer7Hg19, CNEHg19DanRer7, SIMPLIFY=FALSE)
 lapply(cneMergedDanRer7Hg19, head)
 @
