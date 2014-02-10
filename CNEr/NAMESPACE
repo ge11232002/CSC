@@ -64,6 +64,7 @@ export(
   readBed,
   readAxt,
   axtInfo,
+  writeAxt,
 
   ## ceScan.r
   ceScan, 
