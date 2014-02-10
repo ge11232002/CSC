@@ -11,12 +11,17 @@ compDNAStringSet = function(DNAStringSet1, DNAStringSet2){
 
 
 ### -----------------------------------------------------------------
-### For a GRanges object of filter, make the revered GRanges. chromSize needs to be known.
+### For a GRanges object of filter, make the revered GRanges. 
+### chromSize needs to be known.
 ### Not used, exported so far.
 makeReversedFilter = function(qFilter, chromSizes){
   revFilterBed = GRanges(seqnames=seqnames(qFilter),
-                         ranges=IRanges(start=chromSizes[as.character(seqnames(qFilter))] - end(qFilter),
-                                        end=chromSizes[as.character(seqnames(qFilter))] - start(qFilter)
+                         ranges=IRanges(start=chromSizes[
+                                        as.character(seqnames(qFilter))] - 
+                                        end(qFilter),
+                                        end=chromSizes[
+                                        as.character(seqnames(qFilter))] - 
+                                        start(qFilter)
                                         ),
                          strand=Rle("-"))
   return(revFilterBed)
@@ -64,7 +69,8 @@ my.system = function(cmd, echo=TRUE, intern=FALSE, ...){
 
 
 ### -----------------------------------------------------------------
-### Return the bin number that should be assigned to a feature spanning the given range. * USE THIS WHEN CREATING A DB *
+### Return the bin number that should be assigned to 
+### a feature spanning the given range. * USE THIS WHEN CREATING A DB *
 ### Exported!
 .validateBinRanges = function(starts, ends){
   if(any(ends <= 0 | starts <= 0)){
@@ -81,12 +87,15 @@ my.system = function(cmd, echo=TRUE, intern=FALSE, ...){
 
 binFromCoordRange = function(starts, ends){
   .validateBinRanges(starts, ends)
-  bins = .Call2("bin_from_coord_range", as.integer(starts), as.integer(ends), PACKAGE="CNEr")
+  bins = .Call2("bin_from_coord_range", as.integer(starts), 
+                as.integer(ends), PACKAGE="CNEr")
   return(bins)
 }
 
 ### -----------------------------------------------------------------
-### Return the set of bin ranges that overlap a given coordinate range. It is usually more convenient to use bin_restriction string than to use this method directly.
+### Return the set of bin ranges that overlap a given coordinate range. 
+### It is usually more convenient to use bin_restriction string 
+### than to use this method directly.
 ### EXPORTED!
 binRangesFromCoordRange = function(start, end){
   stopifnot(length(start)==1 && length(end)==1)
@@ -96,7 +105,9 @@ binRangesFromCoordRange = function(start, end){
 }
 
 ### -----------------------------------------------------------------
-### Given a coordinate range, return a string to be used in the WHERE section of a SQL SELECT statement that is to select features overlapping a certain range. * USE THIS WHEN QUERYING A DB *
+### Given a coordinate range, return a string to be used in the WHERE 
+### section of a SQL SELECT statement that is to 
+### select features overlapping a certain range. * USE THIS WHEN QUERYING A DB *
 ### EXPORTED!
 binRestrictionString = function(start, end, field="bin"){
   binRanges = binRangesFromCoordRange(start, end)
@@ -117,12 +128,19 @@ binRestrictionString = function(start, end, field="bin"){
 
 
 
-get_cne_ranges_in_region = function(CNE, whichAssembly=c(1,2), chr, CNEstart, CNEend, min_length){
- ## This CNE data.frame does not have the bin column yet. I am not sure whether it is necessary to add this column in R since it's quiet fast to select the cnes which meet the criteria (~0.005 second).
+get_cne_ranges_in_region = function(CNE, whichAssembly=c(1,2), 
+                                    chr, CNEstart, CNEend, min_length){
+  ## This CNE data.frame does not have the bin column yet. 
+  ## I am not sure whether it is necessary to add this column in R since 
+  ## it's quiet fast to select the cnes which meet the criteria (~0.005 second).
   if(whichAssembly == 1)
-    res = subset(CNE, chr1==chr & start1>=CNEstart & end1<=CNEend & end1-start1+1>=min_length & end2-start2+1>=min_length, select=c("start1", "end1"))
+    res = subset(CNE, chr1==chr & start1>=CNEstart & end1<=CNEend & 
+                 end1-start1+1>=min_length & end2-start2+1>=min_length, 
+                 select=c("start1", "end1"))
   else if(whichAssembly == 2)
-    res = subset(CNE, chr2==chr & start2>=CNEstart & end2<=CNEend & end1-start1+1>=min_length & end2-start2+1>=min_length, select=c("start2", "end2"))
+    res = subset(CNE, chr2==chr & start2>=CNEstart & end2<=CNEend & 
+                 end1-start1+1>=min_length & end2-start2+1>=min_length, 
+                 select=c("start2", "end2"))
   else
     stop("whichAssembly should be 1 or 2")
   # Here we return a IRanges object to store the start and end
@@ -131,15 +149,21 @@ get_cne_ranges_in_region = function(CNE, whichAssembly=c(1,2), chr, CNEstart, CN
 }
 
 
-get_cne_ranges_in_region_partitioned_by_other_chr = function(CNE, whichAssembly=c(1,2), chr, CNEstart, CNEend, min_length){
+get_cne_ranges_in_region_partitioned_by_other_chr = 
+  function(CNE, whichAssembly=c(1,2), chr, CNEstart, CNEend, min_length){
   if(whichAssembly == 1)
-    res = subset(CNE, chr1==chr & start1>=CNEstart & end1<=CNEend & end1-start1+1>=min_length & end2-start2+1>=min_length, select=c("chr2", "start1", "end1"))
+    res = subset(CNE, chr1==chr & start1>=CNEstart & end1<=CNEend & 
+                 end1-start1+1>=min_length & end2-start2+1>=min_length, 
+                 select=c("chr2", "start1", "end1"))
   else if(whichAssembly == 1)
-    res = subset(CNE, chr2==chr & start2>=CNEstart & end2<=CNEend & end1-start1+1>=min_length & end2-start2+1>=min_length, select=c("chr1", "start2", "end2"))
+    res = subset(CNE, chr2==chr & start2>=CNEstart & end2<=CNEend & 
+                 end1-start1+1>=min_length & end2-start2+1>=min_length, 
+                 select=c("chr1", "start2", "end2"))
   else
     stop("whichAssembly should be 1 or 2")
   # Here we return a GRanges object.
-  res = GRanges(seqnames=res[ ,1], ranges=IRanges(start=res[ ,2], end=res[ ,3]))
+  res = GRanges(seqnames=res[ ,1], 
+                ranges=IRanges(start=res[ ,2], end=res[ ,3]))
   return(res)
 }
 
@@ -150,7 +174,8 @@ saveCNEToSQLite = function(CNE, dbName, tableName, overwrite=FALSE){
   CNE$bin1 = binFromCoordRange(CNE$start1, CNE$end1)
   CNE$bin2 = binFromCoordRange(CNE$start2, CNE$end2)
   # reorder it
-  CNE = CNE[ ,c("bin1", "chr1", "start1", "end1", "bin2", "chr2", "start2", "end2", "strand", "similarity", "cigar")]
+  CNE = CNE[ ,c("bin1", "chr1", "start1", "end1", "bin2", 
+                "chr2", "start2", "end2", "strand", "similarity", "cigar")]
   con = dbConnect(SQLite(), dbname=dbName)
   on.exit(dbDisconnect(con))
   dbWriteTable(con, tableName, CNE, row.names=FALSE, overwrite=overwrite)
@@ -174,32 +199,55 @@ readCNERangesFromSQLite = function(dbName, tableName, chr, start, end,
   on.exit(dbDisconnect(con))
   if(nrGraphs == 1){
     sqlCmd = switch(whichAssembly,
-                    "L"=paste("SELECT start1,end1 from", tableName, "WHERE chr1=", paste0("'", chr, "'"), "AND start1 >=", CNEstart, "AND end1 <=", CNEend, "AND", binRestrictionString(CNEstart, CNEend, "bin1")),
-                    "R"=paste("SELECT start2,end2 from", tableName, "WHERE chr2=", paste0("'", chr, "'"), "AND start2 >=", CNEstart, "AND end2 <=", CNEend, "AND", binRestrictionString(CNEstart, CNEend, "bin2"))
+                    "L"=paste("SELECT start1,end1 from", tableName, 
+                              "WHERE chr1=", paste0("'", chr, "'"), 
+                              "AND start1 >=", CNEstart, "AND end1 <=", 
+                              CNEend, "AND", 
+                              binRestrictionString(CNEstart, CNEend, "bin1")),
+                    "R"=paste("SELECT start2,end2 from", tableName, 
+                              "WHERE chr2=", paste0("'", chr, "'"), 
+                              "AND start2 >=", CNEstart, "AND end2 <=", 
+                              CNEend, "AND", 
+                              binRestrictionString(CNEstart, CNEend, "bin2"))
                     )
     if(!is.null(minLength))
-      sqlCmd = paste(sqlCmd, "AND end1-start1+1 >=", minLength, "AND end2-start2+1 >=", minLength)
+      sqlCmd = paste(sqlCmd, "AND end1-start1+1 >=", minLength, 
+                     "AND end2-start2+1 >=", minLength)
     fetchedCNE = dbGetQuery(con, sqlCmd)
     fetchedCNE = IRanges(start=fetchedCNE[ ,1], end=fetchedCNE[, 2])
   }else if(nrGraphs > 1){
     sqlCmd = switch(whichAssembly,
-                    "L"=paste("SELECT chr2,start1,end1 from", tableName, "WHERE chr1=", paste0("'", chr, "'"), "AND start1 >=", CNEstart, "AND end1 <=", CNEend, "AND", binRestrictionString(CNEstart, CNEend, "bin1")),
-                    "R"=paste("SELECT chr1,start2,end2 from", tableName, "WHERE chr2=", paste0("'", chr, "'"), "AND start2 >=", CNEstart, "AND end2 <=", CNEend, "AND", binRestrictionString(CNEstart, CNEend, "bin2"))
+                    "L"=paste("SELECT chr2,start1,end1 from", tableName, 
+                              "WHERE chr1=", paste0("'", chr, "'"), 
+                              "AND start1 >=", CNEstart, "AND end1 <=", 
+                              CNEend, "AND", 
+                              binRestrictionString(CNEstart, CNEend, "bin1")),
+                    "R"=paste("SELECT chr1,start2,end2 from", tableName, 
+                              "WHERE chr2=", paste0("'", chr, "'"), 
+                              "AND start2 >=", CNEstart, "AND end2 <=", 
+                              CNEend, "AND", 
+                              binRestrictionString(CNEstart, CNEend, "bin2"))
                     )
     if(!is.null(minLength))
-      sqlCmd = paste(sqlCmd, "AND end1-start1+1 >=", minLength, "AND end2-start2+1 >=", minLength)
+      sqlCmd = paste(sqlCmd, "AND end1-start1+1 >=", minLength, 
+                     "AND end2-start2+1 >=", minLength)
     fetchedCNE = dbGetQuery(con, sqlCmd)
     fetchedCNE = GRanges(seqnames=fetchedCNE[ ,1], 
-                         ranges=IRanges(start=fetchedCNE[ ,2], end=fetchedCNE[ ,3]))
+                         ranges=IRanges(start=fetchedCNE[ ,2], 
+                                        end=fetchedCNE[ ,3]))
   }
   return(fetchedCNE)
 }
 
 queryAnnotationSQLite = function(dbname, tablename, chr, start, end){
   con = dbConnect(SQLite(), dbname=dbname)
-  query = paste("SELECT * from", tablename, "WHERE", binRestrictionString(start, end, "bin"), "AND", "chromosome=", paste0("'", chr, "'"), "AND start >=", start, "AND end <=", end)
+  query = paste("SELECT * from", tablename, "WHERE", 
+                binRestrictionString(start, end, "bin"), "AND", 
+                "chromosome=", paste0("'", chr, "'"), 
+                "AND start >=", start, "AND end <=", end)
   ans = dbGetQuery(con, query)
-  ans = ans[ ,c("chromosome", "start", "end", "strand", "transcript", "gene", "symbol")]
+  ans = ans[ ,c("chromosome", "start", "end", "strand", 
+                "transcript", "gene", "symbol")]
 }
 
 ###------------------------------------------------------------------

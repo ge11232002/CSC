@@ -34,7 +34,8 @@ CNEDensity = function(dbName, tableName, whichAssembly=c("L","R"),
   #context_start = CNEstart - as.integer(((win_nr_steps-1)*step_size)/2+0.5)
   #if(context_start < 1)
   #  context_start = 1
-  #context_end = CNEend + as.integer(((win_nr_steps-1)*step_size)/2+step_size+0.5)
+  #context_end = CNEend + 
+  #  as.integer(((win_nr_steps-1)*step_size)/2+step_size+0.5)
   ranges = readCNERangesFromSQLite(dbName, tableName, chr, 
                                    context_start, context_end, 
                                    whichAssembly, minLength)
@@ -54,7 +55,8 @@ CNEDensity = function(dbName, tableName, whichAssembly=c("L","R"),
     runMeanRes = lapply(runMeanRes, "*", 100)
     res = list()
     for(i in 1:length(runMeanRes)){
-      res[[names(runMeanRes)[i]]] = cbind(resCoords, as.numeric(runMeanRes[[i]]))
+      res[[names(runMeanRes)[i]]] = cbind(resCoords, 
+                                          as.numeric(runMeanRes[[i]]))
       colnames(res[[names(runMeanRes)[i]]]) = c("coordinates", "y")
     }
   }
@@ -62,7 +64,8 @@ CNEDensity = function(dbName, tableName, whichAssembly=c("L","R"),
 }
 
 
-#calc_window_scores = function(CNEstart, CNEend, ranges, win_nr_steps, step_size){
+#calc_window_scores = function(CNEstart, CNEend, ranges, 
+                        # win_nr_steps, step_size){
 #  ## Here the starts and ends are 1-based.
 #  CNElength = CNEend - CNEstart + 1
 #  win_size = win_nr_steps * step_size
@@ -72,8 +75,10 @@ CNEDensity = function(dbName, tableName, whichAssembly=c("L","R"),
 #    context_start = 1
 #  context_end = CNEend + offsetBlk
 #  context_size = context_end - context_start + 1
-#  #nr_blocks = as.integer(context_size/step_size) + ifelse(context_size%%step_size, 1, 0)
-#  #blk_scores = numeric(ifelse(nr_blocks>win_nr_steps, nr_blocks, win_nr_steps+1))
+#  #nr_blocks = as.integer(context_size/step_size) + 
+   # ifelse(context_size%%step_size, 1, 0)
+#  #blk_scores = numeric(ifelse(nr_blocks>win_nr_steps, 
+  # nr_blocks, win_nr_steps+1))
 #
 #  covAll = coverage(ranges, width=context_end)
 #   
@@ -97,22 +102,28 @@ plotCNE = function(listToPlot, horizonscale=2, nbands=3){
   return(p)
 }
 
-horizon.panel.ggplot = function(mergedDf, horizonscale=2, nbands=3, my.title="fun"){
+horizon.panel.ggplot = function(mergedDf, horizonscale=2, 
+                                nbands=3, my.title="fun"){
   #require(ggplot2)
   #require(reshape2)
   origin = 0
   #require(RColorBrewer)
   #col.brew = brewer.pal(name="RdBu",n=10)
-  #col.brew = c("#67001F", "#B2182B", "#D6604D", "#F4A582", "#FDDBC7", "#D1E5F0", "#92C5DE", "#4393C3", "#2166AC", "#053061")
+  #col.brew = c("#67001F", "#B2182B", "#D6604D", 
+                #"#F4A582", "#FDDBC7", "#D1E5F0", 
+                #"#92C5DE", "#4393C3", "#2166AC", "#053061")
   col.brew = c("yellow", "orange", "red", "chartreuse", "blue")
   colnames(mergedDf) = c("coordinates", "grouping", "y")
   for(i in 1:nbands){
     #do positive
-    mergedDf[ ,paste("ypos",i,sep="")] = ifelse(mergedDf$y > origin,
-                                          ifelse(abs(mergedDf$y) > horizonscale * i,
-                                                 horizonscale,
-                                                 ifelse(abs(mergedDf$y) - (horizonscale * (i - 1) - origin) > origin, abs(mergedDf$y) - (horizonscale * (i - 1) - origin), origin)),
-                                          origin)
+    mergedDf[ ,paste("ypos",i,sep="")] = 
+      ifelse(mergedDf$y > origin,
+             ifelse(abs(mergedDf$y) > horizonscale * i,
+                    horizonscale,
+                    ifelse(abs(mergedDf$y) - (horizonscale * (i - 1) - origin) 
+                           > origin, abs(mergedDf$y) - (horizonscale * (i - 1) 
+                                                        - origin), origin)),
+             origin)
   }
   mergedDf.melt = melt(mergedDf[,c(1,2,4:8)],id.vars=1:2)
   colnames(mergedDf.melt) = c("coordinates","grouping","band","value")
@@ -139,7 +150,8 @@ horizon.panel.ggplot = function(mergedDf, horizonscale=2, nbands=3, my.title="fu
 }
 
 #prepareCNETracks = function(dataMatrix, chr, strand, genome){
-#  dTrack = DataTrack(start=dataMatrix[ ,1], end=dataMatrix[ ,1], data=dataMatrix[ ,2], chromosome=chr, strand=strand, genome=genome)
+#  dTrack = DataTrack(start=dataMatrix[ ,1], end=dataMatrix[ ,1], 
+#  data=dataMatrix[ ,2], chromosome=chr, strand=strand, genome=genome)
 
 #}
 

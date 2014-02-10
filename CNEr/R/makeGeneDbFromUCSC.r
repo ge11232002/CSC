@@ -1,4 +1,5 @@
-## This is used to download the annotation from UCSC and incooperate it for the tracks display
+## This is used to download the annotation from UCSC and 
+### incooperate it for the tracks display
 
 #.SUPPORTED_UCSC_TABLES = c(
 #  ## tablename (unique key)   track             subtrack    auxiliary tablename
@@ -48,7 +49,9 @@ queryknownGene = function(con){
   stopifnot(all(sapply(exonStarts, length) == sapply(exonEnds, length)))
   repNum = sapply(exonStarts, length)
   res = data.frame(chromosome=rep(ans$chrom, repNum),
-                   start=as.integer(unlist(exonStarts))+1,# The internal ucsc database use the 0-based start, 1-based end. We only use 1-based.
+                   start=as.integer(unlist(exonStarts))+1,
+                   # The internal ucsc database use the 0-based start, 
+                   # 1-based end. We only use 1-based.
                    end=as.integer(unlist(exonEnds)),
                    strand=rep(ans$strand, repNum),
                    gene=rep(ans$geneSymbol, repNum),
@@ -58,9 +61,10 @@ queryknownGene = function(con){
 }
 
 queryensGene = function(con){
-  query = "SELECT distinct chrom, strand, exonStarts, exonEnds, ensGene.name2, ensGene.name, ensemblToGeneName.value
-          FROM ensGene, ensemblToGeneName WHERE ensGene.name=ensemblToGeneName.name
-          ORDER BY ensGene.name, ensemblToGeneName.value"
+  query = "SELECT distinct chrom, strand, exonStarts, exonEnds, 
+    ensGene.name2, ensGene.name, ensemblToGeneName.value
+    FROM ensGene, ensemblToGeneName WHERE ensGene.name=ensemblToGeneName.name
+    ORDER BY ensGene.name, ensemblToGeneName.value"
   ans = dbGetQuery(con, query)
   # process the ans into one exon per line
   exonStarts = strsplit(ans$exonStarts, ",")
@@ -86,7 +90,6 @@ makeGeneDbFromUCSC = function(genome="hg19",
                               tablenameSQLite=paste(genome, tablename, sep="_"),
                               overwrite=FALSE 
                               ){
-  #require(RMySQL)
   if(!isSingleString(genome))
     stop("'genome' must be a single string")
   if(!isSingleString(tablename))
@@ -95,7 +98,8 @@ makeGeneDbFromUCSC = function(genome="hg19",
     stop("table \"", tablename, "\" is not supported")
   if(!isSingleString(host))
     stop("'url' must be a single string")
-  con = dbConnect(MySQL(), user=user, password=password, dbname=genome, host=host)
+  con = dbConnect(MySQL(), user=user, password=password, 
+                  dbname=genome, host=host)
   tableNames = .SUPPORTED_UCSC_TABLES[[tablename]] 
   message("Download the ", tablename, " table ... ")
   ans = switch(tablename,
@@ -107,7 +111,8 @@ makeGeneDbFromUCSC = function(genome="hg19",
   # add the bin column
   ans$bin = binFromCoordRange(ans$start, ans$end)
   # reorder the columns, not necessary
-  ans = ans[ ,c("bin","chromosome","start","end","strand","gene", "transcript","symbol")]
+  ans = ans[ ,c("bin","chromosome","start","end","strand",
+                "gene", "transcript","symbol")]
   con = dbConnect(SQLite(), dbname=dbnameSQLite)
   dbWriteTable(con, tablenameSQLite, ans, overwrite=overwrite)
   dbDisconnect(con)
