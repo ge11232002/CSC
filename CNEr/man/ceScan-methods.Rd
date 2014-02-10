@@ -98,19 +98,27 @@
 }
 
 \examples{
-  \dontrun{
-    axtFileshg19danRer7 = list.files(path="/Users/gtan/CSC/CNEr/axtNet", 
-      pattern=".*hg19\\.danRer7\\.*", full.names=TRUE)
-    axtshg19danRer7 = readAxt(axtFileshg19danRer7)
-    axtFilesdanRer7hg19 = list.files(path="/Users/gtan/CSC/CNEr/axtNet", 
-      pattern=".*danRer7\\.hg19\\.*", full.names=TRUE)
-    axtsdanRer7hg19 = readAxt(axtFilesdanRer7hg19)
-    bedhg19 = readBed("/Users/gtan/CSC/CNEr/filters/filter_regions.hg19.bed")
-    beddanRer7 = readBed("/Users/gtan/CSC/CNEr/filters/filter_regions.danRer7.bed")
-    library(rtracklayer)
-    qSizesdanRer7 = seqinfo(TwoBitFile("/Users/gtan/CSC/CNEr/2bit/danRer7.2bit"))
-    qSizeshg19 = seqinfo(TwoBitFile("/Users/gtan/CSC/CNEr/2bit/hg19.2bit"))
-  }
+  axtFilesHg19DanRer7 = file.path(system.file("extdata", package="CNEr"), 
+                                  "hg19.danRer7.net.axt.gz")
+  axtHg19DanRer7 = readAxt(axtFilesHg19DanRer7)
+  axtFilesDanRer7Hg19 = file.path(system.file("extdata", package="CNEr"), 
+                                  "danRer7.hg19.net.axt.gz")
+  axtDanRer7Hg19 = readAxt(axtFilesDanRer7Hg19)
+  bedHg19Fn = file.path(system.file("extdata", package="CNEr"), 
+                        "filter_regions.hg19.bed")
+  bedHg19 = readBed(bedHg19Fn)
+  bedDanRer7Fn = file.path(system.file("extdata", package="CNEr"), 
+                           "filter_regions.danRer7.bed")
+  bedDanRer7 = readBed(bedDanRer7Fn)
+  qSizesHg19 = fetchChromSizes("hg19")
+  qSizesDanRer7 = fetchChromSizes("danRer7")
+  CNEHg19DanRer7 = ceScan(axts=axtHg19DanRer7, tFilter=bedHg19,
+                          qFilter=bedDanRer7, qSizes=qSizesDanRer7,
+                          thresholds=c("45,50", "48,50", "49,50"))
+  CNEDanRer7Hg19 = ceScan(axts=axtDanRer7Hg19, tFilter=bedDanRer7,
+                          qFilter=bedHg19, qSizes=qSizesHg19,
+                          thresholds=c("45,50", "48,50", "49,50"))
+
 }
 \keyword{methods}
 \keyword{ ~~ other possible keyword(s) ~~ }
