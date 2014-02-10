@@ -47,8 +47,8 @@ reverseCigar = function(cigar, ops=CIGAR_OPS){
   # splitCigar is deprecated...Before I am in the Bioconductor..
   # some new cigar utilities functions.
   #)
-  cigarOps = rev(explodeCigarOps(cigar, ops=ops))
-  cigarOpsLengths = rev(explodeCigarOpLengths(cigar, ops=ops))
+  cigarOps = lapply(explodeCigarOps(cigar, ops=ops), rev)
+  cigarOpsLengths = lapply(explodeCigarOpLengths(cigar, ops=ops), rev)
   cigar = mapply(paste0, cigarOpsLengths, cigarOps, collapse="")
   return(cigar)
 }
