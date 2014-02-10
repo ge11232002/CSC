@@ -32,9 +32,8 @@ Ge Tan
   \code{\link{axt}}
 }
 \examples{
-  \dontrun{
-    axtFileshg19danRer7 = list.files(path="/Users/gtan/CSC/CNEr/axtNet", 
-      pattern=".*hg19\\.danRer7\\.*", full.names=TRUE)
-    axtshg19danRer7 = readAxt(axtFileshg19danRer7)
-  }
+  axtFilesHg19DanRer7 = file.path(system.file("extdata", package="CNEr"), 
+                                  "hg19.danRer7.net.axt.gz")
+  axtHg19DanRer7 = readAxt(axtFilesHg19DanRer7)
+
 }

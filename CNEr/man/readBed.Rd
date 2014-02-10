@@ -43,8 +43,7 @@ Ge Tan
 \code{\link{import.bed}}
 }
 \examples{
-  \dontrun{
-    bedhg19 = readBed("/Users/gtan/CSC/CNEr/filters/filter_regions.hg19.bed")
-    beddanRer7 = readBed("/Users/gtan/CSC/CNEr/filters/filter_regions.danRer7.bed")
-  }
+  bedHg19Fn = file.path(system.file("extdata", package="CNEr"), 
+                        "filter_regions.hg19.bed")
+  bedHg19 = readBed(bedHg19Fn)
 }
