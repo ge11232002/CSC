@@ -11,8 +11,6 @@
 \alias{querySeqs}
 \alias{querySeqs,axt-method}
 \alias{score,axt-method}
-\alias{subAxt}
-\alias{subAxt,axt-method}
 \alias{symCount}
 \alias{symCount,axt-method}
 \alias{targetRanges}
@@ -47,7 +45,6 @@ Objects can be created by calls of the form \code{new("axt", ...)}.
     \item{queryRanges}{\code{signature(x = "axt")}: Get the ranges of query genome.}
     \item{querySeqs}{\code{signature(x = "axt")}: Get the alignment sequences of query genome.}
     \item{score}{\code{signature(x = "axt")}: Get the alignment score.}
-    \item{subAxt}{\code{signature(x = "axt")}: Get subset of axt alignments based on range.}
     \item{symCount}{\code{signature(x = "axt")}: Get the alignment lengths.}
     \item{targetRanges}{\code{signature(x = "axt")}: Get the ranges of reference genome.}
     \item{targetSeqs}{\code{signature(x = "axt")}: Get the alignment sequences of reference genome.}
@@ -59,6 +56,8 @@ Objects can be created by calls of the form \code{new("axt", ...)}.
 
 \seealso{
   \code{\link{readAxt}}
+  \code{\link{writeAxt}}
+  \code{\link{subAxt}}
 }
 \examples{
 showClass("axt")
