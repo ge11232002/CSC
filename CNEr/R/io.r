@@ -10,7 +10,7 @@ readBedR = function(bedFile){
 
 ### -----------------------------------------------------------------
 ### read the bed file (with only 3 columns) into GRanges.
-###
+### Exported!
 readBed = function(bedFile=NULL){
 ## This GRanges have the different coordinates system 
 ## with the original bed file. i.e. with 1-based start end coordinates.
@@ -29,7 +29,7 @@ readBed = function(bedFile=NULL){
 
 ### -----------------------------------------------------------------
 ### read the axt files into an axt object.
-###
+### Exported!
 readAxt = function(axtFiles){
   # Read axt files into R axt object.
   # The coordinates are 1-based for start and end.
@@ -56,9 +56,29 @@ readAxt = function(axtFiles){
 
 ### -----------------------------------------------------------------
 ### read the axt files and return the widths of all the alignments
-###
+### Exported!
 axtInfo = function(axtFiles){
   ans = .Call2("axt_info", axtFiles, PACKAGE="CNEr")
   return(ans)
 }
+
+### -----------------------------------------------------------------
+### write the axt object to an axt file
+### Exported!
+writeAxt = function(axt, con){
+  firstLine = paste(0:(length(axt)-1), seqnames(targetRanges(axt)),
+                    start(targetRanges(axt)), end(targetRanges(axt)),
+                    seqnames(queryRanges(axt)),
+                    start(queryRanges(axt)), end(queryRanges(axt)),
+                    strand(queryRanges(axt)), score(axt)
+                    )
+  secondLine = targetSeqs(axt)
+  thirdLine = querySeqs(axt)
+  wholeLines = paste(firstLine, as.character(targetSeqs(axt)), 
+                     as.character(querySeqs(axt)),
+                     "", sep="\n")
+  writeLines(wholeLines, con)
+}
+
+
 
