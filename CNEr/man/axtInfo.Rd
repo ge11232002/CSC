@@ -38,13 +38,9 @@ axtInfo(axtFiles)
   \code{link{readAxt}}
 }
 \examples{
-  \dontrun{
-    axtFileshg19danRer7 = list.files(path="/Users/gtan/CSC/CNEr/axtNet", 
-      pattern=".*hg19\\.danRer7\\.*", full.names=TRUE)
+  axtFilesHg19DanRer7 = 
+    file.path(system.file("extdata", package="CNEr"), 
+              "hg19.danRer7.net.axt.gz")
     ans = axtInfo(axtFileshg19danRer7)
-  }
+
 }
-% Add one or more standard keywords, see file 'KEYWORDS' in the
-% R documentation directory.
-\keyword{ ~kwd1 }
-\keyword{ ~kwd2 }% __ONLY ONE__ keyword per line
