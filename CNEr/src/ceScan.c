@@ -778,7 +778,14 @@ struct slThreshold *buildThreshold(SEXP winSize, SEXP minScore, SEXP outputFiles
   return trList;
 }
 
-SEXP myCeScan(SEXP tFilterNames, SEXP tFilterStarts, SEXP tFilterEnds, SEXP qFilterNames, SEXP qFilterStarts, SEXP qFilterEnds, SEXP sizeNames, SEXP sizeSizes, SEXP axttNames, SEXP axttStart, SEXP axttEnd, SEXP axttStrand, SEXP axttSym, SEXP axtqNames, SEXP axtqStart, SEXP axtqEnd, SEXP axtqStrand, SEXP axtqSym, SEXP score, SEXP symCount, SEXP winSize, SEXP minScore, SEXP outputFiles){
+SEXP myCeScan(SEXP tFilterNames, SEXP tFilterStarts, SEXP tFilterEnds, 
+              SEXP qFilterNames, SEXP qFilterStarts, SEXP qFilterEnds, 
+              SEXP sizeNames, SEXP sizeSizes, SEXP axttNames, 
+              SEXP axttStart, SEXP axttEnd, SEXP axttStrand, 
+              SEXP axttSym, SEXP axtqNames, SEXP axtqStart, 
+              SEXP axtqEnd, SEXP axtqStrand, SEXP axtqSym, 
+              SEXP score, SEXP symCount, SEXP winSize, 
+              SEXP minScore, SEXP outputFiles){
   struct hash *tFilter, *qFilter, *qFilterRev, *qSizes;
   struct axt *axt, *curAxt;
   tFilter = buildHashForBed(tFilterNames, tFilterStarts, tFilterEnds);
