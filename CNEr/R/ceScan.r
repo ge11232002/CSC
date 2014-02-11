@@ -106,7 +106,7 @@ ceScanFile <- function(axtFiles, tFilterFile=NULL, qFilterFile=NULL,
   minScore <- as.integer(sapply(strsplit(thresholds, "_"), "[", 1))
   resFiles <- tempfile(pattern=paste(minScore, winSize, "ceScan", sep="-"), 
                       tmpdir=tempdir(), fileext="")
-  .Call2("ceScanFile", axtFiles, tFilterFile, qFilterFile, 
+  .Call2("myCeScanFile", axtFiles, tFilterFile, qFilterFile, 
         as.character(seqnames(qSizes)), as.character(seqlengths(qSizes)),
         winSize, minScore,
         resFiles, PACKAGE="CNEr")
@@ -249,12 +249,12 @@ blatCNE <- function(CNE, winSize, cutoffs1, cutoffs2,
                     blatOptions=NULL, cutIdentity=90, 
                     tmpDir=tempdir(), blatBinary="blat"){
   # In this function, the input CNE's start and end are 1-based coordinates.
-  blatOptionsALL <- list("DEF_BLAT_OPT_WSLO"="-tileSize=9 
-                         -minScore=24 -repMatch=16384",
-                         "DEF_BLAT_OPT_WSMID"="-tileSize=10 
-                         -minScore=28 -repMatch=4096",
-                         "DEF_BLAT_OPT_WSHI"="-tileSize=11 
-                         -minScore=30 -repMatch=1024")
+  blatOptionsALL <- list("DEF_BLAT_OPT_WSLO"=
+                         "-tileSize=9 -minScore=24 -repMatch=16384",
+                         "DEF_BLAT_OPT_WSMID"=
+                         "-tileSize=10 -minScore=28 -repMatch=4096",
+                         "DEF_BLAT_OPT_WSHI"=
+                         "-tileSize=11 -minScore=30 -repMatch=1024")
   if(!is(winSize, "integer"))
     stop("winSize must be an integer!")
   if(is.null(blatOptions)){
@@ -287,7 +287,7 @@ blatCNE <- function(CNE, winSize, cutoffs1, cutoffs2,
     }
     cne <- unique(cne)
     writeLines(cne, con=temp_cne)
-    cmd <- paste0(blatBinary, " ", blatOptions, " ", 
+    cmd <- paste0(blatBinary, " ", blatOptions, " ",
                   "-minIdentity=", cutIdentity,
                   " ", assemblyTwobit, " ", temp_cne, " ", temp_psl)
     my.system(cmd)
@@ -325,10 +325,29 @@ blatCNE <- function(CNE, winSize, cutoffs1, cutoffs2,
 }
 
 
-#detectCNEs = function(axt1, filter1=NULL, sizes1, axt2, 
-                #filter2=NULL, sizes2, thresholds=c("49,50")){
-#  CNE1 = ceScan(axt1, filter1, filter2, sizes2, thresholds)
-#  CNE2 = ceScan(axt2, filter2, filter1, sizes1, thresholds)
-#  CNE = ceMerge(CNE1, CNE2)
-  
-#}
+ceScanOneStep <- function(axt1, filter1=NULL, sizes1, assembly1, twoBit1,
+                          axt2, filter2=NULL, sizes2, assembly2, twoBit2,
+                          thresholds=c("49_50"),
+                          blatBinary="blat",
+                          blatCutoff1, blatCutoff2
+                          ){
+  CNE1 <- ceScan(axt1, filter1, filter2, sizes2, thresholds)
+  CNE2 <- ceScan(axt2, filter2, filter1, sizes1, thresholds)
+  CNEMerged <- mapply(cneMerge, CNE1, CNE2, SIMPLIFY=FALSE)
+  CNEBlated <- list()
+  for(i in 1:length(CNEMerged)){
+    CNEBlated[[names(CNEMerged)[i]]] <- 
+      blatCNE(CNEMerged[[i]], as.integer(sub("\\d+_", "", 
+                                           names(CNEMerged)[i])),
+              cutoffs1=blatCutoff1, cutoffs2=blatCutoff2,
+              assembly1Twobit=twoBit1, assembly2Twobit="twoBit2",
+              blatBinary=blatBinary)
+  }
+  ans <- CNE(assembly1=assembly1, assembly2=assembly2,
+             thresholds=thresholds,
+             CNE1=CNE1, CNE2=CNE2, CNEMerged=CNEMerged,
+             CNERepeatsFiltered=CNEBlated,
+             alignMethod=blatBinary)
+  return(ans)
+}
+
