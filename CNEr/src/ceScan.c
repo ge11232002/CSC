@@ -6,7 +6,8 @@
  *   ********************************************/
 
 /* Scoring matrix.
- *  * This will be set by setBpScores() to 1 for matches and 0 for mismatches and gaps. */
+ *  This will be set by setBpScores() to 1 for matches 
+ *  and 0 for mismatches and gaps. */
 
 #define NR_CHARS 128
 typedef int bpScores_t[NR_CHARS][NR_CHARS];
@@ -112,7 +113,8 @@ void collapseRangeList(struct hashEl *hel)
 
 void convertRangeListToArray(struct hashEl *hel)
 /* Convert a linked list of ranges to an array.
- * The reason for doing this is that we can do a fast binary search on the array. */
+ * The reason for doing this is that we can do a fast binary search 
+ * on the array. */
 {
   struct slRange *list, *slEl;
   struct range *arrayEl;
@@ -135,7 +137,8 @@ void convertRangeListToArray(struct hashEl *hel)
 
   /* The last array element is a "dummy" element that contains a coordinate pair
    * beyond any chromosome size. The presence of this element simplifies going
-   * through the array in scanAxt() as it removes the need for an out-of-bounds check. */
+   * through the array in scanAxt() as it removes the need 
+   * for an out-of-bounds check. */
   arrayEl->start = 1e9;
   arrayEl->end = 1e9+1;
 }
@@ -164,12 +167,16 @@ struct range *searchRangeArray(struct rangeArray *arrayInfo, int key)
     mid = (low+high)/2;
     if(key <= array[mid].start) high = mid - 1;
     else if(key > array[mid].end) low = mid + 1;
-    else return array+mid; /* return pointer to range that contains key */
+    else return array+mid; 
+    /* return pointer to range that contains key */
   }
 
-  /* key not found: return pointer to nearest higher range or abort if there is no higher range
-   * (there should be one because we have added a dummy range with very high values) */
-  if(low >= arrayInfo->n) errAbort("searchRangeArray: key %d out of bounds\n", key);
+  /* key not found: return pointer to nearest higher range or abort 
+   * if there is no higher range
+   * (there should be one because we have added a dummy range 
+   * with very high values) */
+  if(low >= arrayInfo->n) 
+    errAbort("searchRangeArray: key %d out of bounds\n", key);
   return array+low;
 }
 
@@ -184,7 +191,8 @@ struct hash *readFilter(char *fileName)
 }
 
 struct hash *makeReversedFilter(struct hash *f1, struct hash *chrSizes)
-/* Given a filter, create a reversed filter where coordinates increase in the opposite direction.
+/* Given a filter, create a reversed filter 
+ * where coordinates increase in the opposite direction.
  * We use this for filtering alignments that have qStrand == '-'. */
 {
   struct hash *f2 = newHash(0);
@@ -230,8 +238,10 @@ struct range *searchFilter(struct hash *filter, char *chrom, int pos)
 {
   struct hashEl *hel;
 
-  hel = hashLookup(filter, chrom);   /* find range array for sequence (chromosome) */
-  if(hel) return searchRangeArray(hel->val, pos); /* search range array by position */
+  hel = hashLookup(filter, chrom);   
+  /* find range array for sequence (chromosome) */
+  if(hel) return searchRangeArray(hel->val, pos); 
+  /* search range array by position */
   else return NULL;
 }
 
@@ -247,7 +257,8 @@ void printCigarString(FILE *fh, struct axt *axt, int i, int j)
     if(axt->tSym[i] == '-') newType = 'D';
     else if(axt->qSym[i] == '-') newType = 'I';
     else newType = 'M';
-    /* If same type as previous, just increase count, otherwise output previous */
+    /* If same type as previous, just increase count, 
+     * otherwise output previous */
     if(type == newType) count++;
     else {
       fprintf(fh, "%d%c", count, type);
@@ -264,7 +275,8 @@ void addCigarString(struct slCNE *CNE, struct axt *axt, int i, int j){
   char type = 'M'; /* in our case first column is always match */
   char newType;
   int count = 0;
-  // This is potentially risky to limit the cigar string to 1000 length long. Use realloc() to replace it later.
+  // This is potentially risky to limit the cigar string to 1000 length long. 
+  // Use realloc() to replace it later.
   char temp[100];
   //char *cigar = (char *) malloc(sizeof(char) * 1000);
   char cigar[1000];
@@ -276,7 +288,8 @@ void addCigarString(struct slCNE *CNE, struct axt *axt, int i, int j){
     if(axt->tSym[i] == '-') newType = 'D';
     else if(axt->qSym[i] == '-') newType = 'I';
     else newType = 'M';
-    /* If same type as previous, just increase count, otherwise output previous */
+    /* If same type as previous, just increase count, 
+     * otherwise output previous */
     if(type == newType) 
       count++;
     else{
@@ -302,17 +315,20 @@ void addCigarString(struct slCNE *CNE, struct axt *axt, int i, int j){
 }
 
 
-void printElement(struct slThreshold *tr, struct axt *axt, struct hash *qSizes, int *profile, int *tPosList, int *qPosList)
+void printElement(struct slThreshold *tr, struct axt *axt, 
+    struct hash *qSizes, int *profile, int *tPosList, int *qPosList)
 /* Print one conserved element on stdout.
  * Arguments:
  * tr - contains threshold-specific information:
- *      parameters used to find CE, CE location in alignment, and filehandle to print to
+ * parameters used to find CE, CE location in alignment, 
+ * and filehandle to print to
  * axt - alignment
  * qSizes - query assembly chromosome sizes
  * profile - cumulative conservation profile for alignment
  * tPosList, qPosList - target and query position arrays for alignment
  */
-  // The returned coodinates with start in 1-based, different from the original C version.
+  // The returned coodinates with start in 1-based, 
+  // different from the original C version.
   // All the coordinates are based on the positive strand.
 {
   int score, qStart, qEnd, qSize;
@@ -324,7 +340,8 @@ void printElement(struct slThreshold *tr, struct axt *axt, struct hash *qSizes, 
   while(bpScores[ (int) axt->qSym[j] ][ (int) axt->tSym[j] ] <= 0) j--;
 
   /* compute score */
-  score = profile[j] - profile[i] + bpScores[ (int) axt->qSym[i] ][ (int) axt->tSym[i] ];
+  score = profile[j] - profile[i] + 
+    bpScores[ (int) axt->qSym[i] ][ (int) axt->tSym[i] ];
 
   /* recompute query positions if query strand is - */
   if(axt->qStrand == '+') {
@@ -348,11 +365,13 @@ void printElement(struct slThreshold *tr, struct axt *axt, struct hash *qSizes, 
   fputs("\n", tr->outFile);
 }
 
-void addCNE(struct slThreshold *tr, struct axt *axt, struct hash *qSizes, int *profile, int *tPosList, int *qPosList){
+void addCNE(struct slThreshold *tr, struct axt *axt, 
+    struct hash *qSizes, int *profile, int *tPosList, int *qPosList){
   /* add one cne to slThreshold object's CNE element
    * Arguments:
    * tr - contains threshold-specific information:
-   * parameters used to find CE, CE location in alignment, and filehandle to print to
+   * parameters used to find CE, CE location in alignment, 
+   * and filehandle to print to
    * axt - alignment
    * qSizes - query assembly chromosome sizes
    * profile - cumulative conservation profile for alignment
@@ -367,7 +386,8 @@ void addCNE(struct slThreshold *tr, struct axt *axt, struct hash *qSizes, int *p
   while(bpScores[ (int) axt->qSym[j] ][ (int) axt->tSym[j] ] <= 0) j--;
 
   /* compute score */
-  score = profile[j] - profile[i] + bpScores[ (int) axt->qSym[i] ][ (int) axt->tSym[i] ];
+  score = profile[j] - profile[i] + 
+    bpScores[ (int) axt->qSym[i] ][ (int) axt->tSym[i] ];
 
   /* recompute query positions if query strand is - */
   if(axt->qStrand == '+') {
@@ -404,7 +424,9 @@ void addCNE(struct slThreshold *tr, struct axt *axt, struct hash *qSizes, int *p
 }
 
 
-void scanAxt(struct axt *axt, struct hash *qSizes, struct hash *tFilterAll, struct hash *qFilterAll, struct slThreshold *thresholds)
+void scanAxt(struct axt *axt, struct hash *qSizes, 
+    struct hash *tFilterAll, struct hash *qFilterAll, 
+    struct slThreshold *thresholds)
 /* Scan one axt alignment and print conserved elements found to stdout.
  * THIS IS THE CORE FUNCTION OF THIS PROGRAM.
  * Arguments:
@@ -412,7 +434,8 @@ void scanAxt(struct axt *axt, struct hash *qSizes, struct hash *tFilterAll, stru
  * qSizes - query assembly chromosome sizes
  * tFilterAll, qFilterAll - index of regions to exclude from scan
  * winSize - size of sliding window
- * thresholds - linked list of thresholds to call CEs at, and corresponding output filehandles
+ * thresholds - linked list of thresholds to call CEs at, 
+ * and corresponding output filehandles
  */
 {
   /* Variables to keep track of things as we loop through the alignment */
@@ -424,19 +447,27 @@ void scanAxt(struct axt *axt, struct hash *qSizes, struct hash *tFilterAll, stru
   int score;    /* sliding window score */
   struct slThreshold *tr;
 
-  /* Three arrays where each element corresponds to a column in the alignment. */
-  int *profile = needLargeMem(axt->symCount * sizeof(int)); /* cumulative conservation profile */
-  int *tPosList = needLargeMem(axt->symCount * sizeof(int)); /* target seq position */
-  int *qPosList = needLargeMem(axt->symCount * sizeof(int)); /* query seq position */
-  /* E.g. at alignment column 5, target position tPosList[4] is aligned with query position qPosList[4],
-   *      and alignment columns 1-5 contain a total of profile[4] matches.
+  /* Three arrays where each element corresponds to 
+   * a column in the alignment. */
+  int *profile = needLargeMem(axt->symCount * sizeof(int)); 
+  /* cumulative conservation profile */
+  int *tPosList = needLargeMem(axt->symCount * sizeof(int)); 
+  /* target seq position */
+  int *qPosList = needLargeMem(axt->symCount * sizeof(int)); 
+  /* query seq position */
+  /* E.g. at alignment column 5, target position tPosList[4] is 
+   * aligned with query position qPosList[4],
+   * and alignment columns 1-5 contain a total of profile[4] matches.
    * Note:
-   *  - in these 3 arrays, elements that that correspond to masked regions are not set
+   *  - in these 3 arrays, elements that that correspond to 
+   *  masked regions are not set
    *  - profile[] begins from zero again after each mask
    *  - target and query positions are set to -1 at gaps. */
 
-  /* tFilter and qFilter are pointers to sorted arrays of coordinate ranges that should not be scanned.
-   * The calls to searchFilter find the first filter overlapping or following the alignment */
+  /* tFilter and qFilter are pointers to sorted arrays of coordinate ranges 
+   * that should not be scanned.
+   * The calls to searchFilter find the first filter overlapping or 
+   * following the alignment */
   struct range *tFilter = tFilterAll != NULL ? searchFilter(tFilterAll, axt->tName, axt->tStart+1) : NULL;
   struct range *qFilter = qFilterAll != NULL ? searchFilter(qFilterAll, axt->qName, axt->qStart+1) : NULL;
   /* Initialize CE bounds for each threshold */
@@ -449,14 +480,15 @@ void scanAxt(struct axt *axt, struct hash *qSizes, struct hash *tFilterAll, stru
   //Rprintf("The qSym %s\n", axt->qSym);
   
   /* Main loop: go through alignment */
-  while(i < axt->symCount) { /* loop until we have looked at entire alignment */
-
+  while(i < axt->symCount) { 
+    /* loop until we have looked at entire alignment */
     /* if inside a mask, fast forward past it */
     do {
       if(tFilter != NULL) {
   while(tFilter->end <= tPos) tFilter++;
   if(tFilter->start <= tPos) {
-    if(tFilter->end >= axt->tEnd) goto endScan; /* using goto to break out of nested loop */
+    if(tFilter->end >= axt->tEnd) goto endScan; 
+    /* using goto to break out of nested loop */
     while(tFilter->end > tPos) {
       if(axt->tSym[i] != '-') tPos++;
       if(axt->qSym[i] != '-') qPos++;
@@ -468,7 +500,8 @@ void scanAxt(struct axt *axt, struct hash *qSizes, struct hash *tFilterAll, stru
       if(qFilter != NULL) {
   while(qFilter->end <= qPos) qFilter++;
   if(qFilter->start <= qPos) {
-    if(qFilter->end >= axt->qEnd) goto endScan; /* using goto to break out of nested loop */
+    if(qFilter->end >= axt->qEnd) goto endScan; 
+    /* using goto to break out of nested loop */
     while(qFilter->end > qPos) {
       if(axt->tSym[i] != '-') tPos++;
       if(axt->qSym[i] != '-') qPos++;
@@ -488,18 +521,21 @@ void scanAxt(struct axt *axt, struct hash *qSizes, struct hash *tFilterAll, stru
     /* handle remaining positions */
     for(i++; i < axt->symCount; i++) {
       /* break out of loop if we have come to a mask */
-      if((tFilter != NULL && tFilter->start <= tPos) || (qFilter != NULL && qFilter->start <= qPos)) break;
+      if((tFilter != NULL && tFilter->start <= tPos) || 
+          (qFilter != NULL && qFilter->start <= qPos)) break;
       /* set positions */
       //Rprintf("I am in extending\n");
       tPosList[i] = axt->tSym[i] == '-' ? -1 : ++tPos;
       qPosList[i] = axt->qSym[i] == '-' ? -1 : ++qPos;
       /* set profile */
-      profile[i] = profile[i-1] + bpScores[ (int) axt->qSym[i]][ (int) axt->tSym[i] ];
+      profile[i] = profile[i-1] + 
+        bpScores[ (int) axt->qSym[i]][ (int) axt->tSym[i] ];
       /* increment nr of columns seen after mask */
       nrColumns++;
       /* loop over user-defined thresholds */
       for(tr = thresholds; tr != NULL; tr = tr->next) {
-      /* if have have seen enough columns to cover a window, evaluate that window */
+      /* if have have seen enough columns to cover a window, 
+       * evaluate that window */
         if(nrColumns >= tr->winSize) {
         /* compute and check window score */
           score = nrColumns > tr->winSize ? profile[i] - profile[i - tr->winSize] : profile[i];
@@ -509,7 +545,8 @@ void scanAxt(struct axt *axt, struct hash *qSizes, struct hash *tFilterAll, stru
               tr->ceEnd = i;
           }
           else {
-          /* score is below threshold: close and print any open conserved elements that are more than a window away */
+          /* score is below threshold: close and print 
+           * any open conserved elements that are more than a window away */
             if(tr->ceStart != -1 && tr->ceEnd < i - tr->winSize + 1) {
               printElement(tr, axt, qSizes, profile, tPosList, qPosList);
               //addCNE(tr, axt, qSizes, profile, tPosList, qPosList);
@@ -538,7 +575,9 @@ void scanAxt(struct axt *axt, struct hash *qSizes, struct hash *tFilterAll, stru
   freez(&qPosList);
 }
 
-void ceScan1(char *tFilterFile, char *qFilterFile, char *qSizeFile, struct slThreshold *thresholds, int nrAxtFiles, char *axtFiles[])
+void ceScan1(char *tFilterFile, char *qFilterFile, 
+    char *qSizeFile, struct slThreshold *thresholds, 
+    int nrAxtFiles, char *axtFiles[])
 /* ceScan - Find conserved elements. */
 {
   struct lineFile *lf;
@@ -568,7 +607,9 @@ void ceScan1(char *tFilterFile, char *qFilterFile, char *qSizeFile, struct slThr
   }
 }
 
-void ceScan(char **tFilterFile, char **qFilterFile, char **qSizeFile, int *winSize, int *minScore, int *nThresholds, char **axtFiles, int *nrAxtFiles, char **outFilePrefix){
+void ceScan(char **tFilterFile, char **qFilterFile, char **qSizeFile, 
+    int *winSize, int *minScore, int *nThresholds, 
+    char **axtFiles, int *nrAxtFiles, char **outFilePrefix){
   int i, n;
   struct slThreshold *trList = NULL, *tr;
   char rest, path[PATH_LEN];
@@ -577,7 +618,8 @@ void ceScan(char **tFilterFile, char **qFilterFile, char **qSizeFile, int *winSi
     tr = needMem(sizeof(*tr));
     tr->minScore = *minScore++;
     tr->winSize = *winSize++;
-    safef(path, sizeof(path), "%s_%d_%d", *outFilePrefix, tr->minScore, tr->winSize);
+    safef(path, sizeof(path), "%s_%d_%d", *outFilePrefix, 
+        tr->minScore, tr->winSize);
     tr->outFile = mustOpen(path, "w");
     slAddHead(&trList, tr);
     //Rprintf("The winsize %d\n", tr->winSize);
@@ -586,7 +628,8 @@ void ceScan(char **tFilterFile, char **qFilterFile, char **qSizeFile, int *winSi
   //Rprintf("The filter1 is %s\n", *tFilterFile++);
   //Rprintf("The filter1 is %s\n", *tFilterFile);
   /* Call function ceScan with the arguments */
-  ceScan1(*tFilterFile, *qFilterFile, *qSizeFile, trList, *nrAxtFiles, axtFiles);
+  ceScan1(*tFilterFile, *qFilterFile, *qSizeFile, trList, 
+      *nrAxtFiles, axtFiles);
   /* Close all output files */
   for(tr = trList; tr != NULL; tr = tr->next)
     fclose(tr->outFile);
@@ -649,7 +692,8 @@ void freeSlThreshold(struct slThreshold **p_thresholds)
 }
 
 struct hash *buildHashForBed(SEXP tNames, SEXP tStarts, SEXP tEnds){
-/* Given three vectors of names, starts and ends of the filter, return the hash table */
+/* Given three vectors of names, starts and ends of the filter, 
+ * return the hash table */
   PROTECT(tNames = AS_CHARACTER(tNames));
   PROTECT(tStarts = AS_INTEGER(tStarts));
   PROTECT(tEnds = AS_INTEGER(tEnds));
@@ -670,7 +714,8 @@ struct hash *buildHashForBed(SEXP tNames, SEXP tStarts, SEXP tEnds){
     range->next = NULL;
     range->start = p_tStarts[i] - 1;
     range->end = p_tEnds[i];
-    char *tName = (char *) malloc(sizeof(char) * (strlen(CHAR(STRING_ELT(tNames, i)))+1));
+    char *tName = (char *) malloc(sizeof(char) * 
+        (strlen(CHAR(STRING_ELT(tNames, i)))+1));
     strcpy(tName, CHAR(STRING_ELT(tNames, i)));
     hel = hashLookup(hash, tName);
     if(hel == NULL)
@@ -692,7 +737,8 @@ struct hash *buildHashForSizeFile(SEXP names, SEXP sizes){
   int i, *p_sizes, n = GET_LENGTH(names);
   p_sizes = INTEGER_POINTER(sizes);
   for(i = 0; i < n; i++){
-    char *name = (char *) malloc(sizeof(char) * (strlen(CHAR(STRING_ELT(names, i)))+1));
+    char *name = (char *) malloc(sizeof(char) * 
+        (strlen(CHAR(STRING_ELT(names, i)))+1));
     strcpy(name, CHAR(STRING_ELT(names, i)));
     hashAddInt(hash, name, p_sizes[i]);
     free(name);
@@ -701,7 +747,10 @@ struct hash *buildHashForSizeFile(SEXP names, SEXP sizes){
   return hash;
 }
 
-struct axt *buildAxt(SEXP axtqNames, SEXP axtqStart, SEXP axtqEnd, SEXP axtqStrand, SEXP axtqSym, SEXP axttNames, SEXP axttStart, SEXP axttEnd, SEXP axttStrand, SEXP axttSym, SEXP score, SEXP symCount){
+struct axt *buildAxt(SEXP axtqNames, SEXP axtqStart, SEXP axtqEnd, 
+    SEXP axtqStrand, SEXP axtqSym, SEXP axttNames, 
+    SEXP axttStart, SEXP axttEnd, SEXP axttStrand, 
+    SEXP axttSym, SEXP score, SEXP symCount){
   PROTECT(axtqNames = AS_CHARACTER(axtqNames));
   PROTECT(axtqStart = AS_INTEGER(axtqStart));
   PROTECT(axtqEnd = AS_INTEGER(axtqEnd));
@@ -714,7 +763,8 @@ struct axt *buildAxt(SEXP axtqNames, SEXP axtqStart, SEXP axtqEnd, SEXP axtqStra
   PROTECT(axttSym = AS_CHARACTER(axttSym));
   PROTECT(score = AS_INTEGER(score));
   PROTECT(symCount = AS_INTEGER(symCount));
-  int i, *p_axtqStart, *p_axtqEnd, *p_axttStart, *p_axttEnd, *p_score, *p_symCount;
+  int i, *p_axtqStart, *p_axtqEnd, *p_axttStart, *p_axttEnd, 
+      *p_score, *p_symCount;
   p_axtqStart = INTEGER_POINTER(axtqStart);
   p_axtqEnd = INTEGER_POINTER(axtqEnd);
   p_axttStart = INTEGER_POINTER(axttStart);
@@ -727,7 +777,8 @@ struct axt *buildAxt(SEXP axtqNames, SEXP axtqStart, SEXP axtqEnd, SEXP axtqStra
   for(i = 0; i < nrAxt; i++){
     AllocVar(curAxt);
     //Rprintf("The is is %d\n", i);
-    //This will cause the warning during compilation, but can save time. No need to create a none const char for it.
+    //This will cause the warning during compilation, 
+    //but can save time. No need to create a none const char for it.
     curAxt->qName = CHAR(STRING_ELT(axtqNames, i));
     //Rprintf("The qName is %s\n", CHAR(STRING_ELT(axtqNames, i)));
     //Make it back to 0-based coordinates for start
@@ -752,7 +803,8 @@ struct axt *buildAxt(SEXP axtqNames, SEXP axtqStart, SEXP axtqEnd, SEXP axtqStra
   return axt;
 }
 
-struct slThreshold *buildThreshold(SEXP winSize, SEXP minScore, SEXP outputFiles){
+struct slThreshold *buildThreshold(SEXP winSize, SEXP minScore, 
+    SEXP outputFiles){
   struct slThreshold *trList = NULL, *tr;
   //char path[PATH_LEN];
   PROTECT(winSize = AS_INTEGER(winSize));
@@ -767,9 +819,12 @@ struct slThreshold *buildThreshold(SEXP winSize, SEXP minScore, SEXP outputFiles
     tr = needMem(sizeof(*tr));
     tr->minScore = p_minScore[i];
     tr->winSize = p_winSize[i];
-   // Rprintf("The minScore %d and the winSize %d\n", p_minScore[i], p_winSize[i]);
-   //safef(path, sizeof(path), "%s_%d_%d", CHAR(STRING_ELT(outFilePrefix, 0)), tr->minScore, tr->winSize);
-    char *filepath_elt = (char *) R_alloc(strlen(CHAR(STRING_ELT(outputFiles, i)))+1, sizeof(char));
+   // Rprintf("The minScore %d and the winSize %d\n", p_minScore[i], 
+   // p_winSize[i]);
+   //safef(path, sizeof(path), "%s_%d_%d", 
+   //CHAR(STRING_ELT(outFilePrefix, 0)), tr->minScore, tr->winSize);
+    char *filepath_elt = (char *) 
+      R_alloc(strlen(CHAR(STRING_ELT(outputFiles, i)))+1, sizeof(char));
     strcpy(filepath_elt, CHAR(STRING_ELT(outputFiles, i)));
     tr->outFile = mustOpen(filepath_elt, "w");
     slAddHead(&trList, tr);
@@ -792,8 +847,9 @@ SEXP myCeScan(SEXP tFilterNames, SEXP tFilterStarts, SEXP tFilterEnds,
   qFilter = buildHashForBed(qFilterNames, qFilterStarts, qFilterEnds);
   qSizes = buildHashForSizeFile(sizeNames, sizeSizes); 
   qFilterRev = qFilter ? makeReversedFilter(qFilter, qSizes) : NULL;
-  axt = buildAxt(axtqNames, axtqStart, axtqEnd, axtqStrand, axtqSym, axttNames, axttStart, axttEnd, axttStrand, axttSym, score, symCount);
-  // here I decided to build axt in the linked axt, rather than one by one. Perhaps it has lower performance than one by one way.
+  axt = buildAxt(axtqNames, axtqStart, axtqEnd, axtqStrand, 
+      axtqSym, axttNames, axttStart, axttEnd, axttStrand, 
+      axttSym, score, symCount);
   struct slThreshold *thresholds, *tr;
   struct slCNE *CNE;
   int nrThresholds;
@@ -804,7 +860,8 @@ SEXP myCeScan(SEXP tFilterNames, SEXP tFilterStarts, SEXP tFilterEnds,
   setBpScores(bpScores);
   curAxt = axt;
   while(axt){
-    scanAxt(axt, qSizes, tFilter, axt->qStrand == '+' ? qFilter : qFilterRev, thresholds);
+    scanAxt(axt, qSizes, tFilter, 
+        axt->qStrand == '+' ? qFilter : qFilterRev, thresholds);
     axt = axt->next;
   }
   for(tr = thresholds; tr != NULL; tr = tr->next)
@@ -834,10 +891,12 @@ SEXP ceScanFile(SEXP axtFiles, SEXP tFilterFile, SEXP qFilterFile,
   setBpScores(bpScores);
   qSizes = buildHashForSizeFile(sizeNames, sizeSizes);
   char *filepath_elt;
-  filepath_elt = (char *) R_alloc(strlen(CHAR(STRING_ELT(tFilterFile, 0)))+1, sizeof(char));
+  filepath_elt = (char *) 
+    R_alloc(strlen(CHAR(STRING_ELT(tFilterFile, 0)))+1, sizeof(char));
   strcpy(filepath_elt, CHAR(STRING_ELT(tFilterFile, 0)));
   tFilter = tFilterFile ? readFilter(filepath_elt) : NULL;
-  filepath_elt = (char *) R_alloc(strlen(CHAR(STRING_ELT(qFilterFile, 0)))+1, sizeof(char));
+  filepath_elt = (char *) 
+    R_alloc(strlen(CHAR(STRING_ELT(qFilterFile, 0)))+1, sizeof(char));
   strcpy(filepath_elt, CHAR(STRING_ELT(qFilterFile, 0)));
   qFilter = qFilterFile ? readFilter(filepath_elt) : NULL;
   qFilterRev = qFilter ? makeReversedFilter(qFilter, qSizes) : NULL;
@@ -847,7 +906,8 @@ SEXP ceScanFile(SEXP axtFiles, SEXP tFilterFile, SEXP qFilterFile,
   struct lineFile *lf;
   struct axt *axt;
   for(i=0; i<nrAxtFiles; i++){
-    filepath_elt = (char *) R_alloc(strlen(CHAR(STRING_ELT(axtFiles, i)))+1, sizeof(char));
+    filepath_elt = (char *) 
+      R_alloc(strlen(CHAR(STRING_ELT(axtFiles, i)))+1, sizeof(char));
     strcpy(filepath_elt, CHAR(STRING_ELT(axtFiles, i)));
     lf = lineFileOpen(filepath_elt, TRUE);
     while ((axt = axtRead(lf)) != NULL){
@@ -869,3 +929,4 @@ SEXP ceScanFile(SEXP axtFiles, SEXP tFilterFile, SEXP qFilterFile,
   freeSlThreshold(&thresholds);
   return(R_NilValue);
 }
+

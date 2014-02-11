@@ -4,12 +4,15 @@
 /* add one new level to get coverage past chrom sizes of 512 Mb
  *  *  effective limit is now the size of an integer since chrom start
  *   *  and end coordinates are always being used in int's == 2Gb-1 */
-static int binOffsetsExtended[] = {4096+512+64+8+1, 512+64+8+1, 64+8+1, 8+1, 1, 0};
+static int binOffsetsExtended[] = 
+  {4096+512+64+8+1, 512+64+8+1, 64+8+1, 8+1, 1, 0};
 
-static int binOffsets[] = {512+64+8+1, 64+8+1, 8+1, 1, 0};
+static int binOffsets[] = 
+  {512+64+8+1, 64+8+1, 8+1, 1, 0};
 
 SEXP bin_from_coord_range(SEXP starts, SEXP ends){
-//Return the bin numbers that should be assigned to a feature spanning the given ranges.
+//Return the bin numbers that should be assigned to a feature 
+//spanning the given ranges.
 //Here the inputs of starts and ends are 1-based
   starts = AS_INTEGER(starts);
   ends = AS_INTEGER(ends);
@@ -22,7 +25,8 @@ SEXP bin_from_coord_range(SEXP starts, SEXP ends){
   p_end = INTEGER_POINTER(ends);
   p_bin = INTEGER_POINTER(bins);
   for(i=0; i<n; i++){
-    // passing the coordinates to binFromRange in 0-based for start, 1-based for end.
+    // passing the coordinates to binFromRange in 0-based for start, 
+    // 1-based for end.
     p_bin[i] = binFromRange(p_start[i]-1, p_end[i]);
   }
   UNPROTECT(1);
@@ -84,7 +88,9 @@ SEXP bin_ranges_from_coord_range_extended(SEXP start, SEXP end){
 }
 
 SEXP bin_ranges_from_coord_range(SEXP start, SEXP end){
-  //Return the set of bin ranges that overlap a given coordinate range. It is usually more convenient to use bin_restriction string than to use this method directly.
+  //Return the set of bin ranges that overlap a given coordinate range. 
+  //It is usually more convenient to use bin_restriction string than 
+  //to use this method directly.
   // Here, start and end are 1-based.
   if (INTEGER(AS_INTEGER(end))[0] <= BINRANGE_MAXEND_512M)
     return bin_ranges_from_coord_range_standard(start, end);

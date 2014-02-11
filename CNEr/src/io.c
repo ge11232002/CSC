@@ -13,8 +13,11 @@ SEXP myReadBed(SEXP filepath){
     error("'filepath' must be a single string");
   if(STRING_ELT(filepath, 0) == NA_STRING)
     error("'filepath' is NA");
-  // If filepath_elt is defined this way, the memory will be reclaimed by the end of .Call by R, do not need the free()
-  char *filepath_elt = R_alloc(strlen(CHAR(STRING_ELT(filepath, 0))) + 1, sizeof(char));
+  // If filepath_elt is defined this way, 
+  // the memory will be reclaimed by the end of .Call by R, 
+  // do not need the free()
+  char *filepath_elt = 
+    R_alloc(strlen(CHAR(STRING_ELT(filepath, 0))) + 1, sizeof(char));
   strcpy(filepath_elt, CHAR(STRING_ELT(filepath, 0)));
   Rprintf("Reading %s \n", filepath_elt);
   struct lineFile *lf = lineFileOpen(filepath_elt, TRUE);
@@ -65,7 +68,8 @@ SEXP axt_info(SEXP filepath){
   width_buf = new_IntAE(0, 0, 0);
   char *filepath_elt;
   for(i = 0; i < nrAxtFiles; i++){
-    filepath_elt = (char *) R_alloc(strlen(CHAR(STRING_ELT(filepath, i)))+1, sizeof(char));
+    filepath_elt = 
+      (char *) R_alloc(strlen(CHAR(STRING_ELT(filepath, i)))+1, sizeof(char));
     strcpy(filepath_elt, CHAR(STRING_ELT(filepath, i)));
     lf = lineFileOpen(filepath_elt, TRUE);
     while((curAxt = axtRead(lf)) != NULL){
@@ -85,14 +89,16 @@ SEXP axt_info(SEXP filepath){
 SEXP readAxt(SEXP filepath){
   // load a axt file into R, and to be axt object
   // This is tested and without memory leak!
-  // The jim kent's axt struct holds the starts in 0-based. Here we put it into 1-based.
+  // The jim kent's axt struct holds the starts in 0-based. 
+  // Here we put it into 1-based.
   filepath = AS_CHARACTER(filepath);
   int nrAxtFiles, i, nrAxts;
   nrAxtFiles = GET_LENGTH(filepath);
   struct axt *axt=NULL, *curAxt;
   struct lineFile *lf;
   SEXP ans_qSym, ans_tSym, width;
-  SEXP qNames, qStart, qEnd, qStrand, tNames, tStart, tEnd, tStrand, score, symCount, returnList;
+  SEXP qNames, qStart, qEnd, qStrand, tNames, 
+       tStart, tEnd, tStrand, score, symCount, returnList;
   PROTECT(returnList = NEW_LIST(12));
   PROTECT(width = axt_info(filepath));
   nrAxts = GET_LENGTH(width);
@@ -137,7 +143,8 @@ SEXP readAxt(SEXP filepath){
   int j = 0;
   i = 0;
   for(j = 0; j < nrAxtFiles; j++){
-    char *filepath_elt = (char *) R_alloc(strlen(CHAR(STRING_ELT(filepath, j)))+1, sizeof(char));
+    char *filepath_elt = 
+      (char *) R_alloc(strlen(CHAR(STRING_ELT(filepath, j)))+1, sizeof(char));
     strcpy(filepath_elt, CHAR(STRING_ELT(filepath, j)));
     lf = lineFileOpen(filepath_elt, TRUE);
     while((axt = axtRead(lf)) != NULL){
@@ -149,7 +156,8 @@ SEXP readAxt(SEXP filepath){
       else
         SET_STRING_ELT(qStrand, i, mkChar("-"));
 //      cached_ans_elt = get_cachedXRawList_elt(&cached_ans_qSym, i);
-//      memcpy((char *) (&cached_ans_elt)->seq, axt->qSym, axt->symCount * sizeof(char));
+//      memcpy((char *) 
+//      (&cached_ans_elt)->seq, axt->qSym, axt->symCount * sizeof(char));
       SET_STRING_ELT(ans_qSym, i, mkChar(axt->qSym));
       SET_STRING_ELT(tNames, i, mkChar(axt->tName));
       p_tStart[i] = axt->tStart + 1;
@@ -159,7 +167,8 @@ SEXP readAxt(SEXP filepath){
       else
         SET_STRING_ELT(tStrand, i, mkChar("-"));
 //      cached_ans_elt = get_cachedXRawList_elt(&cached_ans_tSym, i);
-//      memcpy((char *) (&cached_ans_elt)->seq, axt->tSym, axt->symCount * sizeof(char));
+//      memcpy((char *) 
+//      (&cached_ans_elt)->seq, axt->tSym, axt->symCount * sizeof(char));
       SET_STRING_ELT(ans_tSym, i, mkChar(axt->tSym));
       p_score[i] = axt->score;
       p_symCount[i] = axt->symCount;
