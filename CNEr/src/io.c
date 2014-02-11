@@ -86,7 +86,7 @@ SEXP axt_info(SEXP filepath){
 }
 
 /* --- .Call ENTRY POINT --- */
-SEXP readAxt(SEXP filepath){
+SEXP myReadAxt(SEXP filepath){
   // load a axt file into R, and to be axt object
   // This is tested and without memory leak!
   // The jim kent's axt struct holds the starts in 0-based. 

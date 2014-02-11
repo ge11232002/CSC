@@ -5,7 +5,7 @@
 static const R_CallMethodDef callMethods[] = {
   /* io.c */
   CALLMETHOD_DEF(myReadBed, 1),
-  CALLMETHOD_DEF(readAxt, 1),
+  CALLMETHOD_DEF(myReadAxt, 1),
   CALLMETHOD_DEF(axt_info, 1),
   
   /* utils.c */
@@ -14,7 +14,7 @@ static const R_CallMethodDef callMethods[] = {
   
   /* ceScan.c */
   CALLMETHOD_DEF(myCeScan, 23),
-  CALLMETHOD_DEF(ceScanFile, 8),
+  CALLMETHOD_DEF(myCeScanFile, 8),
   {NULL, NULL, 0}
 };
 

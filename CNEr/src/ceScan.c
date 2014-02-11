@@ -877,7 +877,7 @@ SEXP myCeScan(SEXP tFilterNames, SEXP tFilterStarts, SEXP tFilterEnds,
 
 
 //----------------- the version works on files directly--------------
-SEXP ceScanFile(SEXP axtFiles, SEXP tFilterFile, SEXP qFilterFile, 
+SEXP myCeScanFile(SEXP axtFiles, SEXP tFilterFile, SEXP qFilterFile, 
                 SEXP sizeNames, SEXP sizeSizes,
                 SEXP winSize, SEXP minScore, SEXP outputFiles){
   if(!IS_CHARACTER(tFilterFile) || LENGTH(tFilterFile) != 1)

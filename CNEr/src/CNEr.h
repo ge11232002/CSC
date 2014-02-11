@@ -79,7 +79,7 @@ struct slAllCNE
 /* io.c */
 SEXP myReadBed(SEXP filepath);
 
-SEXP readAxt(SEXP filepath);
+SEXP myReadAxt(SEXP filepath);
 
 SEXP axt_info(SEXP filepath);
 
@@ -98,7 +98,7 @@ SEXP myCeScan(SEXP tFilterNames, SEXP tFilterStarts, SEXP tFilterEnds,
               SEXP score, SEXP symCount, SEXP winSize,
               SEXP minScore, SEXP outputFiles);
 
-SEXP ceScanFile(SEXP axtFiles, SEXP tFilterFile, SEXP qFilterFile,
+SEXP myCeScanFile(SEXP axtFiles, SEXP tFilterFile, SEXP qFilterFile,
                 SEXP sizeNames, SEXP sizeSizes,
                 SEXP winSize, SEXP minScore, SEXP outputFiles);
 
