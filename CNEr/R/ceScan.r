@@ -188,7 +188,8 @@ cneMerge = function(cne1, cne2){
   # Although in cne1 and cne2, query strand can be negative, 
   # but the coordinate is already on positive strand.
   ## first reverse the cne2's cigar
-  cne2 = transform(cne2, cigar=chartr("DI", "ID", cigar))
+  ## cne2 = transform(cne2, cigar=chartr("DI", "ID", cigar))
+  cne2$cigar = chartr("DI", "ID", cne2$cigar)
   if(any(cne2$strand=="-")){
     cne2[cne2$strand=="-", ] = transform(subset(cne2, strand=="-"), 
                                           cigar=reverseCigar(cigar))
@@ -298,8 +299,11 @@ blatCNE = function(CNE, winSize, cutoffs1, cutoffs2,
       "strand", "qName", "qSize", "qStart", "qEnd", "tName", 
       "tSize", "tStart", "tEnd", "blockCount", "blockSizes", 
       "qStarts", "tStarts")
-  psl1 = subset(psl1, matches/qSize >= cutIdentity/100)
-  psl2 = subset(psl2, matches/qSize >= cutIdentity/100)
+  ##psl1 = subset(psl1, matches/qSize >= cutIdentity/100)
+  ##for some reason, subset will cause error duing the Bioconductor build
+  psl1 = psl1[psl1$matches / psl1$qSize >= cutIdentity/100, ]
+  ##psl2 = subset(psl2, matches/qSize >= cutIdentity/100)
+  psl2 = psl2[psl2$matches / psl2$qSize >= cutIdentity/100, ]
   psl1 = table(psl1[ , "qName"])
   psl2 = table(psl2[ , "qName"])
   CNEtNameIndex = unname(psl1[paste0(CNE[ ,1], ":", CNE[ ,2]-1, "-", CNE[ ,3])])

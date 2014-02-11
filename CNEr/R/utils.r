@@ -128,44 +128,44 @@ binRestrictionString = function(start, end, field="bin"){
 
 
 
-get_cne_ranges_in_region = function(CNE, whichAssembly=c(1,2), 
-                                    chr, CNEstart, CNEend, min_length){
-  ## This CNE data.frame does not have the bin column yet. 
-  ## I am not sure whether it is necessary to add this column in R since 
-  ## it's quiet fast to select the cnes which meet the criteria (~0.005 second).
-  if(whichAssembly == 1)
-    res = subset(CNE, chr1==chr & start1>=CNEstart & end1<=CNEend & 
-                 end1-start1+1>=min_length & end2-start2+1>=min_length, 
-                 select=c("start1", "end1"))
-  else if(whichAssembly == 2)
-    res = subset(CNE, chr2==chr & start2>=CNEstart & end2<=CNEend & 
-                 end1-start1+1>=min_length & end2-start2+1>=min_length, 
-                 select=c("start2", "end2"))
-  else
-    stop("whichAssembly should be 1 or 2")
-  # Here we return a IRanges object to store the start and end
-  res = IRanges(start=res[ ,1], end=res[ ,2])
-  return(res)
-}
-
-
-get_cne_ranges_in_region_partitioned_by_other_chr = 
-  function(CNE, whichAssembly=c(1,2), chr, CNEstart, CNEend, min_length){
-  if(whichAssembly == 1)
-    res = subset(CNE, chr1==chr & start1>=CNEstart & end1<=CNEend & 
-                 end1-start1+1>=min_length & end2-start2+1>=min_length, 
-                 select=c("chr2", "start1", "end1"))
-  else if(whichAssembly == 1)
-    res = subset(CNE, chr2==chr & start2>=CNEstart & end2<=CNEend & 
-                 end1-start1+1>=min_length & end2-start2+1>=min_length, 
-                 select=c("chr1", "start2", "end2"))
-  else
-    stop("whichAssembly should be 1 or 2")
-  # Here we return a GRanges object.
-  res = GRanges(seqnames=res[ ,1], 
-                ranges=IRanges(start=res[ ,2], end=res[ ,3]))
-  return(res)
-}
+#get_cne_ranges_in_region = function(CNE, whichAssembly=c(1,2), 
+#                                    chr, CNEstart, CNEend, min_length){
+#  ## This CNE data.frame does not have the bin column yet. 
+#  ## I am not sure whether it is necessary to add this column in R since 
+#  ## it's quiet fast to select the cnes which meet the criteria (~0.005 second).
+#  if(whichAssembly == 1)
+#    res = subset(CNE, chr1==chr & start1>=CNEstart & end1<=CNEend & 
+#                 end1-start1+1>=min_length & end2-start2+1>=min_length, 
+#                 select=c("start1", "end1"))
+#  else if(whichAssembly == 2)
+#    res = subset(CNE, chr2==chr & start2>=CNEstart & end2<=CNEend & 
+#                 end1-start1+1>=min_length & end2-start2+1>=min_length, 
+#                 select=c("start2", "end2"))
+#  else
+#    stop("whichAssembly should be 1 or 2")
+#  # Here we return a IRanges object to store the start and end
+#  res = IRanges(start=res[ ,1], end=res[ ,2])
+#  return(res)
+#}
+#
+#
+#get_cne_ranges_in_region_partitioned_by_other_chr = 
+#  function(CNE, whichAssembly=c(1,2), chr, CNEstart, CNEend, min_length){
+#  if(whichAssembly == 1)
+#    res = subset(CNE, chr1==chr & start1>=CNEstart & end1<=CNEend & 
+#                 end1-start1+1>=min_length & end2-start2+1>=min_length, 
+#                 select=c("chr2", "start1", "end1"))
+#  else if(whichAssembly == 1)
+#    res = subset(CNE, chr2==chr & start2>=CNEstart & end2<=CNEend & 
+#                 end1-start1+1>=min_length & end2-start2+1>=min_length, 
+#                 select=c("chr1", "start2", "end2"))
+#  else
+#    stop("whichAssembly should be 1 or 2")
+#  # Here we return a GRanges object.
+#  res = GRanges(seqnames=res[ ,1], 
+#                ranges=IRanges(start=res[ ,2], end=res[ ,3]))
+#  return(res)
+#}
 
 ### -----------------------------------------------------------------
 ### save the CNE tables into a local SQLite database
