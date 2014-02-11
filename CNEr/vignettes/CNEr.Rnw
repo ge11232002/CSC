@@ -387,12 +387,11 @@ data(axisTrack)
 data(ideoTrack)
 data(cpgIslands)
 data(refGenes)
-data(biomTrack)
 @
 
 <<plotAnnotation, fig=TRUE, eval=TRUE, results=hide, echo=TRUE, height=10, width=7.5>>=
 library(Gviz)
-plotTracks(list(axisTrack, ideoTrack, cpgIslands, refGenes, biomTrack), 
+plotTracks(list(axisTrack, ideoTrack, cpgIslands, refGenes), 
            collapseTranscripts=TRUE, shape="arrow",
            showId=TRUE, transcriptAnnotation="symbol")
 @
@@ -464,7 +463,7 @@ dTrack3 = DataTrack(start=dataMatrix[ ,1], end=dataMatrix[ ,1],
 
 <<plotCNE, fig=TRUE, eval=TRUE, results=hide, echo=TRUE, height=15, width=7.5>>=
 plotTracks(list(axisTrack, ideoTrack, cpgIslands, 
-                refGenes, biomTrack, 
+                refGenes, 
                 dTrack1, dTrack2, dTrack3),
            collapseTranscripts=TRUE, shape="arrow",
            showId=TRUE, transcriptAnnotation="symbol")

@@ -2,7 +2,6 @@
 \alias{axisTrack}
 \alias{cpgIslands}
 \alias{refGenes}
-\alias{biomTrack}
 \alias{ideoTrack}
 \docType{data}
 \title{
@@ -15,7 +14,6 @@
   data(axisTrack)
   data(cpgIslands)
   data(refGenes)
-  data(biomTrack)
   data(ideoTrack)  
 }
 
@@ -27,7 +25,6 @@
 data(axisTrack)
 data(cpgIslands)
 data(refGenes)
-data(biomTrack)
 data(ideoTrack)
 }
 \keyword{datasets}
