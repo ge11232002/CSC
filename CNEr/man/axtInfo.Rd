@@ -40,7 +40,7 @@ axtInfo(axtFiles)
 \examples{
   axtFilesHg19DanRer7 = 
     file.path(system.file("extdata", package="CNEr"), 
-              "hg19.danRer7.net.axt.gz")
+              "hg19.danRer7.net.axt")
     ans = axtInfo(axtFilesHg19DanRer7)
 
 }

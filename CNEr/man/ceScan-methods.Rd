@@ -99,10 +99,10 @@
 
 \examples{
   axtFilesHg19DanRer7 = file.path(system.file("extdata", package="CNEr"), 
-                                  "hg19.danRer7.net.axt.gz")
+                                  "hg19.danRer7.net.axt")
   axtHg19DanRer7 = readAxt(axtFilesHg19DanRer7)
   axtFilesDanRer7Hg19 = file.path(system.file("extdata", package="CNEr"), 
-                                  "danRer7.hg19.net.axt.gz")
+                                  "danRer7.hg19.net.axt")
   axtDanRer7Hg19 = readAxt(axtFilesDanRer7Hg19)
   bedHg19Fn = file.path(system.file("extdata", package="CNEr"), 
                         "filter_regions.hg19.bed")
