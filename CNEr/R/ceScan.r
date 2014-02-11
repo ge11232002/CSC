@@ -340,7 +340,7 @@ ceScanOneStep <- function(axt1, filter1=NULL, sizes1, assembly1, twoBit1,
       blatCNE(CNEMerged[[i]], as.integer(sub("\\d+_", "", 
                                            names(CNEMerged)[i])),
               cutoffs1=blatCutoff1, cutoffs2=blatCutoff2,
-              assembly1Twobit=twoBit1, assembly2Twobit="twoBit2",
+              assembly1Twobit=twoBit1, assembly2Twobit=twoBit2,
               blatBinary=blatBinary)
   }
   ans <- CNE(assembly1=assembly1, assembly2=assembly2,
