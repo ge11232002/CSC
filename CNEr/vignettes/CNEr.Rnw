@@ -277,7 +277,7 @@ for(i in 1:length(cneMergedDanRer7Hg19)){
   cneBlatedDanRer7Hg19[[names(cneMergedDanRer7Hg19)[i]]] = 
     blatCNE(cneMergedDanRer7Hg19[[i]], 
             as.integer(sub("\\d+_", "", names(cneMergedDanRer7Hg19)[i])), 
-            cutoffs1=4L, cutoffs2=8L, 
+            cutoffs1=8L, cutoffs2=8L, 
             assembly1Twobit=assemblyDanRer7Twobit, 
             assembly2Twobit=assemblyHg19Twobit,
             blatBinary="blat")
@@ -285,7 +285,22 @@ for(i in 1:length(cneMergedDanRer7Hg19)){
 @
 
 Now at this stage, these elements are the final CNEs.
+We also prepare a one step function \Rfunction{ceScanOneStep}
+and it returns a \Robject{CNE} object directly.
+This one-step function is highly recommended to avoid the tedious steps above.
 
+<<ceScanOneStep, eval=FALSE, results = hide>>=
+assemblyHg19Twobit = "/Users/gtan/CSC/CNEr/2bit/hg19.2bit"
+assemblyDanRer7Twobit = "/Users/gtan/CSC/CNEr/2bit/danRer7.2bit"
+finalCNE <- ceScanOneStep(axt1=axtHg19DanRer7, filter1=bedHg19, 
+                          sizes1=qSizesHg19, assembly1="hg19", 
+                          twoBit1=assemblyHg19Twobit,
+                          axt2=axtDanRer7Hg19, filter2=bedDanRer7,
+                          sizes2=qSizesDanRer7, assembly2="danRer7",
+                          twoBit2=assemblyDanRer7Twobit,
+                          thresholds=c("45_50", "48_50", "49_50"),
+                          blatBinary="blat", blatCutoff1=8L, blatCutoff2=8L)
+@
 
 \section{CNE storage and query}
 As the computation of CNEs from the whole pipeline and 
