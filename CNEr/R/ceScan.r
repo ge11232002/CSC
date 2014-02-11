@@ -3,15 +3,15 @@
 ### The main function for scanning the axts and get the CNEs
 ### Not exported!
 ceScanR <- function(axts, tFilter=NULL, qFilter=NULL, qSizes=NULL, 
-                   thresholds=c("49,50")){
+                   thresholds=c("49_50")){
   ## Here the returned tStart and qStart are 1-based coordinates. 
   ## Of course ends are also 1-based.
   if(!is.null(qFilter))
     if(is.null(qSizes) || !is(qSizes, "Seqinfo"))
       stop("qSizes must exist and be a Seqinfo object when qFilter exists")
   
-  winSize <- as.integer(sapply(strsplit(thresholds, ","), "[", 2))
-  minScore <- as.integer(sapply(strsplit(thresholds, ","), "[", 1))
+  winSize <- as.integer(sapply(strsplit(thresholds, "_"), "[", 2))
+  minScore <- as.integer(sapply(strsplit(thresholds, "_"), "[", 1))
   resFiles <- tempfile(pattern=paste(minScore, winSize, "ceScan", sep="-"), 
                        tmpdir=tempdir(), fileext="")
   ## How stupid I am...
@@ -96,14 +96,14 @@ ceScanR <- function(axts, tFilter=NULL, qFilter=NULL, qSizes=NULL,
 ### Not exported!
 ceScanFile <- function(axtFiles, tFilterFile=NULL, qFilterFile=NULL, 
                        qSizes=NULL,
-                       thresholds=c("49,50")){
+                       thresholds=c("49_50")){
   ## Here the returned tStart and qStart are 1-based coordinates. 
   ## Of course ends are also 1-based.
   if(!is.null(qFilterFile))
     if(is.null(qSizes) || !is(qSizes, "Seqinfo"))
       stop("qSizes must exist and be a Seqinfo object when qFilter exists")
-  winSize <- as.integer(sapply(strsplit(thresholds, ","), "[", 2))
-  minScore <- as.integer(sapply(strsplit(thresholds, ","), "[", 1))
+  winSize <- as.integer(sapply(strsplit(thresholds, "_"), "[", 2))
+  minScore <- as.integer(sapply(strsplit(thresholds, "_"), "[", 1))
   resFiles <- tempfile(pattern=paste(minScore, winSize, "ceScan", sep="-"), 
                       tmpdir=tempdir(), fileext="")
   .Call2("ceScanFile", axtFiles, tFilterFile, qFilterFile, 
@@ -126,28 +126,28 @@ ceScanFile <- function(axtFiles, tFilterFile=NULL, qFilterFile=NULL,
 ### Exported!
 setMethod("ceScan", signature(axts="Axt", tFilter="GRanges", qFilter="GRanges",
                               qSizes="Seqinfo"),
-          function(axts, tFilter, qFilter, qSizes, thresholds="49,50"){
+          function(axts, tFilter, qFilter, qSizes, thresholds="49_50"){
             ceScanR(axts, tFilter=tFilter, qFilter=qFilter, 
                     qSizes=qSizes, thresholds=thresholds)
           }
           )
 setMethod("ceScan", signature(axts="Axt", tFilter="missing", qFilter="GRanges",
                               qSizes="Seqinfo"),
-          function(axts, tFilter, qFilter, qSizes, thresholds="49,50"){
+          function(axts, tFilter, qFilter, qSizes, thresholds="49_50"){
             ceScanR(axts, tFilter=NULL, qFilter=qFilter,
                     qSizes=qSizes, thresholds=thresholds)
           }
           )
 setMethod("ceScan", signature(axts="Axt", tFilter="missing", qFilter="missing",
                               qSizes="missing"),
-          function(axts, tFilter, qFilter, qSizes, thresholds="49,50"){
+          function(axts, tFilter, qFilter, qSizes, thresholds="49_50"){
             ceScanR(axts, tFilter=NULL, qFilter=NULL,
                     qSizes=NULL, thresholds=thresholds)
           }
           )
 setMethod("ceScan", signature(axts="Axt", tFilter="GRanges", qFilter="missing",
                               qSizes="missing"),
-          function(axts, tFilter, qFilter, qSizes, thresholds="49,50"){
+          function(axts, tFilter, qFilter, qSizes, thresholds="49_50"){
             ceScanR(axts, tFilter=tFilter, qFilter=NULL,
                     qSizes=NULL, thresholds=thresholds)
           }
@@ -161,21 +161,21 @@ setMethod("ceScan", signature(axts="character", tFilter="character",
           )
 setMethod("ceScan", signature(axts="character", tFilter="missing",
                               qFilter="character", qSizes="Seqinfo"),
-          function(axts, tFilter, qFilter, qSizes, thresholds="49,50"){
+          function(axts, tFilter, qFilter, qSizes, thresholds="49_50"){
             ceScanFile(axtFiles=axts, tFilterFile=NULL, qFilterFile=qFilter,
                        qSizes=qSizes, thresholds=thresholds)
           }
           )
 setMethod("ceScan", signature(axts="character", tFilter="missing",
                               qFilter="missing", qSizes="missing"),
-          function(axts, tFilter, qFilter, qSizes, thresholds="49,50"){
+          function(axts, tFilter, qFilter, qSizes, thresholds="49_50"){
             ceScanFile(axtFiles=axts, tFilterFile=NULL, qFilterFile=NULL,
                        qSizes=NULL, thresholds=thresholds)
           }
           )
 setMethod("ceScan", signature(axts="character", tFilter="character",
                               qFilter="missing", qSizes="missing"),
-          function(axts, tFilter, qFilter, qSizes, thresholds="49,50"){
+          function(axts, tFilter, qFilter, qSizes, thresholds="49_50"){
             ceScanFile(axtFiles=axts, tFilterFile=tFilter, qFilterFile=NULL,
                        qSizes=NULL, thresholds=thresholds)
           }

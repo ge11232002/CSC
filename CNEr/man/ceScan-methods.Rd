@@ -121,10 +121,10 @@ qSizes = "missing")}}{
   qSizesDanRer7 = fetchChromSizes("danRer7")
   CNEHg19DanRer7 = ceScan(axts=axtHg19DanRer7, tFilter=bedHg19,
                           qFilter=bedDanRer7, qSizes=qSizesDanRer7,
-                          thresholds=c("45,50", "48,50", "49,50"))
+                          thresholds=c("45_50", "48_50", "49_50"))
   CNEDanRer7Hg19 = ceScan(axts=axtDanRer7Hg19, tFilter=bedDanRer7,
                           qFilter=bedHg19, qSizes=qSizesHg19,
-                          thresholds=c("45,50", "48,50", "49,50"))
+                          thresholds=c("45_50", "48_50", "49_50"))
 
 }
 \keyword{methods}
