@@ -62,8 +62,9 @@ export(
   fetchChromSizes,
   saveCNEToSQLite,
 
-  ## class.r
+  ## AllClasses.r
   Axt,
+  CNE,
 
   # io.r
   readBed,
