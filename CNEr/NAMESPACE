@@ -31,7 +31,7 @@ importFrom(methods, is, new)
 ### -----------------------------------------------------------------
 ### Export S4 classes defined in CNEr
 ###
-exportClasses(axt)
+exportClasses(Axt)
 
 ### -----------------------------------------------------------------
 ### Export S4 methods for generics not defined in CNEr
@@ -60,7 +60,7 @@ export(
   saveCNEToSQLite,
 
   ## class.r
-  axt,
+  Axt,
 
   # io.r
   readBed,
