@@ -21,8 +21,10 @@ cneMerge(cne1, cne2)
 \value{
   A \code{data.frame} of CNEs is returned.
   In this table, the order of columns are consistent with cne1.
-  For instance, if cne1 has the first three columns for zebrafish and next three columns for human,
-  in the merged table, the first three columns are still the coordinates for zebrafish
+  For instance, if cne1 has the first three columns for zebrafish 
+  and next three columns for human,
+  in the merged table, the first three columns are 
+  still the coordinates for zebrafish
   while the next three columns are coordinates for human.
 }
 
@@ -36,7 +38,8 @@ cneMerge(cne1, cne2)
 \examples{
 data(CNEHg19DanRer7)
 data(CNEDanRer7Hg19)
-cneMergedDanRer7Hg19 = mapply(cneMerge, CNEDanRer7Hg19, CNEHg19DanRer7, SIMPLIFY=FALSE)
+cneMergedDanRer7Hg19 = mapply(cneMerge, CNEDanRer7Hg19, CNEHg19DanRer7, 
+                              SIMPLIFY=FALSE)
 }
 % Add one or more standard keywords, see file 'KEYWORDS' in the
 % R documentation directory.

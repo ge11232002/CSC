@@ -1,6 +1,5 @@
 \name{readAxt}
 \alias{readAxt}
-%- Also NEED an '\alias' for EACH other topic documented here.
 \title{
 readAxt function.
 }
@@ -10,7 +9,6 @@ This function reads the axt files into a \code{axt} object.
 \usage{
 readAxt(axtFiles)
 }
-%- maybe also 'usage' for other objects documented here.
 \arguments{
   \item{axtFiles}{
   Object of \code{character}. The length can be one or more.

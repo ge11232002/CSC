@@ -21,7 +21,8 @@ CNEDensity(dbName, tableName, whichAssembly=c("L","R"),
     A object of \code{character}, the name of table for this CNE data table.
   }
   \item{whichAssembly}{
-    A object of \code{character}, the genome to fetch is in the "Left" columns or "Right" columns of the table.
+    A object of \code{character}, the genome to fetch is in the "Left" 
+    columns or "Right" columns of the table.
   }
   \item{chr}{
      A object of \code{character}, the chromosome to query.
@@ -39,7 +40,8 @@ CNEDensity(dbName, tableName, whichAssembly=c("L","R"),
 
 \value{
   A \code{matrix} is returned. 
-  The first column is the coordinates and the second column is the density values.
+  The first column is the coordinates and the second column 
+  is the density values.
 }
 
 \author{
@@ -55,21 +57,24 @@ Ge Tan
     end =  28000000L
     windowSize= 300L
     minLength = 50L
-    cneHg19DanRer7_45_50 = CNEDensity(dbName=dbName, 
-                                  tableName="cne_twoWay_danRer7_hg19_len50_id900_v1", 
-                                  whichAssembly="R", chr=chr, start=start,
-                                  end=end, windowSize=windowSize, 
-                                  minLength=minLength)
-    cneHg19DanRer7_48_50 = CNEDensity(dbName=dbName, 
-                                  tableName="cne_twoWay_danRer7_hg19_len50_id960_v1", 
-                                  whichAssembly="R", chr=chr, start=start,
-                                  end=end, windowSize=windowSize, 
-                                  minLength=minLength)
-    cneHg19DanRer7_49_50 = CNEDensity(dbName=dbName, 
-                                  tableName="cne_twoWay_danRer7_hg19_len50_id980_v1", 
-                                  whichAssembly="R", chr=chr, start=start,
-                                  end=end, windowSize=windowSize, 
-                                  minLength=minLength)
+    cneHg19DanRer7_45_50 = 
+      CNEDensity(dbName=dbName, 
+                 tableName="cne_twoWay_danRer7_hg19_len50_id900_v1", 
+                 whichAssembly="R", chr=chr, start=start,
+                 end=end, windowSize=windowSize, 
+                 minLength=minLength)
+    cneHg19DanRer7_48_50 = 
+      CNEDensity(dbName=dbName, 
+                 tableName="cne_twoWay_danRer7_hg19_len50_id960_v1", 
+                 whichAssembly="R", chr=chr, start=start,
+                 end=end, windowSize=windowSize, 
+                 minLength=minLength)
+    cneHg19DanRer7_49_50 = 
+      CNEDensity(dbName=dbName, 
+                 tableName="cne_twoWay_danRer7_hg19_len50_id980_v1", 
+                 whichAssembly="R", chr=chr, start=start,
+                 end=end, windowSize=windowSize, 
+                 minLength=minLength)
 }
 
 

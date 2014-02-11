@@ -46,11 +46,15 @@
   The UCSC bin indexing system was initially suggested by Richard Durbin and 
   Lincoln Stein to speed up the SELECT of a SQL query for the rows overlapping
   with certain genome coordinate.
-  The system first used in UCSC genome browser is described by Kent et. al. (2002).
+  The system first used in UCSC genome browser is 
+  described by Kent et. al. (2002).
 }
 
 \references{
-Kent, W. J., Sugnet, C. W., Furey, T. S., Roskin, K. M., Pringle, T. H., Zahler, A. M., & Haussler, A. D. (2002). The Human Genome Browser at UCSC. Genome Research, 12(6), 996-1006. doi:10.1101/gr.229102
+Kent, W. J., Sugnet, C. W., Furey, T. S., Roskin, K. M., Pringle, 
+T. H., Zahler, A. M., & Haussler, A. D. (2002). 
+The Human Genome Browser at UCSC. Genome Research, 12(6), 
+996-1006. doi:10.1101/gr.229102
 
 \url{http://genomewiki.ucsc.edu/index.php/Bin_indexing_system}
 }

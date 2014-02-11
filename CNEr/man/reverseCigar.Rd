@@ -3,7 +3,8 @@
 
 \title{reverseCigar function}
 
-\description{This function reverses the cigar string, i.e., 
+\description{
+  This function reverses the cigar string, i.e., 
   20M15I10D will be reversed to 10D15I20M.}
 
 \usage{

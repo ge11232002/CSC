@@ -12,7 +12,8 @@
 \alias{ceScan,character,missing,missing,missing-method}
 \title{ceScan function}
 \description{
-  This is the main function for conserved noncoding elements (CNEs) identification.
+  This is the main function for conserved noncoding elements (CNEs) 
+  identification.
 }
 
 \usage{
@@ -24,63 +25,69 @@
     A \code{axt} object or \code{character} object with the paths of axt files.
   }
   \item{tFilter}{
-    A \code{GRanges} object or \code{character} object with the path of bed file for target genome filter. 
+    A \code{GRanges} object or \code{character} 
+    object with the path of bed file for target genome filter. 
     This argument can also be missing when target filter is not available.
   }
   \item{qFilter}{
-    A \code{GRanges} object or \code{character} object with the path of bed file for
+    A \code{GRanges} object or \code{character} 
+    object with the path of bed file for
     query genome filter.
     This argument can also be missing when query filter is not available.
   }
   \item{qSizes}{
-    A \code{Seqinfo} object which contains the \code{seqnames} and \code{seqlengths} for query genome.
+    A \code{Seqinfo} object which contains the \code{seqnames} and 
+    \code{seqlengths} for query genome.
     This argument can be missing when \code{qFilter} is missing.
   }
   \item{thresholds}{
-    A \code{character} object specifiying the scanning windows and minimal score.
-    It can be specified in th form of "45,50" with scanning windows 50 and minial score 45.
+    A \code{character} object specifiying the scanning windows and 
+    minimal score.
+    It can be specified in th form of "45,50" with scanning windows 50 
+    and minial score 45.
     More than one thresholds can be provided.
   }
 }
 \section{Methods}{
 \describe{
 
-\item{\code{signature(axts = "axt", tFilter = "GRanges", qFilter = "GRanges", qSizes = "Seqinfo")}}{
-
+\item{\code{signature(axts = "axt", tFilter = "GRanges", qFilter = "GRanges", 
+qSizes = "Seqinfo")}}{
 }
 
-\item{\code{signature(axts = "axt", tFilter = "GRanges", qFilter = "missing", qSizes = "missing")}}{
-%%  ~~describe this method here~~
+\item{\code{signature(axts = "axt", tFilter = "GRanges", qFilter = "missing", 
+qSizes = "missing")}}{
 }
 
-\item{\code{signature(axts = "axt", tFilter = "missing", qFilter = "GRanges", qSizes = "Seqinfo")}}{
-%%  ~~describe this method here~~
+\item{\code{signature(axts = "axt", tFilter = "missing", qFilter = "GRanges", 
+  qSizes = "Seqinfo")}}{
 }
 
-\item{\code{signature(axts = "axt", tFilter = "missing", qFilter = "missing", qSizes = "missing")}}{
-%%  ~~describe this method here~~
+\item{\code{signature(axts = "axt", tFilter = "missing", qFilter = "missing", 
+  qSizes = "missing")}}{
 }
 
-\item{\code{signature(axts = "character", tFilter = "character", qFilter = "character", qSizes = "Seqinfo")}}{
-%%  ~~describe this method here~~
+\item{\code{signature(axts = "character", tFilter = "character", 
+  qFilter = "character", qSizes = "Seqinfo")}}{
 }
 
-\item{\code{signature(axts = "character", tFilter = "character", qFilter = "missing", qSizes = "missing")}}{
-%%  ~~describe this method here~~
+\item{\code{signature(axts = "character", tFilter = "character", 
+  qFilter = "missing", qSizes = "missing")}}{
 }
 
-\item{\code{signature(axts = "character", tFilter = "missing", qFilter = "character", qSizes = "Seqinfo")}}{
-%%  ~~describe this method here~~
+\item{\code{signature(axts = "character", tFilter = "missing", 
+  qFilter = "character", qSizes = "Seqinfo")}}{
 }
 
-\item{\code{signature(axts = "character", tFilter = "missing", qFilter = "missing", qSizes = "missing")}}{
-%%  ~~describe this method here~~
+\item{\code{signature(axts = "character", tFilter = "missing", 
+  qFilter = "missing", qSizes = "missing")}}{
 }
 }}
 
 \details{
   ceScan scan the axts alignmnets and identify the CNEs.
-  ceScan can accept axts in \code{axt} object and filter in \code{GRanges} object,
+  ceScan can accept axts in \code{axt} object and 
+  filter in \code{GRanges} object,
   or directly the axt files and bed files.
   When the axt files and bed files are ready for computation, 
   it is recommended to use them directly rather than read them into R first.

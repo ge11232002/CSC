@@ -14,7 +14,8 @@ blatCNE(CNE, winSize, cutoffs1, cutoffs2, assembly1Twobit, assembly2Twobit,
 
 \arguments{
   \item{CNE}{
-    A object of \code{data.frame}. Usually it is generated from \code{cneMerge} function.
+    A object of \code{data.frame}. 
+      Usually it is generated from \code{cneMerge} function.
   }
   \item{winSize}{
     A object of \code{integer}. 
@@ -30,7 +31,8 @@ blatCNE(CNE, winSize, cutoffs1, cutoffs2, assembly1Twobit, assembly2Twobit,
   }
   \item{blatOptions}{
     A object of \code{character}.
-    When it is NULL, a bunch of preset parameters for blat will be given based on the winSize parameter.
+    When it is NULL, a bunch of preset parameters for blat 
+    will be given based on the winSize parameter.
   }
   \item{cutIdentity}{
     A object of \code{integer}.
@@ -48,11 +50,14 @@ blatCNE(CNE, winSize, cutoffs1, cutoffs2, assembly1Twobit, assembly2Twobit,
 }
 
 \details{
-  When winSize > 45, the blat options is "-tileSize=11 -minScore=30 -repMatch=1024".
+  When winSize > 45, the blat options is 
+  "-tileSize=11 -minScore=30 -repMatch=1024".
   
-  When 35 < winSize <= 45, the blat options is "-tileSize=10 -minScore=28 -repMatch=4096".
+  When 35 < winSize <= 45, the blat options is 
+  "-tileSize=10 -minScore=28 -repMatch=4096".
   
-  When the winSize <= 35, the blat options is "-tileSize=9 -minScore=24 -repMatch=16384".
+  When the winSize <= 35, the blat options is 
+  "-tileSize=9 -minScore=24 -repMatch=16384".
 }
 
 \value{
