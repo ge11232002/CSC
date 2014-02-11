@@ -104,10 +104,10 @@ such as chr1.hg19.mm10.net.axt.gz, chr2.hg19.mm10.net.axt.gz, etc.
 
 <<rtl-Axt, eval=TRUE, results = verbatim>>=
 library(CNEr)
-axtFilesHg19DanRer7 = file.path(system.file("extdata", package="CNEr"), "hg19.danRer7.net.axt.gz")
+axtFilesHg19DanRer7 = file.path(system.file("extdata", package="CNEr"), "hg19.danRer7.net.axt")
 axtHg19DanRer7 = readAxt(axtFilesHg19DanRer7)
 axtHg19DanRer7
-axtFilesDanRer7Hg19 = file.path(system.file("extdata", package="CNEr"), "danRer7.hg19.net.axt.gz")
+axtFilesDanRer7Hg19 = file.path(system.file("extdata", package="CNEr"), "danRer7.hg19.net.axt")
 axtDanRer7Hg19 = readAxt(axtFilesDanRer7Hg19)
 axtDanRer7Hg19
 @
