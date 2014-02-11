@@ -1,63 +1,63 @@
 ### -----------------------------------------------------------------
 ### Fetch the CNE coordinates from SQL and compute the densities
 ### Exported!
-CNEDensity = function(dbName, tableName, whichAssembly=c("L","R"), 
-                      chr, start, end, windowSize, 
-                      minLength=NULL){
-  nrGraphs=1
-  CNEstart = start
-  CNEend = end
+CNEDensity <- function(dbName, tableName, whichAssembly=c("L","R"), 
+                       chr, start, end, windowSize, 
+                       minLength=NULL){
+  nrGraphs <- 1
+  CNEstart <- start
+  CNEend <- end
   # This is the pipeline of doing the density plot
   # The windowSize is in kb.
-  whichAssembly = match.arg(whichAssembly)
+  whichAssembly <- match.arg(whichAssembly)
   if(!is(windowSize, "integer"))
     stop("windowSize must be an integer!")
-  windowSize = windowSize * 1000
-  CNElength = CNEend - CNEstart + 1
-  pixel_width = 2048
+  windowSize <- windowSize * 1000
+  CNElength <- CNEend - CNEstart + 1
+  pixel_width <- 2048
   if(CNElength <= pixel_width) {
-    step_size = 1
+    step_size <- 1
   }else{
-    step_size = as.integer(CNElength/pixel_width)
+    step_size <- as.integer(CNElength/pixel_width)
     if(step_size > windowSize/10)
-      step_size = windowSize/10
+      step_size <- windowSize/10
     while(windowSize %% step_size){
-      step_size = step_size - 1
+      step_size <- step_size - 1
     }
   }
   # make things easier
   if(windowSize %% 2 == 0)
-    windowSize = windowSize - 1L
-  context_start = as.integer(max(CNEstart - (windowSize-1L)/2, 1))
-  context_end = as.integer(CNEend + (windowSize-1)/2)
+    windowSize <- windowSize - 1L
+  context_start <- as.integer(max(CNEstart - (windowSize-1L)/2, 1))
+  context_end <- as.integer(CNEend + (windowSize-1)/2)
   #win_nr_steps = windowSize / step_size
   #context_start = CNEstart - as.integer(((win_nr_steps-1)*step_size)/2+0.5)
   #if(context_start < 1)
   #  context_start = 1
   #context_end = CNEend + 
   #  as.integer(((win_nr_steps-1)*step_size)/2+step_size+0.5)
-  ranges = readCNERangesFromSQLite(dbName, tableName, chr, 
-                                   context_start, context_end, 
-                                   whichAssembly, minLength)
+  ranges <- readCNERangesFromSQLite(dbName, tableName, chr, 
+                                    context_start, context_end, 
+                                    whichAssembly, minLength)
   # Implement get_cne_ranges_in_region_partitioned_by_other_chr later!!!
-  ranges = reduce(ranges)
-  covAll = coverage(ranges, width=context_end)
-  runMeanAll = runmean(covAll, k=windowSize, "constant")
-  resStart = max(CNEstart, (windowSize-1)/2+1)
-  resEnd = min(CNEend, context_end-(windowSize-1)/2)
-  resCoords = seq(resStart, resEnd, by=step_size)
+  ranges <- reduce(ranges)
+  covAll <- coverage(ranges, width=context_end)
+  runMeanAll <- runmean(covAll, k=windowSize, "constant")
+  resStart <- max(CNEstart, (windowSize-1)/2+1)
+  resEnd <- min(CNEend, context_end-(windowSize-1)/2)
+  resCoords <- seq(resStart, resEnd, by=step_size)
   if(nrGraphs == 1){
-    runMeanRes = runMeanAll[resCoords]*100
-    res = cbind(resCoords, as.numeric(runMeanRes))
-    colnames(res) = c("coordinates", "y")
+    runMeanRes <- runMeanAll[resCoords]*100
+    res <- cbind(resCoords, as.numeric(runMeanRes))
+    colnames(res) <- c("coordinates", "y")
   }else{
-    runMeanRes = lapply(runMeanAll, "[", resCoords)
-    runMeanRes = lapply(runMeanRes, "*", 100)
-    res = list()
+    runMeanRes <- lapply(runMeanAll, "[", resCoords)
+    runMeanRes <- lapply(runMeanRes, "*", 100)
+    res <- list()
     for(i in 1:length(runMeanRes)){
-      res[[names(runMeanRes)[i]]] = cbind(resCoords, 
-                                          as.numeric(runMeanRes[[i]]))
-      colnames(res[[names(runMeanRes)[i]]]) = c("coordinates", "y")
+      res[[names(runMeanRes)[i]]] <- cbind(resCoords, 
+                                           as.numeric(runMeanRes[[i]]))
+      colnames(res[[names(runMeanRes)[i]]]) <- c("coordinates", "y")
     }
   }
   return(res)

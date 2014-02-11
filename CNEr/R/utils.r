@@ -1,10 +1,10 @@
 ### -----------------------------------------------------------------
 ### Compare two DNAStringSet. Match is TRUE, Mismatch is FALSE.
 ### Not used, exported so far.
-compDNAStringSet = function(DNAStringSet1, DNAStringSet2){
-  tmp = cbind(strsplit(as.character(DNAStringSet1), ""), 
-              strsplit(as.character(DNAStringSet2), ""))
-  apply(tmp, 1, function(x){x[[1]]==x[[2]]})
+compDNAStringSet <- function(DNAStringSet1, DNAStringSet2){
+  tmp <- cbind(strsplit(as.character(DNAStringSet1), ""), 
+               strsplit(as.character(DNAStringSet2), ""))
+  apply(tmp, 1, function(x){x[[1]] == x[[2]]})
 }
 #system.time(foo<-compDNAStringSet(targetSeqs(myAxt), querySeqs(myAxt)))
 #system.time(foo1<-RleList(foo))
@@ -14,32 +14,32 @@ compDNAStringSet = function(DNAStringSet1, DNAStringSet2){
 ### For a GRanges object of filter, make the revered GRanges. 
 ### chromSize needs to be known.
 ### Not used, exported so far.
-makeReversedFilter = function(qFilter, chromSizes){
-  revFilterBed = GRanges(seqnames=seqnames(qFilter),
-                         ranges=IRanges(start=chromSizes[
-                                        as.character(seqnames(qFilter))] - 
-                                        end(qFilter),
-                                        end=chromSizes[
-                                        as.character(seqnames(qFilter))] - 
-                                        start(qFilter)
-                                        ),
-                         strand=Rle("-"))
+makeReversedFilter <- function(qFilter, chromSizes){
+  revFilterBed <- GRanges(seqnames=seqnames(qFilter),
+                          ranges=IRanges(start=chromSizes[
+                                         as.character(seqnames(qFilter))] - 
+                                         end(qFilter),
+                                         end=chromSizes[
+                                         as.character(seqnames(qFilter))] - 
+                                         start(qFilter)
+                                         ),
+                          strand=Rle("-"))
   return(revFilterBed)
 }
 
 ### -----------------------------------------------------------------
 ### Generate a translation from sequence index to alignment index.
 ### Not used, exported so far.
-seqToAlignment = function(DNAStringSet){
-  foo = strsplit(as.character(DNAStringSet), "")
-  foo = lapply(foo, function(x){grep("-", x, invert=TRUE)})
+seqToAlignment <- function(DNAStringSet){
+  foo <- strsplit(as.character(DNAStringSet), "")
+  foo <- lapply(foo, function(x){grep("-", x, invert=TRUE)})
   return(foo)
 }
 
 ### -----------------------------------------------------------------
 ### rever the cigar string. i.e. 20M15I10D will be reversed to 10D15I20M.
 ### EXPORTED!
-reverseCigar = function(cigar, ops=CIGAR_OPS){
+reverseCigar <- function(cigar, ops=CIGAR_OPS){
   #cigar = sapply(splitCigar(cigar), function(x){
   #               paste0(rev(x[[2]]), rev(rawToChar(x[[1]], multiple=TRUE)), 
   #                      collapse="")
@@ -47,20 +47,20 @@ reverseCigar = function(cigar, ops=CIGAR_OPS){
   # splitCigar is deprecated...Before I am in the Bioconductor..
   # some new cigar utilities functions.
   #)
-  cigarOps = lapply(explodeCigarOps(cigar, ops=ops), rev)
-  cigarOpsLengths = lapply(explodeCigarOpLengths(cigar, ops=ops), rev)
-  cigar = mapply(paste0, cigarOpsLengths, cigarOps, collapse="")
+  cigarOps <- lapply(explodeCigarOps(cigar, ops=ops), rev)
+  cigarOpsLengths <- lapply(explodeCigarOpLengths(cigar, ops=ops), rev)
+  cigar <- mapply(paste0, cigarOpsLengths, cigarOps, collapse="")
   return(cigar)
 }
 
 ### -----------------------------------------------------------------
 ### Better system interface
 ### Not exported.
-my.system = function(cmd, echo=TRUE, intern=FALSE, ...){
+my.system <- function(cmd, echo=TRUE, intern=FALSE, ...){
   if (echo){
     message(cmd)
   }
-  res = system(cmd, intern=intern, ...)
+  res <- system(cmd, intern=intern, ...)
   if (!intern){
     stopifnot(res == 0)
   }
@@ -72,7 +72,7 @@ my.system = function(cmd, echo=TRUE, intern=FALSE, ...){
 ### Return the bin number that should be assigned to 
 ### a feature spanning the given range. * USE THIS WHEN CREATING A DB *
 ### Exported!
-.validateBinRanges = function(starts, ends){
+.validateBinRanges <- function(starts, ends){
   if(any(ends <= 0 | starts <= 0)){
     stop("starts and ends must be positive integers!")
   }
@@ -85,10 +85,10 @@ my.system = function(cmd, echo=TRUE, intern=FALSE, ...){
   return(TRUE) 
 }
 
-binFromCoordRange = function(starts, ends){
+binFromCoordRange <- function(starts, ends){
   .validateBinRanges(starts, ends)
-  bins = .Call2("bin_from_coord_range", as.integer(starts), 
-                as.integer(ends), PACKAGE="CNEr")
+  bins <- .Call2("bin_from_coord_range", as.integer(starts), 
+                 as.integer(ends), PACKAGE="CNEr")
   return(bins)
 }
 
@@ -97,10 +97,11 @@ binFromCoordRange = function(starts, ends){
 ### It is usually more convenient to use bin_restriction string 
 ### than to use this method directly.
 ### EXPORTED!
-binRangesFromCoordRange = function(start, end){
-  stopifnot(length(start)==1 && length(end)==1)
+binRangesFromCoordRange <- function(start, end){
+  stopifnot(length(start) == 1 && length(end) == 1)
   .validateBinRanges(start, end)
-  binRanges = .Call2("bin_ranges_from_coord_range", as.integer(start), as.integer(end), PACKAGE="CNEr")
+  binRanges <- .Call2("bin_ranges_from_coord_range", 
+                      as.integer(start), as.integer(end), PACKAGE="CNEr")
   return(binRanges)
 }
 
@@ -109,18 +110,18 @@ binRangesFromCoordRange = function(start, end){
 ### section of a SQL SELECT statement that is to 
 ### select features overlapping a certain range. * USE THIS WHEN QUERYING A DB *
 ### EXPORTED!
-binRestrictionString = function(start, end, field="bin"){
-  binRanges = binRangesFromCoordRange(start, end)
-  cmdString = mapply(function(x,y, field){
-                     if(x==y){
-                       paste(field, "=", x)
-                     }else{
-                       paste(field, ">=", x, "and", field, "<=", y)
-                     }
-                    }, binRanges[ ,1], binRanges[ ,2], field=field
-                    )
-  cmdString = paste(cmdString, collapse=") or (")
-  cmdString = paste0("((", cmdString, "))")
+binRestrictionString <- function(start, end, field="bin"){
+  binRanges <- binRangesFromCoordRange(start, end)
+  cmdString <- mapply(function(x,y, field){
+                      if(x==y){
+                        paste(field, "=", x)
+                      }else{
+                        paste(field, ">=", x, "and", field, "<=", y)
+                      }
+                     }, binRanges[ ,1], binRanges[ ,2], field=field
+                     )
+  cmdString <- paste(cmdString, collapse=") or (")
+  cmdString <- paste0("((", cmdString, "))")
   return(cmdString)
 }
 
@@ -170,13 +171,13 @@ binRestrictionString = function(start, end, field="bin"){
 ### -----------------------------------------------------------------
 ### save the CNE tables into a local SQLite database
 ### Exported!!
-saveCNEToSQLite = function(CNE, dbName, tableName, overwrite=FALSE){
-  CNE$bin1 = binFromCoordRange(CNE$start1, CNE$end1)
-  CNE$bin2 = binFromCoordRange(CNE$start2, CNE$end2)
+saveCNEToSQLite <- function(CNE, dbName, tableName, overwrite=FALSE){
+  CNE$bin1 <- binFromCoordRange(CNE$start1, CNE$end1)
+  CNE$bin2 <- binFromCoordRange(CNE$start2, CNE$end2)
   # reorder it
-  CNE = CNE[ ,c("bin1", "chr1", "start1", "end1", "bin2", 
+  CNE <- CNE[ ,c("bin1", "chr1", "start1", "end1", "bin2", 
                 "chr2", "start2", "end2", "strand", "similarity", "cigar")]
-  con = dbConnect(SQLite(), dbname=dbName)
+  con <- dbConnect(SQLite(), dbname=dbName)
   on.exit(dbDisconnect(con))
   dbWriteTable(con, tableName, CNE, row.names=FALSE, overwrite=overwrite)
 }
@@ -184,89 +185,89 @@ saveCNEToSQLite = function(CNE, dbName, tableName, overwrite=FALSE){
 ### -----------------------------------------------------------------
 ### read CNE ranges from a local SQLite database.
 ### Exported!
-readCNERangesFromSQLite = function(dbName, tableName, chr, start, end, 
-                                   whichAssembly=c("L","R"), minLength=NULL){
-  nrGraphs=1
+readCNERangesFromSQLite <- function(dbName, tableName, chr, start, end, 
+                                    whichAssembly=c("L","R"), minLength=NULL){
+  nrGraphs <- 1
   ## Let's make nrGraphs=1, make all the cnes together.
   if(!is(start, "integer"))
     stop("start must be an integer!")
   if(!is(end, "integer"))
     stop("end must be an integer!")
-  CNEstart = start
-  CNEend = end
-  whichAssembly = match.arg(whichAssembly)
-  con = dbConnect(SQLite(), dbname=dbName)
+  CNEstart <- start
+  CNEend <- end
+  whichAssembly <- match.arg(whichAssembly)
+  con <- dbConnect(SQLite(), dbname=dbName)
   on.exit(dbDisconnect(con))
   if(nrGraphs == 1){
-    sqlCmd = switch(whichAssembly,
-                    "L"=paste("SELECT start1,end1 from", tableName, 
-                              "WHERE chr1=", paste0("'", chr, "'"), 
-                              "AND start1 >=", CNEstart, "AND end1 <=", 
-                              CNEend, "AND", 
-                              binRestrictionString(CNEstart, CNEend, "bin1")),
-                    "R"=paste("SELECT start2,end2 from", tableName, 
-                              "WHERE chr2=", paste0("'", chr, "'"), 
-                              "AND start2 >=", CNEstart, "AND end2 <=", 
-                              CNEend, "AND", 
-                              binRestrictionString(CNEstart, CNEend, "bin2"))
-                    )
+    sqlCmd <- switch(whichAssembly,
+                     "L"=paste("SELECT start1,end1 from", tableName, 
+                               "WHERE chr1=", paste0("'", chr, "'"), 
+                               "AND start1 >=", CNEstart, "AND end1 <=", 
+                               CNEend, "AND", 
+                               binRestrictionString(CNEstart, CNEend, "bin1")),
+                     "R"=paste("SELECT start2,end2 from", tableName, 
+                               "WHERE chr2=", paste0("'", chr, "'"), 
+                               "AND start2 >=", CNEstart, "AND end2 <=", 
+                               CNEend, "AND", 
+                               binRestrictionString(CNEstart, CNEend, "bin2"))
+                     )
     if(!is.null(minLength))
-      sqlCmd = paste(sqlCmd, "AND end1-start1+1 >=", minLength, 
-                     "AND end2-start2+1 >=", minLength)
-    fetchedCNE = dbGetQuery(con, sqlCmd)
-    fetchedCNE = IRanges(start=fetchedCNE[ ,1], end=fetchedCNE[, 2])
+      sqlCmd <- paste(sqlCmd, "AND end1-start1+1 >=", minLength, 
+                      "AND end2-start2+1 >=", minLength)
+    fetchedCNE <- dbGetQuery(con, sqlCmd)
+    fetchedCNE <- IRanges(start=fetchedCNE[ ,1], end=fetchedCNE[, 2])
   }else if(nrGraphs > 1){
-    sqlCmd = switch(whichAssembly,
-                    "L"=paste("SELECT chr2,start1,end1 from", tableName, 
-                              "WHERE chr1=", paste0("'", chr, "'"), 
-                              "AND start1 >=", CNEstart, "AND end1 <=", 
-                              CNEend, "AND", 
-                              binRestrictionString(CNEstart, CNEend, "bin1")),
-                    "R"=paste("SELECT chr1,start2,end2 from", tableName, 
-                              "WHERE chr2=", paste0("'", chr, "'"), 
-                              "AND start2 >=", CNEstart, "AND end2 <=", 
-                              CNEend, "AND", 
-                              binRestrictionString(CNEstart, CNEend, "bin2"))
-                    )
+    sqlCmd <- switch(whichAssembly,
+                     "L"=paste("SELECT chr2,start1,end1 from", tableName, 
+                               "WHERE chr1=", paste0("'", chr, "'"), 
+                               "AND start1 >=", CNEstart, "AND end1 <=", 
+                               CNEend, "AND", 
+                               binRestrictionString(CNEstart, CNEend, "bin1")),
+                     "R"=paste("SELECT chr1,start2,end2 from", tableName, 
+                               "WHERE chr2=", paste0("'", chr, "'"), 
+                               "AND start2 >=", CNEstart, "AND end2 <=", 
+                               CNEend, "AND", 
+                               binRestrictionString(CNEstart, CNEend, "bin2"))
+                     )
     if(!is.null(minLength))
-      sqlCmd = paste(sqlCmd, "AND end1-start1+1 >=", minLength, 
-                     "AND end2-start2+1 >=", minLength)
-    fetchedCNE = dbGetQuery(con, sqlCmd)
-    fetchedCNE = GRanges(seqnames=fetchedCNE[ ,1], 
-                         ranges=IRanges(start=fetchedCNE[ ,2], 
-                                        end=fetchedCNE[ ,3]))
+      sqlCmd <- paste(sqlCmd, "AND end1-start1+1 >=", minLength, 
+                      "AND end2-start2+1 >=", minLength)
+    fetchedCNE <- dbGetQuery(con, sqlCmd)
+    fetchedCNE <- GRanges(seqnames=fetchedCNE[ ,1], 
+                          ranges=IRanges(start=fetchedCNE[ ,2], 
+                                         end=fetchedCNE[ ,3]))
   }
   return(fetchedCNE)
 }
 
-queryAnnotationSQLite = function(dbname, tablename, chr, start, end){
-  con = dbConnect(SQLite(), dbname=dbname)
-  query = paste("SELECT * from", tablename, "WHERE", 
+queryAnnotationSQLite <- function(dbname, tablename, chr, start, end){
+  con <- dbConnect(SQLite(), dbname=dbname)
+  query <- paste("SELECT * from", tablename, "WHERE", 
                 binRestrictionString(start, end, "bin"), "AND", 
                 "chromosome=", paste0("'", chr, "'"), 
                 "AND start >=", start, "AND end <=", end)
-  ans = dbGetQuery(con, query)
-  ans = ans[ ,c("chromosome", "start", "end", "strand", 
+  ans <- dbGetQuery(con, query)
+  ans <- ans[ ,c("chromosome", "start", "end", "strand", 
                 "transcript", "gene", "symbol")]
 }
 
 ###------------------------------------------------------------------
 ### fetchChromSizes fetches the chromosome sizes.
 ### Exported!
-fetchChromSizes = function(assembly){
+fetchChromSizes <- function(assembly){
   # UCSC
   message("Trying UCSC...")
-  con = try(dbConnect(MySQL(), user="genome", password="", 
-                      dbname=assembly, host="genome-mysql.cse.ucsc.edu"), 
-            silent=TRUE)
+  con <- try(dbConnect(MySQL(), user="genome", password="", 
+                       dbname=assembly, host="genome-mysql.cse.ucsc.edu"), 
+             silent=TRUE)
   if(class(con) != "try-error"){
     on.exit(dbDisconnect(con))
-    sqlCmd = "SELECT chrom,size FROM chromInfo ORDER BY size DESC"
-    ans = try(dbGetQuery(con, sqlCmd))
+    sqlCmd <- "SELECT chrom,size FROM chromInfo ORDER BY size DESC"
+    ans <- try(dbGetQuery(con, sqlCmd))
     if(class(ans) == "try-error"){
       return(NULL)
     }else{
-      ans = Seqinfo(seqnames=ans$chrom, seqlengths=ans$size, genome=assembly)
+      ans <- Seqinfo(seqnames=ans$chrom, seqlengths=ans$size, genome=assembly)
       return(ans)
     }
   }
