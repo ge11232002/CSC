@@ -1,3 +1,4 @@
+#include "CNEr.h"
 #include <R_ext/Rdynload.h>
 
 #define CALLMETHOD_DEF(fun, numArgs) {#fun, (DL_FUNC) &fun, numArgs}
