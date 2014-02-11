@@ -7,9 +7,11 @@ static const R_CallMethodDef callMethods[] = {
   CALLMETHOD_DEF(myReadBed, 1),
   CALLMETHOD_DEF(readAxt, 1),
   CALLMETHOD_DEF(axt_info, 1),
+  
   /* utils.c */
   CALLMETHOD_DEF(bin_from_coord_range, 2),
   CALLMETHOD_DEF(bin_ranges_from_coord_range, 2),
+  
   /* ceScan.c */
   CALLMETHOD_DEF(myCeScan, 23),
   CALLMETHOD_DEF(ceScanFile, 8),
