@@ -1,3 +1,7 @@
+
+### -----------------------------------------------------------------
+### Axt class
+###
 setClass(Class="Axt",
          slots=c(targetRanges="GRanges",
                  targetSeqs="DNAStringSet",
@@ -18,7 +22,31 @@ setValidity("Axt",
             }
             )
 
-### - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+### -----------------------------------------------------------------
+### CNE class
+###
+setClass(Class="CNE",
+         slots=c(assembly1="character",
+                 assembly2="character",
+                 thresholds="character",
+                 CNE1="list",
+                 CNE2="list",
+                 CNE1="data.frame",
+                 CNE2="data.frame",
+                 CNEMerged="data.frame",
+                 CNERepeatsFiltered="data.frame"
+                 alignMethod="character",
+                 alignParameters="character"
+                 )
+         )
+setValidity("CNE",
+            function(object){
+
+            }
+            )
+
+
+### - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 ### Slot getters and setters.
 ###
 setMethod("targetRanges", "Axt", function(x) x@targetRanges)
@@ -29,7 +57,7 @@ setMethod("score", "Axt", function(x) x@score)
 setMethod("symCount", "Axt", function(x) x@symCount)
 setMethod("length", "Axt", function(x) length(targetRanges(x)))
 
-### - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+### -- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 ### Constructor.
 ###
 Axt <- function(targetRanges=GRanges(), targetSeqs=DNAStringSet(),
@@ -40,7 +68,7 @@ Axt <- function(targetRanges=GRanges(), targetSeqs=DNAStringSet(),
       score=score, symCount=symCount)
 }
 
-### - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+### - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 ### Updating and cloning.
 ###
 ### An object is either 'update'd in place (usually with a replacement
