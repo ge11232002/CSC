@@ -1,7 +1,7 @@
 
 ### -----------------------------------------------------------------
 ### Axt class
-###
+### Exported!
 setClass(Class="Axt",
          slots=c(targetRanges="GRanges",
                  targetSeqs="DNAStringSet",
@@ -14,34 +14,56 @@ setClass(Class="Axt",
 
 setValidity("Axt",
             function(object){
-              length(unique(length(object@targetRanges), 
-                            length(object@targetSeqs),
-              length(object@queryRanges), length(object@querySeqs),
-              length(object@score), length(object@symCount))) == 1 && 
-              all(object@symCount >= 0)
+              if(!isConstant(c(length(object@targetRanges), 
+                             length(object@targetSeqs),
+                             length(object@queryRanges), 
+                             length(object@querySeqs),
+                             length(object@score), 
+                             length(object@symCount))))
+                return("The lengths of targetRanges, targetSeqs,
+                       queryRanges, querySeqs, score and symCount
+                       must have be same!")
+              if(any(object@symCount <= 0L))
+                return("Then symCount must be larger than 0!")
+              return(TRUE)
             }
             )
 
 ### -----------------------------------------------------------------
 ### CNE class
-###
+### 
 setClass(Class="CNE",
          slots=c(assembly1="character",
                  assembly2="character",
                  thresholds="character",
                  CNE1="list",
                  CNE2="list",
-                 CNE1="data.frame",
-                 CNE2="data.frame",
-                 CNEMerged="data.frame",
-                 CNERepeatsFiltered="data.frame"
-                 alignMethod="character",
-                 alignParameters="character"
+                 CNEMerged="list",
+                 CNERepeatsFiltered="list",
+                 alignMethod="character"
                  )
          )
+
 setValidity("CNE",
             function(object){
-
+              if(length(object@assembly1) != 1L)
+                return("The name of assembly1 must be length 1!")
+              if(length(alignMethod) != 1L)
+                return("The align method must be length 1!")
+              if(length(object@assembly2) != 1L)
+                return("The name of assembly2 must be length 1!")
+              if(!all(grepl("^\\d+_\\d+$", object@thresholds)))
+                return("The thresholds must be in format of 49_50!")
+              if(as.integer(sapply(strsplit(thresholds, "_"), "[", 2))
+                 < as.integer(sapply(strsplit(thresholds, "_"), "[", 1)))
+                return("The window size cannot be smaller than identity score!")
+              if(length(CNE1) != length(thresholds) ||
+                 length(CNE2) != length(thresholds) ||
+                 length(CNEMerged) != length(thresholds) ||
+                 length(CNERepeatsFiltered) != length(thresholds))
+                return("The number of cne tables must be same with
+                       number of thresholds!")
+              return(TRUE)
             }
             )
 
@@ -58,7 +80,7 @@ setMethod("symCount", "Axt", function(x) x@symCount)
 setMethod("length", "Axt", function(x) length(targetRanges(x)))
 
 ### -- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-### Constructor.
+### Axt Constructor.
 ###
 Axt <- function(targetRanges=GRanges(), targetSeqs=DNAStringSet(),
                queryRanges=GRanges(), querySeqs=DNAStringSet(),
@@ -66,6 +88,21 @@ Axt <- function(targetRanges=GRanges(), targetSeqs=DNAStringSet(),
   new("Axt", targetRanges=targetRanges, targetSeqs=targetSeqs,
       queryRanges=queryRanges, querySeqs=querySeqs,
       score=score, symCount=symCount)
+}
+
+### -----------------------------------------------------------------
+### CNE constructor.
+###
+CNE <- function(assembly1=character(), assembly2=character(),
+                thresholds=character(),
+                CNE1=list(), CNE2=list(),
+                CNEMerged=list(), CNERepeatsFiltered=list(),
+                alignMethod=character()
+                ){
+  new("CNE", assembly1=assembly1, assembly2=assembly2,
+      thresholds=thresholds, CNE1=CNE1, CNE2=CNE2,
+      CNEMerged=CNEMerged, CNERepeatsFiltered=CNERepeatsFiltered,
+      alignMethod=alignMethod)
 }
 
 ### - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
