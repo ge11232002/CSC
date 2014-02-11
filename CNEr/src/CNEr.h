@@ -74,3 +74,30 @@ struct slAllCNE
   int winSize;
   struct slCNE *CNE;
 };
+
+/* io.c */
+SEXP myReadBed(SEXP filepath);
+
+SEXP readAxt(SEXP filepath);
+
+SEXP axt_info(SEXP filepath);
+
+/* utils.c */
+SEXP bin_from_coord_range(SEXP starts, SEXP ends);
+
+SEXP bin_ranges_from_coord_range(SEXP start, SEXP end);
+
+/* ceScan.c */
+SEXP myCeScan(SEXP tFilterNames, SEXP tFilterStarts, SEXP tFilterEnds,
+              SEXP qFilterNames, SEXP qFilterStarts, SEXP qFilterEnds,
+              SEXP sizeNames, SEXP sizeSizes, SEXP axttNames,
+              SEXP axttStart, SEXP axttEnd, SEXP axttStrand,
+              SEXP axttSym, SEXP axtqNames, SEXP axtqStart,
+              SEXP axtqEnd, SEXP axtqStrand, SEXP axtqSym,
+              SEXP score, SEXP symCount, SEXP winSize,
+              SEXP minScore, SEXP outputFiles);
+
+SEXP ceScanFile(SEXP axtFiles, SEXP tFilterFile, SEXP qFilterFile,
+                SEXP sizeNames, SEXP sizeSizes,
+                SEXP winSize, SEXP minScore, SEXP outputFiles);
+
