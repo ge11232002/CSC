@@ -90,17 +90,17 @@ CNEDensity = function(dbName, tableName, whichAssembly=c("L","R"),
 
 #listToPlot = list(a=res, b=res)
 
-plotCNE = function(listToPlot, horizonscale=2, nbands=3){
-  mergedDf = as.data.frame(do.call(rbind, listToPlot))
-  mergedDf$grouping = rep(names(listToPlot), sapply(listToPlot, nrow))
-  mergedDf = mergedDf[ ,c("coordinates", "grouping", "y")]
-  p = horizon.panel.ggplot(mergedDf, horizonscale=horizonscale, nbands=nbands)
-  #if(!is.null(file)){
-  #  postscript(file=file)
-  #  on.exit(dev.off())
-  #}
-  return(p)
-}
+#plotCNE = function(listToPlot, horizonscale=2, nbands=3){
+#  mergedDf = as.data.frame(do.call(rbind, listToPlot))
+#  mergedDf$grouping = rep(names(listToPlot), sapply(listToPlot, nrow))
+#  mergedDf = mergedDf[ ,c("coordinates", "grouping", "y")]
+#  p = horizon.panel.ggplot(mergedDf, horizonscale=horizonscale, nbands=nbands)
+#  #if(!is.null(file)){
+#  #  postscript(file=file)
+#  #  on.exit(dev.off())
+#  #}
+#  return(p)
+#}
 
 #horizon.panel.ggplot = function(mergedDf, horizonscale=2, 
 #                                nbands=3, my.title="fun"){

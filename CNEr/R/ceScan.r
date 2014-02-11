@@ -191,8 +191,10 @@ cneMerge = function(cne1, cne2){
   ## cne2 = transform(cne2, cigar=chartr("DI", "ID", cigar))
   cne2$cigar = chartr("DI", "ID", cne2$cigar)
   if(any(cne2$strand=="-")){
-    cne2[cne2$strand=="-", ] = transform(subset(cne2, strand=="-"), 
-                                          cigar=reverseCigar(cigar))
+    #cne2[cne2$strand=="-", ] = transform(subset(cne2, strand=="-"), 
+    #                                      cigar=reverseCigar(cigar))
+    cne2[cne2$strand=="-", "cigar"] = 
+      reverseCigar(cne2[cne2$strand=="-", "cigar"])
   }
   colnames(cne2) = c("qName", "qStart", "qEnd", "tName", 
                      "tStart", "tEnd", "strand", "score", "cigar")
