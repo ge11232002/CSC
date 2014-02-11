@@ -13,7 +13,7 @@ writeAxt(axt, con)
 
 \arguments{
   \item{axt}{
-    A \code{axt} object to be written.
+    A \code{Axt} object to be written.
   }
   \item{con}{
     A connection object or a character string.

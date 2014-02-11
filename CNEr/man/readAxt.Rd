@@ -4,7 +4,7 @@
 readAxt function.
 }
 \description{
-This function reads the axt files into a \code{axt} object.
+This function reads the axt files into a \code{Axt} object.
 }
 \usage{
 readAxt(axtFiles)
@@ -16,10 +16,10 @@ readAxt(axtFiles)
 }
 \details{
   This function reads the axt files. 
-  The coordinates in \code{axt} object is 1-based.
+  The coordinates in \code{Axt} object is 1-based.
 }
 \value{
-  A object \code{axt} is returned.
+  A object \code{Axt} is returned.
 }
 
 \author{
@@ -27,7 +27,7 @@ Ge Tan
 }
 
 \seealso{
-  \code{\link{axt}}
+  \code{\link{Axt}}
 }
 \examples{
   axtFilesHg19DanRer7 = file.path(system.file("extdata", package="CNEr"), 

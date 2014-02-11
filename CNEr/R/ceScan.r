@@ -123,28 +123,28 @@ ceScanFile = function(axtFiles, tFilterFile=NULL, qFilterFile=NULL, qSizes=NULL,
 ### -----------------------------------------------------------------
 ### The S4 methods for ceScan
 ### Exported!
-setMethod("ceScan", signature(axts="axt", tFilter="GRanges", qFilter="GRanges",
+setMethod("ceScan", signature(axts="Axt", tFilter="GRanges", qFilter="GRanges",
                               qSizes="Seqinfo"),
           function(axts, tFilter, qFilter, qSizes, thresholds="49,50"){
             ceScanR(axts, tFilter=tFilter, qFilter=qFilter, 
                     qSizes=qSizes, thresholds=thresholds)
           }
           )
-setMethod("ceScan", signature(axts="axt", tFilter="missing", qFilter="GRanges",
+setMethod("ceScan", signature(axts="Axt", tFilter="missing", qFilter="GRanges",
                               qSizes="Seqinfo"),
           function(axts, tFilter, qFilter, qSizes, thresholds="49,50"){
             ceScanR(axts, tFilter=NULL, qFilter=qFilter,
                     qSizes=qSizes, thresholds=thresholds)
           }
           )
-setMethod("ceScan", signature(axts="axt", tFilter="missing", qFilter="missing",
+setMethod("ceScan", signature(axts="Axt", tFilter="missing", qFilter="missing",
                               qSizes="missing"),
           function(axts, tFilter, qFilter, qSizes, thresholds="49,50"){
             ceScanR(axts, tFilter=NULL, qFilter=NULL,
                     qSizes=NULL, thresholds=thresholds)
           }
           )
-setMethod("ceScan", signature(axts="axt", tFilter="GRanges", qFilter="missing",
+setMethod("ceScan", signature(axts="Axt", tFilter="GRanges", qFilter="missing",
                               qSizes="missing"),
           function(axts, tFilter, qFilter, qSizes, thresholds="49,50"){
             ceScanR(axts, tFilter=tFilter, qFilter=NULL,

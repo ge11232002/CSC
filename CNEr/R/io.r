@@ -38,7 +38,7 @@ readAxt = function(axtFiles){
     stop("No such file ", paste(axtFiles[index_noexists], sep=" "))
   }
   myAxt = .Call2("readAxt", axtFiles, PACKAGE="CNEr")
-  axts = axt(targetRanges=GRanges(seqnames=Rle(myAxt[[1]]),
+  axts = Axt(targetRanges=GRanges(seqnames=Rle(myAxt[[1]]),
                                  ranges=IRanges(start=myAxt[[2]],
                                                 end=myAxt[[3]]),
                                  strand=Rle(myAxt[[4]])),
@@ -63,7 +63,7 @@ axtInfo = function(axtFiles){
 }
 
 ### -----------------------------------------------------------------
-### write the axt object to an axt file
+### write the Axt object to an axt file
 ### Exported!
 writeAxt = function(axt, con){
   firstLine = paste(0:(length(axt)-1), seqnames(targetRanges(axt)),

@@ -1,6 +1,6 @@
 
 ### -----------------------------------------------------------------
-### axt object related
+### Axt object related
 ###
 setGeneric("targetRanges", function(x) standardGeneric("targetRanges"))
 setGeneric("targetSeqs", function(x) standardGeneric("targetSeqs"))

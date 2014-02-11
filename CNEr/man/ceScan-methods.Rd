@@ -2,10 +2,10 @@
 \docType{methods}
 \alias{ceScan-methods}
 \alias{ceScan}
-\alias{ceScan,axt,GRanges,GRanges,Seqinfo-method}
-\alias{ceScan,axt,GRanges,missing,missing-method}
-\alias{ceScan,axt,missing,GRanges,Seqinfo-method}
-\alias{ceScan,axt,missing,missing,missing-method}
+\alias{ceScan,Axt,GRanges,GRanges,Seqinfo-method}
+\alias{ceScan,Axt,GRanges,missing,missing-method}
+\alias{ceScan,Axt,missing,GRanges,Seqinfo-method}
+\alias{ceScan,Axt,missing,missing,missing-method}
 \alias{ceScan,character,character,character,Seqinfo-method}
 \alias{ceScan,character,character,missing,missing-method}
 \alias{ceScan,character,missing,character,Seqinfo-method}
@@ -22,7 +22,7 @@
 
 \arguments{
   \item{axts}{
-    A \code{axt} object or \code{character} object with the paths of axt files.
+    A \code{Axt} object or \code{character} object with the paths of axt files.
   }
   \item{tFilter}{
     A \code{GRanges} object or \code{character} 
@@ -51,19 +51,19 @@
 \section{Methods}{
 \describe{
 
-\item{\code{signature(axts = "axt", tFilter = "GRanges", qFilter = "GRanges", 
+\item{\code{signature(axts = "Axt", tFilter = "GRanges", qFilter = "GRanges", 
 qSizes = "Seqinfo")}}{
 }
 
-\item{\code{signature(axts = "axt", tFilter = "GRanges", qFilter = "missing", 
+\item{\code{signature(axts = "Axt", tFilter = "GRanges", qFilter = "missing", 
 qSizes = "missing")}}{
 }
 
-\item{\code{signature(axts = "axt", tFilter = "missing", qFilter = "GRanges", 
+\item{\code{signature(axts = "Axt", tFilter = "missing", qFilter = "GRanges", 
   qSizes = "Seqinfo")}}{
 }
 
-\item{\code{signature(axts = "axt", tFilter = "missing", qFilter = "missing", 
+\item{\code{signature(axts = "Axt", tFilter = "missing", qFilter = "missing", 
   qSizes = "missing")}}{
 }
 
@@ -86,7 +86,7 @@ qSizes = "missing")}}{
 
 \details{
   ceScan scan the axts alignmnets and identify the CNEs.
-  ceScan can accept axts in \code{axt} object and 
+  ceScan can accept axts in \code{Axt} object and 
   filter in \code{GRanges} object,
   or directly the axt files and bed files.
   When the axt files and bed files are ready for computation, 

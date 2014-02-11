@@ -1,30 +1,30 @@
-\name{axt-class}
+\name{Axt-class}
 \Rdversion{1.1}
 \docType{class}
-\alias{axt}
-\alias{axt-class}
-\alias{[,axt,ANY,ANY-method}
-\alias{c,axt-method}
-\alias{length,axt-method}
+\alias{Axt}
+\alias{Axt-class}
+\alias{[,Axt,ANY,ANY-method}
+\alias{c,Axt-method}
+\alias{length,Axt-method}
 \alias{queryRanges}
-\alias{queryRanges,axt-method}
+\alias{queryRanges,Axt-method}
 \alias{querySeqs}
-\alias{querySeqs,axt-method}
-\alias{score,axt-method}
+\alias{querySeqs,Axt-method}
+\alias{score,Axt-method}
 \alias{symCount}
-\alias{symCount,axt-method}
+\alias{symCount,Axt-method}
 \alias{targetRanges}
-\alias{targetRanges,axt-method}
+\alias{targetRanges,Axt-method}
 \alias{targetSeqs}
-\alias{targetSeqs,axt-method}
+\alias{targetSeqs,Axt-method}
 
-\title{Class \code{"axt"}}
+\title{Class \code{"Axt"}}
 \description{
-  The axt S4 object
+  The Axt S4 object
 }
 
 \section{Objects from the Class}{
-Objects can be created by calls of the form \code{new("axt", ...)}.
+Objects can be created by calls of the form \code{new("Axt", ...)}.
 }
 
 \section{Slots}{
@@ -45,18 +45,18 @@ Objects can be created by calls of the form \code{new("axt", ...)}.
 }
 \section{Methods}{
   \describe{
-    \item{[}{\code{signature(x = "axt", i = "ANY", j = "ANY")}: axt getter}
-    \item{c}{\code{signature(x = "axt")}: axt concatenator.}
-    \item{length}{\code{signature(x = "axt")}: Get the number of alignments.}
-    \item{queryRanges}{\code{signature(x = "axt")}: 
+    \item{[}{\code{signature(x = "Axt", i = "ANY", j = "ANY")}: Axt getter}
+    \item{c}{\code{signature(x = "Axt")}: Axt concatenator.}
+    \item{length}{\code{signature(x = "Axt")}: Get the number of alignments.}
+    \item{queryRanges}{\code{signature(x = "Axt")}: 
       Get the ranges of query genome.}
-    \item{querySeqs}{\code{signature(x = "axt")}: 
+    \item{querySeqs}{\code{signature(x = "Axt")}: 
       Get the alignment sequences of query genome.}
-    \item{score}{\code{signature(x = "axt")}: Get the alignment score.}
-    \item{symCount}{\code{signature(x = "axt")}: Get the alignment lengths.}
-    \item{targetRanges}{\code{signature(x = "axt")}: 
+    \item{score}{\code{signature(x = "Axt")}: Get the alignment score.}
+    \item{symCount}{\code{signature(x = "Axt")}: Get the alignment lengths.}
+    \item{targetRanges}{\code{signature(x = "Axt")}: 
       Get the ranges of reference genome.}
-    \item{targetSeqs}{\code{signature(x = "axt")}: 
+    \item{targetSeqs}{\code{signature(x = "Axt")}: 
       Get the alignment sequences of reference genome.}
 	 }
 }
@@ -70,6 +70,6 @@ Objects can be created by calls of the form \code{new("axt", ...)}.
   \code{\link{subAxt}}
 }
 \examples{
-showClass("axt")
+showClass("Axt")
 }
 \keyword{classes}

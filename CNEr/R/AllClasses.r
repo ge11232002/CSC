@@ -1,4 +1,4 @@
-setClass(Class="axt",
+setClass(Class="Axt",
          slots=c(targetRanges="GRanges",
                  targetSeqs="DNAStringSet",
                  queryRanges="GRanges",
@@ -8,7 +8,7 @@ setClass(Class="axt",
                  )
          )
 
-setValidity("axt",
+setValidity("Axt",
             function(object){
               length(unique(length(object@targetRanges), 
                             length(object@targetSeqs),
@@ -21,21 +21,21 @@ setValidity("axt",
 ### - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 ### Slot getters and setters.
 ###
-setMethod("targetRanges", "axt", function(x) x@targetRanges)
-setMethod("targetSeqs", "axt", function(x) x@targetSeqs)
-setMethod("queryRanges", "axt", function(x) x@queryRanges)
-setMethod("querySeqs", "axt", function(x) x@querySeqs)
-setMethod("score", "axt", function(x) x@score)
-setMethod("symCount", "axt", function(x) x@symCount)
-setMethod("length", "axt", function(x) length(targetRanges(x)))
+setMethod("targetRanges", "Axt", function(x) x@targetRanges)
+setMethod("targetSeqs", "Axt", function(x) x@targetSeqs)
+setMethod("queryRanges", "Axt", function(x) x@queryRanges)
+setMethod("querySeqs", "Axt", function(x) x@querySeqs)
+setMethod("score", "Axt", function(x) x@score)
+setMethod("symCount", "Axt", function(x) x@symCount)
+setMethod("length", "Axt", function(x) length(targetRanges(x)))
 
 ### - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 ### Constructor.
 ###
-axt = function(targetRanges=GRanges(), targetSeqs=DNAStringSet(),
+Axt = function(targetRanges=GRanges(), targetSeqs=DNAStringSet(),
                queryRanges=GRanges(), querySeqs=DNAStringSet(),
                score=integer(), symCount=integer()){
-  new("axt", targetRanges=targetRanges, targetSeqs=targetSeqs,
+  new("Axt", targetRanges=targetRanges, targetSeqs=targetSeqs,
       queryRanges=queryRanges, querySeqs=querySeqs,
       score=score, symCount=symCount)
 }
@@ -50,7 +50,7 @@ axt = function(targetRanges=GRanges(), targetSeqs=DNAStringSet(),
 ### initialize. Reference classes will want to override 'update'. Other
 ### external representations need further customization.
 
-setMethod("update", "axt",
+setMethod("update", "Axt",
           function(object, ..., check=TRUE){
             initialize(object, ...)
           }
@@ -71,7 +71,7 @@ setMethod("clone", "ANY",  # not exported
 ### Subsetting and combining.
 ###
 
-setMethod("[", "axt",
+setMethod("[", "Axt",
           function(x, i, ..., drop){
             if(length(list(...)) > 0L)
               stop("invalid subsetting")
@@ -90,7 +90,7 @@ setMethod("[", "axt",
           }
           )
 
-setMethod("c", "axt",
+setMethod("c", "Axt",
           function(x, ...){
             if(missing(x)){
               args = unname(list(...))
@@ -124,8 +124,8 @@ setMethod("c", "axt",
           )
 
 
-setMethod("subAxt", "axt",
-## This is to fetch the axts within the specific chrs, starts, ends 
+setMethod("subAxt", "Axt",
+## This is to fetch the Axts within the specific chrs, starts, ends 
 ## based on target sequences.
           function(x, chr, start, end, #strand=c("+", "-", "*"), 
                    select=c("target", "query"),
@@ -150,7 +150,7 @@ setMethod("subAxt", "axt",
                                              searchGRanges, type=type, 
                                              select="all"))
             }else if(select == "query"){
-              # first search axts on positive strand
+              # first search Axts on positive strand
               searchGRanges = GRanges(seqnames=chr,
                                       ranges=IRanges(start=start, end=end),
                                       strand="+")
@@ -159,7 +159,7 @@ setMethod("subAxt", "axt",
               indexPositive = queryHits(findOverlaps(queryRanges(x),
                                                      searchGRanges, type=type,
                                                      select="all"))
-              # then search axts on negative strand.
+              # then search Axts on negative strand.
               # we need to prepare the searchGRanges on negative strand.
               searchGRanges = GRanges(seqnames=chr,
                                       ranges=IRanges(start=qSize-end+1,
@@ -284,7 +284,7 @@ showAxt = function(x, margin="", half_nrow=5L){
     #      rownames(out) = paste0(margin, rownames(out))
     #  print(out, quote=FALSE, right=TRUE)
 
-setMethod("show", "axt",
+setMethod("show", "Axt",
           function(object){
             lx = length(object)
             cat(" A ", class(object), " with ", length(object), " ", 

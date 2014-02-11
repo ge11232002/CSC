@@ -2,10 +2,10 @@
 \docType{methods}
 \alias{subAxt}
 \alias{subAxt-methods}
-\alias{subAxt,axt-method}
+\alias{subAxt,Axt-method}
 \title{ \code{subAxt} method}
 \description{
-  Get subset of axt alignments based on chromosome and ranges.
+  Get subset of Axt alignments based on chromosome and ranges.
 }
 
 \usage{
@@ -16,7 +16,7 @@
 
 \arguments{
   \item{x}{
-    A object of \code{axt}.
+    A object of \code{Axt}.
   }
   \item{chr}{
     A object of \code{character}. The chromosome name to extract.
@@ -43,7 +43,7 @@
 }
 
 \details{
-  Usually when we want to subset some axts from a \code{axt} object,
+  Usually when we want to subset some axts from a \code{Axt} object,
   we care about all the axts within certain range.
   The axts can come from the axt file with chr as reference 
   (i.e., target sequence),
@@ -54,7 +54,7 @@
 }
 
 \value{
-  A subset of \code{axt} object is returned.
+  A subset of \code{Axt} object is returned.
 }
 
 \author{
