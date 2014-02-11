@@ -1,13 +1,13 @@
 useDynLib(CNEr)
-importClassesFrom(methods, ANY, character, integer, missing)
-importMethodsFrom(methods, initialize, show)
-importFrom(methods, is, new)
+
+import(IRanges)
 
 ### -----------------------------------------------------------------
 #### Import S4 classes defined in other packages
 ####
 #import(Biostrings)
 #import(GenomicRanges)
+importClassesFrom(methods, ANY, character, integer, missing)
 
 ### -----------------------------------------------------------------
 ### Import S4 methods defined in other packages
@@ -16,6 +16,7 @@ importMethodsFrom(rtracklayer, import.bed)
 importMethodsFrom(GenomicRanges, seqnames, seqlengths, strand)
 importMethodsFrom(XVector, subseq)
 importMethodsFrom(DBI, dbGetQuery, dbConnect, dbDisconnect, dbWriteTable)
+importMethodsFrom(methods, initialize, show)
 
 ### -----------------------------------------------------------------
 ### Import ordinary functions, variables in other packages
@@ -25,6 +26,7 @@ importFrom(GenomicAlignments, explodeCigarOps, CIGAR_OPS, explodeCigarOpLengths)
 importFrom(Biostrings, DNAStringSet)
 importFrom(RMySQL, MySQL)
 importFrom(RSQLite, SQLite)
+importFrom(methods, is, new)
 
 ### -----------------------------------------------------------------
 ### Export S4 classes defined in CNEr
