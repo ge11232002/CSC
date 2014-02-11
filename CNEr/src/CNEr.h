@@ -39,7 +39,8 @@ struct slRange
 };
 
 
-/* Data structure used to represent different thresholds and intermediate results for each */
+/* Data structure used to represent different thresholds and 
+ * intermediate results for each */
 
 struct slThreshold
 {
