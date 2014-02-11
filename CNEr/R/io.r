@@ -37,7 +37,7 @@ readAxt <- function(axtFiles){
   if(any(index_noexists)){
     stop("No such file ", paste(axtFiles[index_noexists], sep=" "))
   }
-  myAxt <- .Call2("readAxt", axtFiles, PACKAGE="CNEr")
+  myAxt <- .Call2("myReadAxt", axtFiles, PACKAGE="CNEr")
   axts <- Axt(targetRanges=GRanges(seqnames=Rle(myAxt[[1]]),
                                    ranges=IRanges(start=myAxt[[2]],
                                                   end=myAxt[[3]]),
