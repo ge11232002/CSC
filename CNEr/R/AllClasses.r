@@ -32,7 +32,7 @@ setMethod("length", "Axt", function(x) length(targetRanges(x)))
 ### - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 ### Constructor.
 ###
-Axt = function(targetRanges=GRanges(), targetSeqs=DNAStringSet(),
+Axt <- function(targetRanges=GRanges(), targetSeqs=DNAStringSet(),
                queryRanges=GRanges(), querySeqs=DNAStringSet(),
                score=integer(), symCount=integer()){
   new("Axt", targetRanges=targetRanges, targetSeqs=targetSeqs,
@@ -78,12 +78,12 @@ setMethod("[", "Axt",
             if(missing(i))
               return(x)
             #i = IRanges:::normalizeSingleBracketSubscript(i, x)
-            ans_targetRanges = targetRanges(x)[i]
-            ans_targetSeqs = targetSeqs(x)[i]
-            ans_queryRanges = queryRanges(x)[i]
-            ans_querySeqs = querySeqs(x)[i]
-            ans_score = score(x)[i]
-            ans_symCount = symCount(x)[i]
+            ans_targetRanges <- targetRanges(x)[i]
+            ans_targetSeqs <- targetSeqs(x)[i]
+            ans_queryRanges <- queryRanges(x)[i]
+            ans_querySeqs <- querySeqs(x)[i]
+            ans_score <- score(x)[i]
+            ans_symCount <- symCount(x)[i]
             clone(x, targetRanges=ans_targetRanges, targetSeqs=ans_targetSeqs,
                   queryRanges=ans_queryRanges, querySeqs=ans_querySeqs,
                   score=ans_score, symCount=ans_symCount)
@@ -93,33 +93,33 @@ setMethod("[", "Axt",
 setMethod("c", "Axt",
           function(x, ...){
             if(missing(x)){
-              args = unname(list(...))
-              x = args[[1L]]
+              args <- unname(list(...))
+              x <- args[[1L]]
             }else{
-              args = unname(list(x, ...))
+              args <- unname(list(x, ...))
             }
             if(length(args) == 1L)
               return(x)
-            arg_is_null = sapply(args, is.null)
+            arg_is_null <- sapply(args, is.null)
             if(any(arg_is_null))
-              args[arg_is_null] = NULL
+              args[arg_is_null] <- NULL
             if(!all(sapply(args, is, class(x))))
               stop("all arguments in '...' must be ", 
                    class(x), " objects (or NULLs)")
-            new_targetRanges = do.call(c, lapply(args, targetRanges))
-            new_targetSeqs = do.call(c, lapply(args, targetSeqs))
-            new_queryRanges = do.call(c, lapply(args, queryRanges))
-            new_querySeqs = do.call(c, lapply(args, querySeqs))
-            new_score = do.call(c, lapply(args, score))
-            new_symCount = do.call(c, lapply(args, symCount))
+            new_targetRanges <- do.call(c, lapply(args, targetRanges))
+            new_targetSeqs <- do.call(c, lapply(args, targetSeqs))
+            new_queryRanges <- do.call(c, lapply(args, queryRanges))
+            new_querySeqs <- do.call(c, lapply(args, querySeqs))
+            new_score <- do.call(c, lapply(args, score))
+            new_symCount <- do.call(c, lapply(args, symCount))
 
             initialize(x,
-                       targetRanges = new_targetRanges,
-                       targetSeqs = new_targetSeqs,
-                       queryRanges = new_queryRanges,
-                       querySeqs = new_querySeqs,
-                       score = new_score,
-                       symCount = new_symCount)
+                       targetRanges=new_targetRanges,
+                       targetSeqs=new_targetSeqs,
+                       queryRanges=new_queryRanges,
+                       querySeqs=new_querySeqs,
+                       score=new_score,
+                       symCount=new_symCount)
           }
           )
 
@@ -131,8 +131,8 @@ setMethod("subAxt", "Axt",
                    select=c("target", "query"),
                    type=c("any", "within"),
                    qSize=NULL){
-            type = match.arg(type)
-            select = match.arg(select)
+            type <- match.arg(type)
+            select <- match.arg(select)
             if(select == "query"){
               if(is.null(qSize))
                 stop("When selecting on query alignments, 
@@ -146,7 +146,7 @@ setMethod("subAxt", "Axt",
                                       strand="+")
               if(length(searchGRanges) == 0)
                 return(x)
-              index = queryHits(findOverlaps(targetRanges(x), 
+              index <- queryHits(findOverlaps(targetRanges(x), 
                                              searchGRanges, type=type, 
                                              select="all"))
             }else if(select == "query"){
@@ -156,19 +156,19 @@ setMethod("subAxt", "Axt",
                                       strand="+")
               if(length(searchGRanges) == 0)
                 return(x)
-              indexPositive = queryHits(findOverlaps(queryRanges(x),
+              indexPositive <- queryHits(findOverlaps(queryRanges(x),
                                                      searchGRanges, type=type,
                                                      select="all"))
               # then search Axts on negative strand.
               # we need to prepare the searchGRanges on negative strand.
-              searchGRanges = GRanges(seqnames=chr,
+              searchGRanges <- GRanges(seqnames=chr,
                                       ranges=IRanges(start=qSize-end+1,
                                                      end=qSize-start+1),
                                       strand="-")
-              indexNegative = queryHits(findOverlaps(queryRanges(x),
+              indexNegative <- queryHits(findOverlaps(queryRanges(x),
                                                      searchGRanges, type=type,
                                                      select="all"))
-              index = sort(c(indexPositive, indexNegative))
+              index <- sort(c(indexPositive, indexNegative))
             }else{
               stop("Wrong select!")
             }
@@ -198,7 +198,7 @@ toSeqSnippet <- function(x, width)
 }
 
 
-.axt.show_frame_line = function(x, i, iW, tNameW, tStartW, tEndW, 
+.axt.show_frame_line <- function(x, i, iW, tNameW, tStartW, tEndW, 
                                 qNameW, qStartW, qEndW, scoreW){
   cat(format(i, width=iW, justify="right"), " ",
       format(as.character(seqnames(targetRanges(x)[i])), 
@@ -215,47 +215,47 @@ toSeqSnippet <- function(x, width)
       sep=""
       )
   cat("\n")
-  snippetWidth = getOption("width")
-  seq_snippet = toSeqSnippet(targetSeqs(x)[[i]], snippetWidth)
+  snippetWidth <- getOption("width")
+  seq_snippet <- toSeqSnippet(targetSeqs(x)[[i]], snippetWidth)
   cat(seq_snippet)
   cat("\n")
-  seq_snippet = toSeqSnippet(querySeqs(x)[[i]], snippetWidth)
+  seq_snippet <- toSeqSnippet(querySeqs(x)[[i]], snippetWidth)
   cat(seq_snippet)
   cat("\n")
 }
 
-showAxt = function(x, margin="", half_nrow=5L){
-  lx = length(x)
+showAxt <- function(x, margin="", half_nrow=5L){
+  lx <- length(x)
   if(is.null((head_nrow = getOption("showHeadLines"))))
     head_nrow = half_nrow
   if(is.null((tail_nrow = getOption("showTailLines"))))
     tail_nrow = half_nrow
   iW = nchar(as.character(lx))
   if(lx < (2*half_nrow+1L) | (lx < (head_nrow+tail_nrow+1L))) {
-    tNameW = max(nchar(as.character(seqnames(targetRanges(x)))))
-    tStartW = max(nchar(as.character(start(targetRanges(x)))))
-    tEndW = max(nchar(as.character(end(targetRanges(x)))))
-    qNameW = max(nchar(as.character(seqnames(queryRanges(x)))))
-    qStartW = max(nchar(as.character(start(queryRanges(x)))))
-    qEndW = max(nchar(as.character(end(queryRanges(x)))))
-    scoreW = max(nchar(as.character(score(x))))
+    tNameW <- max(nchar(as.character(seqnames(targetRanges(x)))))
+    tStartW <- max(nchar(as.character(start(targetRanges(x)))))
+    tEndW <- max(nchar(as.character(end(targetRanges(x)))))
+    qNameW <- max(nchar(as.character(seqnames(queryRanges(x)))))
+    qStartW <- max(nchar(as.character(start(queryRanges(x)))))
+    qEndW <- max(nchar(as.character(end(queryRanges(x)))))
+    scoreW <- max(nchar(as.character(score(x))))
     for(i in seq_len(lx))
       .axt.show_frame_line(x, i, iW, tNameW, tStartW, tEndW, 
                            qNameW, qStartW, qEndW, scoreW)
   }else{
-    tNameW = max(nchar(as.character(seqnames(targetRanges(x)
+    tNameW <- max(nchar(as.character(seqnames(targetRanges(x)
                         [c(1:head_nrow, (lx-tail_nrow+1L):lx)]))))
-    tStartW = max(nchar(as.character(start(targetRanges(x)
+    tStartW <- max(nchar(as.character(start(targetRanges(x)
                         [c(1:head_nrow, (lx-tail_nrow+1L):lx)]))))
-    tEndW = max(nchar(as.character(end(targetRanges(x)
+    tEndW <- max(nchar(as.character(end(targetRanges(x)
                         [c(1:head_nrow, (lx-tail_nrow+1L):lx)]))))
-    qNameW = max(nchar(as.character(seqnames(queryRanges(x)
+    qNameW <- max(nchar(as.character(seqnames(queryRanges(x)
                         [c(1:head_nrow, (lx-tail_nrow+1L):lx)]))))
-    qStartW = max(nchar(as.character(start(queryRanges(x)
+    qStartW <- max(nchar(as.character(start(queryRanges(x)
                         [c(1:head_nrow, (lx-tail_nrow+1L):lx)]))))
-    qEndW = max(nchar(as.character(end(queryRanges(x)
+    qEndW <- max(nchar(as.character(end(queryRanges(x)
                         [c(1:head_nrow, (lx-tail_nrow+1L):lx)]))))
-    scoreW = max(nchar(as.character(score(x)
+    scoreW <- max(nchar(as.character(score(x)
                         [c(1:head_nrow, (lx-tail_nrow+1L):lx)])))
     if(head_nrow > 0){
       for(i in 1:head_nrow)
@@ -286,7 +286,7 @@ showAxt = function(x, margin="", half_nrow=5L){
 
 setMethod("show", "Axt",
           function(object){
-            lx = length(object)
+            lx <- length(object)
             cat(" A ", class(object), " with ", length(object), " ", 
                 ifelse(lx == 1L, "alignment pair", "alignment pairs"), 
                 ":\n", sep="")
