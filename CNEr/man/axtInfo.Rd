@@ -41,6 +41,6 @@ axtInfo(axtFiles)
   axtFilesHg19DanRer7 = 
     file.path(system.file("extdata", package="CNEr"), 
               "hg19.danRer7.net.axt.gz")
-    ans = axtInfo(axtFileshg19danRer7)
+    ans = axtInfo(axtFilesHg19DanRer7)
 
 }

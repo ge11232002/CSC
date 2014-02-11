@@ -30,7 +30,7 @@
   }
   \item{type}{
     By default, any overlap is accepted. 
-    If ‘type’ is ‘within’, the selected axts must be wholly contained within the subject interval.
+    If "type" is "within", the selected axts must be wholly contained within the subject interval.
   }
   \item{qSize}{
     When select is "query", qSize must be provided and is the length of chromosome chr.

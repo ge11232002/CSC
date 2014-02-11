@@ -39,9 +39,10 @@ Ge Tan
 
 \examples{
   dbName = tempfile()
+  data(cneBlatedDanRer7Hg19)
   for(i in 1:length(cneBlatedDanRer7Hg19)){
     tableName = paste0("cne_twoWay_danRer7_hg19_len50_id", 
-    as.integer(sub("_\\d+$", "", names(cneBlatedDanRer7Hg19)[i]))*20, "_v1")
+    as.integer(sub("_\\\d+$", "", names(cneBlatedDanRer7Hg19)[i]))*20, "_v1")
     saveCNEToSQLite(cneBlatedDanRer7Hg19[[i]], dbName, tableName, overwrite=TRUE)
   }
 }
