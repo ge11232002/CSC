@@ -34,7 +34,8 @@ importFrom(methods, is, new)
 ### -----------------------------------------------------------------
 ### Export S4 classes defined in CNEr
 ###
-exportClasses(Axt)
+exportClasses(Axt,
+              CNE)
 
 ### -----------------------------------------------------------------
 ### Export S4 methods for generics not defined in CNEr
