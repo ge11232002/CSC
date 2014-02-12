@@ -13,6 +13,20 @@ setGeneric("subAxt", function(x, chr, start, end, #strand=c("+", "-", "*"),
                               qSize=NULL) 
                       standardGeneric("subAxt")
                       )
+
+### -----------------------------------------------------------------
+### CNE class related
+###
+setGeneric("assembly1", function(x) standardGeneric("assembly1"))
+setGeneric("assembly2", function(x) standardGeneric("assembly2"))
+setGeneric("CNE1", function(x) standardGeneric("CNE1"))
+setGeneric("CNE2", function(x) standardGeneric("CNE2"))
+setGeneric("thresholds", function(x) standardGeneric("thresholds"))
+setGeneric("CNEMerged", function(x) standardGeneric("CNEMerged"))
+setGeneric("CNERepeatsFiltered", function(x) 
+           standardGeneric("CNERepeatsFiltered"))
+
+
 ### -----------------------------------------------------------------
 ### general
 ### Not Exported!

@@ -71,7 +71,7 @@ setValidity("CNE",
 
 
 ### - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-### Slot getters and setters.
+### Axt Slot getters and setters.
 ###
 setMethod("targetRanges", "Axt", function(x) x@targetRanges)
 setMethod("targetSeqs", "Axt", function(x) x@targetSeqs)
@@ -80,6 +80,17 @@ setMethod("querySeqs", "Axt", function(x) x@querySeqs)
 setMethod("score", "Axt", function(x) x@score)
 setMethod("symCount", "Axt", function(x) x@symCount)
 setMethod("length", "Axt", function(x) length(targetRanges(x)))
+
+### -----------------------------------------------------------------
+### CNE Slot getters and setters.
+###
+setMethod("assembly1", "CNE", function(x) x@assembly1)
+setMethod("assembly2", "CNE", function(x) x@assembly2)
+setMethod("CNE1", "CNE", function(x) x@CNE1)
+setMethod("CNE2", "CNE", function(x) x@CNE2)
+setMethod("thresholds", "CNE", function(x) x@thresholds)
+setMethod("CNEMerged", "CNE", function(x) x@CNEMerged)
+setMethod("CNERepeatsFiltered", "CNE", function(x) x@CNERepeatsFiltered)
 
 ### -- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 ### Axt Constructor.
@@ -121,7 +132,13 @@ setMethod("update", "Axt",
           function(object, ..., check=TRUE){
             initialize(object, ...)
           }
-)
+          )
+
+setMethod("update", "CNE",
+          function(object, ..., check=TRUE){
+            initialize(object, ...)
+          }
+          )
 
 setMethod("clone", "ANY",  # not exported
     function(x, ...)
