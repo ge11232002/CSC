@@ -47,9 +47,6 @@ ceScanOneStep(axt1, filter1=NULL, sizes1, assembly1, twoBit1,
  }
 }
 
-\details{
-  
-}
 
 \value{
   An object \code{CNE} is returned.

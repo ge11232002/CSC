@@ -38,7 +38,8 @@ setGeneric("clone", function(x, ...) standardGeneric("clone"))
 ### -----------------------------------------------------------------
 ### ceScan
 ### Exported!
-setGeneric("ceScan", function(axts, tFilter, qFilter, qSizes, thresholds="49,50")
+setGeneric("ceScan", 
+           function(axts, tFilter, qFilter, qSizes, thresholds="49_50")
            standardGeneric("ceScan"))
 
 
