@@ -286,7 +286,8 @@ for(i in 1:length(cneMergedDanRer7Hg19)){
 
 Now at this stage, these elements are the final CNEs.
 We also prepare a one step function \Rfunction{ceScanOneStep}
-and it returns a \Robject{CNE} object directly.
+and it returns a \Robject{CNE} object directly
+which wrapps all the necessary information.
 This one-step function is highly recommended to avoid the tedious steps above.
 
 <<ceScanOneStep, eval=FALSE, results = hide>>=
