@@ -53,6 +53,8 @@ Axt(targetRanges=GRanges(), targetSeqs=DNAStringSet(),
       The alignment score.}
   \item{\code{symCount}:}{Object of class \code{"integer"}: 
     The alignment length.}
+  \item{\code{x}:}{Object of class \code{"Axt"}:
+    A Axt object.}
 }
 
 \section{Methods}{
