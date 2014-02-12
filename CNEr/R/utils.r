@@ -174,6 +174,9 @@ binRestrictionString <- function(start, end, field="bin"){
 setMethod("saveCNEToSQLite",
           signature(CNE="data.frame", tableName="character"),
           function(CNE, dbName, tableName, overwrite=FALSE){
+            ## tableName should be in the format "danRer7_hg19_49_50"
+            if(!grepl("^.+_.+_\\d+_\\d+$", tableName))
+              stop("The tableName should be in the format danRer7_hg19_49_50.")
             CNE$bin1 <- binFromCoordRange(CNE$start1, CNE$end1)
             CNE$bin2 <- binFromCoordRange(CNE$start2, CNE$end2)
             # reorder it

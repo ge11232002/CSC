@@ -112,13 +112,13 @@ such as chr1.hg19.mm10.net.axt.gz, chr2.hg19.mm10.net.axt.gz, etc.
 
 <<rtl-Axt, eval=TRUE, results = verbatim>>=
 library(CNEr)
-axtFilesHg19DanRer7 = file.path(system.file("extdata", package="CNEr"), 
+axtFilesHg19DanRer7 <- file.path(system.file("extdata", package="CNEr"), 
                                 "hg19.danRer7.net.axt")
-axtHg19DanRer7 = readAxt(axtFilesHg19DanRer7)
+axtHg19DanRer7 <- readAxt(axtFilesHg19DanRer7)
 axtHg19DanRer7
-axtFilesDanRer7Hg19 = file.path(system.file("extdata", package="CNEr"), 
+axtFilesDanRer7Hg19 <- file.path(system.file("extdata", package="CNEr"), 
                                 "danRer7.hg19.net.axt")
-axtDanRer7Hg19 = readAxt(axtFilesDanRer7Hg19)
+axtDanRer7Hg19 <- readAxt(axtFilesDanRer7Hg19)
 axtDanRer7Hg19
 @
 
@@ -165,13 +165,13 @@ that are the information needed by \Rpackage{CNEr},
 then it is better to use the \Rfunction{readBed} function that is much faster with C implementation.
 
 <<rtl-Bed, eval=TRUE, results = verbatim>>=
-bedHg19Fn = file.path(system.file("extdata", package="CNEr"), 
+bedHg19Fn <- file.path(system.file("extdata", package="CNEr"), 
                       "filter_regions.hg19.bed")
-bedHg19 = readBed(bedHg19Fn)
+bedHg19 <- readBed(bedHg19Fn)
 bedHg19
-bedDanRer7Fn = file.path(system.file("extdata", package="CNEr"), 
+bedDanRer7Fn <- file.path(system.file("extdata", package="CNEr"), 
                          "filter_regions.danRer7.bed")
-bedDanRer7 = readBed(bedDanRer7Fn)
+bedDanRer7 <- readBed(bedDanRer7Fn)
 bedDanRer7
 @
 
@@ -187,9 +187,9 @@ A object of \Robject{Seqinfo} is returned
 which suits the input to downstream analysis.
 
 <<rtl-chromSizes, eval=TRUE, results = verbatim>>=
-qSizesHg19 = fetchChromSizes("hg19")
+qSizesHg19 <- fetchChromSizes("hg19")
 qSizesHg19
-qSizesDanRer7 = fetchChromSizes("danRer7")
+qSizesDanRer7 <- fetchChromSizes("danRer7")
 qSizesDanRer7
 @
 
@@ -216,20 +216,20 @@ several similarity criterias (\textbf{I/C}) range from 70\% to 100\%.
 
 <<rtl-CNEScan, eval=TRUE, results = verbatim>>=
 ## axt, GRanges objects as input
-CNEHg19DanRer7 = ceScan(axts=axtHg19DanRer7, tFilter=bedHg19,
-                        qFilter=bedDanRer7, qSizes=qSizesDanRer7,
-                        thresholds=c("45_50", "48_50", "49_50"))
-CNEDanRer7Hg19 = ceScan(axts=axtDanRer7Hg19, tFilter=bedDanRer7,
-                        qFilter=bedHg19, qSizes=qSizesHg19,
-                        thresholds=c("45_50", "48_50", "49_50"))
+CNEHg19DanRer7 <- ceScan(axts=axtHg19DanRer7, tFilter=bedHg19,
+                         qFilter=bedDanRer7, qSizes=qSizesDanRer7,
+                         thresholds=c("45_50", "48_50", "49_50"))
+CNEDanRer7Hg19 <- ceScan(axts=axtDanRer7Hg19, tFilter=bedDanRer7,
+                         qFilter=bedHg19, qSizes=qSizesHg19,
+                         thresholds=c("45_50", "48_50", "49_50"))
 
 ## axt and bed files as input
-CNEHg19DanRer7 = ceScan(axts=axtFilesHg19DanRer7, tFilter=bedHg19Fn,
-                        qFilter=bedDanRer7Fn, qSizes=qSizesDanRer7,
-                        thresholds=c("45_50", "48_50", "49_50"))
-CNEDanRer7Hg19 = ceScan(axts=axtFilesDanRer7Hg19, tFilter=bedDanRer7Fn,
-                        qFilter=bedHg19Fn, qSizes=qSizesHg19,
-                        thresholds=c("45_50", "48_50", "49_50"))
+CNEHg19DanRer7 <- ceScan(axts=axtFilesHg19DanRer7, tFilter=bedHg19Fn,
+                         qFilter=bedDanRer7Fn, qSizes=qSizesDanRer7,
+                         thresholds=c("45_50", "48_50", "49_50"))
+CNEDanRer7Hg19 <- ceScan(axts=axtFilesDanRer7Hg19, tFilter=bedDanRer7Fn,
+                         qFilter=bedHg19Fn, qSizes=qSizesHg19,
+                         thresholds=c("45_50", "48_50", "49_50"))
 @
 
 At this stage, a \Robject(list) of \Robject(data.frame) is returned 
@@ -253,8 +253,8 @@ so that duplicated elements remain distinct.
 
 <<rtl-CNEMerge, eval=TRUE, results = verbatim>>=
 #data(CNEDanRer7Hg19)
-cneMergedDanRer7Hg19 = mapply(cneMerge, CNEDanRer7Hg19, CNEHg19DanRer7, 
-                              SIMPLIFY=FALSE)
+cneMergedDanRer7Hg19 <- mapply(cneMerge, CNEDanRer7Hg19, CNEHg19DanRer7, 
+                               SIMPLIFY=FALSE)
 lapply(cneMergedDanRer7Hg19, head)
 @
 
@@ -270,11 +270,11 @@ Other alignment method can also be considerd, such as Bowtie2, BWA.
 The two bit file for each assembly is required.
 
 <<rtl-CNERealignment, eval=FALSE, results = hide>>=
-assemblyHg19Twobit = "/Users/gtan/CSC/CNEr/2bit/hg19.2bit"
-assemblyDanRer7Twobit = "/Users/gtan/CSC/CNEr/2bit/danRer7.2bit"
-cneBlatedDanRer7Hg19 = list()
+assemblyHg19Twobit <- "/Users/gtan/CSC/CNEr/2bit/hg19.2bit"
+assemblyDanRer7Twobit <- "/Users/gtan/CSC/CNEr/2bit/danRer7.2bit"
+cneBlatedDanRer7Hg19 <- list()
 for(i in 1:length(cneMergedDanRer7Hg19)){
-  cneBlatedDanRer7Hg19[[names(cneMergedDanRer7Hg19)[i]]] = 
+  cneBlatedDanRer7Hg19[[names(cneMergedDanRer7Hg19)[i]]] <-
     blatCNE(cneMergedDanRer7Hg19[[i]], 
             as.integer(sub(".+_.+_\\d+_", "", names(cneMergedDanRer7Hg19)[i])), 
             cutoffs1=8L, cutoffs2=8L, 
@@ -291,8 +291,8 @@ which wrapps all the necessary information.
 This one-step function is highly recommended to avoid the tedious steps above.
 
 <<ceScanOneStep, eval=FALSE, results = hide>>=
-assemblyHg19Twobit = "/Users/gtan/CSC/CNEr/2bit/hg19.2bit"
-assemblyDanRer7Twobit = "/Users/gtan/CSC/CNEr/2bit/danRer7.2bit"
+assemblyHg19Twobit <- "/Users/gtan/CSC/CNEr/2bit/hg19.2bit"
+assemblyDanRer7Twobit <- "/Users/gtan/CSC/CNEr/2bit/danRer7.2bit"
 finalCNE <- ceScanOneStep(axt1=axtHg19DanRer7, filter1=bedHg19, 
                           sizes1=qSizesHg19, assembly1="hg19", 
                           twoBit1=assemblyHg19Twobit,
@@ -319,10 +319,10 @@ and \href{http://genomewiki.ucsc.edu/index.php/Bin_indexing_system}{genomewiki}.
 
 <<saveCNE, eval=TRUE, results = verbatim>>=
 ## on individual tables
-dbName = tempfile()
+dbName <- tempfile()
 data(cneBlatedDanRer7Hg19)
 for(i in 1:length(cneBlatedDanRer7Hg19)){
-  tableName = paste("danRer7_hg19", names(cneBlatedDanRer7Hg19)[i],
+  tableName <- paste("danRer7_hg19", names(cneBlatedDanRer7Hg19)[i],
                       sep="_")
 	saveCNEToSQLite(cneBlatedDanRer7Hg19[[i]], dbName, tableName, overwrite=TRUE)
 }
@@ -337,12 +337,12 @@ coordinates and other criterias,
 a \Robject{IRanges} object is returned.
 
 <<queryCNE, eval=TRUE, results = verbatim>>=
-chr = "chr6"
-start = 19900000L
-end =  28000000L
-minLength = 50L
-tableName = "danRer7_hg19_45_50"
-fetchedCNERanges = readCNERangesFromSQLite(dbName, tableName, chr, 
+chr <- "chr11"
+start <- 31000000L
+end <-  33000000L
+minLength <- 50L
+tableName <- "danRer7_hg19_45_50"
+fetchedCNERanges <- readCNERangesFromSQLite(dbName, tableName, chr, 
                                            start, end, whichAssembly="L",
                                            minLength=minLength)
 @
@@ -380,24 +380,24 @@ show the range of developmental gene \textbf{PAX6}.
 
 <<queryUCSC, eval=FALSE, results = hide>>=
 library(Gviz)
-genome="hg19"
-chr = "chr11"
-start = 31000000L
-end =  33000000L
-axisTrack = GenomeAxisTrack()
-ideoTrack = IdeogramTrack(genome=genome, chromosome=chr)
-cpgIslands = UcscTrack(genome=genome, chromosome=chr,
+genome <- "hg19"
+chr <- "chr11"
+start <- 31000000L
+end <-  33000000L
+axisTrack <- GenomeAxisTrack()
+ideoTrack <- IdeogramTrack(genome=genome, chromosome=chr)
+cpgIslands <- UcscTrack(genome=genome, chromosome=chr,
                        track="cpgIslandExt", from=start, to=end,
                        trackType="AnnotationTrack", start="chromStart",
                        end="chromEnd", id="name", shape="box",
                        fill="#006400", name="CpG Islands")
-refGenes = UcscTrack(genome="hg19", chromosome=chr,
+refGenes <- UcscTrack(genome="hg19", chromosome=chr,
                      track="refGene", from=start, to=end,
                      trackType="GeneRegionTrack", rstarts="exonStarts",
                      rends="exonEnds", gene="name2", symbol="name2",
                      transcript="name", strand="strand", fill="#8282d2",
                      name="refSeq Genes", collapseTranscripts=TRUE)
-biomTrack = BiomartGeneRegionTrack(genome="hg19", chromosome=chr, 
+biomTrack <- BiomartGeneRegionTrack(genome="hg19", chromosome=chr, 
                                    start=start , end=end, name="Ensembl")
 @
 
@@ -424,24 +424,26 @@ For more details, please look into the vignette of \Rpackage{Gviz}.
 
 \subsection{CNEs horizon plot}
 <<CNEDensity, eval=TRUE, results = verbatim>>=
-windowSize= 300L
-minLength = 50L
-cneHg19DanRer7_45_50 = 
+dbName <- file.path(system.file("extdata", package="CNEr"),
+                    "cne.sqlite")
+windowSize <- 300L
+minLength <- 50L
+cneHg19DanRer7_45_50 <- 
   CNEDensity(dbName=dbName, 
              tableName="danRer7_hg19_45_50", 
-             whichAssembly="R", chr=chr, start=start,
+             assembly1="hg19", chr=chr, start=start,
              end=end, windowSize=windowSize, 
              minLength=minLength)
-cneHg19DanRer7_48_50 = 
+cneHg19DanRer7_48_50 <-
   CNEDensity(dbName=dbName, 
              tableName="danRer7_hg19_48_50", 
-             whichAssembly="R", chr=chr, start=start,
+             assembly1="hg19", chr=chr, start=start,
              end=end, windowSize=windowSize, 
              minLength=minLength)
-cneHg19DanRer7_49_50 = 
+cneHg19DanRer7_49_50 <-
   CNEDensity(dbName=dbName, 
              tableName="danRer7_hg19_49_50", 
-             whichAssembly="R", chr=chr, start=start,
+             assembly1="hg19", chr=chr, start=start,
              end=end, windowSize=windowSize, 
              minLength=minLength)
 @
@@ -450,34 +452,34 @@ cneHg19DanRer7_49_50 =
 data(cneHg19DanRer7_45_50)
 data(cneHg19DanRer7_48_50)
 data(cneHg19DanRer7_49_50)
-genome="hg19"
-chr = "chr11"
-start = 31000000L
-end =  33000000L
+genome <- "hg19"
+chr <- "chr11"
+start <- 31000000L
+end <-  33000000L
 #axisTrack = GenomeAxisTrack()
 #ideoTrack = IdeogramTrack(genome=genome, chromosome=chr)
-strand = "+"
-dataMatrix= cneHg19DanRer7_45_50
-dTrack1 = DataTrack(start=dataMatrix[ ,1], end=dataMatrix[ ,1], 
-                    data=dataMatrix[ ,2], chromosome=chr, strand=strand, 
-                    genome=genome, type="horiz", horizon.scale=0.1, 
-                    fill.horizon=c("#B41414", "#E03231", "#F7A99C", 
-                                   "yellow", "orange", "red"), 
-                    name="danRer7 45/50")
-dataMatrix = cneHg19DanRer7_48_50
-dTrack2 = DataTrack(start=dataMatrix[ ,1], end=dataMatrix[ ,1], 
-                    data=dataMatrix[ ,2], chromosome=chr, strand=strand, 
-                    genome=genome, type="horiz", horizon.scale=0.1, 
-                    fill.horizon=c("#B41414", "#E03231", "#F7A99C", 
-                                   "yellow", "orange", "red"), 
-                    name="danRer7 48/50")
-dataMatrix = cneHg19DanRer7_49_50
-dTrack3 = DataTrack(start=dataMatrix[ ,1], end=dataMatrix[ ,1], 
-                    data=dataMatrix[ ,2], chromosome=chr, strand=strand, 
-                    genome=genome, type="horiz", horizon.scale=0.1, 
-                    fill.horizon=c("#B41414", "#E03231", "#F7A99C", 
-                                   "yellow", "orange", "red"), 
-                    name="danRer7 49/50")
+strand <- "+"
+dataMatrix <- cneHg19DanRer7_45_50
+dTrack1 <- DataTrack(start=dataMatrix[ ,1], end=dataMatrix[ ,1], 
+                     data=dataMatrix[ ,2], chromosome=chr, strand=strand, 
+                     genome=genome, type="horiz", horizon.scale=0.1, 
+                     fill.horizon=c("#B41414", "#E03231", "#F7A99C", 
+                                    "yellow", "orange", "red"), 
+                     name="danRer7 45/50")
+dataMatrix <- cneHg19DanRer7_48_50
+dTrack2 <- DataTrack(start=dataMatrix[ ,1], end=dataMatrix[ ,1], 
+                     data=dataMatrix[ ,2], chromosome=chr, strand=strand, 
+                     genome=genome, type="horiz", horizon.scale=0.1, 
+                     fill.horizon=c("#B41414", "#E03231", "#F7A99C", 
+                                    "yellow", "orange", "red"), 
+                     name="danRer7 48/50")
+dataMatrix <- cneHg19DanRer7_49_50
+dTrack3 <- DataTrack(start=dataMatrix[ ,1], end=dataMatrix[ ,1], 
+                     data=dataMatrix[ ,2], chromosome=chr, strand=strand, 
+                     genome=genome, type="horiz", horizon.scale=0.1, 
+                     fill.horizon=c("#B41414", "#E03231", "#F7A99C", 
+                                    "yellow", "orange", "red"), 
+                     name="danRer7 49/50")
 @
 
 <<plotCNE, fig=TRUE, eval=TRUE, results=hide, echo=TRUE, height=15, width=7.5>>=

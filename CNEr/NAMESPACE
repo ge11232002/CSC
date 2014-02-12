@@ -61,7 +61,6 @@ export(
   readCNERangesFromSQLite,
   #queryAnnotationSQLite,
   fetchChromSizes,
-  saveCNEToSQLite,
 
   ## AllClasses.r
   Axt,
@@ -101,6 +100,11 @@ exportMethods(
   assembly1, assembly2,
   CNE1, CNE2,
   thresholds,
-  CNEMerged, CNERepeatsFiltered
+  CNEMerged, CNERepeatsFiltered,
+  
+  ## utils.r
+  saveCNEToSQLite,
+  ## plot.r
+  CNEDensity
 )
 

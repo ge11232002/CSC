@@ -47,13 +47,14 @@ Ge Tan
 }
 
 \examples{
-    dbName = file.path(system.file("extdata", package="CNEr"),
+    dbName <- file.path(system.file("extdata", package="CNEr"),
                        "cne.sqlite")
-    chr = "chr6"
-    start = 19900000L
-    end =  28000000L
-    minLength = 50L
-    tableName = "cne_twoWay_danRer7_hg19_len50_id960_v1"
-    fetchedCNERanges = readCNERangesFromSQLite(dbName, tableName, chr, 
-      start, end, whichAssembly="L", minLength=minLength)
+    chr <- "chr11"
+    start <- 31000000L
+    end <-  33000000L
+    minLength <- 50L
+    tableName <- "danRer7_hg19_45_50"
+    fetchedCNERanges <- readCNERangesFromSQLite(dbName, tableName, chr, 
+                                               start, end, whichAssembly="L",
+                                               minLength=minLength)
 }

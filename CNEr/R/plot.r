@@ -1,7 +1,49 @@
 ### -----------------------------------------------------------------
 ### Fetch the CNE coordinates from SQL and compute the densities
 ### Exported!
-CNEDensity <- function(dbName, tableName, whichAssembly=c("L","R"), 
+setMethod("CNEDensity", 
+          signature(tableName="character", assembly1="character",
+                    assembly2="missing", threshold="missing"),
+          function(dbName, tableName, assembly1, assembly2, threshold,
+                   chr, start, end, windowSize, minLength=NULL){
+            if(!grepl("^.+_.+_\\d+_\\d+$", tableName))
+              stop("The tableName should be in the format danRer7_hg19_49_50.")
+            assemblyNames <- strsplit(tableName, "_")[[1]][1:2]
+            stopifnot(assembly1 %in% assemblyNames)
+            if(which(assembly1 == assemblyNames) == 1){
+              whichAssembly = "L"
+            }else{
+              whichAssembly = "R"
+            }
+            .CNEDensityInternal(dbName=dbName, tableName=tableName,
+                                whichAssembly=whichAssembly,
+                                chr=chr, start=start, end=end,
+                                windowSize=windowSize, minLength=minLength)
+          }
+          )
+setMethod("CNEDensity", signature(tableName="missing", assembly1="character",
+                                  assembly2="character", threshold="character"),
+          function(dbName, tableName, assembly1, assembly2, threshold,
+                   chr, start, end, windowSize, minLength=NULL){
+            stopifnot(length(threshold) == 1L)
+            builtTableName = paste(paste(sort(c(assembly1, assembly2)), 
+                                         sep="_", collapse="_"), threshold, 
+                                   sep="_", collapse="_")
+            if(which(assembly1 == sort(c(assembly1, assembly2))) == 1){
+              whichAssembly = "L"
+            }else{
+              whichAssembly = "R"
+            }
+            .CNEDensityInternal(dbName=dbName, tableName=builtTableName,
+                                whichAssembly=whichAssembly,
+                                chr=chr, start=start, end=end,
+                                windowSize=windowSize, minLength=minLength)
+          }
+          )
+
+
+
+.CNEDensityInternal <- function(dbName, tableName, whichAssembly=c("L","R"), 
                        chr, start, end, windowSize, 
                        minLength=NULL){
   nrGraphs <- 1

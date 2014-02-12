@@ -29,6 +29,10 @@ setGeneric("CNERepeatsFiltered", function(x)
 setGeneric("saveCNEToSQLite", 
            function(CNE, dbName, tableName, overwrite=FALSE) 
              standardGeneric("saveCNEToSQLite"))
+setGeneric("CNEDensity",
+           function(dbName, tableName, assembly1, assembly2, threshold,
+                    chr, start, end, windowSize, minLength=NULL)
+             standardGeneric("CNEDensity"))
 
 ### -----------------------------------------------------------------
 ### general
