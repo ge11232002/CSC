@@ -41,19 +41,19 @@ Axt(targetRanges=GRanges(), targetSeqs=DNAStringSet(),
 
 
 \arguments{
-  \item{\code{targetRanges}:}{Object of class \code{"GRanges"}: 
+  \item{targetRanges}{Object of class \code{"GRanges"}: 
     The ranges of net alignments on reference genome.}
-  \item{\code{targetSeqs}:}{Object of class \code{"DNAStringSet"}: 
+  \item{targetSeqs}{Object of class \code{"DNAStringSet"}: 
     The alignment sequences of reference genome.}
-  \item{\code{queryRanges}:}{Object of class \code{"GRanges"}: 
+  \item{queryRanges}{Object of class \code{"GRanges"}: 
     The ranges of net alignments on query genome.}
-  \item{\code{querySeqs}:}{Object of class \code{"DNAStringSet"}: 
+  \item{querySeqs}{Object of class \code{"DNAStringSet"}: 
     The alignment sequences of query genome.}
-  \item{\code{score}:}{Object of class \code{"integer"}: 
+  \item{score}{Object of class \code{"integer"}: 
       The alignment score.}
-  \item{\code{symCount}:}{Object of class \code{"integer"}: 
+  \item{symCount}{Object of class \code{"integer"}: 
     The alignment length.}
-  \item{\code{x}:}{Object of class \code{"Axt"}:
+  \item{x}{Object of class \code{"Axt"}:
     A Axt object.}
 }
 

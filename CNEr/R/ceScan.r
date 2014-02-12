@@ -154,7 +154,7 @@ setMethod("ceScan", signature(axts="Axt", tFilter="GRanges", qFilter="missing",
           )
 setMethod("ceScan", signature(axts="character", tFilter="character", 
                               qFilter="character", qSizes="Seqinfo"),
-          function(axts, tFilter, qFilter, qSizes, thresholds="49,50"){
+          function(axts, tFilter, qFilter, qSizes, thresholds="49_50"){
             ceScanFile(axtFiles=axts, tFilterFile=tFilter, qFilterFile=qFilter,
                        qSizes=qSizes, thresholds=thresholds)
           }

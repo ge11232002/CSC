@@ -17,7 +17,7 @@
 }
 
 \usage{
-  ceScan(axts, tFilter, qFilter, qSizes, thresholds="49,50")
+  ceScan(axts, tFilter, qFilter, qSizes, thresholds="49_50")
 }
 
 \arguments{
@@ -43,7 +43,7 @@
   \item{thresholds}{
     A \code{character} object specifiying the scanning windows and 
     minimal score.
-    It can be specified in th form of "45,50" with scanning windows 50 
+    It can be specified in th form of "45_50" with scanning windows 50 
     and minial score 45.
     More than one thresholds can be provided.
   }

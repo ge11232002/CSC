@@ -38,30 +38,31 @@ CNE(assembly1=character(), assembly2=character(),thresholds=character(),
 \S4method{CNE2}{CNE}(x)
 \S4method{CNEMerged}{CNE}(x)
 \S4method{CNERepeatsFiltered}{CNE}(x)
-\S4method{alignMethod}{CNE}(x)
 
 ## ... and more (see Methods)
 }
 
 \arguments{
-    \item{\code{assembly1}:}{Object of class \code{"character"}: 
+    \item{assembly1}{Object of class \code{"character"}: 
       The name of assembly1.}
-    \item{\code{assembly2}:}{Object of class \code{"character"}:
+    \item{assembly2}{Object of class \code{"character"}:
       The name of assembly2.}
-    \item{\code{thresholds}:}{Object of class \code{"character"}:
+    \item{thresholds}{Object of class \code{"character"}:
       The thresholds of CNE scan: window size and identity score
       in the form of "49_50".}
-    \item{\code{CNE1}:}{Object of class \code{"list"}:
+    \item{CNE1}{Object of class \code{"list"}:
       The preliminary CNEs from axt file with assembly1 as reference.}
-    \item{\code{CNE2}:}{Object of class \code{"list"}:
+    \item{CNE2}{Object of class \code{"list"}:
       The preliminart CNEs from axt file with assembly2 as reference.}
-    \item{\code{CNEMerged}:}{Object of class \code{"list"}:
+    \item{CNEMerged}{Object of class \code{"list"}:
       The CNEs after merging CNE1 and CNE2.}
-    \item{\code{CNERepeatsFiltered}:}{Object of class \code{"list"}:
+    \item{CNERepeatsFiltered}{Object of class \code{"list"}:
       The CNEs after being realigned back to reference genome,
       with blat in current implementation.}
-    \item{\code{alignMethod}:}{Object of class \code{"character"}:
+    \item{alignMethod}{Object of class \code{"character"}:
       The method to realign CNEs back to reference genome.}
+    \item{x}{Object of class \code{"CNE"}:
+      A \code{"CNE"} object.}
 }
 
 \section{Methods}{
