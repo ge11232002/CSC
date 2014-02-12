@@ -43,7 +43,7 @@ CNE(assembly1=character(), assembly2=character(),thresholds=character(),
 ## ... and more (see Methods)
 }
 
-\arguments{{
+\arguments{
     \item{\code{assembly1}:}{Object of class \code{"character"}: 
       The name of assembly1.}
     \item{\code{assembly2}:}{Object of class \code{"character"}:
