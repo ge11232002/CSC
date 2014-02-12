@@ -48,19 +48,21 @@ setValidity("CNE",
             function(object){
               if(length(object@assembly1) != 1L)
                 return("The name of assembly1 must be length 1!")
-              if(length(alignMethod) != 1L)
+              if(length(object@alignMethod) != 1L)
                 return("The align method must be length 1!")
               if(length(object@assembly2) != 1L)
                 return("The name of assembly2 must be length 1!")
               if(!all(grepl("^\\d+_\\d+$", object@thresholds)))
                 return("The thresholds must be in format of 49_50!")
-              if(as.integer(sapply(strsplit(thresholds, "_"), "[", 2))
-                 < as.integer(sapply(strsplit(thresholds, "_"), "[", 1)))
+              if(any(as.integer(
+                       sapply(strsplit(object@thresholds, "_"), "[", 2))
+                 < as.integer(
+                       sapply(strsplit(object@thresholds, "_"), "[", 1))))
                 return("The window size cannot be smaller than identity score!")
-              if(length(CNE1) != length(thresholds) ||
-                 length(CNE2) != length(thresholds) ||
-                 length(CNEMerged) != length(thresholds) ||
-                 length(CNERepeatsFiltered) != length(thresholds))
+              if(length(object@CNE1) != length(object@thresholds) ||
+                 length(object@CNE2) != length(object@thresholds) ||
+                 length(object@CNEMerged) != length(object@thresholds) ||
+                 length(object@CNERepeatsFiltered) != length(object@thresholds))
                 return("The number of cne tables must be same with
                        number of thresholds!")
               return(TRUE)
