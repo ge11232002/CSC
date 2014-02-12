@@ -26,6 +26,9 @@ setGeneric("CNEMerged", function(x) standardGeneric("CNEMerged"))
 setGeneric("CNERepeatsFiltered", function(x) 
            standardGeneric("CNERepeatsFiltered"))
 
+setGeneric("saveCNEToSQLite", 
+           function(CNE, dbName, tableName, overwrite=FALSE) 
+             standardGeneric("saveCNEToSQLite"))
 
 ### -----------------------------------------------------------------
 ### general
