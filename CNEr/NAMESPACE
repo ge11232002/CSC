@@ -93,10 +93,14 @@ export(
 ###
 
 exportMethods(
-  ## class.r
+  ## AllClasses.r
   targetRanges, queryRanges,
   targetSeqs, querySeqs,
   symCount,
-  subAxt
+  subAxt,
+  assembly1, assembly2,
+  CNE1, CNE2,
+  thresholds,
+  CNEMerged, CNERepeatsFiltered
 )
 
