@@ -18,12 +18,12 @@ importClassesFrom(methods, ANY, character, integer, missing)
 importMethodsFrom(Biostrings, reverseComplement, matchPWM, maxScore, minScore, consensusMatrix, PairwiseAlignments, pattern, consensusMatrix)
 importMethodsFrom(RSQLite, dbGetQuery, dbConnect, dbDisconnect)
 importMethodsFrom(XVector, subseq)
-importMethodsFrom(GenomicRanges, seqnames, strand, "strand<-")
+importMethodsFrom(GenomicRanges, seqnames, strand, "strand<-", findOverlaps)
 importMethodsFrom(rtracklayer, import.chain, liftOver)
 importMethodsFrom(BSgenome, getSeq)
 importMethodsFrom(methods, initialize, show)
 importMethodsFrom(IRanges, score, isConstant, subject, ranges,
-                  Views, start, end)
+                  Views, start, end, findOverlaps)
 
 ### -----------------------------------------------------------------
 ### Import ordinary functions, variables in other packages
