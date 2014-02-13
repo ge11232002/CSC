@@ -774,21 +774,35 @@ struct axt *buildAxt(SEXP axtqNames, SEXP axtqStart, SEXP axtqEnd,
 
   struct axt *axt=NULL, *curAxt;
   int nrAxt = GET_LENGTH(axtqNames);
+  char *buffer;
   for(i = 0; i < nrAxt; i++){
     AllocVar(curAxt);
     //This will cause the warning during compilation, 
     //but can save time. No need to create a none const char for it.
-    curAxt->qName = CHAR(STRING_ELT(axtqNames, i));
+    // Fixed by creating new buffer.
+    buffer = (char *) 
+      R_alloc(strlen(CHAR(STRING_ELT(axtqNames, i))) + 1, sizeof(char));
+    strcpy(buffer, CHAR(STRING_ELT(axtqNames, i)));
+    curAxt->qName = buffer;
     //Make it back to 0-based coordinates for start
     curAxt->qStart = p_axtqStart[i] - 1;
     curAxt->qEnd = p_axtqEnd[i];
     curAxt->qStrand = CHAR(STRING_ELT(axtqStrand, i))[0];
-    curAxt->qSym = CHAR(STRING_ELT(axtqSym, i));
-    curAxt->tName = CHAR(STRING_ELT(axttNames, i));
+    buffer = (char *)
+      R_alloc(strlen(CHAR(STRING_ELT(axtqSym, i))) + 1, sizeof(char));
+    strcpy(buffer, CHAR(STRING_ELT(axtqSym, i)));
+    curAxt->qSym = buffer;
+    buffer = (char *)
+      R_alloc(strlen(CHAR(STRING_ELT(axttNames, i))) + 1, sizeof(char));
+    strcpy(buffer, CHAR(STRING_ELT(axttNames, i)));
+    curAxt->tName = buffer;
     curAxt->tStart = p_axttStart[i] - 1;
     curAxt->tEnd = p_axttEnd[i];
     curAxt->tStrand = CHAR(STRING_ELT(axttStrand, i))[0];
-    curAxt->tSym = CHAR(STRING_ELT(axttSym, i));
+    buffer = (char *)
+      R_alloc(strlen(CHAR(STRING_ELT(axttSym, i))) + 1, sizeof(char));
+    strcpy(buffer, CHAR(STRING_ELT(axttSym, i)));
+    curAxt->tSym = buffer;
     curAxt->score = p_score[i];
     curAxt->symCount = p_symCount[i];
     curAxt->next = axt;
