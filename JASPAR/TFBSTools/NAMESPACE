@@ -8,7 +8,7 @@ import(IRanges)
 importClassesFrom(IRanges, SimpleList)
 #importClassesFrom(JASPAR2014, JASPAR2014)
 importClassesFrom(Biostrings, DNAStringSet, PairwiseAlignments, XStringViews)
-importClassesFrom(GenomicRanges, GRanges)
+importClassesFrom(GenomicRanges, GRanges, GRangesList)
 importClassesFrom(methods, ANY, character, integer, missing)
 #importClassesFrom(rtracklayer, Chain)
 
