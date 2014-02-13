@@ -776,17 +776,13 @@ struct axt *buildAxt(SEXP axtqNames, SEXP axtqStart, SEXP axtqEnd,
   int nrAxt = GET_LENGTH(axtqNames);
   for(i = 0; i < nrAxt; i++){
     AllocVar(curAxt);
-    //Rprintf("The is is %d\n", i);
     //This will cause the warning during compilation, 
     //but can save time. No need to create a none const char for it.
     curAxt->qName = CHAR(STRING_ELT(axtqNames, i));
-    //Rprintf("The qName is %s\n", CHAR(STRING_ELT(axtqNames, i)));
     //Make it back to 0-based coordinates for start
     curAxt->qStart = p_axtqStart[i] - 1;
-    //Rprintf("The start is %d\n", p_axtqStart[i]);
     curAxt->qEnd = p_axtqEnd[i];
     curAxt->qStrand = CHAR(STRING_ELT(axtqStrand, i))[0];
-    //Rprintf("The strand is %s\n", CHAR(STRING_ELT(axtqStrand, i))); 
     curAxt->qSym = CHAR(STRING_ELT(axtqSym, i));
     curAxt->tName = CHAR(STRING_ELT(axttNames, i));
     curAxt->tStart = p_axttStart[i] - 1;
