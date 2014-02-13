@@ -1,8 +1,6 @@
-useDynLib(TFBSTools)
-import(methods)
-import(RSQLite)
+useDynLib(TFBSTools, .registration = TRUE)
 
-#import(IRanges)
+import(IRanges)
 
 ### -----------------------------------------------------------------
 ### Import S4 classes defined in other packages
@@ -11,6 +9,7 @@ importClassesFrom(IRanges, SimpleList)
 #importClassesFrom(JASPAR2014, JASPAR2014)
 importClassesFrom(Biostrings, DNAStringSet, PairwiseAlignments, XStringViews)
 importClassesFrom(GenomicRanges, GRanges)
+importClassesFrom(methods, ANY, character, integer, missing)
 #importClassesFrom(rtracklayer, Chain)
 
 
@@ -20,9 +19,10 @@ importClassesFrom(GenomicRanges, GRanges)
 importMethodsFrom(Biostrings, reverseComplement, matchPWM, maxScore, minScore, consensusMatrix, PairwiseAlignments, pattern, consensusMatrix)
 importMethodsFrom(RSQLite, dbGetQuery, dbConnect, dbDisconnect)
 importMethodsFrom(XVector, subseq)
-importMethodsFrom(GenomicRanges, seqnames)
+importMethodsFrom(GenomicRanges, seqnames, strand, "strand<-")
 importMethodsFrom(rtracklayer, import.chain, liftOver)
 importMethodsFrom(BSgenome, getSeq)
+importMethodsFrom(methods, initialize, show)
 
 ### -----------------------------------------------------------------
 ### Import ordinary functions, variables in other packages
@@ -32,6 +32,8 @@ importFrom(Biostrings, unitScale, PWMscoreStartingAt,
                        readAAStringSet, writeXStringSet, IUPAC_CODE_MAP)
 importFrom(caTools, runmean)
 importFrom(GenomicRanges, GRanges, GRangesList)
+importFrom(methods, is, new)
+importFrom(RSQLite, SQLite)
 
 ### -----------------------------------------------------------------
 ### Export S4 classes defined in TFBSTools
@@ -65,6 +67,9 @@ exportMethods(
   ncol,
   dim,
   reverseComplement,
+
+  ## coercion-methods.r
+  as.matrix,
 
   ## Motif-methods.r
   consensusMatrix
