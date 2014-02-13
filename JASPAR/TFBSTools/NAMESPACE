@@ -23,7 +23,8 @@ importMethodsFrom(rtracklayer, import.chain, liftOver)
 importMethodsFrom(BSgenome, getSeq)
 importMethodsFrom(methods, initialize, show)
 importMethodsFrom(IRanges, score, isConstant, subject, ranges,
-                  Views, start, end, findOverlaps)
+                  Views, start, end, findOverlaps,
+                  queryHits, subjectHits)
 
 ### -----------------------------------------------------------------
 ### Import ordinary functions, variables in other packages
