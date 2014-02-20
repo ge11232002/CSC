@@ -40,7 +40,7 @@ dirichletMixtureEMEstimation <- function(inputMatrix, K,
 
   ite <- 0; 
   dll <- Inf;
-  ll = numeric(iteouter_max)
+  ll <- numeric(iteouter_max)
   while(ite < iteouter_max && (dll > dll_min || ite == 1)){
     ite <- ite + 1;
 
@@ -71,21 +71,21 @@ dirichletMixtureEMEstimation <- function(inputMatrix, K,
       print(iteinner)
       iteinner = iteinner + 1
       for(k in 1:K){
-        alpha0_k = alpha0[ , k]
-        contrib_n[ , k] = psigamma(t(inputMatrix) + 
+        alpha0_k <- alpha0[ , k]
+        contrib_n[ , k] <- psigamma(t(inputMatrix) + 
                              matrix(rep(alpha0_k, N), nrow=A, 
                                     ncol=N, byrow=FALSE)) %*% gam[ , k]
-        contrib_d[k] = sum(psigamma(rowSumsInputMatrix + Alpha0[k]) * 
+        contrib_d[k] <- sum(psigamma(rowSumsInputMatrix + Alpha0[k]) * 
           gam[ ,k]) - pmix[k] * N * psigamma(Alpha0[k])
       }
-      contrib_n = contrib_n - N * psigamma(alpha0) * 
+      contrib_n <- contrib_n - N * psigamma(alpha0) * 
         matrix(rep(pmix, A), nrow=A, ncol=length(pmix), byrow=TRUE)
-      dalpha0 = pmax(alpha0 * (contrib_n / 
+      dalpha0 <- pmax(alpha0 * (contrib_n / 
                               matrix(rep(contrib_d, A), nrow=A, 
                                      ncol=length(contrib_d), byrow=TRUE)), 
                     alpha0_min) - alpha0
-      alpha0 = alpha0 + dalpha0 
-      Alpha0 = colSums(alpha0)
+      alpha0 <- alpha0 + dalpha0 
+      Alpha0 <- colSums(alpha0)
     }
     if(! ite %% iteouter_max /10){
       print(dll)
@@ -97,5 +97,9 @@ dirichletMixtureEMEstimation <- function(inputMatrix, K,
   return(list(alpha0=alpha0, pmix=pmix, ll=ll))
 }
 
+
+PWMrandomizeBayes <- function(){
+
+}
 
 
