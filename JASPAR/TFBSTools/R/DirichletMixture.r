@@ -1,5 +1,25 @@
 
 
+setMethod("dmmEM", signature(x="matrix"),
+          function(x, K, alpha0=NULL, pmix=NULL){
+            dirichletMixtureEMEstimation(x, K, alpha0, pmix)
+          }
+          )
+
+setMethod("dmmEM", signature(x="PFMatrixList"),
+          function(x, K, alpha0=NULL, pmix=NULL){
+            allMatrix <- do.call(cbind, Matrix(x))
+            dirichletMixtureEMEstimation(t(allMatrix), K, alpha0, pmix)
+          }
+          )
+
+setMethod("dmmEM", signature(x="ANY"),
+          function(x, K, alpha0=NULL, pmix=NULL){
+            allMatrix <- getMatrixSet(x, opts=list(all=TRUE))
+            dmmEM(allMatrix, K, alpha0, pmix)
+          }
+          )
+
 
 dirichletMixtureEMEstimation <- function(inputMatrix, K, 
                                          alpha0=NULL, pmix=NULL){
@@ -68,7 +88,6 @@ dirichletMixtureEMEstimation <- function(inputMatrix, K,
     dalpha0 <- Inf  
     iteinner <- 0 
     while(sum(abs(dalpha0)) > ftol && iteinner < iteinner_max){
-      print(iteinner)
       iteinner = iteinner + 1
       for(k in 1:K){
         alpha0_k <- alpha0[ , k]
@@ -114,23 +133,39 @@ repmat <- function(a,n,m) {kronecker(matrix(1,n,m),a)}
   #rgamma(n*length(a), rep(a, n))
 #}
 
+setMethod("rPWMDmm", signature(x="matrix"),
+          function(x, alpha0, pmix, N=1, W=6){
+            PWMrandomizeBayes(x, alpha0, pmix, N, W)
+          }
+          )
 
-PWMrandomizeBayes <- function(PCM, Dprior, N=NULL, W=NULL){
-  ## generates N (default 1) random PWM of width drawn from the posterior distribution
-  ## of PWMs. The posterior is propertional to the Dirichlet prior distribution Dprior (which
+setMethod("rPWMDmm", signature(x="PFMatrixList"),
+          function(x, alpha0, pmix, N=1, W=6){
+            allMatrix <- do.call(cbind, Matrix(x))
+            PWMrandomizeBayes(allMatrix, alpha0, pmix, N, W)
+          }
+          )
+
+setMethod("rPWMDmm", signature(x="ANY"),
+          function(x, alpha0, pmix, N=1, W=6){
+            allMatrix <- getMatrixSet(x, opts=list(all=TRUE))
+            rPWMDmm(allMatrix, alpha0, pmix, N, W)
+          }
+          )
+
+
+PWMrandomizeBayes <- function(PCM, alpha0, pmix, N=1, W=6){
+  ## generates N (default 1) random PWM of width drawn from 
+  ## the posterior distribution
+  ## of PWMs. The posterior is propertional to the 
+  ## Dirichlet prior distribution Dprior (which
   ## might be a mixture) times the mulitnomial likelihood with count matrix PCM.
   A <- nrow(PCM)
   Win <- ncol(PCM)
-  if(is.null(N)){
-    N <- 1
-  }
-  if(is.null(W)){
-    W <- Win
-  }
   ### parameters of prior
-  alpha0 <- Dprior$alpha0 
+  #alpha0 <- Dprior$alpha0 
   ##alpha0 is the estimated Dirichlet parameters A x K
-  pmix <- Dprior$pmix
+  #pmix <- Dprior$pmix
   ## pmix mixing proportions 1 x K
   K <- length(pmix)
 
@@ -139,14 +174,14 @@ PWMrandomizeBayes <- function(PCM, Dprior, N=NULL, W=NULL){
 
   PWM = list() 
   for(n in 1:N){
-    PWM[[n]] <- matrix(NA, ncol=W, nrow=length(alpha0))
+    PWM[[n]] <- matrix(NA, ncol=W, nrow=nrow(alpha0))
     if(W == Win){
       for(w in 1:W){
         ## draw from the mixture component
         k = which(runif(1) < apmix)[1]
         ## draw from component k of dirichlet posterior
         PWM[[n]][ ,w] <- 
-          gtools::rdirichlet(n=1, alpha=(alpha0[ ,k] + PCM[ ,w]))
+          rdirichlet(n=1, alpha=(alpha0[ ,k] + PCM[ ,w]))
       }
     }else{
       for(w in 1:W){
@@ -155,11 +190,13 @@ PWMrandomizeBayes <- function(PCM, Dprior, N=NULL, W=NULL){
         ## draw from component k of dirichlet posterior and use random
         ## column in PCM
         PWM[[n]][, w] <- 
-          gtools::rdirichlet(n=1, alpha=(alpha0[ ,k] + 
+          rdirichlet(n=1, alpha=(alpha0[ ,k] + 
                                          PCM[ ,ceiling(Win * runif(1))]))
       }
     }
   }
+  stopifnot(all(colSums(PWM) == 1))
+  return(PWM)
 }
 
 
