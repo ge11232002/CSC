@@ -87,7 +87,7 @@ dirichletMixtureEMEstimation <- function(inputMatrix, K,
       alpha0 <- alpha0 + dalpha0 
       Alpha0 <- colSums(alpha0)
     }
-    if(! ite %% iteouter_max /10){
+    if(isTRUE(all.equal(ite %% iteouter_max / 10, 0))){
       print(dll)
       print(sum(abs(dalpha0)))
       print(pmix)
@@ -96,6 +96,7 @@ dirichletMixtureEMEstimation <- function(inputMatrix, K,
   }
   return(list(alpha0=alpha0, pmix=pmix, ll=ll))
 }
+
 repmat <- function(a,n,m) {kronecker(matrix(1,n,m),a)}
 
 ## Sampling from Dirichlet distribution is implemented in gtools::rdirichlet.
@@ -127,29 +128,32 @@ PWMrandomizeBayes <- function(PCM, Dprior, N=NULL, W=NULL){
     W <- Win
   }
   ### parameters of prior
-  alpha0 = Dprior$alpha0 
+  alpha0 <- Dprior$alpha0 
   ##alpha0 is the estimated Dirichlet parameters A x K
-  pmix = Dprior$pmix
+  pmix <- Dprior$pmix
   ## pmix mixing proportions 1 x K
-  K = length(pmix)
+  K <- length(pmix)
 
   ### accumulative distribution for mixing proportions
-  apmix = pmix
-  for(k in 2:K){
-    apmix[k] = apmix[k] + apmix[k-1]
-  }
+  apmix <- cumsum(pmix)
+
   PWM = list() 
   for(n in 1:N){
     PWM[[n]] <- matrix(NA, ncol=W, nrow=length(alpha0))
     if(W == Win){
       for(w in 1:W){
+        ## draw from the mixture component
         k = which(runif(1) < apmix)[1]
+        ## draw from component k of dirichlet posterior
         PWM[[n]][ ,w] <- 
           gtools::rdirichlet(n=1, alpha=(alpha0[ ,k] + PCM[ ,w]))
       }
     }else{
       for(w in 1:W){
+        ## draw from the mixture component
         k = which(runif(x) < apmix)[1]
+        ## draw from component k of dirichlet posterior and use random
+        ## column in PCM
         PWM[[n]][, w] <- 
           gtools::rdirichlet(n=1, alpha=(alpha0[ ,k] + 
                                          PCM[ ,ceiling(Win * runif(1))]))
