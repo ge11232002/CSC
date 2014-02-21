@@ -50,7 +50,7 @@
 }}
 
 \seealso{
-  \link{\code{rPWMDmm}}  
+  \code{\link{rPWMDmm}}
 }
 \author{
   Ge Tan
