@@ -2,8 +2,8 @@
 \docType{methods}
 \alias{rPWMDmm}
 \alias{rPWMDmm-methods}
-\alias{rPWMDmm,ANY-method}
 \alias{rPWMDmm,matrix-method}
+\alias{rPWMDmm,PFMatrix-method}
 \alias{rPWMDmm,PFMatrixList-method}
 \title{rPWMDmm method}
 \description{
@@ -78,7 +78,7 @@ where V = sum(Yi) ~ Gamma(shape = sum(ai), scale = 1).
 \section{Methods}{
 \describe{
 
-\item{\code{signature(x = "ANY")}}{
+\item{\code{signature(x = "PFMatrix")}}{
 %%  ~~describe this method here~~
 }
 
@@ -107,6 +107,16 @@ Kimura, T., Tokuda, T., Nakada, Y., Nokajima, T., Matsumoto, T., & Doucet, A. (2
 
 \author{
   Ge Tan
+}
+
+\examples{
+  \donttest{
+    data(MA0003.2)
+    data(MA0004.1)
+    pfmList <- PFMatrixList(pfm1=MA0003.2, pfm2=MA0004.1, use.names=TRUE)
+    dmmParameters <- dmmEM(pfmList, 6)
+    rPWMDmm(MA0003.2, dmmParameters$alpha0, dmmParameters$pmix, N=1, W=6)
+  }
 }
 
 \keyword{methods}

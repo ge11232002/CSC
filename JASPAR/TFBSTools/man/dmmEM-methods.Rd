@@ -56,5 +56,14 @@
   Ge Tan
 }
 
+\examples{
+  \donttest{
+    data(MA0003.2)
+    data(MA0004.1)
+    pfmList <- PFMatrixList(pfm1=MA0003.2, pfm2=MA0004.1, use.names=TRUE)
+    dmmParameters <- dmmEM(pfmList, 6)
+  }
+}
+
 \keyword{methods}
 \keyword{ ~~ other possible keyword(s) ~~ }

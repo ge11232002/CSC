@@ -149,6 +149,12 @@ setMethod("rPWMDmm", signature(x="matrix"),
           }
           )
 
+setMethod("rPWMDmm", signature(x="PFMatrix"),
+          function(x, alpha0, pmix, N=1, W=6){
+            PWMrandomizeBayes(Matrix(x), alpha0, pmix, N, W)
+          }
+          )
+
 setMethod("rPWMDmm", signature(x="PFMatrixList"),
           function(x, alpha0, pmix, N=1, W=6){
             allMatrix <- do.call(cbind, Matrix(x))
