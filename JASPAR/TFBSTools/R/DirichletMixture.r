@@ -202,7 +202,7 @@ PWMrandomizeBayes <- function(PCM, alpha0, pmix, N=1, W=6){
     }else{
       for(w in 1:W){
         ## draw from the mixture component
-        k = which(runif(x) < apmix)[1]
+        k = which(runif(1) < apmix)[1]
         ## draw from component k of dirichlet posterior and use random
         ## column in PCM
         PWM[[n]][, w] <- 

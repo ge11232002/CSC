@@ -102,7 +102,7 @@ Kimura, T., Tokuda, T., Nakada, Y., Nokajima, T., Matsumoto, T., & Doucet, A. (2
 }
 
 \seealso{
-  \link{\code{dmmEM}}
+  \code{\link{dmmEM}}
 }
 
 \author{
