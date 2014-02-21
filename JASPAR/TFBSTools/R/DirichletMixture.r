@@ -1,8 +1,10 @@
-
+### -----------------------------------------------------------------
+### Train the Dirichlet mixture model from matrice
+### Exported!
 
 setMethod("dmmEM", signature(x="matrix"),
           function(x, K, alpha0=NULL, pmix=NULL){
-            dirichletMixtureEMEstimation(x, K, alpha0, pmix)
+            dirichletMixtureEMEstimation(t(x), K, alpha0, pmix)
           }
           )
 
@@ -29,7 +31,7 @@ dirichletMixtureEMEstimation <- function(inputMatrix, K,
 ## K: the number of sought component.
 ## alpha0: the estimated Dirichlet parameters A x K
 ## pmix: mixing proportions 1 x K
-
+  K = as.integer(K)
   N <- nrow(inputMatrix)
   A <- ncol(inputMatrix)
   rowSumsInputMatrix <- rowSums(inputMatrix)
@@ -45,10 +47,14 @@ dirichletMixtureEMEstimation <- function(inputMatrix, K,
   if(is.null(alpha0)){
     epsilon <- 0.1
     alpha0 <- epsilon * (2 * matrix(runif(A * K), nrow=A, ncol=K) - 1) + 2
+  }else{
+    stopifnot(all(dim(alpha0) == c(nrow(inputMatrix), K)))
   }
   Alpha0 <- colSums(alpha0)
   if(is.null(pmix)){
     pmix <- rep(1, K) / K
+  }else{
+    stopifnot(sum(pmix) == 1)
   }
 
   ## minimum alpha0 value
@@ -133,6 +139,10 @@ repmat <- function(a,n,m) {kronecker(matrix(1,n,m),a)}
   #rgamma(n*length(a), rep(a, n))
 #}
 
+### -----------------------------------------------------------------
+### sample the matrix from Dirichlet mixture model
+### Exported!
+
 setMethod("rPWMDmm", signature(x="matrix"),
           function(x, alpha0, pmix, N=1, W=6){
             PWMrandomizeBayes(x, alpha0, pmix, N, W)
@@ -146,12 +156,12 @@ setMethod("rPWMDmm", signature(x="PFMatrixList"),
           }
           )
 
-setMethod("rPWMDmm", signature(x="ANY"),
-          function(x, alpha0, pmix, N=1, W=6){
-            allMatrix <- getMatrixSet(x, opts=list(all=TRUE))
-            rPWMDmm(allMatrix, alpha0, pmix, N, W)
-          }
-          )
+#setMethod("rPWMDmm", signature(x="ANY"),
+#          function(x, alpha0, pmix, N=1, W=6){
+#            allMatrix <- getMatrixSet(x, opts=list(all=TRUE))
+#            rPWMDmm(allMatrix, alpha0, pmix, N, W)
+#          }
+#          )
 
 
 PWMrandomizeBayes <- function(PCM, alpha0, pmix, N=1, W=6){

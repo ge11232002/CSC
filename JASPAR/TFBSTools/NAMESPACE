@@ -133,7 +133,7 @@ export(
   permuteMatrix,
 
   ## DirichletMixture.r
-  dmmEM,
+  dmmEM, rPWMDmm,
 
   ## Wrappers-methods.r
   runMEME,
