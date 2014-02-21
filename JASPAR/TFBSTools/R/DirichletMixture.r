@@ -96,10 +96,66 @@ dirichletMixtureEMEstimation <- function(inputMatrix, K,
   }
   return(list(alpha0=alpha0, pmix=pmix, ll=ll))
 }
+repmat <- function(a,n,m) {kronecker(matrix(1,n,m),a)}
+
+## Sampling from Dirichlet distribution is implemented in gtools::rdirichlet.
+#dirichletSample <- function(a, n=1){
+  ## Sample from Dirichlet distribution.
+  ## DIRICHLET_SAMPLE(a) returns a probability vector sampled from a
+  ## Dirichlet distribution with parameter vector A.
+  ## DIRICHLET_SAMPLE(a,n) returns N samples, collected into a matrix, each
+  ## vector having the same orientation as A.
+  ## References:
+  ##   [1]  L. Devroye, "Non-Uniform Random Variate Generation",
+  ##   Springer-Verlag, 1986
+  ## This is essentially a generalization of the method for Beta rv's.
+  ## Theorem 4.1, p.594
+  #rgamma(n*length(a), rep(a, n))
+#}
 
 
-PWMrandomizeBayes <- function(){
+PWMrandomizeBayes <- function(PCM, Dprior, N=NULL, W=NULL){
+  ## generates N (default 1) random PWM of width drawn from the posterior distribution
+  ## of PWMs. The posterior is propertional to the Dirichlet prior distribution Dprior (which
+  ## might be a mixture) times the mulitnomial likelihood with count matrix PCM.
+  A <- nrow(PCM)
+  Win <- ncol(PCM)
+  if(is.null(N)){
+    N <- 1
+  }
+  if(is.null(W)){
+    W <- Win
+  }
+  ### parameters of prior
+  alpha0 = Dprior$alpha0 
+  ##alpha0 is the estimated Dirichlet parameters A x K
+  pmix = Dprior$pmix
+  ## pmix mixing proportions 1 x K
+  K = length(pmix)
 
+  ### accumulative distribution for mixing proportions
+  apmix = pmix
+  for(k in 2:K){
+    apmix[k] = apmix[k] + apmix[k-1]
+  }
+  PWM = list() 
+  for(n in 1:N){
+    PWM[[n]] <- matrix(NA, ncol=W, nrow=length(alpha0))
+    if(W == Win){
+      for(w in 1:W){
+        k = which(runif(1) < apmix)[1]
+        PWM[[n]][ ,w] <- 
+          gtools::rdirichlet(n=1, alpha=(alpha0[ ,k] + PCM[ ,w]))
+      }
+    }else{
+      for(w in 1:W){
+        k = which(runif(x) < apmix)[1]
+        PWM[[n]][, w] <- 
+          gtools::rdirichlet(n=1, alpha=(alpha0[ ,k] + 
+                                         PCM[ ,ceiling(Win * runif(1))]))
+      }
+    }
+  }
 }
 
 
