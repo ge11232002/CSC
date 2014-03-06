@@ -37,7 +37,9 @@ export lastzParams="$lastzFar"
 #  WRKDIR is where your 2bit files are and where you want this to work
 export WRKDIR="."
 cd ${WRKDIR}
+## To adapt
 export TNAME=droVir3
+## To adapt
 export QNAME=dm3
 export TARGET=${WRKDIR}/${TNAME}.2bit
 export QUERY=${WRKDIR}/${QNAME}.2bit
@@ -56,11 +58,11 @@ mkdir ${QNAME}PartList
 fi
 
 if [ ! -s ${TNAME}.part.list ]; then
-partitionSequence.pl 10000000 10000 ${TARGET} ${TNAME}.chrom.sizes 1 \
+./partitionSequence.pl 10000000 10000 ${TARGET} ${TNAME}.chrom.sizes 1 \
 	-lstDir ${TNAME}PartList > ${TNAME}.part.list
 fi
 if [ ! -s ${QNAME}.part.list ]; then
-partitionSequence.pl 20000000 0 ${QUERY} ${QNAME}.chrom.sizes 1 \
+./partitionSequence.pl 20000000 0 ${QUERY} ${QNAME}.chrom.sizes 1 \
 	-lstDir ${QNAME}PartList > ${QNAME}.part.list
 fi
 
@@ -89,11 +91,11 @@ set T = \$1
 set Q = \$2
 set FT = \$3
 set FQ = \$4
-set tmpDir = /scratch/tmp/\${FT}
+set tmpDir = /mnt/biggles/home/tmp/\${FT}
 mkdir -p raw psl \${tmpDir}
 twoBitToFa \${T} \${tmpDir}/\${FT}.fa
 twoBitToFa \${Q} \${tmpDir}/\${FQ}.fa
-/cluster/bin/penn/lastz-distrib-1.02.00/bin/lastz \${tmpDir}/\${FT}.fa \
+lastz \${tmpDir}/\${FT}.fa \
     \${tmpDir}/\${FQ}.fa \
     ${lastzParams} \
     > raw/\${FT}.\${FQ}.lav
