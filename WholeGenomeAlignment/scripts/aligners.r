@@ -161,14 +161,13 @@ axtChain = function(inputs, assemblyTarget, assemblyQuery, format="axt",
   return(outputs)
 }
 
-chainMergeSort = function(chains, assemblyTarget, assemblyQuery, removeChains=TRUE){
+chainMergeSort = function(path="chain", assemblyTarget, assemblyQuery, removeChains=TRUE){
   allChain = paste(sub("\\.2bit$", "", basename(assemblyTarget), ignore.case=TRUE), 
                    ".",
                    sub("\\.2bit$", "", basename(assemblyQuery), ignore.case=TRUE),
                    ".all.chain", sep=""
                    )
-  cmd = "chainMergeSort"
-  cmd = paste(cmd, paste(chains, collapse=" "), ">", allChain)
+  cmd = paste0("find ", path, " -name \"*.chain\" | chainMergeSort -inputList=stdin > ", allChain)
   my.system(cmd)
   if(removeChains){
     unlink(chains)
