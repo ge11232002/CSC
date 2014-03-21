@@ -859,6 +859,24 @@ The reference genome is downloaded from [Aspergillus Genome Database](http://www
 The evolutionary distance between these species can be found from 
 [Broad Institute](http://www.broadinstitute.org/annotation/genome/aspergillus_group/MultiHome.html).
 
+**Pucciniales**
+The reference genome is downloaded from Fungi Ensembl.
+
+| full name | short name |
+| --------- | ---------- |
+| Puccinia graminis | ASM14992v1 |
+| Puccinia triticina| ASM15152v1 |
+| Melampsora larici-populina | GCA-000204055.1 |
+
+**Magnaporthales**
+The reference genome is downloaded from Fungi Ensembl.
+
+| full name | short name |
+| --------- | ---------- |
+| Magnaporthe oryzae | MG8 |
+| Gaeumannomyces graminis | Gae-graminis-V2 |
+| Magnaporthe poae   | Mag-poae-ATCC-64411-V1 |
+
 
 ### Creating and loading GFF files
 The annotations in the UCSC MySQL tables and 
