@@ -855,6 +855,7 @@ The reference genome is downloaded from [Aspergillus Genome Database](http://www
 | A_oryzae_RIB40  | RIB40     |
 | A_fumigatus_Af293 | AF293    |
 | A_niger_CBS_513_88    | CBS51388 |
+| A_flavus_NRRL_3357  | NRRL3357 |
 
 The evolutionary distance between these species can be found from 
 [Broad Institute](http://www.broadinstitute.org/annotation/genome/aspergillus_group/MultiHome.html).
