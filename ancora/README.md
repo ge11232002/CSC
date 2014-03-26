@@ -839,6 +839,7 @@ Name conventions for candida:
 | C_tropicalis_MYA-3404 | MYA3404 |
 | C_guilliermondii_ATCC_6260 | ATCC6260 |
 
+
 The original reference genome from CGD is not repeat masked, 
 i.e., all the bases in the upper case.
 To mask the repeats into lower case, ```cne/scripts/gbrowse_db/candida/repeatmaskReference.r```
@@ -860,6 +861,12 @@ The reference genome is downloaded from [Aspergillus Genome Database](http://www
 
 The evolutionary distance between these species can be found from 
 [Broad Institute](http://www.broadinstitute.org/annotation/genome/aspergillus_group/MultiHome.html).
+
+** S. accharomyces**
+The reference genome from [SGD](http://yeastgenome.org/).
+| full name | short name |
+| --------- | ---------- |
+| S_bayanus/623-6C | Sb6236C | 
 
 **Pucciniales**
 The reference genome is downloaded from Fungi Ensembl.
