@@ -61,14 +61,17 @@ lastz = function(assemblyTarget, assemblyQuery, chrsTarget=NULL, chrsQuery=NULL,
   outputToReturn = c()
   for(chrTarget in chrsTarget){
     for(chrQuery in chrsQuery){
-      output = paste(chrTarget, 
+      ## Deal the "|" in chr name
+      output = paste(gsub("|", "\\|", chrTarget, fixed=TRUE), 
                      ".", sub("\\..*$", "", basename(assemblyTarget)),
-                     "-", chrQuery,
+                     "-", gsub("|", "\\|", chrQuery, fixed=TRUE),
                      ".", sub("\\..*$", "", basename(assemblyQuery)),
                      ".", format, sep="")
       outputToReturn = c(outputToReturn, output)
-      cmd = paste("lastz", " ", assemblyTarget, "/", chrTarget, " ", 
-                  assemblyQuery, "/", chrQuery, " ", 
+      cmd = paste("lastz", " ", assemblyTarget, "/", 
+                  gsub("|", "\\|", chrTarget, fixed=TRUE), " ", 
+                  assemblyQuery, "/", 
+                  gsub("|", "\\|", chrQuery, fixed=TRUE), " ", 
                   lastzOptions[[distance]], 
                   " --format=", format, 
                   " --output=", output,
