@@ -836,6 +836,8 @@ Name conventions for candida:
 | C_dubliniensis_CD36 | CD36 |
 | C_glabrata_CBS138 | CBS138 |
 | C_parapsilosis_CDC317 |  CDC317 | 
+| C_tropicalis_MYA-3404 | MYA3404 |
+| C_guilliermondii_ATCC_6260 | ATCC6260 |
 
 The original reference genome from CGD is not repeat masked, 
 i.e., all the bases in the upper case.
@@ -855,7 +857,6 @@ The reference genome is downloaded from [Aspergillus Genome Database](http://www
 | A_oryzae_RIB40  | RIB40     |
 | A_fumigatus_Af293 | AF293    |
 | A_niger_CBS_513_88    | CBS51388 |
-| A_flavus_NRRL_3357  | NRRL3357 |
 
 The evolutionary distance between these species can be found from 
 [Broad Institute](http://www.broadinstitute.org/annotation/genome/aspergillus_group/MultiHome.html).
