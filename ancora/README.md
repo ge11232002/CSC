@@ -863,7 +863,7 @@ The reference genome is downloaded from [Aspergillus Genome Database](http://www
 The evolutionary distance between these species can be found from 
 [Broad Institute](http://www.broadinstitute.org/annotation/genome/aspergillus_group/MultiHome.html).
 
-** S. accharomyces**
+**S. accharomyces**
 The reference genome from [SGD](http://yeastgenome.org/).
 
 | full name | short name |
