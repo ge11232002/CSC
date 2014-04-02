@@ -103,14 +103,18 @@ validateLastz = function(lavs){
 
 lavToPsl = function(lavs, psls=sub("\\.lav$", ".psl", lavs, ignore.case=TRUE), 
                     removeLav=TRUE){
-  for(i in 1:length(lavs)){
-    cmd = paste("lavToPsl", lavs[i], psls[i])
-    my.system(cmd)
-  }
+  #for(i in 1:length(lavs)){
+  #  cmd = paste("lavToPsl", lavs[i], psls[i])
+  #  my.system(cmd)
+  #}
+  tempFile <- tempfile(pattern="lavToPsl", tmpdir=".")
+  writeLines(paste("lavToPsl", lavs, psls), con=tempFile)
+  my.system(paste("sh", tempFile))
+  unlink(tempFile)
   if(removeLav){
     unlink(lavs)
   } 
-  return(psls)
+  return("success")
 }
 
 axtChain = function(inputs, assemblyTarget, assemblyQuery, format="axt", 
@@ -147,16 +151,22 @@ axtChain = function(inputs, assemblyTarget, assemblyQuery, format="axt",
   matrixFile = paste(Sys.getpid(), "-lastzMatrix.dat", sep="")
   write.table(lastzMatrix[[distance]], file=matrixFile, quote=FALSE, 
               sep=" ", row.names=FALSE, col.names=TRUE)
-  for(i in 1:length(inputs)){
-    cmd = "axtChain"
-    if(format == "psl"){
-      cmd = paste(cmd, "-psl")
-    }
-    cmd = paste(cmd, chainOptions[[distance]]) 
-    cmd = paste(cmd, " -scoreScheme=", matrixFile, sep="")
-    cmd = paste(cmd, inputs[i], assemblyTarget, assemblyQuery, outputs[i])
-    my.system(cmd)
-  }
+  #for(i in 1:length(inputs)){
+  #  cmd = "axtChain"
+  #  if(format == "psl"){
+  #    cmd = paste(cmd, "-psl")
+  #  }
+  #  cmd = paste(cmd, chainOptions[[distance]]) 
+  #  cmd = paste(cmd, " -scoreScheme=", matrixFile, sep="")
+  #  cmd = paste(cmd, inputs[i], assemblyTarget, assemblyQuery, outputs[i])
+  #  my.system(cmd)
+  #}
+  cmd = paste0("axtChain -psl ", chainOptions[[distance]], " -scoreScheme=",
+               matrixFile, inputs, assemblyTarget, assemblyQuery, outputs)
+  tempFile <- tempfile(pattern="axtChain", tmpdir=".")
+  writeLines(cmd, con=tempFile)
+  my.system(paste("sh", tempFile))
+  unlink(tempFile)
   unlink(matrixFile)
   if(removePsl){
     unlink(inputs)
