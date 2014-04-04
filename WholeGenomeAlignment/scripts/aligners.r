@@ -2,6 +2,7 @@
 
 lastz = function(assemblyTarget, assemblyQuery, chrsTarget=NULL, chrsQuery=NULL, distance="medium", format="lav", echoCommand=FALSE){
   require(rtracklayer)
+  require(countLines)
 # This matrix is taken from http://genomewiki.ucsc.edu/index.php/GorGor3_conservation_lastz_parameters. Default HOXD70 is medium. HoxD55 is far. human-chimp.v2 is close.
   lastzMatrix = list(medium = matrix(c(91, -114, -31, -123,
                                       -114, 100, -125, -31,
@@ -81,6 +82,10 @@ lastz = function(assemblyTarget, assemblyQuery, chrsTarget=NULL, chrsQuery=NULL,
         message(cmd)
       }else{
         my.system(cmd)
+      }
+      if(countLines(output) == 15L){
+        ## delete the empty files
+        unlink(output)
       }
     }
   }
