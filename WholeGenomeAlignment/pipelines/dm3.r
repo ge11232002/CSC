@@ -38,15 +38,15 @@ setwd("../")
 
 removeFiles <- FALSE
 ## lastz might exit without any errors. check the files whether are complete.
-lavs <- file.path("lav", lavs)
+#lavs <- file.path("lav", lavs)
+lavs <- list.files("lav", pattern=".*\\.lav", full.names=TRUE)
 filesNotCompleted = validateLastz(lavs)
 stopifnot(is.null(filesNotCompleted))
 
 ### step 2: lav to psl 
 dir.create("psl")
-psls <- file.path("psl", sub("\\.lav$", ".psl", basename(lavs), 
-                             ignore.case=TRUE))
-psls = lavToPsl(lavs, psls, removeLav=removeFiles)
+psls <- file.path("psl", sub(".lav", ".psl", basename(lavs), fixed=TRUE))
+lavToPsl(lavs, psls, removeLav=removeFiles)
 
 ### step 3: Chaining
 dir.create("chain")
