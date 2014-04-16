@@ -11,7 +11,7 @@ filesNotToCompute = sub("-tmp$", "", filesNotToCompute)
 
 files = setdiff(files, file.path(preBlatFilter, filesNotToCompute))
 
-library(multicore)
+library(parallel)
 
 cmd = "perl /opt/www/cne/scripts/cne_pipeline/blat_filter.pl --tmp "
 setwd(blatFilter)
