@@ -167,7 +167,8 @@ axtChain = function(inputs, assemblyTarget, assemblyQuery, format="axt",
   #  my.system(cmd)
   #}
   cmd = paste0("axtChain -psl ", chainOptions[[distance]], " -scoreScheme=",
-               matrixFile, inputs, assemblyTarget, assemblyQuery, outputs)
+               matrixFile, " ", inputs, " ", assemblyTarget, 
+               " ", assemblyQuery, " ", outputs)
   tempFile <- tempfile(pattern="axtChain", tmpdir=".")
   writeLines(cmd, con=tempFile)
   my.system(paste("sh", tempFile))
