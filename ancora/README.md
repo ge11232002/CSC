@@ -888,6 +888,14 @@ The reference genome is downloaded from Fungi Ensembl.
 | Gaeumannomyces graminis | Gae-graminis-V2 |
 | Magnaporthe poae   | Mag-poae-ATCC-64411-V1 |
 
+**Tsetse Fly**
+The reference genome (Glossina morsitans) is from [Sanger Institute](ftp://ftp.sanger.ac.uk/pub/pathogens/Glossina/morsitans/Assemblies/tsetseGenome-v1.tar.gz).
+The Glossina morsitans assembly was released by the Sanger Center in December 2010 and is in the process of being released. It consists of 13,807 supercontigs.
+The annotation is from [VectorBase](https://www.vectorbase.org/downloads) with 
+Gene set: GmorY1.3 25 Feb 2014.
+Assembly ID: GmorY1.
+CNEs are generated between Drosophila (dm3) vs GmorY1.
+
 
 ### Creating and loading GFF files
 The annotations in the UCSC MySQL tables and 
