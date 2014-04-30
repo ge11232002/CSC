@@ -877,7 +877,7 @@ The reference genome is downloaded from Fungi Ensembl.
 | --------- | ---------- |
 | Puccinia graminis | ASM14992v1 |
 | Puccinia triticina| ASM15152v1 |
-| Melampsora larici-populina | GCA-000204055.1 |
+| Melampsora larici-populina | GCA0002040551 |
 
 **Magnaporthales**
 The reference genome is downloaded from Fungi Ensembl.
