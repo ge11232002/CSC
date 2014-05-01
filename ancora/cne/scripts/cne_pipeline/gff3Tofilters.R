@@ -1,14 +1,13 @@
 
 library(rtracklayer)
-CDGGff = list.files("../annotation/", "*.gff", full.names=TRUE)
-stopifnot(length(CDGGff) == 1)
 
-filtersFn = "filter_regions.CBS51388_real.bed"
+## set
+gffFn <- "../annotation/Glossina-morsitans-Yale_BASEFEATURES_GmorY1.3.gff3_0"
+filtersFn <- "filter_regions.GmorY1.bed"
+chroms <- seqnames(seqinfo(TwoBitFile("/export/data/goldenpath/GmorY1/assembly.2bit")))
 
-chroms = seqnames(seqinfo(TwoBitFile("/export/data/goldenpath/CBS51388/assembly.2bit")))
-
-gff = read.table(CDGGff, header=FALSE, sep="\t", stringsAsFactors=FALSE, quote="")
-
+## compute
+gff <- read.table(gffFn, header=FALSE, sep="\t", stringsAsFactors=FALSE, quote="")
 filterFeatures = c("exon", "repeat_region", "long_terminal_repeat")
 
 gff = gff[gff$V3 %in% filterFeatures, c("V1", "V4", "V5")]
