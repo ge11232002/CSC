@@ -21,5 +21,4 @@ report = mclapply(files, function(oneFile){
                   if(res != 0){return(oneFile)}}, mc.cores=nr_cores)
 
 
-message("The running report: ", report)
 

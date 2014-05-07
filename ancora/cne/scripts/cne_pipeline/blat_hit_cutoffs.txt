@@ -39,6 +39,7 @@ dp4     4
 dp3     4
 droVir3 4
 droMoj3 4
+GmorY1  4
 
 ce10    4
 ce4     4
