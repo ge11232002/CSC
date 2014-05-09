@@ -838,7 +838,7 @@ Name conventions for candida:
 | C_parapsilosis_CDC317 |  CDC317 | 
 | C_tropicalis_MYA-3404 | MYA3404 |
 | C_guilliermondii_ATCC_6260 | ATCC6260 |
-
+| C_albicans_WO-1 | WO1 |
 
 The original reference genome from CGD is not repeat masked, 
 i.e., all the bases in the upper case.
