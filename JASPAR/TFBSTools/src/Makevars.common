@@ -1,3 +1,0 @@
-PKG_OBJECTS = \
-  matrixAlignerDynamic.o R_init_TFBSTools.o
-
