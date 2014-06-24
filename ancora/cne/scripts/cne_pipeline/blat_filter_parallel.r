@@ -16,8 +16,8 @@ library(BatchJobs)
 
 cmd = "perl /opt/www/cne/scripts/cne_pipeline/blat_filter.pl --tmp "
 setwd(blatFilter)
-reg <- makeRegistry(id="blatfilter", seed=123,
-                    file.dir=file.path(getwd(), paste("blatfilter", 
+reg <- makeRegistry(id="blatfilter2", seed=123,
+                    file.dir=file.path(getwd(), paste("blatfilter2", 
                                                       "-batchjobs",
                                                       sep="")),
                     work.dir=getwd(), skip=FALSE)
