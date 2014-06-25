@@ -22,7 +22,7 @@ reg <- makeRegistry(id="blatfilter2", seed=123,
                                                       sep="")),
                     work.dir=getwd(), skip=FALSE)
 batchMap(reg, function(oneFile, cmd){
-         res=system(paste0(cmd, basename(oneFile)," ", oneFile))
+         res=system(paste0(cmd, basename(oneFile),"-tmp ", oneFile))
          return(oneFile)
                     }, files, more.args=list(cmd=cmd)
          )
