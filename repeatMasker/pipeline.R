@@ -3,6 +3,10 @@ selfScripts = list.files(path=selfDir, pattern='.*\\.R', full.names=TRUE,
                          recursive=TRUE)
 for(rs in selfScripts){message(rs);source(rs)}
 
+
+### Compute together
+#/usr/local/bin/RepeatMasker/RepeatMasker -engine crossmatch  -pa 8 -align -species danio DHAB.fa
+
 ### Partition
 # perl /mnt/biggley/home/gtan/Repos/CSC/repeatMasker/scripts/src_hg_utils_automation_simplePartition.pl /export/data/goldenpath/DHAB/DHAB.unmasked.2bit 500000 RMPart
 
