@@ -42,6 +42,7 @@ repeatMasker <- function(inLstFn, species="danio", engine="crossmatch",
   faOutFns <- list.files(path=".", pattern=".*\\.fa\\.out")
   cmd <- paste("liftUp -type=.out stdout",  inLftFn, "error", 
                paste0(faOutFns, collapse=" "), "> tmpOut_out")
+  CNEr:::my.system(cmd)
   alignFiles <- list.files(path=".", pattern=".*\\.align")
   if(length(alignFiles) > 0){
     cmd <- paste("liftUp -type=.align stdout", inLftFn, "error",
