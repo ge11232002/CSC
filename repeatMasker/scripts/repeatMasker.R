@@ -1,6 +1,8 @@
 
 
-
+### ------------------------------------------------------------------ 
+### The RepeatMaske rwrapper function for splitted assembly
+###
 repeatMasker <- function(inLstFn, species="danio", engine="crossmatch",
                          binary="/usr/local/bin/RepeatMasker/RepeatMasker"){
   engine <- match.arg(engine, c("crossmatch", "wublast", "abblast", "ncbi",
