@@ -18,6 +18,7 @@ inLstFns <- file.path(getwd(), "RMPart", inLstFns)
 
 
 library(BatchJobs)
+## require 1 core for each job
 reg <- makeRegistry(id="repeatMasker", seed=123,
                     file.dir=file.path(getwd(), 
                                        paste("repeatMasker", "-batchjobs",
