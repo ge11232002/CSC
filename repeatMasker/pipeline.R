@@ -34,3 +34,4 @@ idsChunk <- chunk(ids, n.chunk=10)
 submitJobs(reg, ids=idsChunk)
 showStatus(reg)
 
+

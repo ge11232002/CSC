@@ -14,6 +14,7 @@ repeatMasker <- function(inLstFn, species="danio", engine="crossmatch",
 
   cwd <- getwd()
   tmpDir <- tempdir()
+  dir.create(tmpDir)
   setwd(tmpDir)
   # Initialize local library
   cmd <- paste(binary, "-engine", engine, "-pa 1 -species", species, "/dev/null")
