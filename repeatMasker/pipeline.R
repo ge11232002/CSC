@@ -34,4 +34,12 @@ idsChunk <- chunk(ids, n.chunk=10)
 submitJobs(reg, ids=idsChunk)
 showStatus(reg)
 
+###  Collect cluster run results
+#### liftUp DHAB.fa.out /dev/null carry RMPart/*/*/*.out
+#### liftUp DHAB.fa.align /dev/null carry RMPart/*/*/*.align
+
+###  Masking sequence
+#### twoBitMask DHAB.unmasked.2bit ../DHAB_ncbi/DHAB.sorted.fa.out DHAB.rmsk.2bit
+
+
 
