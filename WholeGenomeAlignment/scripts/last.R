@@ -6,7 +6,8 @@
 #########################################################################
 
 last <- function(db, queryFn, outputFn,
-                 distance="medium", format=c("MAF","tabular")){
+                 distance="medium", format=c("MAF","tabular"),
+                 mc.cores=1L){
   format <- match.arg(form)
   # This matrix is taken from http://genomewiki.ucsc.edu/index.php/GorGor3_conservation_lastz_parameters. Default HOXD70 is medium. HoxD55 is far. human-chimp.v2 is close.
   lastzMatrix <- list(medium=matrix(c(91, -114, -31, -123,
@@ -42,15 +43,23 @@ last <- function(db, queryFn, outputFn,
   ## -e: Minimum alignment score.
   ## -p: Specify a match/mismatch score matrix.  Options -r and -q will be ignored.
   ## -s: Specify which query strand should be used: 0 means reverse only, 1 means forward only, and 2 means both.
-  lastOptiosn <- list(near=paste("-a 600 -b 150 -e 3000 -p", matrixFile, "-s 2",),
+  lastOptiosn <- list(near=paste("-a 600 -b 150 -e 3000 -p", matrixFile, "-s 2"),
                       medium=paste("-a 400 -b 30 -e 4500 -p", matrixFile, "-s 2"),
                       far=paste("-a 400 -b 30 -e 6000 -p", matrixFile, "-s 2")
                       )
   formatMapping <- list(MAF=1, tabular=0)
   message("last")
-  cmd <- paste("lastal", lastOptiosn[[distance]],
+  mc.cores <- as.integer(mc.cores)
+  if(mc.cores == 1L){
+    cmd <- paste("lastal", lastOptiosn[[distance]],
                "-o", outputFn, "-f", formatMapping[[format]],
                db, queryFn)
+  }else{
+    cmd <- paste("parallel-fasta", "-j", mc.cores,
+                 "\"lastal", lastOptiosn[[distance]],
+                 "-f", formatMapping[[format]], db, "\"", "< queryFn",
+                 ">", outputFn)
+  }
   CNEr:::my.system(cmd)
   unlink(matrixFile)
   return("success")
