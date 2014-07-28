@@ -5,6 +5,10 @@ for(rs in selfScripts){message(rs);source(rs)}
 
 ## first set the two genomes are near, medium or far.
 distance = "near"
-assemblyTarget= "/export/data/goldenpath/DHAB/DHAB"
-assemblyQuery = "/export/data/goldenpath/ASM15152v1/ASM15152v1.2bit"
+targetDB= "/export/data/goldenpath/DHAB/DHAB"
+assemblyQuery = "/export/data/goldenpath/danRer7/danRer7.fa"
+
+last(targetDB, assemblyQuery, outputFn="DHAB.danRer7.maf")
+
+
 
