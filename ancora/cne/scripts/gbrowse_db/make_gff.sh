@@ -22,6 +22,11 @@
     /export/data/CNEs/synteny/joinedNets_danRer7_hg19_gap150k450k.hg19_detail.bed \
     >>/export/data/CNEs/gff/hg19.gff
   wc -l /export/data/CNEs/gff/hg19.gff
+  perl /opt/www/cne/scripts/gbrowse_db/synteny2gff.pl jn galGal4 \
+    /export/data/CNEs/synteny/joinedNets_galGal4_hg19_gap200k300k.txt \
+    /export/data/CNEs/synteny/joinedNets_galGal4_hg19_gap200k300k.hg19_detail.bed \
+    >>/export/data/CNEs/gff/hg19.gff
+  wc -l /export/data/CNEs/gff/hg19.gff
 
 
 #mm10
