@@ -81,12 +81,16 @@ lastz = function(assemblyTarget, assemblyQuery, chrsTarget=NULL, chrsQuery=NULL,
       if(echoCommand){
         message(cmd)
       }else{
-        my.system(cmd)
+        if(!file.exists(output)){
+          my.system(cmd)
+        }else{
+          warning("The output ", output, " already exists! Skipping..")
+        }
       }
-      if(countLines(output) == 15L){
+      #if(countLines(output) == 15L){
         ## delete the empty files
-        unlink(output)
-      }
+      #  unlink(output)
+      #}
     }
   }
   unlink(matrixFile)
