@@ -37,10 +37,10 @@ batchExpandGrid(reg, function(chrsTarget, chrsQuery, assemblyTarget, assemblyQue
                                format="lav")
                 )
 
-testJob(reg, 1)
+#testJob(reg, 1)
 ids <- getJobIds(reg)
 idsChunk <- chunk(ids, n.chunks=10, shuffle=TRUE)
-submitJobs(reg)
+submitJobs(reg, ids=idsChunk)
 showStatus(reg)
 setwd("../")
 
