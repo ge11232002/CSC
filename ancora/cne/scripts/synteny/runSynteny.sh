@@ -7,7 +7,7 @@ hg19()
   perl /opt/www/cne/scripts/synteny/join_nets.pl \
     danRer7 hg19 UCSC_danRer7 100000 300000
   perl /opt/www/cne/scripts/synteny/join_nets.pl \
-    galGal4 hg19 UCSC_galGal4 200000 300000
+    galGal4 hg19 UCSC_galGal4 300000 300000
 }
 
 #mm10
