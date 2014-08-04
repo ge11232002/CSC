@@ -16,3 +16,13 @@ last(targetDB, assemblyQuery, outputFn="DHAB.danRer7.maf",
 ### maf-convert.py psl DHAB.danRer7.maf > DHAB.danRer7.psl
 
 
+## psl to chain
+assemblyTarget = "/export/data/goldenpath/DHAB/DHAB.2bit"
+assemblyQuery = "/export/data/goldenpath/danRer7/danRer7.2bit"
+outputs = "DHAB.danRer7.chain"
+psls = "DHAB.danRer7.psl"
+
+chains = axtChain(psls, assemblyTarget, assemblyQuery, format="psl",
+                  outputs=outputs, distance=distance, removePsl=removeFiles)
+
+
