@@ -833,6 +833,7 @@ Name conventions for candida:
 | full name | short name |
 | --------------- |--------------- | 
 | C_albicans_SC5314A21 | SC5314A21 |
+| C_albicans_SC5314A22 | SC5314A22 |
 | C_dubliniensis_CD36 | CD36 |
 | C_glabrata_CBS138 | CBS138 |
 | C_parapsilosis_CDC317 |  CDC317 | 
