@@ -836,7 +836,9 @@ Name conventions for candida:
 | C_albicans_SC5314A22 | SC5314A22 |
 | C_dubliniensis_CD36 | CD36 |
 | C_glabrata_CBS138 | CBS138 |
+| C_glabrata_CBS138_s02-m04-r01 | CBS138s02m04r01 |
 | C_parapsilosis_CDC317 |  CDC317 | 
+| C_parapsilosis_CDC317_s01-m03-r11 | CDC317s01m03r11 |
 | C_tropicalis_MYA-3404 | MYA3404 |
 | C_guilliermondii_ATCC_6260 | ATCC6260 |
 | C_albicans_WO-1 | WO1 |
