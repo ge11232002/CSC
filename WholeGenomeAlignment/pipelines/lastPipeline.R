@@ -17,15 +17,16 @@ last(targetDB, assemblyQuery, outputFn="DHAB.danRer7.maf",
 
 
 ## split psl
+### mkdir psl && cd psl
 ### split --lines=9767336 DHAB.danRer7.psl
 
 ## psl to chain
 assemblyTarget = "/export/data/goldenpath/DHAB/DHAB.2bit"
 assemblyQuery = "/export/data/goldenpath/danRer7/danRer7.2bit"
-outputs = "DHAB.danRer7.chain"
-psls = list.files(path="psl", pattern="x.*")
-outputs <- file.path("chain", sub(paste("\\.", "psl", "$", sep=""),
-                                  ".chain", basename(psls), ignore.case=TRUE))
+psls = list.files(path="psl", pattern="x.*", full.name=TRUE)
+dir.create("chain")
+outputs <- file.path("chain", paste0(basename(psls), ".chain"))
+
 removeFiles = FALSE
 chains = axtChain(psls, assemblyTarget, assemblyQuery, format="psl",
                   outputs=outputs, distance=distance, removePsl=FALSE)
