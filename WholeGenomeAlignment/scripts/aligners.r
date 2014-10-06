@@ -117,7 +117,8 @@ lavToPsl = function(lavs, psls=sub("\\.lav$", ".psl", lavs, ignore.case=TRUE),
   #  my.system(cmd)
   #}
   tempFile <- tempfile(pattern="lavToPsl", tmpdir=".")
-  writeLines(paste("lavToPsl", lavs, psls), con=tempFile)
+  writeLines(paste0("lavToPsl ", "\"", lavs, "\"", " ", "\"", psls, "\""),
+             con=tempFile)
   my.system(paste("sh", tempFile))
   unlink(tempFile)
   if(removeLav){
