@@ -32,6 +32,7 @@ oryLat1 8
 oryLat2 8
 GmG10   8
 GmG09   8
+LepOcu1 4
 calMil1	1
 
 dm3     4
