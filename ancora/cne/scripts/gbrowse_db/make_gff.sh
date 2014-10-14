@@ -26,6 +26,10 @@
     /export/data/CNEs/synteny/joinedNets_galGal4_hg19_gap200k300k.txt \
     /export/data/CNEs/synteny/joinedNets_galGal4_hg19_gap200k300k.hg19_detail.bed \
     >>/export/data/CNEs/gff/hg19.gff
+  perl /opt/www/cne/scripts/gbrowse_db/synteny2gff.pl jn xenTro3 \
+    /export/data/CNEs/synteny/joinedNets_xenTro3_hg19_gap150k300k.txt \
+    /export/data/CNEs/synteny/joinedNets_xenTro3_hg19_gap150k300k.hg19_detail.bed \
+    >>/export/data/CNEs/gff/hg19.gff
   wc -l /export/data/CNEs/gff/hg19.gff
 
 
