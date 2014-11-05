@@ -1,5 +1,7 @@
 hg19    4
 hg18    4
+hg38    4
+rheMac3 4
 mm10    4
 mm9     4
 monDom5 4
