@@ -24,6 +24,7 @@ oryCun2 4
 loxAfr3 4
 
 danRer7 8
+cypCar1 16
 danRer6 8
 danRer5 8
 tetNig2 8
