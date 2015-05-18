@@ -28,7 +28,7 @@ batchExpandGrid(reg, function(chrsTarget, chrsQuery, assemblyTarget, assemblyQue
                 selfDir = "~/Repos/CSC/WholeGenomeAlignment/scripts"
                 selfScripts = list.files(path=selfDir, pattern='.*\\.r', full.names=TRUE, recursive=TRUE, ignore.case=TRUE)
                 for(rs in selfScripts){source(rs)}
-                lastz(assemblyTarget, assemblyQuery, chrsTarget, chrsQuery, distance, format)
+                try(lastz(assemblyTarget, assemblyQuery, chrsTarget, chrsQuery, distance, format))
                 },
                 chrsTarget=validchrsTarget,
                 chrsQuery=validchrsQuery,
