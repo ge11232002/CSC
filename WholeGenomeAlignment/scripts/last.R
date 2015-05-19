@@ -50,13 +50,13 @@ last <- function(db, queryFn, outputFn,
   formatMapping <- list(MAF=1, tabular=0)
   message("last")
   mc.cores <- as.integer(mc.cores)
-  if(mc.cores != 1L){
-    stop("The computation in parallel is still not working properly")
-  }
+  #if(mc.cores != 1L){
+  #  stop("The computation in parallel is still not working properly")
+  #}
   if(mc.cores == 1L){
     cmd <- paste("lastal", lastOptiosn[[distance]],
-               "-o", outputFn, "-f", formatMapping[[format]],
-               db, queryFn)
+               "-f", formatMapping[[format]],
+               db, queryFn, ">", outputFn)
   }else{
     cmd <- paste("parallel-fasta", "-j", mc.cores,
                  "\"lastal", lastOptiosn[[distance]],
