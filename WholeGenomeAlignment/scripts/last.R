@@ -7,7 +7,7 @@
 
 last <- function(db, queryFn, outputFn,
                  distance="medium", format=c("MAF","tabular"),
-                 mc.cores=1L){
+                 mc.cores=1L, echoCommand=FALSE){
   format <- match.arg(format)
   # This matrix is taken from http://genomewiki.ucsc.edu/index.php/GorGor3_conservation_lastz_parameters. Default HOXD70 is medium. HoxD55 is far. human-chimp.v2 is close.
   lastzMatrix <- list(medium=matrix(c(91, -114, -31, -123,
@@ -63,7 +63,11 @@ last <- function(db, queryFn, outputFn,
                  "-f", formatMapping[[format]], db, "\"", "<", queryFn,
                  ">", outputFn)
   }
-  CNEr:::my.system(cmd)
+  if(echoCommand){
+    message(cmd)
+  }else{
+    my.system(cmd)
+  }
   unlink(matrixFile)
   return("success")
 }

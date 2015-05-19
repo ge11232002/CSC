@@ -23,7 +23,7 @@ combinations <- expand.grid(validchrsTarget, validchrsQuery,
                             stringsAsFactors=FALSE)
 library(BiocParallel)
 parallelFunc <- function(chrsTarget, chrsQuery, assemblyTarget, assemblyQuery, distance, format="lav"){
-  lastz(assemblyTarget, assemblyQuery, chrsTarget, chrsQuery, distance, format=format)
+  try(lastz(assemblyTarget, assemblyQuery, chrsTarget, chrsQuery, distance, format=format))
 }
 multicoreParam <- MulticoreParam(workers=12)
 ### Step 1: Do the Lastz
