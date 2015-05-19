@@ -10,7 +10,8 @@ targetDB= "/export/data/goldenpath/DHAB/DHAB"
 assemblyQuery = "/export/data/goldenpath/danRer7/danRer7.fa"
 
 last(targetDB, assemblyQuery, outputFn="DHAB.danRer7.maf",
-     distance="near", format="MAF", mc.cores=1L)
+     distance=distance, format="MAF", mc.cores=8L,
+     echoCommand=FALSE)
 
 ## Convert maf to psl
 ### maf-convert.py psl DHAB.danRer7.maf > DHAB.danRer7.psl
