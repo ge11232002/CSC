@@ -16,9 +16,9 @@ last(targetDB, assemblyQuery, outputFn=outputFn,
      echoCommand=FALSE)
 
 ## Convert maf to psl
-### maf-convert DHAB.danRer7.maf > DHAB.danRer7.psl
+### maf-convert psl DHAB.danRer7.maf > DHAB.danRer7.psl
 psls <- sub("\\.maf$", ".psl", outputFn)
-cmd <- paste("maf-convert", outputFn, ">", psls)
+cmd <- paste("maf-convert psl", outputFn, ">", psls)
 my.system(cmd)
 
 ## psl to chain
