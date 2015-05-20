@@ -30,7 +30,7 @@ chains <- sub("\\.psl$", ".chain", psls)
 removeFiles = FALSE
 chains = axtChain(psls, assemblyTarget, assemblyQuery, format="psl",
                   outputs=chains, distance=distance, removePsl=FALSE)
-allChain = chainMergeSort(path="chain", assemblyTarget, assemblyQuery, removeChains=removeFiles)
+allChain = chainMergeSort(path=".", assemblyTarget, assemblyQuery, removeChains=removeFiles)
 
 ### step 3: Netting
 allPreChain = chainPreNet(allChain, assemblyTarget, assemblyQuery, removeAllChain=removeFiles)
