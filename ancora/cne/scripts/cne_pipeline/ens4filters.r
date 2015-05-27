@@ -1,8 +1,8 @@
 
 library(rtracklayer)
 
-build = "ce10"
-ensemblGeneFile = "../annotation/ensembl_genes.txt"
+build = "danRer10"
+ensemblGeneFile = "../annotation/ensembl_genes.dat"
 assembly = file.path("/export/data/goldenpath", build, "assembly.2bit")
 
 ensemblGene = read.table(ensemblGeneFile, sep="\t", header=TRUE, quote="", colClass="character")
