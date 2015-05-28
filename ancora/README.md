@@ -503,7 +503,7 @@ Run the script without arguments for usage information.
 The username and password that the script should use to connect to the database must be declared in MyPerlVars.pm (see above).
 
 ```sh
-perl /opt/www/cne/scripts/cne_pipeline/create_filter.pl \
+perl $HOME/Repos/CSC/ancora/cne/scripts/cne_pipeline/create_filter.pl \
 -g refGene,knownGene -b hg19 -r -a /export/data/goldenpath/hg19/assembly.2bit \
 -f ensembleExons.txt \
 > /export/data/CNEs/hg19/filters/filter_regions.hg19.bed &
@@ -515,7 +515,7 @@ that we run to detect CNEs.
 The simplest way to run the script is as follows:
 
 ```sh
-perl /opt/www/cne/scripts/cne_pipeline/detect_cnes.pl all
+perl $HOME/Repos/CSC/ancora/cne/scripts/cne_pipeline/detect_cnes.pl all
 ```
 
 If executed in this way, 
@@ -527,7 +527,7 @@ causes it to detect CNEs only for that particular pairwise comparison
 (which must be listed in the configuration file):
 
 ```sh
-perl /opt/www/cne/scripts/cne_pipeline/detect_cnes.pl hg18 mm9
+perl $HOME/Repos/CSC/ancora/cne/scripts/cne_pipeline/detect_cnes.pl hg18 mm9
 ```
 
 If thresholds are also specified on the command line, 
@@ -535,7 +535,7 @@ the script will not attempt to read a configuration file,
 but simply generate CNEs for the indicated comparison and thresholds:
 
 ```sh
-perl /opt/www/cne/scripts/cne_pipeline/detect_cnes.pl hg18 mm9 45,50 48,50 49,50
+perl $HOME/Repos/CSC/ancora/cne/scripts/cne_pipeline/detect_cnes.pl hg18 mm9 45,50 48,50 49,50
 ```
 
 Each threshold is specified as two values separated by a comma: 
@@ -607,7 +607,7 @@ The blat filter is implemented in the script ```cne/scripts/cne_pipeline/blat_fi
 It can simply be run with the cne files as arguments, e.g.:
 
 ```sh
-perl /opt/www/cne/scripts/cne_pipeline/blat_filter.pl cne2w_hg18_mm9_45_50 cne2w_hg18_mm9_48_50 cne2w_hg18_mm9_49_50
+perl $HOME/Repos/CSC/ancora/cne/scripts/cne_pipeline/blat_filter.pl cne2w_hg18_mm9_45_50 cne2w_hg18_mm9_48_50 cne2w_hg18_mm9_49_50
 ```
 
 Any number of CNE files can be given as arguments. 
@@ -632,7 +632,7 @@ For example, the following command loads two files
 with hg19-mm10 CNEs into the database cne:
 
 ```sh
-perl /opt/www/cne/scripts/cne_pipeline/load_cnes.pl \
+perl $HOME/Repos/CSC/ancora/cne/scripts/cne_pipeline/load_cnes.pl \
 	-d cne -r cne2wBf_hg19_mm10_29_30 cne2wBf_hg19_mm10_30_30
 ```
 
