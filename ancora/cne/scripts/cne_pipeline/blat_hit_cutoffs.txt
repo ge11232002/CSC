@@ -61,6 +61,9 @@ caeRem2 4
 caeRem3 4
 priPac1 4
 
+Brafl2 4
+Bl71nemr 4
+
 MetagenomeScaffold 4
 Arcobacter         4
 Campylobacter      4

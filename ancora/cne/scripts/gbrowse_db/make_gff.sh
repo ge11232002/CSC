@@ -32,6 +32,20 @@
     >>/export/data/CNEs/gff/hg19.gff
   wc -l /export/data/CNEs/gff/hg19.gff
 
+#hg38
+perl $HOME/Repos/CSC/ancora/cne/scripts/gbrowse_db/ucsc2gff.pl \
+    -a /export/data/goldenpath/hg38/assembly.2bit \
+    -d UCSC_hg38  assembly rmsk gap refGene cpgIsland \
+    > hg38.gff
+wc -l hg38.gff
+perl $HOME/Repos/CSC/ancora/cne/scripts/gbrowse_db/ens2gff.pl \
+  /export/data/goldenpath/hg38/assembly.2bit \
+  /export/data/CNEs/hg38/annotation/ensembl_genes.dat \
+  >> hg38.gff
+wc -l hg38.gff
+
+
+
 
 #mm10
   perl /opt/www/cne/scripts/gbrowse_db/ucsc2gff.pl \
