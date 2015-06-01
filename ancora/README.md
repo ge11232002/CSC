@@ -914,7 +914,7 @@ outputs GFF format suitable for import into the GBrowse database.
 The scripts that process flat files to generate GBrowse GFF files are listed in Table above.
 
 ```sh
-perl /opt/www/cne/scripts/gbrowse_db/ucsc2gff.pl \
+perl $HOME/Repos/CSC/ancora/cne/scripts/gbrowse_db/ucsc2gff.pl \
 	-a /export/data/goldenpath/hg18/assembly.2bit \
     -d UCSC_hg18   assembly rmsk gap refGene \
     >hg18.gff
