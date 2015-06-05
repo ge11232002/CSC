@@ -12,7 +12,7 @@ outputFn <- "danRer7.cteIde1.maf"
 
 ## last
 last(targetDB, assemblyQuery, outputFn=outputFn,
-     distance=distance, format="MAF", mc.cores=8L,
+     distance=distance, format="MAF", mc.cores=4L,
      echoCommand=FALSE)
 
 ## Convert maf to psl
