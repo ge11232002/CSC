@@ -9,6 +9,7 @@ monDom4 4
 ornAna1 4
 galGal4 4
 galGal3 4
+taeGut2 4
 xenTro3 4
 xenTro2 4
 anoCar1 4
