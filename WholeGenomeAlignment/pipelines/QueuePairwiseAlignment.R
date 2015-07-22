@@ -1,4 +1,4 @@
-selfDir = "~/Repos/CSC/WholeGenomeAlignment/scripts"
+selfDir = "~/Repos/github/CSC/WholeGenomeAlignment/scripts"
 selfScripts = list.files(path=selfDir, pattern='.*\\.r', full.names=TRUE, 
                          recursive=TRUE, ignore.case=TRUE)
 for(rs in selfScripts){message(rs);source(rs)}
