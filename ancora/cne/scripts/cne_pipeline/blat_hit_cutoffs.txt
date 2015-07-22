@@ -65,6 +65,9 @@ priPac1 4
 Brafl2 4
 Bl71nemr 4
 
+Dcit1 4
+dicty 4
+
 MetagenomeScaffold 4
 Arcobacter         4
 Campylobacter      4
