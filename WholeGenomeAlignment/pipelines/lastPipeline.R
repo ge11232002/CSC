@@ -5,7 +5,7 @@ for(rs in selfScripts){message(rs);source(rs)}
 
 
 ## first set the two genomes are near, medium or far.
-distance = "medium"
+distance = "far"
 targetDB= "/export/data/goldenpath/danRer7/lastdb/danRer7"
 assemblyQuery = "/export/data/goldenpath/cteIde1/cteIde1.fa"
 outputFn <- "danRer7.cteIde1.maf"

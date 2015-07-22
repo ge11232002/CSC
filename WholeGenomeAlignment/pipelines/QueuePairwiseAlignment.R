@@ -5,7 +5,7 @@ for(rs in selfScripts){message(rs);source(rs)}
 
 
 ## first set the two genomes are near, medium or far.
-distance = "medium"
+distance = "far"
 assemblyTarget= "/export/data/goldenpath/galGal4/galGal4.2bit"
 assemblyQuery = "/export/data/goldenpath/hg19/hg19.2bit"
 
@@ -25,7 +25,7 @@ dir.create("lav")
 setwd("lav")
 reg = makeRegistry(id="lastz", seed=123, file.dir=file.path(getwd(), paste(basename(assemblyQuery), "-lastz_batchjobs", sep="")), work.dir=getwd(), skip=FALSE)
 batchExpandGrid(reg, function(chrsTarget, chrsQuery, assemblyTarget, assemblyQuery, distance, format){
-                selfDir = "~/Repos/CSC/WholeGenomeAlignment/scripts"
+                selfDir = "~/Repos/github/CSC/WholeGenomeAlignment/scripts"
                 selfScripts = list.files(path=selfDir, pattern='.*\\.r', full.names=TRUE, recursive=TRUE, ignore.case=TRUE)
                 for(rs in selfScripts){source(rs)}
                 try(lastz(assemblyTarget, assemblyQuery, chrsTarget, chrsQuery, distance, format))
