@@ -58,7 +58,7 @@ last <- function(db, queryFn, outputFn,
                "-f", formatMapping[[format]],
                db, queryFn, ">", outputFn)
   }else{
-    cmd <- paste("parallel-fasta", "-j", mc.cores,
+    cmd <- paste("parallel-fasta", "-j", mc.cores, "--compress",
                  "\"lastal", lastOptiosn[[distance]],
                  "-f", formatMapping[[format]], db, "\"", "<", queryFn,
                  ">", outputFn)
