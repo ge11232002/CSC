@@ -67,6 +67,8 @@ Bl71nemr 4
 
 Dcit1 4
 dicty 4
+Dpurp1 4
+Dfasc1 4
 
 MetagenomeScaffold 4
 Arcobacter         4
