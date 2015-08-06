@@ -69,6 +69,11 @@ Dcit1 4
 dicty 4
 Dpurp1 4
 Dfasc1 4
+Dcit1CE 4
+dictyCE 4
+Dpurp1CE 4
+Dfasc1CE 4
+
 
 MetagenomeScaffold 4
 Arcobacter         4
