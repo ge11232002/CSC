@@ -3,7 +3,7 @@ library(Biostrings)
 library(GenomicRanges)
 library(rtracklayer)
 
-foo = readBStringSet("Astyanax_mexicanus.AstMex102.dna_sm.nonchromosomal.fa")
+foo = readBStringSet("/export/data/goldenpath/droMoj28/droMoj28.fa")
 names(foo) = sapply(strsplit(names(foo), " "), "[", 1)
 foo3 = lapply(lapply(strsplit(as.character(foo),"") ,"%in%", 
                      c("a","c","g","t")), Rle)

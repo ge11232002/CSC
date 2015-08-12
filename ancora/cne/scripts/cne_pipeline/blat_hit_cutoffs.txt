@@ -53,6 +53,13 @@ droMoj3 4
 GmorY1  4
 md202   4
 
+dm6     4
+droAna28 4
+dp28    4
+droVir28 4
+droMoj28 4
+
+
 ce10    4
 ce4     4
 cb3     4

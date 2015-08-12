@@ -1,7 +1,7 @@
 
 library(rtracklayer)
 
-build = "dm6"
+build = "droMoj28"
 ensemblGeneFile = "../annotation/ensembl_genes.tsv"
 assembly = file.path("/export/data/goldenpath", build, "assembly.2bit")
 
@@ -21,6 +21,41 @@ bed <- transform(bed, Chromosome.Name=sub("dmel_mitochondrion_genome",
 bed <- subset(bed, subset=bed$Chromosome.Name %in% 
               c("2L", "2R", "3L", "3R", "4", "M", "X", "Y"))
 bed <- transform(bed, Chromosome.Name=paste("chr", Chromosome.Name, sep=""))
+
+## droAna28
+bed <- ensemblGene[ ,c("Chromosome.scaffold.name", "Exon.region.start..bp.",
+                       "Exon.region.end..bp.")]
+bed <- transform(bed, Exon.region.start..bp.=Exon.region.start..bp.-1L)
+validChromsIndex <- bed[ ,"Chromosome.scaffold.name"] %in% 
+                        seqnames(seqinfo(TwoBitFile(assembly)))
+message("before:", nrow(bed), "   after:", sum(validChromsIndex), " deleted:", nrow(bed)-sum(validChromsIndex))
+
+## dp28
+bed <- ensemblGene[ ,c("Chromosome.scaffold.name", "Exon.region.start..bp.",
+                       "Exon.region.end..bp.")]
+bed <- transform(bed, Exon.region.start..bp.=Exon.region.start..bp.-1L)
+validChromsIndex <- bed[ ,"Chromosome.scaffold.name"] %in%
+                        seqnames(seqinfo(TwoBitFile(assembly)))
+message("before:", nrow(bed), "   after:", sum(validChromsIndex), " deleted:", nrow(bed)-sum(validChromsIndex))
+
+## droVir28
+bed <- ensemblGene[ ,c("Chromosome.scaffold.name", "Exon.region.start..bp.",
+                       "Exon.region.end..bp.")]
+bed <- transform(bed, Exon.region.start..bp.=Exon.region.start..bp.-1L)
+validChromsIndex <- bed[ ,"Chromosome.scaffold.name"] %in%
+                        seqnames(seqinfo(TwoBitFile(assembly)))
+message("before:", nrow(bed), "   after:", sum(validChromsIndex), " deleted:", nrow(bed)-sum(validChromsIndex))
+
+## droMoj28
+bed <- ensemblGene[ ,c("Chromosome.scaffold.name", "Exon.region.start..bp.",
+                       "Exon.region.end..bp.")]
+bed <- transform(bed, Exon.region.start..bp.=Exon.region.start..bp.-1L)
+validChromsIndex <- bed[ ,"Chromosome.scaffold.name"] %in%
+                        seqnames(seqinfo(TwoBitFile(assembly)))
+message("before:", nrow(bed), "   after:", sum(validChromsIndex), " deleted:", nrow(bed)-sum(validChromsIndex))
+
+
+
 
 ## for petMar2
 # do nothing
