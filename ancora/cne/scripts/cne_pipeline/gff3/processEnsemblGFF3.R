@@ -13,6 +13,7 @@ gff <- import.gff3(gffFn)
 gff <- txdbENS2UCSC(gff)
 
 gff <- gff[seqnames(gff) %in% names(fasta.seqlengths(fastaFn))]
+gff <- gff[which(gff$type != "chromosome")]
 
 export.gff3(gff, con=sub("\\gff3$", "gbrowse.gff3", gffFn))
 

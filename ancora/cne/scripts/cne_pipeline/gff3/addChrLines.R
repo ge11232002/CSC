@@ -4,18 +4,17 @@ library(rtracklayer)
 library(Biostrings)
 library(GenomicRanges)
 
-gffFn <- "/var/lib/gbrowse/databases/danRer10/refGene.danRer10.gff"
-fastaFn <- "/var/lib/gbrowse/databases/danRer10_fasta/danRer10.fa"
+gffFn <- "refGene.danRer10.gff3"
+fastaFn <- "danRer10.fa"
 
-### fasta
-fasta <- readDNAStringSet(fastaFn)
-gff <- import.gff(gffFn)
+### fasta and gff
+gff <- import.gff3(gffFn)
 
-fastaGRanges <- GRanges(seqnames=names(fasta),
+fastaGRanges <- GRanges(seqnames=names(fasta.seqlengths(fastaFn)),
                         ranges=IRanges(start=1L,
-                                       end=width(fasta)),
+                                       end=fasta.seqlengths(fastaFn)),
                         strand="*",
-                        Name=names(fasta)
+                        Name=names(fasta.seqlengths(fastaFn))
                         )
 stopifnot(all(seqnames(gff) %in% seqnames(fastaGRanges)))
 export.gff3(fastaGRanges, con="chroms.gff3")
