@@ -18,7 +18,7 @@ fastaGRanges <- GRanges(seqnames=names(fasta),
                         Name=names(fasta)
                         )
 stopifnot(all(seqnames(gff) %in% seqnames(fastaGRanges)))
-export.gff3(fastaGRanges, con="chroms.gff")
+export.gff3(fastaGRanges, con="chroms.gff3")
 
 
 
