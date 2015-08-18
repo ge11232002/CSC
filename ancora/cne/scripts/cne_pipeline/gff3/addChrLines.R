@@ -4,10 +4,11 @@ library(rtracklayer)
 library(Biostrings)
 library(GenomicRanges)
 
+## TODO:
 gffFn <- "refGene.danRer10.gff3"
 fastaFn <- "danRer10.fa"
 
-### fasta and gff
+## fasta and gff
 gff <- import.gff3(gffFn)
 
 fastaGRanges <- GRanges(seqnames=names(fasta.seqlengths(fastaFn)),
