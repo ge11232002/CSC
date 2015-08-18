@@ -1,4 +1,4 @@
-# GFF3 for ancora
+# GFF3 for Ancora Browser
 This explans how to use GFF3 for gbrowse which can provide much better performance as claimed.
 
 ## refGene from UCSC
@@ -9,6 +9,11 @@ gtf2gff3 refGene.danRer10.gtf > refGene.danRer10.gff3
 
 Then we need to manually add the chromosoms lines for GFF3 file which is required by gbrowse.
 Use the script __addChrLines.R__ to generate the chroms lines __chroms.gff3__.
+
+## knownGene from UCSC
+```{sh}
+genePredToGtf hg38 knownGene knownGene.hg38.gtf
+```
 
 ## ensGene from Ensembl
 Download the GFF3 file from Ensembl [ftp](http://www.ensembl.org/info/data/ftp/index.html).
@@ -21,6 +26,9 @@ Use the script __CpG.R__ to generate the file __CpG.gff3__.
 ## rmsk from UCSC
 Use the script __rmsk.R__ to generate the file __rmsk.gff3__.
 
+## gap from UCSC
+Use the script __gap.R__ to generate the file __gap.gff3__.
+
 
 ## Load the GFF3 file into mysql database
 ```{sh}
@@ -31,7 +39,7 @@ mysql -u root -p -e 'grant select on gbrowse_gff_danRer10.* to nobody@localhost'
 Merge the GFF3 files into one
 
 ```{sh}
-cat refGene.danRer10.gff3 chroms.gff3 Danio_rerio.GRCz10.81.gbrowse.gff3 CpG.gff3 rmsk.gff3 > gbrowse_gff_danRer10.gff3
+cat refGene.danRer10.gff3 chroms.gff3 Danio_rerio.GRCz10.81.gbrowse.gff3 CpG.gff3 rmsk.gff3 gap.gff3 > gbrowse_gff_danRer10.gff3
 ```
 
 One buggy thing from Bioconductor package __rtracklayer__ is that the attributes of GFF3 file from ```export.gff3``` have space before ";", which causes problem in GBrowse.
