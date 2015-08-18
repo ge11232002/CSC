@@ -24,7 +24,9 @@ cpgGRangs <- GRanges(seqnames=tbl.cpg$genoName,
                      strand="+",
                      source=Rle("UCSC", nrow(tbl.cpg)),
                      type=Rle("rmsk", nrow(tbl.cpg)),
-                     Name=tbl.cpg$repName
+                     score=tbl.cpg$milliDiv/10,
+                     Name=tbl.cpg$repName,
+                     Class=tbl.cpg$repClass
                      )
 export.gff3(cpgGRangs, con="rmsk.gff3")
 

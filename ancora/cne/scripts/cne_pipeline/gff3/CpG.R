@@ -21,7 +21,10 @@ cpgGRangs <- GRanges(seqnames=tbl.cpg$chrom,
                                     end=tbl.cpg$chromEnd),
                      strand="+",
                      source=Rle("UCSC", nrow(tbl.cpg)),
-                     type=Rle("CpG", nrow(tbl.cpg))
+                     type=Rle("CpG", nrow(tbl.cpg)),
+                     cpgNum=tbl.cpg$cpgNum,
+                     perCpg=tbl.cpg$perCpg,
+                     perGc=tbl.cpg$perGc
                      )
 export.gff3(cpgGRangs, con="CpG.gff3")
 
