@@ -44,6 +44,18 @@ perl $HOME/Repos/CSC/ancora/cne/scripts/gbrowse_db/ens2gff.pl \
   >> hg38.gff
 wc -l hg38.gff
 
+# dm6
+perl $HOME/Repos/github/CSC/ancora/cne/scripts/gbrowse_db/ucsc2gff.pl \
+    -a /export/data/goldenpath/dm6/assembly.2bit \
+    -d UCSC_dm6  assembly rmsk gap refGene cpgIsland \
+    >dm6.gff
+wc -l dm6.gff
+perl $HOME/Repos/github/CSC/ancora/cne/scripts/gbrowse_db/ens2gff.pl \
+  /export/data/goldenpath/dm6/assembly.2bit \
+  /export/data/CNEs/dm6/annotation/ensembl_genes.tsv \
+  >> dm6.gff
+wc -l dm6.gff
+
 
 
 
