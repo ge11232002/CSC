@@ -1,0 +1,6 @@
+import(methods)
+
+exportClasses(
+  JASPAR2016
+  )
+
