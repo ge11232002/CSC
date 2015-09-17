@@ -1,36 +1,36 @@
-selfDir = "~/Repos/CSC/WholeGenomeAlignment/scripts"
+selfDir = "~/Repos/github/CSC/WholeGenomeAlignment/scripts"
 selfScripts = list.files(path=selfDir, pattern='.*\\.r', full.names=TRUE, 
                          recursive=TRUE, ignore.case=TRUE)
 for(rs in selfScripts){message(rs);source(rs)}
 
 
 ## first set the two genomes are near, medium or far.
-distance = "near"
-targetDB= "/export/data/goldenpath/DHAB/DHAB"
-assemblyQuery = "/export/data/goldenpath/danRer7/danRer7.fa"
+distance = "far"
+targetDB= "/export/data/goldenpath/danRer7/lastdb/danRer7"
+assemblyQuery = "/export/data/goldenpath/cteIde1/cteIde1.fa"
+outputFn <- "danRer7.cteIde1.maf"
 
-last(targetDB, assemblyQuery, outputFn="DHAB.danRer7.maf",
-     distance="near", format="MAF", mc.cores=1L)
+## last
+last(targetDB, assemblyQuery, outputFn=outputFn,
+     distance=distance, format="MAF", mc.cores=4L,
+     echoCommand=FALSE)
 
 ## Convert maf to psl
-### maf-convert.py psl DHAB.danRer7.maf > DHAB.danRer7.psl
-
-
-## split psl
-### mkdir psl && cd psl
-### split --lines=9767336 DHAB.danRer7.psl
+### maf-convert psl DHAB.danRer7.maf > DHAB.danRer7.psl
+psls <- sub("\\.maf$", ".psl", outputFn)
+cmd <- paste("maf-convert psl", outputFn, ">", psls)
+my.system(cmd)
 
 ## psl to chain
-assemblyTarget = "/export/data/goldenpath/DHAB/DHAB.2bit"
-assemblyQuery = "/export/data/goldenpath/danRer7/danRer7.2bit"
-psls = list.files(path="psl", pattern="x.*", full.name=TRUE)
-dir.create("chain")
-outputs <- file.path("chain", paste0(basename(psls), ".chain"))
+assemblyTarget = file.path(dirname(dirname(targetDB)), 
+                           paste0(basename(targetDB), ".2bit"))
+assemblyQuery = sub("\\.fa$", ".2bit", assemblyQuery)
+chains <- sub("\\.psl$", ".chain", psls)
 
 removeFiles = FALSE
 chains = axtChain(psls, assemblyTarget, assemblyQuery, format="psl",
-                  outputs=outputs, distance=distance, removePsl=FALSE)
-allChain = chainMergeSort(path="chain", assemblyTarget, assemblyQuery, removeChains=removeFiles)
+                  outputs=chains, distance=distance, removePsl=FALSE)
+allChain = chainMergeSort(path=".", assemblyTarget, assemblyQuery, removeChains=removeFiles)
 
 ### step 3: Netting
 allPreChain = chainPreNet(allChain, assemblyTarget, assemblyQuery, removeAllChain=removeFiles)

@@ -7,7 +7,7 @@
 
 last <- function(db, queryFn, outputFn,
                  distance="medium", format=c("MAF","tabular"),
-                 mc.cores=1L){
+                 mc.cores=1L, echoCommand=FALSE){
   format <- match.arg(format)
   # This matrix is taken from http://genomewiki.ucsc.edu/index.php/GorGor3_conservation_lastz_parameters. Default HOXD70 is medium. HoxD55 is far. human-chimp.v2 is close.
   lastzMatrix <- list(medium=matrix(c(91, -114, -31, -123,
@@ -50,20 +50,24 @@ last <- function(db, queryFn, outputFn,
   formatMapping <- list(MAF=1, tabular=0)
   message("last")
   mc.cores <- as.integer(mc.cores)
-  if(mc.cores != 1L){
-    stop("The computation in parallel is still not working properly")
-  }
+  #if(mc.cores != 1L){
+  #  stop("The computation in parallel is still not working properly")
+  #}
   if(mc.cores == 1L){
     cmd <- paste("lastal", lastOptiosn[[distance]],
-               "-o", outputFn, "-f", formatMapping[[format]],
-               db, queryFn)
+               "-f", formatMapping[[format]],
+               db, queryFn, ">", outputFn)
   }else{
-    cmd <- paste("parallel-fasta", "-j", mc.cores,
+    cmd <- paste("parallel-fasta", "-j", mc.cores, "--compress",
                  "\"lastal", lastOptiosn[[distance]],
                  "-f", formatMapping[[format]], db, "\"", "<", queryFn,
                  ">", outputFn)
   }
-  CNEr:::my.system(cmd)
+  if(echoCommand){
+    message(cmd)
+  }else{
+    my.system(cmd)
+  }
   unlink(matrixFile)
   return("success")
 }

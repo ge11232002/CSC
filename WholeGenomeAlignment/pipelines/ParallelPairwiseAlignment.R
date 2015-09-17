@@ -10,8 +10,11 @@ assemblyQuery = "/export/data/goldenpath/ASM15152v1/ASM15152v1.2bit"
 
 ### step 1: Alignments with lastz 
 library(rtracklayer)
-validchrsTarget = seqnames(seqinfo(TwoBitFile(assemblyTarget)))
-validchrsQuery = seqnames(seqinfo(TwoBitFile(assemblyQuery)))
+validchrsTarget = grep("chr", seqnames(seqinfo(TwoBitFile(assemblyTarget))), value=TRUE)
+validchrsTarget = grep("_", validchrsTarget, invert=TRUE, value=TRUE)
+validchrsQuery = grep("chr", seqnames(seqinfo(TwoBitFile(assemblyQuery))), value=TRUE)
+validchrsQuery = grep("_", validchrsQuery, invert=TRUE, value=TRUE)
+
 
 ## To check the command of lastz
 #lavs = lastz(assemblyTarget=assemblyTarget, assemblyQuery=assemblyQuery, chrsTarget="chr1", chrsQuery="chr1", distance=distance, format="lav", echoCommand=TRUE)
@@ -23,7 +26,7 @@ combinations <- expand.grid(validchrsTarget, validchrsQuery,
                             stringsAsFactors=FALSE)
 library(BiocParallel)
 parallelFunc <- function(chrsTarget, chrsQuery, assemblyTarget, assemblyQuery, distance, format="lav"){
-  lastz(assemblyTarget, assemblyQuery, chrsTarget, chrsQuery, distance, format=format)
+  try(lastz(assemblyTarget, assemblyQuery, chrsTarget, chrsQuery, distance, format=format))
 }
 multicoreParam <- MulticoreParam(workers=12)
 ### Step 1: Do the Lastz

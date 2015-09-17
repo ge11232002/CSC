@@ -12,6 +12,8 @@ hg19()
     xenTro3 hg19 UCSC_xenTro3 150000 300000
   perl /opt/www/cne/scripts/synteny/join_nets.pl \
     tetNig2 hg19 UCSC_tetNig2 100000 300000
+  perl /opt/www/cne/scripts/synteny/join_nets.pl \
+    monDom5 hg19 UCSC_monDom5 300000 300000 
 }
 
 #mm10
