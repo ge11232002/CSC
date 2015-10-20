@@ -1,16 +1,15 @@
 Package: JASPAR2016
-Version: 0.99.2
-Date: 2015-10-12
+Version: 0.99.0
+Date: 2015-10-16
 Title: Data package for JASPAR 2016
 Description: Data package for JASPAR 2014. To search this databases, 
              please use the package TFBSTools (>= 1.7.1).
 Author: Ge Tan <ge.tan09@imperial.ac.uk> 
 Maintainer: Ge Tan <ge.tan09@imperial.ac.uk>
-Depends: R (>= 3.0.1), methods
+Depends: R (>= 3.2.2), methods
 License: GPL-2
 URL: http://jaspar.genereg.net/
 Type: Package
 biocViews: ExperimentData, MotifAnnotation, GeneRegulation
 NeedsCompilation: no
 LazyData: no
-
