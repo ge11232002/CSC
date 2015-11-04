@@ -1,9 +1,9 @@
 Package: JASPAR2016
-Version: 0.99.0
-Date: 2015-10-16
+Version: 0.99.1
+Date: 2015-11-04
 Title: Data package for JASPAR 2016
-Description: Data package for JASPAR 2014. To search this databases, 
-             please use the package TFBSTools (>= 1.7.1).
+Description: Data package for JASPAR 2016. To search this databases, 
+             please use the package TFBSTools (>= 1.8.1).
 Author: Ge Tan <ge.tan09@imperial.ac.uk> 
 Maintainer: Ge Tan <ge.tan09@imperial.ac.uk>
 Depends: R (>= 3.2.2), methods
