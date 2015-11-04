@@ -1,5 +1,0 @@
-#!/bin/bash
-export PERL5LIB=/opt/www/cne/perl_lib:/opt/www/AT/lib:$PERL5LIB
-cd /opt/www/ancora/Bio-Das-ProServer/
-eg/proserver -config ancora/proserver.ini
-
